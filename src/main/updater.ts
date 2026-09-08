@@ -93,10 +93,22 @@ export function setupAutoUpdater(win: BrowserWindow): void {
 
   // ─── IPC: renderer can trigger install ────────────────────────────────────
   ipcMain.on('updater:install-now', () => {
-    console.log('[updater] Triggering silent Discord-style quitAndInstall...')
-    autoUpdater.quitAndInstall(true, true)
-    // true  = silent install in background without wizard UI
-    // true  = restart immediately after install
+    console.log('[updater] Triggering instant silent Discord-style quitAndInstall...')
+    ;(app as any).isQuitting = true
+
+    // Destroy all windows immediately so nothing blocks the process exit
+    // and Windows doesn't show "(Not Responding)" or freeze for 60 seconds
+    const { BrowserWindow } = require('electron')
+    BrowserWindow.getAllWindows().forEach((w: any) => {
+      try {
+        w.removeAllListeners('close')
+        w.destroy()
+      } catch {}
+    })
+
+    setImmediate(() => {
+      autoUpdater.quitAndInstall(true, true)
+    })
   })
 
   // ─── IPC: renderer can trigger manual check ───────────────────────────────
