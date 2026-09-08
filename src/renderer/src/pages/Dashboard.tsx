@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import SpotlightCard from '../components/SpotlightCard'
 import {
   ArrowRight,
   Zap,
@@ -172,39 +173,43 @@ export default function Dashboard() {
         </motion.p>
       </div>
 
-      {/* Stats row */}
+      {/* Quick stats */}
       <motion.div
         initial="initial"
         animate="animate"
-        transition={{ staggerChildren: 0.1, delayChildren: 0.25 }}
+        variants={{
+          animate: { transition: { staggerChildren: 0.1, delayChildren: 0.25 } },
+        }}
         className="grid grid-cols-3 gap-4 mb-10"
       >
         {[
-          { icon: Zap, label: t('dashboard.stats.activeTools') || 'Active Tools', value: '8', color: 'text-nexus-accent' },
-          { icon: Shield, label: t('dashboard.stats.security') || 'Security', value: t('dashboard.stats.ipcIsolated') || 'IPC Isolated', color: 'text-nexus-success' },
+          { icon: Zap, label: t('dashboard.stats.activeTools') || 'Active Tools', value: '10 Tools', color: 'text-nexus-cyan', spotColor: 'rgba(6, 182, 212, 0.15)' },
+          { icon: Shield, label: t('dashboard.stats.security') || 'Security Guard', value: t('dashboard.stats.ipcIsolated') || 'IPC Isolated', color: 'text-emerald-400', spotColor: 'rgba(16, 185, 129, 0.15)' },
           {
             icon: Sparkles,
-            label: t('dashboard.stats.status') || 'Status',
-            value: t('dashboard.stats.allSystemsGo') || 'All Systems Go',
-            color: 'text-nexus-cyan',
+            label: t('dashboard.stats.status') || 'System Engine',
+            value: t('dashboard.stats.allSystemsGo') || 'All Systems Ready',
+            color: 'text-nexus-accent',
+            spotColor: 'rgba(139, 92, 246, 0.15)',
           },
         ].map((stat) => (
-          <motion.div
+          <SpotlightCard
             key={stat.label}
-            variants={fadeUp}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="glass-card p-4 flex items-center gap-4"
+            spotlightColor={stat.spotColor}
+            className="p-4"
           >
-            <div
-              className={`w-10 h-10 rounded-xl bg-nexus-card flex items-center justify-center ${stat.color}`}
-            >
-              <stat.icon className="w-5 h-5" />
+            <div className="flex items-center gap-4">
+              <div
+                className={`w-11 h-11 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center ${stat.color} shadow-lg`}
+              >
+                <stat.icon className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-[11px] font-semibold text-nexus-muted uppercase tracking-wider">{stat.label}</p>
+                <p className="text-base font-bold text-white tracking-tight mt-0.5">{stat.value}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs text-nexus-muted">{stat.label}</p>
-              <p className="text-sm font-semibold text-white">{stat.value}</p>
-            </div>
-          </motion.div>
+          </SpotlightCard>
         ))}
       </motion.div>
 
@@ -212,57 +217,59 @@ export default function Dashboard() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.2 }}
       >
-        <h2 className="text-xs font-semibold text-nexus-muted tracking-widest uppercase mb-4">
-          {t('dashboard.availableTools') || 'Available Tools'}
-        </h2>
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <h2 className="text-xs font-semibold text-nexus-muted tracking-widest uppercase">
+              {t('dashboard.availableTools') || 'Available Tools'}
+            </h2>
+            <p className="text-xs text-nexus-muted/60 mt-0.5">High-performance native desktop utilities</p>
+          </div>
+          <span className="text-xs font-mono text-nexus-muted px-2.5 py-1 rounded-lg bg-white/5 border border-white/5">
+            {tools.length} Modules Installed
+          </span>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Tool cards */}
           {tools.map((tool, index) => (
-            <motion.button
+            <SpotlightCard
               key={tool.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 + index * 0.08 }}
-              whileHover={{ scale: 1.02, y: -4 }}
-              whileTap={{ scale: 0.98 }}
+              spotlightColor={tool.glowColor}
+              whileHover={{ scale: 1.015, y: -3 }}
+              whileTap={{ scale: 0.985 }}
               onClick={() => navigate(tool.path)}
-              className="glass-card p-6 text-left group cursor-pointer relative overflow-hidden"
+              className="p-6 text-left group cursor-pointer border border-white/5 hover:border-nexus-cyan/40 flex flex-col justify-between"
             >
-              {/* Hover glow overlay */}
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{ boxShadow: `inset 0 0 60px ${tool.glowColor}` }}
-              />
-
-              <div className="relative z-10">
+              <div>
                 <div className="flex items-start justify-between mb-4">
                   <div
-                    className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center shadow-lg`}
+                    className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center shadow-lg shadow-black/40 group-hover:scale-105 transition-transform duration-200`}
                   >
                     <tool.icon className="w-6 h-6 text-white" />
                   </div>
-                  <span className="flex items-center gap-1.5 text-xs font-medium text-nexus-success bg-nexus-success/10 px-2.5 py-1 rounded-full">
-                    <span className="w-1.5 h-1.5 rounded-full bg-nexus-success animate-pulse" />
+                  <span className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     {tool.status}
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-white mb-1.5 group-hover:text-nexus-accent-light transition-colors">
+                <h3 className="text-base font-bold text-white mb-1.5 group-hover:text-nexus-cyan transition-colors">
                   {tool.title}
                 </h3>
-                <p className="text-sm text-nexus-muted leading-relaxed mb-4">
+                <p className="text-xs text-nexus-muted leading-relaxed mb-6 line-clamp-2">
                   {tool.description}
                 </p>
+              </div>
 
-                <div className="flex items-center gap-2 text-sm font-medium text-nexus-accent group-hover:text-nexus-accent-light transition-colors">
-                  <span>{t('dashboard.launchTool') || 'Launch Tool'}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs font-semibold text-nexus-cyan group-hover:text-nexus-cyan-light transition-colors">
+                <span>{t('dashboard.launchTool') || 'Launch Tool'}</span>
+                <div className="w-7 h-7 rounded-lg bg-white/[0.04] group-hover:bg-nexus-cyan/20 border border-white/5 group-hover:border-nexus-cyan/40 flex items-center justify-center transition-all">
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </div>
               </div>
-            </motion.button>
+            </SpotlightCard>
           ))}
         </div>
       </motion.div>
