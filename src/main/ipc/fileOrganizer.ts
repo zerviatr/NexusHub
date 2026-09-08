@@ -90,6 +90,26 @@ async function scanDirectory(
   }
 }
 
+async function getUniquePath(targetPath: string): Promise<string> {
+  let candidate = targetPath
+  const dir = path.dirname(targetPath)
+  const ext = path.extname(targetPath)
+  const base = path.basename(targetPath, ext)
+  let counter = 1
+
+  while (true) {
+    try {
+      await fs.access(candidate)
+      // File exists, generate next candidate
+      candidate = path.join(dir, `${base} (${counter})${ext}`)
+      counter++
+    } catch {
+      // File does not exist, candidate is safe to use
+      return candidate
+    }
+  }
+}
+
 async function executeOperations(operations: FileOperation[]): Promise<ExecutionResult> {
   const result: ExecutionResult = {
     success: false,
@@ -104,8 +124,11 @@ async function executeOperations(operations: FileOperation[]): Promise<Execution
       const destDir = path.dirname(op.newPath)
       await fs.mkdir(destDir, { recursive: true })
 
+      // Prevent silent overwrite by finding a unique destination path
+      const safePath = await getUniquePath(op.newPath)
+
       // Perform the move/rename
-      await fs.rename(op.oldPath, op.newPath)
+      await fs.rename(op.oldPath, safePath)
       result.successfulOperations++
     } catch (error: any) {
       result.failedOperations++

@@ -13,6 +13,7 @@ import {
 import BaseToolTemplate from '../components/BaseToolTemplate'
 import { nexusAPI, TempMailMessage, TempMailMessageDetails } from '../lib/ipc'
 import { useT } from '../lib/i18n'
+import DOMPurify from 'dompurify'
 
 export default function TempMail() {
   const { t } = useT()
@@ -297,7 +298,7 @@ export default function TempMail() {
                         {activeMessage.htmlBody ? (
                           <div 
                             className="prose prose-sm max-w-none break-words"
-                            dangerouslySetInnerHTML={{ __html: activeMessage.htmlBody }}
+                            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(activeMessage.htmlBody) }}
                           />
                         ) : (
                           <pre className="whitespace-pre-wrap font-sans text-sm break-words">

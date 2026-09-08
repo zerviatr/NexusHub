@@ -29,7 +29,8 @@ export default function Activation() {
   }
 
   const handlePurchase = () => {
-    window.nexusAPI.openExternal('https://nexushub.app/pricing')
+    const storeUrl = (import.meta as any).env?.VITE_STORE_URL || 'https://github.com/zerviatr/NexusHub#get-license'
+    window.nexusAPI.openExternal(storeUrl)
   }
 
   return (

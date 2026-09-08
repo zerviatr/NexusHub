@@ -13,9 +13,9 @@ import { ipcMain } from 'electron'
 import * as dns from 'dns'
 import * as net from 'net'
 import { promisify } from 'util'
-import { exec } from 'child_process'
+import { execFile } from 'child_process'
 
-const execAsync = promisify(exec)
+const execFileAsync = promisify(execFile)
 const dnsLookup = promisify(dns.lookup)
 
 // ===== Types =====
@@ -212,10 +212,16 @@ export function registerNetworkToolsIPC(): void {
       const sanitized = host.trim()
       if (!sanitized) throw new Error('Host cannot be empty')
 
-      const isWin = process.platform === 'win32'
-      const cmd = isWin ? `ping -n 4 ${sanitized}` : `ping -c 4 ${sanitized}`
+      // Strict validation: Host must be a valid IPv4, IPv6 or hostname. No shell metacharacters.
+      const HOST_SAFE_REGEX = /^[a-zA-Z0-9.:-]+$/
+      if (!HOST_SAFE_REGEX.test(sanitized)) {
+        throw new Error('Invalid host format. Only alphanumeric characters, dots, colons, and hyphens are allowed.')
+      }
 
-      const { stdout, stderr } = await execAsync(cmd, { timeout: 10000 })
+      const isWin = process.platform === 'win32'
+      const args = isWin ? ['-n', '4', sanitized] : ['-c', '4', sanitized]
+
+      const { stdout, stderr } = await execFileAsync('ping', args, { timeout: 10000 })
       const output = stdout || stderr
 
       return {
