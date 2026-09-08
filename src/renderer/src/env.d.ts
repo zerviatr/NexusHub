@@ -31,6 +31,8 @@ interface NexusAPI {
     selectDir: () => Promise<{ canceled: boolean; filePaths: string[] }>
     scan: (dirPath: string) => Promise<{ success: boolean; files?: any[]; error?: string }>
     execute: (operations: any[]) => Promise<any>
+    canUndo: () => Promise<boolean>
+    undo: () => Promise<{ success: boolean; restored: number; errors: string[] }>
   }
   clipboard: {
     getHistory: () => Promise<any[]>
@@ -44,6 +46,7 @@ interface NexusAPI {
     portScan: (host: string, ports: number[]) => Promise<any>
     ping: (host: string) => Promise<any>
     sslInspect: (host: string, port?: number) => Promise<any>
+    myIp: () => Promise<any>
   }
   image: {
     selectFiles: () => Promise<string[]>

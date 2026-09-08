@@ -160,6 +160,7 @@ export default function App() {
                   path="/fortress"
                   element={isPro ? <CyberFortress /> : <ProLockGate toolName="Cyber Fortress" toolDesc="DoD 5220.22-M 7-pass file shredder and military-grade AES-256-GCM vault encryption." />}
                 />
+                <Route path="/cyber-fortress" element={<Navigate to="/fortress" replace />} />
                 <Route path="/account" element={<Account />} />
               </Routes>
             </motion.div>

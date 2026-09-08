@@ -18,6 +18,9 @@ import {
   Sparkles,
   Command,
   FileCheck,
+  Activity,
+  Code2,
+  ShieldAlert,
 } from 'lucide-react'
 
 interface PaletteItem {
@@ -129,6 +132,33 @@ const PALETTE_ITEMS: PaletteItem[] = [
     path: '/image',
     icon: ImageIcon,
     keywords: ['image', 'convert', 'webp', 'avif', 'png', 'jpg', 'resize', 'exif']
+  },
+  {
+    id: 'sentinel',
+    title: 'Resource Sentinel',
+    subtitle: 'Real-time CPU/RAM telemetry, per-core load, working set flush',
+    category: 'Tools',
+    path: '/sentinel',
+    icon: Activity,
+    keywords: ['sentinel', 'cpu', 'ram', 'memory', 'core', 'telemetry', 'hardware', 'performance', 'optimize']
+  },
+  {
+    id: 'dev-sandbox',
+    title: 'Dev Sandbox',
+    subtitle: 'Native HTTP/REST & Webhook studio, response inspection & cURL export',
+    category: 'Tools',
+    path: '/dev-sandbox',
+    icon: Code2,
+    keywords: ['dev', 'sandbox', 'http', 'api', 'rest', 'webhook', 'curl', 'headers', 'payload', 'fetch']
+  },
+  {
+    id: 'cyber-fortress',
+    title: 'Cyber Fortress',
+    subtitle: 'DoD 5220.22-M 7-pass file shredder & AES-256-GCM vault',
+    category: 'Tools',
+    path: '/fortress',
+    icon: ShieldAlert,
+    keywords: ['cyber', 'fortress', 'shred', 'shredder', 'wipe', 'dod', 'vault', 'aes', 'encrypt', 'decrypt', 'security']
   },
   {
     id: 'account',

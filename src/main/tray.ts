@@ -79,11 +79,19 @@ export function setupSystemTray(mainWindow: BrowserWindow): Tray | null {
       }
     },
     {
-      label: 'JSON & JWT Studio',
+      label: 'Resource Sentinel',
       click: () => {
         mainWindow.show()
         mainWindow.focus()
-        mainWindow.webContents.send('navigate:to', '/json-studio')
+        mainWindow.webContents.send('navigate:to', '/sentinel')
+      }
+    },
+    {
+      label: 'Cyber Fortress (Vault & Shredder)',
+      click: () => {
+        mainWindow.show()
+        mainWindow.focus()
+        mainWindow.webContents.send('navigate:to', '/fortress')
       }
     },
     { type: 'separator' },
