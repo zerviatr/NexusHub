@@ -42,7 +42,7 @@ export async function migrate(): Promise<void> {
 
   await db.execute(`
     CREATE TABLE IF NOT EXISTS activations (
-      id           INTEGER PRIMARY KEY AUTOINCREMENT,
+      id           INTEGER PRIMARY KEY,
       license_key  TEXT    NOT NULL REFERENCES licenses(key),
       device_id    TEXT    NOT NULL,
       activated_at INTEGER NOT NULL,
