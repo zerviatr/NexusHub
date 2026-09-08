@@ -11,10 +11,13 @@ import PasswordGenerator from './pages/PasswordGenerator'
 import ClipboardManager from './pages/ClipboardManager'
 import NetworkTools from './pages/NetworkTools'
 import ImageToolkit from './pages/ImageToolkit'
+import QrCodeStudio from './pages/QrCodeStudio'
+import JsonStudio from './pages/JsonStudio'
 import Account from './pages/Account'
 import Activation from './pages/Activation'
 import EulaGate from './pages/EulaGate'
 import OnboardingTour from './components/OnboardingTour'
+import CommandPalette from './components/CommandPalette'
 import { useLicense } from './lib/LicenseContext'
 
 const pageVariants = {
@@ -67,6 +70,7 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-nexus-bg">
+      <CommandPalette />
       {!hasCompletedTour && <OnboardingTour onComplete={handleCompleteTour} />}
       <TitleBar />
       <div className="flex flex-1 overflow-hidden">
@@ -98,6 +102,8 @@ export default function App() {
                 <Route path="/clipboard" element={<ClipboardManager />} />
                 <Route path="/network" element={<NetworkTools />} />
                 <Route path="/image" element={<ImageToolkit />} />
+                <Route path="/qr-code" element={<QrCodeStudio />} />
+                <Route path="/json-studio" element={<JsonStudio />} />
                 <Route path="/account" element={<Account />} />
               </Routes>
             </motion.div>

@@ -4,6 +4,7 @@
     "subtitle": "Multi-Tool Suite",
     "groups": {
       "privacy": "Privacy & Security",
+      "developer": "Developer & Utilities",
       "files": "Files & Media",
       "network": "Network"
     },
@@ -11,6 +12,8 @@
       "tempMail": "TempMail Generator",
       "decrypter": "Universal Link Decrypter & Cleaner",
       "passwordGenerator": "Password Generator",
+      "qrCode": "QR Code Studio",
+      "jsonStudio": "JSON & JWT Studio",
       "bulkOrganizer": "Bulk Organizer",
       "clipboardManager": "Clipboard Manager",
       "imageToolkit": "Image Toolkit",
@@ -147,8 +150,22 @@
       },
       "imageToolkit": {
         "desc": "Batch convert images to JPEG, PNG, WebP, or AVIF. Resize, strip EXIF metadata, process locally."
+      },
+      "qrCode": {
+        "desc": "Custom QR code generator for WiFi, URLs, and vCards with vector SVG and high-res PNG export."
+      },
+      "jsonStudio": {
+        "desc": "Offline JSON beautifier, minifier, validator, and real-time JWT token claim inspector."
       }
     }
+  },
+  "qr": {
+    "title": "QR Code Studio",
+    "description": "Generate high-resolution, custom-styled QR codes for URLs, WiFi networks, digital business cards, and contact info."
+  },
+  "jsonStudio": {
+    "title": "JSON & JWT Studio",
+    "description": "Format, validate, and minify JSON with real-time error detection. Decode and inspect JWT claims 100% client-side."
   },
   "clipboard": {
     "search": "Search history...",

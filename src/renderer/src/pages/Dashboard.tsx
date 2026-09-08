@@ -12,6 +12,8 @@ import {
   Clipboard,
   Globe,
   ImageIcon,
+  QrCode,
+  Braces,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
 
@@ -95,6 +97,26 @@ export default function Dashboard() {
       gradient: 'from-pink-500 to-rose-600',
       glowColor: 'rgba(236, 72, 153, 0.3)',
       status: t('dashboard.status.ready') || 'Ready',
+    },
+    {
+      id: 'qr-code-studio',
+      path: '/qr-code',
+      title: t('nav.tools.qrCode') || 'QR Code Studio',
+      description: t('dashboard.tools.qrCode.desc') || 'Custom QR code generator for WiFi, URLs, and vCards with vector SVG and high-res PNG export.',
+      icon: QrCode,
+      gradient: 'from-cyan-500 to-blue-600',
+      glowColor: 'rgba(6, 182, 212, 0.3)',
+      status: t('dashboard.status.live') || 'Live',
+    },
+    {
+      id: 'json-studio',
+      path: '/json-studio',
+      title: t('nav.tools.jsonStudio') || 'JSON & JWT Studio',
+      description: t('dashboard.tools.jsonStudio.desc') || 'Offline JSON beautifier, minifier, validator, and real-time JWT token claim inspector.',
+      icon: Braces,
+      gradient: 'from-indigo-500 to-cyan-500',
+      glowColor: 'rgba(99, 102, 241, 0.3)',
+      status: t('dashboard.status.active') || 'Active',
     },
   ]
 

@@ -13,6 +13,9 @@ import {
   ImageIcon,
   ChevronDown,
   Settings,
+  QrCode,
+  Braces,
+  Search,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
 
@@ -35,6 +38,13 @@ const NAV_GROUPS: NavGroup[] = [
       { path: '/temp-mail',  labelKey: 'nav.tools.tempMail',         icon: Mail },
       { path: '/decrypter',  labelKey: 'nav.tools.decrypter',        icon: ShieldCheck },
       { path: '/password',   labelKey: 'nav.tools.passwordGenerator', icon: Key },
+    ],
+  },
+  {
+    labelKey: 'nav.groups.developer',
+    items: [
+      { path: '/qr-code',     labelKey: 'nav.tools.qrCode',     icon: QrCode },
+      { path: '/json-studio', labelKey: 'nav.tools.jsonStudio', icon: Braces },
     ],
   },
   {
@@ -195,7 +205,7 @@ export default function Sidebar() {
       <div className="mx-4 h-px bg-gradient-to-r from-transparent via-nexus-border to-transparent" />
 
       {/* Dashboard — pinned, outside groups */}
-      <div className="px-3 pt-3 pb-1">
+      <div className="px-3 pt-3 pb-1 space-y-1">
         <button
           onClick={() => navigate('/')}
           className={`
@@ -208,6 +218,21 @@ export default function Sidebar() {
           {isHome && <ActiveEdge />}
           <LayoutDashboard className="w-4 h-4 relative z-10 flex-shrink-0" />
           <span className="relative z-10">{t('nav.dashboard')}</span>
+        </button>
+
+        {/* Quick Switcher Trigger */}
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent('nexus:open-palette'))}
+          className="w-full flex items-center justify-between px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.07] border border-white/5 text-xs text-nexus-muted hover:text-white transition-all group no-drag"
+        >
+          <span className="flex items-center gap-2">
+            <Search className="w-3.5 h-3.5 text-nexus-cyan" />
+            <span className="text-[12px]">Quick Search</span>
+          </span>
+          <span className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-[10px] font-mono text-nexus-muted">
+            Ctrl K
+          </span>
         </button>
       </div>
 

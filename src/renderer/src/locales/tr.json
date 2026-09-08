@@ -4,6 +4,7 @@
     "subtitle": "Çoklu Araç Seti",
     "groups": {
       "privacy": "Gizlilik & Güvenlik",
+      "developer": "Geliştirici & Araçlar",
       "files": "Dosyalar & Medya",
       "network": "Ağ"
     },
@@ -11,6 +12,8 @@
       "tempMail": "Geçici Mail Üreticisi",
       "decrypter": "Evrensel Link Çözücü & Tracker Temizleyici",
       "passwordGenerator": "Parola Üreticisi",
+      "qrCode": "QR Kod Stüdyosu",
+      "jsonStudio": "JSON & JWT Stüdyosu",
       "bulkOrganizer": "Toplu Düzenleyici",
       "clipboardManager": "Pano Yöneticisi",
       "imageToolkit": "Görsel Araç Seti",
@@ -147,8 +150,22 @@
       },
       "imageToolkit": {
         "desc": "Görselleri toplu olarak JPEG, PNG, WebP veya AVIF'e dönüştürün. Yeniden boyutlandırın, EXIF verilerini silin, yerel işleyin."
+      },
+      "qrCode": {
+        "desc": "WiFi, URL ve vCard için SVG ve yüksek çözünürlüklü PNG dışa aktarma destekli QR kod üreticisi."
+      },
+      "jsonStudio": {
+        "desc": "Çevrimdışı JSON biçimlendirici, doğrulayıcı, küçültücü ve anlık JWT belirteç inceleyicisi."
       }
     }
+  },
+  "qr": {
+    "title": "QR Kod Stüdyosu",
+    "description": "URL, Wi-Fi ağları, dijital kartvizitler ve kişi bilgileri için yüksek çözünürlüklü, özel stilli QR kodları üretin."
+  },
+  "jsonStudio": {
+    "title": "JSON & JWT Stüdyosu",
+    "description": "Anlık sözdizimi doğrulamasıyla JSON'ı biçimlendirin, küçültün ve doğrulayın. JWT belirteçlerini %100 yerel olarak çözümleyin."
   },
   "clipboard": {
     "search": "Geçmişte ara...",
