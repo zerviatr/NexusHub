@@ -70,7 +70,7 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 // ── Startup ────────────────────────────────────────────────────────────────
 async function start(): Promise<void> {
   await migrate()
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`[server] NexusHub License API running on port ${PORT}`)
     console.log(`[server] Env: ${process.env['NODE_ENV'] ?? 'development'}`)
   })
