@@ -21,14 +21,32 @@ export function LicenseProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Initial check on mount
-    window.nexusAPI.license.check().then((res: any) => {
+    window.nexusAPI?.license?.check?.()?.then((res: any) => {
+      if (!res) {
+        setStatus('inactive')
+        return
+      }
       setStatus(res.status)
       if (res.status === 'active') {
         setTier(res.tier)
         setExpiresAt(res.expiresAt)
         setKey(res.key)
       }
+    })?.catch((err: any) => {
+      console.warn('License check failed:', err)
+      setStatus('inactive')
     })
+
+    const unbindRevoked = window.nexusAPI?.license?.onRevoked?.(() => {
+      setStatus('revoked')
+      setTier(null)
+      setExpiresAt(null)
+      setKey(null)
+    })
+
+    return () => {
+      unbindRevoked?.()
+    }
   }, [])
 
   const activate = async (newKey: string) => {

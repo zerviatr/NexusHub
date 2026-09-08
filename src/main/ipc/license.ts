@@ -8,7 +8,7 @@
  *   license:deactivate → void                   (clear stored + online deregister)
  *   license:bgVerify   → void                   (24h background heartbeat)
  */
-import { ipcMain } from 'electron'
+import { ipcMain, BrowserWindow } from 'electron'
 import {
   validateKey,
   storeLicense,
@@ -58,8 +58,12 @@ export function registerLicenseIPC(): void {
         // Server says key is invalid/revoked — clear local license
         console.log('[license] Online verify failed (revoked?), clearing:', online.reason)
         clearLicense()
-        // Notify renderer to re-check
-        ipcMain.emit('license:revoked')
+        // Notify renderer windows to update
+        BrowserWindow.getAllWindows().forEach((win) => {
+          if (!win.isDestroyed()) {
+            win.webContents.send('license:revoked')
+          }
+        })
       } else if (online.ok) {
         // Update stored data with fresh server response
         const updated: LicenseData = {

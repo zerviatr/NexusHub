@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron'
 import axios from 'axios'
 import { URL } from 'url'
+import { isValidAylinkUrl, bypassAylink } from './linkBypasser'
 
 const KNOWN_TRACKERS = new Set([
   'utm_source',
@@ -60,8 +61,7 @@ export async function decryptAndClean(targetUrl: string): Promise<DecryptResult>
       }
     }
 
-    // --- NEW: Check if it's an Aylink ---
-    const { isValidAylinkUrl, bypassAylink } = await import('./linkBypasser')
+    // --- Check if it's an Aylink ---
     if (isValidAylinkUrl(finalUrl)) {
       console.log(`[LinkDecrypter] Detected Aylink URL: ${finalUrl}, running bypasser...`)
       const bypassRes = await bypassAylink(finalUrl)

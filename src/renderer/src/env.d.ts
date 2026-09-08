@@ -52,6 +52,7 @@ interface NexusAPI {
     activate:   (key: string) => Promise<{ success: boolean; tier?: string; reason?: string }>
     deactivate: () => Promise<{ success: boolean }>
     bgVerify:   () => Promise<{ valid: boolean }>
+    onRevoked:  (cb: () => void) => () => void
   }
   updater: {
     onAvailable:  (cb: (info: unknown) => void) => () => void
@@ -65,6 +66,12 @@ interface NexusAPI {
   maximize: () => void
   close: () => void
   isMaximized: () => Promise<boolean>
+  onNavigate?: (cb: (path: string) => void) => () => void
+  onPaletteToggle?: (cb: () => void) => () => void
+  settings?: {
+    getAutoLaunch: () => Promise<boolean>
+    setAutoLaunch: (enable: boolean) => Promise<boolean>
+  }
 }
 
 declare global {

@@ -55,6 +55,12 @@ const nexusAPI = {
     deactivate: ()           => ipcRenderer.invoke('license:deactivate'),
     /** 24h background heartbeat — verify key+device against server. */
     bgVerify:   ()           => ipcRenderer.invoke('license:bgVerify'),
+    /** Listen for remote revocation event */
+    onRevoked:  (cb: () => void) => {
+      const handler = () => cb()
+      ipcRenderer.on('license:revoked', handler)
+      return () => ipcRenderer.removeListener('license:revoked', handler)
+    },
   },
 
   // ─── Auto-updater events (subscribe pattern → returns cleanup fn) ─────────

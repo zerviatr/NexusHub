@@ -68,6 +68,32 @@ const FINAL_DOMAINS = [
   'fileditch.com',
 ]
 
+const TRACKER_KEYS = new Set([
+  'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+  'fbclid', 'igshid', 'gclid', 'gclsrc', 'wbraid', 'gbraid',
+  '_ga', '_gl', '_ke', 'mc_cid', 'mc_eid', 'ref', 'ref_src', 'ref_url'
+])
+
+export function stripTrackingParams(targetUrl: string): { cleanUrl: string; trackersRemoved: number } {
+  try {
+    const urlObj = new URL(targetUrl)
+    let trackersRemoved = 0
+    const keysToRemove: string[] = []
+    urlObj.searchParams.forEach((_, key) => {
+      if (TRACKER_KEYS.has(key.toLowerCase()) || key.toLowerCase().startsWith('utm_')) {
+        keysToRemove.push(key)
+      }
+    })
+    keysToRemove.forEach((key) => {
+      urlObj.searchParams.delete(key)
+      trackersRemoved++
+    })
+    return { cleanUrl: urlObj.toString(), trackersRemoved }
+  } catch {
+    return { cleanUrl: targetUrl, trackersRemoved: 0 }
+  }
+}
+
 // ===== Helpers (ported verbatim from server.js) =====
 
 export function isValidAylinkUrl(url: string): boolean {
@@ -452,15 +478,12 @@ export async function bypassAylink(url: string): Promise<BypassResult> {
         finalUrl = await resolveRedirects(intermediateUrl)
         console.log('[Bypass] Final destination URL:', finalUrl)
         
-        // Pipe the final URL into the Universal Decrypter to clean trackers
-        const { decryptAndClean } = await import('./linkDecrypter')
-        const decryptRes = await decryptAndClean(finalUrl)
-        if (decryptRes.success && decryptRes.cleanUrl) {
-          finalUrl = decryptRes.cleanUrl
-          trackersRemoved = decryptRes.trackersRemoved || 0
-          if (trackersRemoved > 0) {
-            console.log(`[Bypass] Cleaned ${trackersRemoved} trackers from bypassed URL`)
-          }
+        // Clean tracking parameters from final destination URL
+        const cleaned = stripTrackingParams(finalUrl)
+        finalUrl = cleaned.cleanUrl
+        trackersRemoved = cleaned.trackersRemoved
+        if (trackersRemoved > 0) {
+          console.log(`[Bypass] Cleaned ${trackersRemoved} trackers from bypassed URL`)
         }
       } catch (redirectErr: any) {
         console.log(
