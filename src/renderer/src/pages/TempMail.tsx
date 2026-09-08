@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Mail,
@@ -92,11 +92,6 @@ export default function TempMail() {
     } finally {
       setIsReading(false)
     }
-  }
-
-  const handleBack = () => {
-    setActiveMessageId(null)
-    setActiveMessage(null)
   }
 
   const handleCopy = async () => {

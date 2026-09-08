@@ -76,7 +76,7 @@ export async function decryptAndClean(targetUrl: string): Promise<DecryptResult>
 
     // Collect keys to remove
     const keysToRemove: string[] = []
-    urlObj.searchParams.forEach((value, key) => {
+    urlObj.searchParams.forEach((_, key) => {
       // Check exact matches or prefixes (e.g., utm_ anything)
       if (KNOWN_TRACKERS.has(key) || key.startsWith('utm_')) {
         keysToRemove.push(key)

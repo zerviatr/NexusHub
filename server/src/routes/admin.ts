@@ -21,9 +21,9 @@ adminRouter.post('/create-key', async (req: Request, res: Response): Promise<voi
     adminSecret?: string
   }
 
-  const expected = process.env['ADMIN_SECRET'] ?? 'NEXUS_ADMIN_LOCAL_TEST'
+  const expected = process.env['ADMIN_SECRET']
 
-  if (adminSecret !== expected) {
+  if (!expected || adminSecret !== expected) {
     res.status(401).json({ error: 'Unauthorized' })
     return
   }

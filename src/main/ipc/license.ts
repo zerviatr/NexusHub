@@ -32,9 +32,6 @@ export type LicenseActivateResult =
   | { success: true;  tier: string; expiresAt: number }
   | { success: false; reason: string }
 
-/** 24h in ms — how long we allow offline grace before requiring reverification */
-const OFFLINE_GRACE_MS = 24 * 60 * 60 * 1000
-
 export function registerLicenseIPC(): void {
   // ─── Check stored license (called on startup) ──────────────────────────
   ipcMain.handle('license:check', async (): Promise<LicenseStatusPayload> => {

@@ -22,12 +22,10 @@ import fs                      from 'fs'
 import { machineIdSync }       from 'node-machine-id'
 
 // ─── Config ──────────────────────────────────────────────────────────────────
-const SECRET: string =
-  process.env['NEXUS_LICENSE_SECRET'] ?? 'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
+const SECRET: string = 'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
 
-/** Base URL for the license API server. Set NEXUS_API_URL in .env at build time. */
-const API_URL: string =
-  process.env['NEXUS_API_URL'] ?? 'http://localhost:3000'
+/** Base URL for the license API server. */
+const API_URL: string = 'https://nexushub-production-4a5b.up.railway.app'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 export type LicenseTier = 'free' | 'pro' | 'team' | 'lifetime'
