@@ -47,6 +47,22 @@ const nexusAPI = {
     process: (jobs: any[]) => ipcRenderer.invoke('image:process', jobs),
   },
 
+  // Sentinel (Hardware & Process Monitor)
+  sentinel: {
+    getStats: () => ipcRenderer.invoke('sentinel:getStats'),
+    optimizeMemory: () => ipcRenderer.invoke('sentinel:optimizeMemory'),
+  },
+
+  // Cyber Fortress & Secure Shredder
+  fortress: {
+    selectFile: () => ipcRenderer.invoke('fortress:selectFile'),
+    shredFile: (filePath: string) => ipcRenderer.invoke('fortress:shredFile', filePath),
+    encryptFile: (payload: { filePath: string; passphrase: string }) =>
+      ipcRenderer.invoke('fortress:encryptFile', payload),
+    decryptFile: (payload: { filePath: string; passphrase: string }) =>
+      ipcRenderer.invoke('fortress:decryptFile', payload),
+  },
+
   // ─── License & Activation ─────────────────────────────────────────────────
   license: {
     /** Check persisted license on startup. Returns status + tier if active. */

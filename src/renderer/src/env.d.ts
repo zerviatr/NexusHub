@@ -50,6 +50,16 @@ interface NexusAPI {
     getMetadata: (filePath: string) => Promise<any>
     process: (jobs: any[]) => Promise<any[]>
   }
+  sentinel: {
+    getStats: () => Promise<any>
+    optimizeMemory: () => Promise<any>
+  }
+  fortress: {
+    selectFile: () => Promise<any>
+    shredFile: (filePath: string) => Promise<any>
+    encryptFile: (payload: { filePath: string; passphrase: string }) => Promise<any>
+    decryptFile: (payload: { filePath: string; passphrase: string }) => Promise<any>
+  }
   license: {
     check:      () => Promise<{ status: string; tier?: string; expiresAt?: number }>
     activate:   (key: string) => Promise<{ success: boolean; tier?: string; reason?: string }>

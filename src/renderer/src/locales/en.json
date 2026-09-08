@@ -18,7 +18,10 @@
       "bulkOrganizer": "Bulk Organizer",
       "clipboardManager": "Clipboard Manager",
       "imageToolkit": "Image Toolkit",
-      "networkTools": "Network Tools"
+      "networkTools": "Network Tools",
+      "sentinel": "Resource Sentinel",
+      "devSandbox": "DevSandbox API Studio",
+      "cyberFortress": "Cyber Fortress & Shredder"
     },
     "account": "Account Settings"
   },

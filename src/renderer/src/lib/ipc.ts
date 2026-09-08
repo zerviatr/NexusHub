@@ -241,4 +241,22 @@ export const nexusAPI = {
     process: (jobs: ImageJob[]): Promise<ImageProcessResult[]> =>
       window.nexusAPI.image.process(jobs),
   },
+
+  // ── Sentinel (Hardware & Process Monitor) ───────────────────────────────────
+  sentinel: {
+    getStats: (): Promise<any> => window.nexusAPI.sentinel.getStats(),
+    optimizeMemory: (): Promise<any> => window.nexusAPI.sentinel.optimizeMemory(),
+  },
+
+  // ── Cyber Fortress (Vault & DoD Shredder) ───────────────────────────────────
+  fortress: {
+    selectFile: (): Promise<{ filePath: string; name: string; size: number } | null> =>
+      window.nexusAPI.fortress.selectFile(),
+    shredFile: (filePath: string): Promise<{ success: boolean; passes?: number; size?: number; error?: string }> =>
+      window.nexusAPI.fortress.shredFile(filePath),
+    encryptFile: (payload: { filePath: string; passphrase: string }): Promise<{ success: boolean; outPath?: string; name?: string; error?: string }> =>
+      window.nexusAPI.fortress.encryptFile(payload),
+    decryptFile: (payload: { filePath: string; passphrase: string }): Promise<{ success: boolean; outPath?: string; name?: string; error?: string }> =>
+      window.nexusAPI.fortress.decryptFile(payload),
+  },
 }

@@ -10,6 +10,8 @@ import { registerImageToolkitIPC } from './ipc/imageToolkit'
 import { setupAutoUpdater } from './updater'
 import { registerLicenseIPC } from './ipc/license'
 import { setupSystemTray } from './tray'
+import { registerSentinelIPC } from './ipc/sentinelIPC'
+import { registerCyberFortressIPC } from './ipc/cyberFortressIPC'
 import { setupGlobalShortcuts, registerSettingsIPC } from './shortcuts'
 
 let mainWindow: BrowserWindow | null = null
@@ -94,6 +96,8 @@ registerClipboardIPC()
 registerNetworkToolsIPC()
 registerImageToolkitIPC()
 registerSettingsIPC()
+registerSentinelIPC()
+registerCyberFortressIPC()
 
 // ===== App Lifecycle =====
 app.whenReady().then(() => {

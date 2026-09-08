@@ -18,6 +18,9 @@ import {
   Braces,
   Search,
   FileCheck,
+  Activity,
+  Code2,
+  ShieldAlert,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
 
@@ -40,11 +43,13 @@ const NAV_GROUPS: NavGroup[] = [
       { path: '/temp-mail',  labelKey: 'nav.tools.tempMail',         icon: Mail },
       { path: '/decrypter',  labelKey: 'nav.tools.decrypter',        icon: ShieldCheck },
       { path: '/password',   labelKey: 'nav.tools.passwordGenerator', icon: Key },
+      { path: '/fortress',   labelKey: 'nav.tools.cyberFortress',    icon: ShieldAlert },
     ],
   },
   {
     labelKey: 'nav.groups.developer',
     items: [
+      { path: '/dev-sandbox', labelKey: 'nav.tools.devSandbox', icon: Code2 },
       { path: '/qr-code',     labelKey: 'nav.tools.qrCode',     icon: QrCode },
       { path: '/json-studio', labelKey: 'nav.tools.jsonStudio', icon: Braces },
       { path: '/hash-studio', labelKey: 'nav.tools.hashStudio', icon: FileCheck },
@@ -61,7 +66,8 @@ const NAV_GROUPS: NavGroup[] = [
   {
     labelKey: 'nav.groups.network',
     items: [
-      { path: '/network', labelKey: 'nav.tools.networkTools', icon: Globe },
+      { path: '/network',  labelKey: 'nav.tools.networkTools', icon: Globe },
+      { path: '/sentinel', labelKey: 'nav.tools.sentinel',     icon: Activity },
     ],
   },
 ]

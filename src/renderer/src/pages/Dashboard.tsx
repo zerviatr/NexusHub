@@ -16,6 +16,9 @@ import {
   QrCode,
   Braces,
   FileCheck,
+  Activity,
+  Code2,
+  ShieldAlert,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
 
@@ -129,6 +132,36 @@ export default function Dashboard() {
       gradient: 'from-emerald-500 to-teal-600',
       glowColor: 'rgba(16, 185, 129, 0.3)',
       status: t('dashboard.status.live') || 'Live',
+    },
+    {
+      id: 'sentinel',
+      path: '/sentinel',
+      title: 'Resource Sentinel',
+      description: 'Gerçek zamanlı donanım sensörleri, çekirdek CPU yükü, RAM tüketim analizörü ve tek tıkla bellek temizleme motoru.',
+      icon: Activity,
+      gradient: 'from-cyan-500 to-emerald-600',
+      glowColor: 'rgba(6, 182, 212, 0.3)',
+      status: 'Pro',
+    },
+    {
+      id: 'dev-sandbox',
+      path: '/dev-sandbox',
+      title: 'DevSandbox API Studio',
+      description: 'Hafif, ultra hızlı REST API ve Webhook test stüdyosu. GET/POST istekleri gönderin, gecikmeyi ölçün ve cURL çıktısı alın.',
+      icon: Code2,
+      gradient: 'from-indigo-500 to-nexus-cyan',
+      glowColor: 'rgba(99, 102, 241, 0.3)',
+      status: 'Pro',
+    },
+    {
+      id: 'cyber-fortress',
+      path: '/fortress',
+      title: 'Cyber Fortress & Shredder',
+      description: 'DoD 5220.22-M standardında 7 geçişli geri döndürülemez dosya imha motoru ve AES-256-GCM güvenli kasa şifreleme.',
+      icon: ShieldAlert,
+      gradient: 'from-rose-500 to-amber-600',
+      glowColor: 'rgba(244, 63, 94, 0.3)',
+      status: 'Pro',
     },
   ]
 

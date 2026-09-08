@@ -14,6 +14,9 @@ import ImageToolkit from './pages/ImageToolkit'
 import QrCodeStudio from './pages/QrCodeStudio'
 import JsonStudio from './pages/JsonStudio'
 import HashStudio from './pages/HashStudio'
+import ResourceSentinel from './pages/ResourceSentinel'
+import DevSandbox from './pages/DevSandbox'
+import CyberFortress from './pages/CyberFortress'
 import Account from './pages/Account'
 import Activation from './pages/Activation'
 import EulaGate from './pages/EulaGate'
@@ -151,6 +154,12 @@ export default function App() {
                 <Route path="/qr-code" element={<QrCodeStudio />} />
                 <Route path="/json-studio" element={<JsonStudio />} />
                 <Route path="/hash-studio" element={<HashStudio />} />
+                <Route path="/sentinel" element={<ResourceSentinel />} />
+                <Route path="/dev-sandbox" element={<DevSandbox />} />
+                <Route
+                  path="/fortress"
+                  element={isPro ? <CyberFortress /> : <ProLockGate toolName="Cyber Fortress" toolDesc="DoD 5220.22-M 7-pass file shredder and military-grade AES-256-GCM vault encryption." />}
+                />
                 <Route path="/account" element={<Account />} />
               </Routes>
             </motion.div>

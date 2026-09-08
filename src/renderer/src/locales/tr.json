@@ -18,7 +18,10 @@
       "bulkOrganizer": "Toplu Düzenleyici",
       "clipboardManager": "Pano Yöneticisi",
       "imageToolkit": "Görsel Araç Seti",
-      "networkTools": "Ağ Araçları"
+      "networkTools": "Ağ Araçları",
+      "sentinel": "Resource Sentinel",
+      "devSandbox": "DevSandbox API Stüdyosu",
+      "cyberFortress": "Cyber Fortress & Shredder"
     },
     "account": "Hesap Ayarları"
   },
