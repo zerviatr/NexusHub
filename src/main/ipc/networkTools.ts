@@ -12,6 +12,7 @@
 import { ipcMain } from 'electron'
 import * as dns from 'dns'
 import * as net from 'net'
+import * as tls from 'tls'
 import { promisify } from 'util'
 import { execFile } from 'child_process'
 import axios from 'axios'
@@ -57,7 +58,25 @@ export interface PingResult {
   host: string
   output?: string
   avgMs?: number
+  minMs?: number
+  maxMs?: number
+  latencies?: number[]
   packetLoss?: string
+  error?: string
+}
+
+export interface SslCertResult {
+  success: boolean
+  host: string
+  subject?: { CN?: string; O?: string; C?: string }
+  issuer?: { CN?: string; O?: string; C?: string }
+  validFrom?: string
+  validTo?: string
+  daysRemaining?: number
+  isExpired?: boolean
+  serialNumber?: string
+  fingerprint256?: string
+  protocol?: string
   error?: string
 }
 
@@ -120,6 +139,108 @@ function parsePingAvg(output: string): number | undefined {
 function parsePingPacketLoss(output: string): string | undefined {
   const match = output.match(/(\d+)%\s*(packet\s*)?loss/i)
   return match ? `${match[1]}%` : undefined
+}
+
+function parsePingLatencies(output: string): number[] {
+  const latencies: number[] = []
+  // Matches "time=14ms", "time<1ms", "time 14.2 ms"
+  const regex = /time[=<]([\d.]+)\s*ms/gi
+  let match: RegExpExecArray | null
+  while ((match = regex.exec(output)) !== null) {
+    const val = parseFloat(match[1])
+    if (!isNaN(val)) latencies.push(val)
+  }
+  return latencies
+}
+
+function parsePingMinMax(output: string): { minMs?: number; maxMs?: number } {
+  // Windows: "Minimum = 1ms, Maximum = 3ms, Average = 2ms"
+  const winMin = output.match(/Minimum\s*=\s*(\d+)ms/i)
+  const winMax = output.match(/Maximum\s*=\s*(\d+)ms/i)
+  if (winMin || winMax) {
+    return {
+      minMs: winMin ? parseInt(winMin[1]) : undefined,
+      maxMs: winMax ? parseInt(winMax[1]) : undefined,
+    }
+  }
+  // Unix: "rtt min/avg/max/mdev = 1.234/2.345/3.456/0.123 ms"
+  const unixMatch = output.match(/min\/avg\/max\/mdev\s*=\s*([\d.]+)\/([\d.]+)\/([\d.]+)/)
+  if (unixMatch) {
+    return {
+      minMs: parseFloat(unixMatch[1]),
+      maxMs: parseFloat(unixMatch[3]),
+    }
+  }
+  return {}
+}
+
+function inspectSslCertificate(rawHost: string, port = 443, timeoutMs = 6000): Promise<SslCertResult> {
+  return new Promise((resolve) => {
+    const cleanHost = rawHost.trim().replace(/^https?:\/\//i, '').split('/')[0].split(':')[0]
+    if (!cleanHost) return resolve({ success: false, host: rawHost, error: 'Host is empty' })
+
+    const socket = tls.connect(
+      {
+        host: cleanHost,
+        port,
+        servername: cleanHost,
+        rejectUnauthorized: false,
+        timeout: timeoutMs,
+      },
+      () => {
+        try {
+          const cert = socket.getPeerCertificate(true)
+          const protocol = socket.getProtocol() || undefined
+          socket.destroy()
+
+          if (!cert || Object.keys(cert).length === 0) {
+            return resolve({ success: false, host: cleanHost, error: 'Sunucu geçerli bir SSL sertifikası sağlamadı.' })
+          }
+
+          const validTo = cert.valid_to ? new Date(cert.valid_to) : undefined
+          const validFrom = cert.valid_from ? new Date(cert.valid_from) : undefined
+          const now = new Date()
+          const daysRemaining = validTo
+            ? Math.round((validTo.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+            : undefined
+
+          resolve({
+            success: true,
+            host: cleanHost,
+            subject: {
+              CN: cert.subject?.CN,
+              O: cert.subject?.O,
+              C: cert.subject?.C,
+            },
+            issuer: {
+              CN: cert.issuer?.CN,
+              O: cert.issuer?.O,
+              C: cert.issuer?.C,
+            },
+            validFrom: validFrom ? validFrom.toLocaleDateString() : undefined,
+            validTo: validTo ? validTo.toLocaleDateString() : undefined,
+            daysRemaining,
+            isExpired: daysRemaining !== undefined ? daysRemaining <= 0 : false,
+            serialNumber: cert.serialNumber,
+            fingerprint256: cert.fingerprint256,
+            protocol,
+          })
+        } catch (err: any) {
+          resolve({ success: false, host: cleanHost, error: err.message || 'Sertifika çözümlenemedi.' })
+        }
+      }
+    )
+
+    socket.on('timeout', () => {
+      socket.destroy()
+      resolve({ success: false, host: cleanHost, error: 'SSL el sıkışması zaman aşımına uğradı (Timeout).' })
+    })
+
+    socket.on('error', (err) => {
+      socket.destroy()
+      resolve({ success: false, host: cleanHost, error: err.message || 'SSL bağlantı hatası.' })
+    })
+  })
 }
 
 // ===== IPC Registration =====
@@ -224,17 +345,27 @@ export function registerNetworkToolsIPC(): void {
 
       const { stdout, stderr } = await execFileAsync('ping', args, { timeout: 10000 })
       const output = stdout || stderr
+      const minMax = parsePingMinMax(output)
+      const latencies = parsePingLatencies(output)
 
       return {
         success: true,
         host: sanitized,
         output,
         avgMs: parsePingAvg(output),
+        minMs: minMax.minMs,
+        maxMs: minMax.maxMs,
+        latencies,
         packetLoss: parsePingPacketLoss(output),
       }
     } catch (err: any) {
       return { success: false, host, error: err.message || String(err) }
     }
+  })
+
+  // SSL Certificate Inspector
+  ipcMain.handle('network:sslInspect', async (_, host: string, port?: number): Promise<SslCertResult> => {
+    return inspectSslCertificate(host, port || 443)
   })
 
   // My IP & Geolocation

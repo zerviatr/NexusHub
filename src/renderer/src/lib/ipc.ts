@@ -13,12 +13,19 @@ export interface BypassResult {
   error?: string
 }
 
+export interface RemovedTrackerInfo {
+  name: string
+  category: 'analytics' | 'social' | 'ads' | 'campaign' | 'other'
+  description: string
+}
+
 export interface DecryptResult {
   success: boolean
   originalUrl?: string
   finalUrl?: string
   cleanUrl?: string
   trackersRemoved?: number
+  removedList?: RemovedTrackerInfo[]
   error?: string
 }
 
@@ -103,7 +110,25 @@ export interface PingResult {
   host: string
   output?: string
   avgMs?: number
+  minMs?: number
+  maxMs?: number
+  latencies?: number[]
   packetLoss?: string
+  error?: string
+}
+
+export interface SslCertResult {
+  success: boolean
+  host: string
+  subject?: { CN?: string; O?: string; C?: string }
+  issuer?: { CN?: string; O?: string; C?: string }
+  validFrom?: string
+  validTo?: string
+  daysRemaining?: number
+  isExpired?: boolean
+  serialNumber?: string
+  fingerprint256?: string
+  protocol?: string
   error?: string
 }
 
@@ -163,6 +188,7 @@ export const nexusAPI = {
 
   decrypter: {
     clean: (url: string): Promise<DecryptResult> => window.nexusAPI.decrypter.clean(url),
+    cleanBatch: (urls: string[]): Promise<DecryptResult[]> => window.nexusAPI.decrypter.cleanBatch(urls),
   },
 
   organizer: {
@@ -202,6 +228,8 @@ export const nexusAPI = {
     portScan: (host: string, ports: number[]): Promise<PortScanResult> =>
       window.nexusAPI.network.portScan(host, ports),
     ping: (host: string): Promise<PingResult> => window.nexusAPI.network.ping(host),
+    sslInspect: (host: string, port?: number): Promise<SslCertResult> =>
+      window.nexusAPI.network.sslInspect(host, port),
     myIp: (): Promise<MyIpResult> => window.nexusAPI.network.myIp(),
   },
 

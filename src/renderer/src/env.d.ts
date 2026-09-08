@@ -22,8 +22,10 @@ interface NexusAPI {
       finalUrl?: string
       cleanUrl?: string
       trackersRemoved?: number
+      removedList?: { name: string; category: string; description: string }[]
       error?: string
     }>
+    cleanBatch: (urls: string[]) => Promise<any[]>
   }
   organizer: {
     selectDir: () => Promise<{ canceled: boolean; filePaths: string[] }>
@@ -41,6 +43,7 @@ interface NexusAPI {
     dnsQuery: (host: string, type: string) => Promise<any>
     portScan: (host: string, ports: number[]) => Promise<any>
     ping: (host: string) => Promise<any>
+    sslInspect: (host: string, port?: number) => Promise<any>
   }
   image: {
     selectFiles: () => Promise<string[]>

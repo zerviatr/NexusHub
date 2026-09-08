@@ -11,6 +11,7 @@ const nexusAPI = {
   },
   decrypter: {
     clean: (url: string) => ipcRenderer.invoke('decrypter:clean', url),
+    cleanBatch: (urls: string[]) => ipcRenderer.invoke('decrypter:cleanBatch', urls),
   },
   organizer: {
     selectDir: () => ipcRenderer.invoke('organizer:selectDir'),
@@ -35,6 +36,7 @@ const nexusAPI = {
     portScan: (host: string, ports: number[]) =>
       ipcRenderer.invoke('network:portScan', host, ports),
     ping: (host: string) => ipcRenderer.invoke('network:ping', host),
+    sslInspect: (host: string, port?: number) => ipcRenderer.invoke('network:sslInspect', host, port),
     myIp: () => ipcRenderer.invoke('network:myIp'),
   },
 

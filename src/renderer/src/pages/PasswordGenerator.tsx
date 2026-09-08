@@ -24,9 +24,12 @@ import {
   Sparkles,
   Layers,
   AlertCircle,
+  ShieldAlert,
+  CheckCircle2,
 } from 'lucide-react'
 import BaseToolTemplate from '../components/BaseToolTemplate'
 import { useT } from '../lib/i18n'
+import { useToast } from '../lib/ToastContext'
 import {
   type SavedPasswordItem,
   saveEncryptedVault,
@@ -52,6 +55,43 @@ function estimateStrength(password: string): { score: number; key: StrengthKey; 
   if (score <= 4) return { score: score / 8, key: 'fair',   color: '#f59e0b' }
   if (score <= 6) return { score: score / 8, key: 'good',   color: '#3b82f6' }
   return           { score: score / 8, key: 'strong', color: '#22c55e' }
+}
+
+export function calculateEntropy(pwd: string): number {
+  if (!pwd) return 0
+  let pool = 0
+  if (/[a-z]/.test(pwd)) pool += 26
+  if (/[A-Z]/.test(pwd)) pool += 26
+  if (/[0-9]/.test(pwd)) pool += 10
+  if (/[^a-zA-Z0-9]/.test(pwd)) pool += 32
+  if (pool === 0) pool = 10
+  return Math.round(pwd.length * Math.log2(pool))
+}
+
+export async function checkPwnedPassword(password: string): Promise<{ breached: boolean; count: number }> {
+  if (!password) return { breached: false, count: 0 }
+  try {
+    const enc = new TextEncoder().encode(password)
+    const hashBuffer = await crypto.subtle.digest('SHA-1', enc)
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('').toUpperCase()
+    const prefix = hashHex.slice(0, 5)
+    const suffix = hashHex.slice(5)
+
+    const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`)
+    if (!res.ok) throw new Error('Pwned API error')
+    const text = await res.text()
+    const lines = text.split('\n')
+    for (const line of lines) {
+      const [hashSuffix, countStr] = line.trim().split(':')
+      if (hashSuffix === suffix) {
+        return { breached: true, count: parseInt(countStr, 10) || 1 }
+      }
+    }
+    return { breached: false, count: 0 }
+  } catch {
+    return { breached: false, count: 0 }
+  }
 }
 
 // ─── Word list for passphrase ─────────────────────────────────────────────────
@@ -172,7 +212,19 @@ export default function PasswordGenerator() {
     })
   }, [])
 
+  const { success: showToastSuccess, error: showToastError } = useToast()
+
+  const [pwnedResult, setPwnedResult] = useState<{ checked: boolean; breached: boolean; count: number; loading: boolean }>({
+    checked: false,
+    breached: false,
+    count: 0,
+    loading: false,
+  })
+
+  const entropyBits = useMemo(() => calculateEntropy(generated), [generated])
+
   const generate = useCallback(() => {
+    setPwnedResult({ checked: false, breached: false, count: 0, loading: false })
     if (mode === 'password') {
       setGenerated(generatePassword({ length, lower: useLower, upper: useUpper, digits: useDigits, symbols: useSymbols, excludeAmbiguous }))
     } else if (mode === 'passphrase') {
@@ -183,6 +235,18 @@ export default function PasswordGenerator() {
   }, [mode, length, useLower, useUpper, useDigits, useSymbols, excludeAmbiguous, wordCount, delimiter, capitalizeWords, pinLength])
 
   useEffect(() => { generate() }, [generate])
+
+  const handleCheckBreaches = async () => {
+    if (!generated || pwnedResult.loading) return
+    setPwnedResult((prev) => ({ ...prev, loading: true }))
+    const res = await checkPwnedPassword(generated)
+    setPwnedResult({ checked: true, breached: res.breached, count: res.count, loading: false })
+    if (res.breached) {
+      showToastError('Sızıntı Tespiti!', `Bu parola ${res.count.toLocaleString()} farklı veri ihlalinde ele geçirilmiş!`)
+    } else {
+      showToastSuccess('Parola Temiz!', 'Harika! Bu parola bilinen hiçbir sızıntıda bulunamadı.')
+    }
+  }
 
   const generateBulk = () => {
     const results: string[] = []
@@ -197,6 +261,7 @@ export default function PasswordGenerator() {
   const handleCopy = async (text: string, key: string) => {
     await navigator.clipboard.writeText(text)
     setCopied(key)
+    showToastSuccess('Kopyalandı', 'Parola güvenle panoya kopyalandı.')
     setTimeout(() => setCopied(null), 1500)
   }
 
@@ -443,32 +508,95 @@ export default function PasswordGenerator() {
               </div>
             </div>
 
-            {/* Action buttons & Strength */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-white/5">
-              {/* Strength bar */}
-              {mode !== 'pin' ? (
-                <div className="w-full sm:w-1/2 space-y-1">
-                  <div className="h-1.5 bg-nexus-card rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full rounded-full"
-                      animate={{ width: `${strength.score * 100}%`, backgroundColor: strength.color }}
-                      transition={{ duration: 0.4, ease: 'easeOut' }}
-                    />
+            {/* Action buttons, Entropy & Strength */}
+            <div className="flex flex-col gap-3 pt-3 border-t border-white/5">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                {/* Strength bar & Entropy */}
+                {mode !== 'pin' ? (
+                  <div className="w-full sm:w-1/2 space-y-1.5">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="font-medium" style={{ color: strength.color }}>
+                        {t(`password.strength.${strength.key}`)}
+                      </span>
+                      <span className="hud-badge text-[10px] text-nexus-cyan font-mono">
+                        {entropyBits} bit Entropi
+                      </span>
+                    </div>
+                    <div className="h-1.5 bg-nexus-card rounded-full overflow-hidden">
+                      <motion.div
+                        className="h-full rounded-full"
+                        animate={{ width: `${strength.score * 100}%`, backgroundColor: strength.color }}
+                        transition={{ duration: 0.4, ease: 'easeOut' }}
+                      />
+                    </div>
                   </div>
-                  <p className="text-[11px] font-medium" style={{ color: strength.color }}>
-                    {t(`password.strength.${strength.key}`)}
-                  </p>
-                </div>
-              ) : <div />}
+                ) : (
+                  <div className="text-[11px] text-nexus-muted font-mono">
+                    <span className="hud-badge text-[10px] text-nexus-cyan">{pinLength} haneli PIN</span>
+                  </div>
+                )}
 
-              {/* Save to Vault Button */}
-              <button
-                onClick={handleOpenSaveModal}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold transition-all hover:scale-[1.02]"
-              >
-                <BookmarkPlus className="w-4 h-4 text-amber-400" />
-                <span>{t('password.vault.saveToVault') || 'Kasaya Kaydet (Etiketle)'}</span>
-              </button>
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  {/* HaveIBeenPwned Breach Check Button */}
+                  <button
+                    id="pwd-check-pwned-btn"
+                    onClick={handleCheckBreaches}
+                    disabled={pwnedResult.loading || !generated}
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-nexus-card hover:bg-nexus-accent/15 border border-white/10 hover:border-nexus-accent/40 text-nexus-text text-xs font-semibold transition-all disabled:opacity-50"
+                    title="HaveIBeenPwned k-anonymity ile parolanın sızıp sızmadığını test edin"
+                  >
+                    {pwnedResult.loading ? (
+                      <RefreshCw className="w-3.5 h-3.5 text-nexus-accent animate-spin" />
+                    ) : pwnedResult.checked && pwnedResult.breached ? (
+                      <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
+                    ) : pwnedResult.checked && !pwnedResult.breached ? (
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Shield className="w-3.5 h-3.5 text-nexus-muted" />
+                    )}
+                    <span>
+                      {pwnedResult.loading
+                        ? 'Taranıyor...'
+                        : pwnedResult.checked
+                        ? pwnedResult.breached
+                          ? `${pwnedResult.count.toLocaleString()} Sızıntı!`
+                          : 'Sızıntı Yok (Temiz)'
+                        : 'Sızıntı Kontrolü'}
+                    </span>
+                  </button>
+
+                  {/* Save to Vault Button */}
+                  <button
+                    onClick={handleOpenSaveModal}
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold transition-all hover:scale-[1.02]"
+                  >
+                    <BookmarkPlus className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{t('password.vault.saveToVault') || 'Kasaya Kaydet'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Breach Banner alert if checked and breached */}
+              {pwnedResult.checked && pwnedResult.breached && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center justify-between gap-2"
+                >
+                  <div className="flex items-center gap-2">
+                    <ShieldAlert className="w-4 h-4 text-rose-400 shrink-0" />
+                    <span>
+                      Bu parola HaveIBeenPwned veritabanında <strong>{pwnedResult.count.toLocaleString()}</strong> kez ifşa edilmiş! Farklı bir parola üretmeniz önerilir.
+                    </span>
+                  </div>
+                  <button
+                    onClick={generate}
+                    className="text-[11px] font-bold text-rose-300 underline hover:text-white shrink-0"
+                  >
+                    Yenisini Üret
+                  </button>
+                </motion.div>
+              )}
             </div>
 
             {/* Save Success Toast */}
