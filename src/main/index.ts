@@ -80,6 +80,7 @@ ipcMain.handle('window:isMaximized', () => mainWindow?.isMaximized() ?? false)
 
 // Open external URLs in system browser
 ipcMain.handle('shell:openExternal', (_, url: string) => shell.openExternal(url))
+ipcMain.handle('app:getVersion', () => app.getVersion())
 
 // Register license IPC first — renderer gate depends on it being ready
 registerLicenseIPC()

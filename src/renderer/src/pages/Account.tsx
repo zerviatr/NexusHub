@@ -12,17 +12,23 @@ export default function Account() {
   const [updateInfo, setUpdateInfo] = useState<{ version?: string; current?: string; message?: string }>({})
 
   useEffect(() => {
+    window.nexusAPI?.getVersion?.().then((ver: string) => {
+      if (ver) {
+        setUpdateInfo((prev) => ({ ...prev, current: ver.startsWith('v') ? ver : `v${ver}` }))
+      }
+    })
+
     const unbindAvailable = window.nexusAPI?.updater?.onAvailable?.((info: any) => {
       setUpdateStatus('available')
-      setUpdateInfo({ version: info?.version })
+      setUpdateInfo((prev) => ({ ...prev, version: info?.version ? (String(info.version).startsWith('v') ? info.version : `v${info.version}`) : undefined }))
     })
     const unbindNotAvailable = window.nexusAPI?.updater?.onNotAvailable?.((info: any) => {
       setUpdateStatus('latest')
-      setUpdateInfo({ current: info?.version || 'v1.0.0' })
+      setUpdateInfo((prev) => ({ ...prev, current: info?.version ? (String(info.version).startsWith('v') ? info.version : `v${info.version}`) : (prev.current || 'v1.0.1') }))
     })
     const unbindDownloaded = window.nexusAPI?.updater?.onDownloaded?.((info: any) => {
       setUpdateStatus('ready')
-      setUpdateInfo({ version: info?.version })
+      setUpdateInfo((prev) => ({ ...prev, version: info?.version ? (String(info.version).startsWith('v') ? info.version : `v${info.version}`) : undefined }))
     })
     const unbindError = window.nexusAPI?.updater?.onError?.((err: string) => {
       setUpdateStatus('error')
@@ -41,22 +47,25 @@ export default function Account() {
     setUpdateStatus('checking')
     try {
       const res = await window.nexusAPI?.updater?.checkNow?.()
+      const cur = res?.currentVersion ? (res.currentVersion.startsWith('v') ? res.currentVersion : `v${res.currentVersion}`) : 'v1.0.1'
+      const upd = res?.updateVersion ? (res.updateVersion.startsWith('v') ? res.updateVersion : `v${res.updateVersion}`) : undefined
+
       if (res?.hasUpdate) {
         setUpdateStatus('available')
-        setUpdateInfo({ version: res.updateVersion, current: res.currentVersion })
+        setUpdateInfo({ version: upd, current: cur })
       } else if (res?.isLatest) {
         setUpdateStatus('latest')
-        setUpdateInfo({ current: res.currentVersion || 'v1.0.0' })
+        setUpdateInfo({ current: cur })
       } else if (res?.error) {
         setUpdateStatus('error')
-        setUpdateInfo({ message: res.error })
+        setUpdateInfo({ message: res.error, current: cur })
       } else {
         setUpdateStatus('latest')
-        setUpdateInfo({ current: 'v1.0.0' })
+        setUpdateInfo({ current: cur })
       }
     } catch (err: any) {
       setUpdateStatus('error')
-      setUpdateInfo({ message: err?.message || 'Update check failed' })
+      setUpdateInfo({ message: err?.message || 'Update check failed', current: 'v1.0.1' })
     }
   }
 

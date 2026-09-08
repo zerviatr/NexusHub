@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   LayoutDashboard,
   Sparkles,
@@ -182,6 +182,13 @@ export default function Sidebar() {
   const navigate = useNavigate()
   const { t } = useT()
   const isHome = location.pathname === '/'
+  const [appVersion, setAppVersion] = useState('1.0.1')
+
+  useEffect(() => {
+    window.nexusAPI?.getVersion?.().then((v) => {
+      if (v) setAppVersion(v)
+    })
+  }, [])
 
   return (
     <motion.aside
@@ -265,7 +272,7 @@ export default function Sidebar() {
           <span className="truncate">{t('nav.account') || 'Account Settings'}</span>
         </button>
         <div className="glass-card p-2.5 text-center">
-          <p className="text-[10px] text-nexus-muted">NexusHub v1.0.0</p>
+          <p className="text-[10px] text-nexus-muted">NexusHub v{appVersion}</p>
           <p className="text-[9px] text-nexus-muted/60 mt-0.5">Electron + React + TypeScript</p>
         </div>
       </div>

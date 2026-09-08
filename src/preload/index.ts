@@ -89,8 +89,9 @@ const nexusAPI = {
     checkNow:   () => ipcRenderer.invoke('updater:check-now'),
   },
 
-  // Shell
+  // Shell & App
   openExternal: (url: string) => ipcRenderer.invoke('shell:openExternal', url),
+  getVersion:   () => ipcRenderer.invoke('app:getVersion'),
 
   // Window controls
   minimize:    () => ipcRenderer.send('window:minimize'),

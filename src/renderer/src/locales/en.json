@@ -114,7 +114,18 @@
       "autoLaunchDesc": "Silently starts in system tray on boot",
       "hotkeys": "System Hotkeys",
       "checkUpdates": "Check for Updates",
-      "checkingUpdate": "Checking GitHub releases for updates..."
+      "checkingUpdate": "Scanning GitHub releases...",
+      "autoUpdatesActive": "Auto-updates active in background",
+      "allUpToDate": "You are on the latest stable version",
+      "latestMsg": "✓ Program is up to date! Installed version:",
+      "updateFound": "New version available",
+      "newVersionDownloading": "New version found:",
+      "downloading": "Downloading...",
+      "updateReady": "Update ready!",
+      "updateReadyDesc": "Ready to install",
+      "restartInstall": "Restart & Install",
+      "updateErrorDesc": "Could not connect to release server",
+      "offlineWarning": "Could not check GitHub releases (Check your internet connection)."
     }
   },
   "eula": {

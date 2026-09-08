@@ -114,7 +114,18 @@
       "autoLaunchDesc": "Sistem açılışında tepside sessizce başlar",
       "hotkeys": "Sistem Kısayolları",
       "checkUpdates": "Güncellemeleri Denetle",
-      "checkingUpdate": "GitHub sürümleri denetleniyor..."
+      "checkingUpdate": "GitHub sürümleri taranıyor...",
+      "autoUpdatesActive": "Otomatik güncellemeler devrede",
+      "allUpToDate": "En son kararlı sürümü kullanıyorsunuz",
+      "latestMsg": "✓ Program güncel! Kurulu sürüm:",
+      "updateFound": "Yeni sürüm mevcut",
+      "newVersionDownloading": "Yeni sürüm bulundu:",
+      "downloading": "İndiriliyor...",
+      "updateReady": "Güncelleme hazır!",
+      "updateReadyDesc": "Yüklemeye hazır",
+      "restartInstall": "Yeniden Başlat & Kur",
+      "updateErrorDesc": "Sürüm sunucusuna erişilemedi",
+      "offlineWarning": "GitHub sürüm kontrolü yapılamadı (İnternet bağlantınızı kontrol edin)."
     }
   },
   "eula": {

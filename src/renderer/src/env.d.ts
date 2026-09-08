@@ -64,6 +64,7 @@ interface NexusAPI {
     checkNow:        () => Promise<any>
   }
   openExternal: (url: string) => Promise<void>
+  getVersion?: () => Promise<string>
   minimize: () => void
   maximize: () => void
   close: () => void
