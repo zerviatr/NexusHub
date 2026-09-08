@@ -1,6 +1,6 @@
 {
   "name": "nexushub",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "NexusHub — Premium Multi-Tool Desktop Application",
   "main": "./out/main/index.js",
   "author": {
@@ -96,10 +96,8 @@
           ]
         }
       ],
-      "hardenedRuntime": true,
-      "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist",
-      "notarize": true,
+      "hardenedRuntime": false,
+      "notarize": false,
       "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "dmg": {
