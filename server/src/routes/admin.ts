@@ -28,25 +28,29 @@ adminRouter.post('/create-key', async (req: Request, res: Response): Promise<voi
     return
   }
 
-  const secret    = process.env['NEXUS_LICENSE_SECRET'] ?? 'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
-  const expiresAt = tierToExpiry(tier)
-  const key       = generateKey(tier, expiresAt, secret)
+  try {
+    const secret    = process.env['NEXUS_LICENSE_SECRET'] ?? 'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
+    const expiresAt = tierToExpiry(tier)
+    const key       = generateKey(tier, expiresAt, secret)
 
-  const db = getDb()
+    const db = getDb()
 
-  // Check if key already exists (same tier/expiry = same key deterministically)
-  const existing = await db.execute({
-    sql:  'SELECT key FROM licenses WHERE key = ?',
-    args: [key],
-  })
-
-  if (existing.rows.length === 0) {
-    await db.execute({
-      sql: `INSERT INTO licenses (key, tier, expires_at, order_id, email, max_activations, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      args: [key, tier, expiresAt, `ADMIN-${Date.now()}`, 'admin@nexushub.app', 5, Date.now()],
+    const existing = await db.execute({
+      sql:  'SELECT key FROM licenses WHERE key = ?',
+      args: [key],
     })
-  }
 
-  res.json({ key, tier, expiresAt })
+    if (existing.rows.length === 0) {
+      await db.execute({
+        sql: `INSERT INTO licenses (key, tier, expires_at, order_id, email, max_activations, created_at)
+              VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        args: [key, tier, expiresAt, `ADMIN-${Date.now()}`, 'admin@nexushub.app', 5, Date.now()],
+      })
+    }
+
+    res.json({ key, tier, expiresAt })
+  } catch (err: any) {
+    console.error('[admin] create-key error:', err)
+    res.status(500).json({ error: 'Internal server error', detail: String(err?.message ?? err) })
+  }
 })
