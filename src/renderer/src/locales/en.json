@@ -9,8 +9,7 @@
     },
     "tools": {
       "tempMail": "TempMail Generator",
-      "decrypter": "Universal Decrypter",
-      "aylinkBypasser": "Aylink Bypasser",
+      "decrypter": "Universal Link Decrypter & Cleaner",
       "passwordGenerator": "Password Generator",
       "bulkOrganizer": "Bulk Organizer",
       "clipboardManager": "Clipboard Manager",
@@ -132,13 +131,10 @@
         "desc": "Instant disposable email addresses to bypass spam and tracking. Reads inbox in real-time."
       },
       "decrypter": {
-        "desc": "Resolve shortened links to their true destination and strip privacy-invading trackers."
+        "desc": "Resolve shortened and monetized redirect links (Aylink, bit.ly, etc.) to their true destination and strip privacy trackers."
       },
       "bulkOrganizer": {
         "desc": "Clean up messy directories by instantly categorizing and bulk-renaming files by extension."
-      },
-      "aylinkBypasser": {
-        "desc": "Bypass aylink, cpmlink, ay.live and similar monetised redirect pages instantly without a browser."
       },
       "passwordGenerator": {
         "desc": "Generate cryptographically secure passwords, passphrases, and PINs with strength estimation."
@@ -198,30 +194,14 @@
     "subject": "Subject"
   },
   "decrypter": {
-    "placeholder": "Paste shortened link here (e.g. bit.ly, adf.ly, t.co)...",
-    "decrypt": "Decrypt Link",
+    "placeholder": "Paste shortened or redirect link here (e.g. bit.ly, aylink.co, t.co)...",
+    "decrypt": "Decrypt & Clean Link",
     "decrypting": "Decrypting...",
     "status": "Ready",
     "success": "Decrypted Successfully",
     "failed": "Decryption Failed",
     "original": "Original",
     "decrypted": "Decrypted"
-  },
-  "aylink": {
-    "placeholder": "Paste aylink, cpmlink, ay.live link here...",
-    "bypass": "Bypass",
-    "bypassing": "Bypassing...",
-    "status": "Ready to bypass",
-    "success": "Bypass Successful",
-    "failed": "Bypass Failed",
-    "original": "Original",
-    "bypassed": "Bypassed Target",
-    "pasteLink": "Paste Link",
-    "examples": "Examples:",
-    "finalUrl": "Final URL",
-    "intermediateUrl": "Intermediate URL",
-    "recent": "Recent Bypasses",
-    "unknownError": "Unknown error"
   },
   "network": {
     "target": "Target (Domain or IP)",

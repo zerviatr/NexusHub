@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import Sidebar from './components/Sidebar'
 import TitleBar from './components/TitleBar'
@@ -7,7 +7,6 @@ import Dashboard from './pages/Dashboard'
 import TempMail from './pages/TempMail'
 import UniversalDecrypter from './pages/UniversalDecrypter'
 import BulkOrganizer from './pages/BulkOrganizer'
-import AylinkBypasser from './pages/AylinkBypasser'
 import PasswordGenerator from './pages/PasswordGenerator'
 import ClipboardManager from './pages/ClipboardManager'
 import NetworkTools from './pages/NetworkTools'
@@ -94,7 +93,7 @@ export default function App() {
                 <Route path="/temp-mail" element={<TempMail />} />
                 <Route path="/decrypter" element={<UniversalDecrypter />} />
                 <Route path="/organizer" element={<BulkOrganizer />} />
-                <Route path="/aylink" element={<AylinkBypasser />} />
+                <Route path="/aylink" element={<Navigate to="/decrypter" replace />} />
                 <Route path="/password" element={<PasswordGenerator />} />
                 <Route path="/clipboard" element={<ClipboardManager />} />
                 <Route path="/network" element={<NetworkTools />} />

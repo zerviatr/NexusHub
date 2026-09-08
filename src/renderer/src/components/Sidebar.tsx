@@ -7,7 +7,6 @@ import {
   Mail,
   ShieldCheck,
   FolderArchive,
-  Link2,
   Key,
   Clipboard,
   Globe,
@@ -35,7 +34,6 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { path: '/temp-mail',  labelKey: 'nav.tools.tempMail',         icon: Mail },
       { path: '/decrypter',  labelKey: 'nav.tools.decrypter',        icon: ShieldCheck },
-      { path: '/aylink',     labelKey: 'nav.tools.aylinkBypasser',   icon: Link2 },
       { path: '/password',   labelKey: 'nav.tools.passwordGenerator', icon: Key },
     ],
   },

@@ -9,8 +9,7 @@
     },
     "tools": {
       "tempMail": "Geçici Mail Üreticisi",
-      "decrypter": "Evrensel Şifre Çözücü",
-      "aylinkBypasser": "Aylink Atlayıcı",
+      "decrypter": "Evrensel Link Çözücü & Tracker Temizleyici",
       "passwordGenerator": "Parola Üreticisi",
       "bulkOrganizer": "Toplu Düzenleyici",
       "clipboardManager": "Pano Yöneticisi",
@@ -132,13 +131,10 @@
         "desc": "Spam ve takibi atlamak için anında tek kullanımlık e-posta adresleri. Gelen kutusunu gerçek zamanlı okur."
       },
       "decrypter": {
-        "desc": "Kısaltılmış bağlantıları gerçek hedeflerine çözün ve gizliliği ihlal eden izleyicileri temizleyin."
+        "desc": "Kısaltılmış ve reklamlı linkleri (Aylink, bit.ly vb.) asıl hedefine çözün; gizlilik takipçilerini (UTM, tracker) temizleyin."
       },
       "bulkOrganizer": {
         "desc": "Dosyaları uzantılarına göre anında kategorize ederek ve toplu yeniden adlandırarak dağınık dizinleri temizleyin."
-      },
-      "aylinkBypasser": {
-        "desc": "aylink, cpmlink, ay.live ve benzeri para kazandıran yönlendirme sayfalarını tarayıcı olmadan anında atlayın."
       },
       "passwordGenerator": {
         "desc": "Kriptografik olarak güvenli parolalar, parola ifadeleri ve PIN'ler üretin; güç tahmini yapın."
@@ -198,30 +194,14 @@
     "subject": "Konu"
   },
   "decrypter": {
-    "placeholder": "Kısaltılmış bağlantıyı buraya yapıştırın (ör. bit.ly, t.co)...",
-    "decrypt": "Bağlantıyı Çöz",
+    "placeholder": "Kısaltılmış veya reklamlı bağlantıyı yapıştırın (ör. bit.ly, aylink.co, t.co)...",
+    "decrypt": "Bağlantıyı Çöz & Temizle",
     "decrypting": "Çözülüyor...",
     "status": "Hazır",
     "success": "Başarıyla Çözüldü",
     "failed": "Çözme Başarısız",
     "original": "Orijinal",
     "decrypted": "Çözülmüş"
-  },
-  "aylink": {
-    "placeholder": "Aylink, cpmlink, ay.live bağlantısını buraya yapıştırın...",
-    "bypass": "Atla",
-    "bypassing": "Atlanıyor...",
-    "status": "Atlamaya hazır",
-    "success": "Başarıyla Atlandı",
-    "failed": "Atlama Başarısız",
-    "original": "Orijinal",
-    "bypassed": "Atlanmış Hedef",
-    "pasteLink": "Bağlantıyı Yapıştır",
-    "examples": "Örnekler:",
-    "finalUrl": "Son URL",
-    "intermediateUrl": "Ara URL",
-    "recent": "Son Atlamalar",
-    "unknownError": "Bilinmeyen hata"
   },
   "network": {
     "target": "Hedef (Domain veya IP)",
