@@ -23,7 +23,7 @@ const fadeUp = {
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const { t } = useT()
+  const { t, locale } = useT()
 
   const tools = [
     {
@@ -121,8 +121,13 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-4xl font-extrabold text-white mb-3"
-          dangerouslySetInnerHTML={{ __html: t('dashboard.readyTitle') || 'Your <span class="gradient-text">NexusHub</span> is ready.' }}
-        />
+        >
+          {locale === 'tr' ? (
+            <>NexusHub <span className="gradient-text">Kullanıma Hazır</span>.</>
+          ) : (
+            <>Your <span className="gradient-text">NexusHub</span> is ready.</>
+          )}
+        </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
