@@ -14,6 +14,4 @@ COPY src ./src
 # Build TypeScript
 RUN npm install typescript --save-dev && npx tsc
 
-EXPOSE 3000
-
 CMD ["node", "dist/index.js"]
