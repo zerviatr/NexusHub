@@ -47,8 +47,8 @@ function getCategory(ext: string): string {
 // ===== Logic =====
 
 async function selectDirectory(): Promise<{ canceled: boolean; filePaths: string[] }> {
-  const window = BrowserWindow.getFocusedWindow()
-  const result = await dialog.showOpenDialog(window || undefined, {
+  const win = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0]
+  const result = await dialog.showOpenDialog(win, {
     properties: ['openDirectory'],
     title: 'Select Folder to Organize',
   })

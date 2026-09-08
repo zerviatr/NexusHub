@@ -47,6 +47,19 @@ interface NexusAPI {
     getMetadata: (filePath: string) => Promise<any>
     process: (jobs: any[]) => Promise<any[]>
   }
+  license: {
+    check:      () => Promise<{ status: string; tier?: string; expiresAt?: number }>
+    activate:   (key: string) => Promise<{ success: boolean; tier?: string; reason?: string }>
+    deactivate: () => Promise<{ success: boolean }>
+    bgVerify:   () => Promise<{ valid: boolean }>
+  }
+  updater: {
+    onAvailable:  (cb: (info: unknown) => void) => () => void
+    onProgress:   (cb: (p: unknown) => void) => () => void
+    onDownloaded: (cb: (info: unknown) => void) => () => void
+    installNow: () => void
+    checkNow:   () => Promise<unknown>
+  }
   openExternal: (url: string) => Promise<void>
   minimize: () => void
   maximize: () => void
