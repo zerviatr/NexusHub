@@ -16,6 +16,7 @@ import express, { Request, Response, NextFunction } from 'express'
 import { migrate } from './db'
 import { webhookRouter } from './routes/webhook'
 import { licenseRouter } from './routes/license'
+import { adminRouter }   from './routes/admin'
 
 const app  = express()
 const PORT = Number(process.env['PORT'] ?? 3000)
@@ -51,6 +52,7 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
 // ── Routes ─────────────────────────────────────────────────────────────────
 app.use('/webhook',      webhookRouter)
 app.use('/api/license',  licenseRouter)
+app.use('/admin',        adminRouter)
 
 app.get('/health', (_req: Request, res: Response) => {
   res.json({ ok: true, ts: Date.now() })
