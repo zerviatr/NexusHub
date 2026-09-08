@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import logoImg from '../assets/logo.png'
 import {
   LayoutDashboard,
   Sparkles,
@@ -182,7 +183,7 @@ export default function Sidebar() {
   const navigate = useNavigate()
   const { t } = useT()
   const isHome = location.pathname === '/'
-  const [appVersion, setAppVersion] = useState('1.0.2')
+  const [appVersion, setAppVersion] = useState('1.0.3')
 
   useEffect(() => {
     window.nexusAPI?.getVersion?.().then((v) => {
@@ -199,8 +200,8 @@ export default function Sidebar() {
     >
       {/* Logo */}
       <div className="p-5 flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-nexus-accent to-nexus-cyan flex items-center justify-center shadow-lg glow-accent flex-shrink-0">
-          <Sparkles className="w-4 h-4 text-white" />
+        <div className="w-9 h-9 rounded-xl overflow-hidden shadow-lg border border-white/10 flex-shrink-0">
+          <img src={logoImg} alt="NexusHub" className="w-full h-full object-cover" />
         </div>
         <div>
           <h1 className="text-base font-bold gradient-text">NexusHub</h1>
