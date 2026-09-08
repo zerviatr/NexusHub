@@ -27,7 +27,14 @@
     },
     "files": [
       "out/**",
+      "build/icons/**",
       "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "build/icons",
+        "to": "icons"
+      }
     ],
     "extraMetadata": {
       "main": "out/main/index.js"
