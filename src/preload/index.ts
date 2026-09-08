@@ -16,6 +16,8 @@ const nexusAPI = {
     selectDir: () => ipcRenderer.invoke('organizer:selectDir'),
     scan: (dirPath: string) => ipcRenderer.invoke('organizer:scan', dirPath),
     execute: (operations: any[]) => ipcRenderer.invoke('organizer:execute', operations),
+    canUndo: () => ipcRenderer.invoke('organizer:canUndo'),
+    undo: () => ipcRenderer.invoke('organizer:undo'),
   },
 
   // Clipboard Manager
@@ -33,6 +35,7 @@ const nexusAPI = {
     portScan: (host: string, ports: number[]) =>
       ipcRenderer.invoke('network:portScan', host, ports),
     ping: (host: string) => ipcRenderer.invoke('network:ping', host),
+    myIp: () => ipcRenderer.invoke('network:myIp'),
   },
 
   // Image Toolkit
@@ -80,6 +83,24 @@ const nexusAPI = {
   maximize:    () => ipcRenderer.send('window:maximize'),
   close:       () => ipcRenderer.send('window:close'),
   isMaximized: () => ipcRenderer.invoke('window:isMaximized'),
+
+  // Desktop integration & navigation events
+  onNavigate: (cb: (path: string) => void) => {
+    const handler = (_: any, path: string) => cb(path)
+    ipcRenderer.on('navigate:to', handler)
+    return () => ipcRenderer.removeListener('navigate:to', handler)
+  },
+  onPaletteToggle: (cb: () => void) => {
+    const handler = () => cb()
+    ipcRenderer.on('palette:toggle', handler)
+    return () => ipcRenderer.removeListener('palette:toggle', handler)
+  },
+
+  // System Settings
+  settings: {
+    getAutoLaunch: () => ipcRenderer.invoke('settings:getAutoLaunch'),
+    setAutoLaunch: (enable: boolean) => ipcRenderer.invoke('settings:setAutoLaunch', enable),
+  },
 }
 
 if (process.contextIsolated) {

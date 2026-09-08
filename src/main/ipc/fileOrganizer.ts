@@ -110,6 +110,8 @@ async function getUniquePath(targetPath: string): Promise<string> {
   }
 }
 
+let lastExecutionMoves: FileOperation[] = []
+
 async function executeOperations(operations: FileOperation[]): Promise<ExecutionResult> {
   const result: ExecutionResult = {
     success: false,
@@ -117,6 +119,8 @@ async function executeOperations(operations: FileOperation[]): Promise<Execution
     failedOperations: 0,
     errors: [],
   }
+
+  const recordedMoves: FileOperation[] = []
 
   for (const op of operations) {
     try {
@@ -129,6 +133,7 @@ async function executeOperations(operations: FileOperation[]): Promise<Execution
 
       // Perform the move/rename
       await fs.rename(op.oldPath, safePath)
+      recordedMoves.push({ oldPath: op.oldPath, newPath: safePath })
       result.successfulOperations++
     } catch (error: any) {
       result.failedOperations++
@@ -136,8 +141,35 @@ async function executeOperations(operations: FileOperation[]): Promise<Execution
     }
   }
 
+  if (recordedMoves.length > 0) {
+    lastExecutionMoves = recordedMoves
+  }
+
   result.success = result.failedOperations === 0
   return result
+}
+
+async function undoLastExecution(): Promise<{ success: boolean; restored: number; errors: string[] }> {
+  if (lastExecutionMoves.length === 0) {
+    return { success: false, restored: 0, errors: ['No previous operations to undo'] }
+  }
+
+  let restored = 0
+  const errors: string[] = []
+
+  // Move back in reverse
+  for (const move of [...lastExecutionMoves].reverse()) {
+    try {
+      await fs.rename(move.newPath, move.oldPath)
+      restored++
+    } catch (err: any) {
+      errors.push(`Failed to restore ${move.newPath} to ${move.oldPath}: ${err.message}`)
+    }
+  }
+
+  // Clear log after undo
+  lastExecutionMoves = []
+  return { success: errors.length === 0, restored, errors }
 }
 
 // ===== IPC Registration =====
@@ -147,4 +179,6 @@ export function registerFileOrganizerIPC(): void {
   ipcMain.handle('organizer:execute', async (_event, operations: FileOperation[]) =>
     executeOperations(operations)
   )
+  ipcMain.handle('organizer:canUndo', async () => lastExecutionMoves.length > 0)
+  ipcMain.handle('organizer:undo', async () => undoLastExecution())
 }

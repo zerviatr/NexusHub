@@ -14,6 +14,7 @@ import {
   ImageIcon,
   QrCode,
   Braces,
+  FileCheck,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
 
@@ -117,6 +118,16 @@ export default function Dashboard() {
       gradient: 'from-indigo-500 to-cyan-500',
       glowColor: 'rgba(99, 102, 241, 0.3)',
       status: t('dashboard.status.active') || 'Active',
+    },
+    {
+      id: 'hash-studio',
+      path: '/hash-studio',
+      title: t('nav.tools.hashStudio') || 'Hash & Checksum Studio',
+      description: t('dashboard.tools.hashStudio.desc') || 'Calculate MD5, SHA-1, SHA-256, and SHA-512 hashes for text and files with instant checksum verification.',
+      icon: FileCheck,
+      gradient: 'from-emerald-500 to-teal-600',
+      glowColor: 'rgba(16, 185, 129, 0.3)',
+      status: t('dashboard.status.live') || 'Live',
     },
   ]
 

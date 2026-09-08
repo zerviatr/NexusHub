@@ -9,6 +9,8 @@ import { registerNetworkToolsIPC } from './ipc/networkTools'
 import { registerImageToolkitIPC } from './ipc/imageToolkit'
 import { setupAutoUpdater } from './updater'
 import { registerLicenseIPC } from './ipc/license'
+import { setupSystemTray } from './tray'
+import { setupGlobalShortcuts, registerSettingsIPC } from './shortcuts'
 
 let mainWindow: BrowserWindow | null = null
 
@@ -30,10 +32,22 @@ function createWindow(): void {
     },
   })
 
+  // Prevent full termination on close unless explicitly quitting -> minimize to tray
+  mainWindow.on('close', (event) => {
+    if (!(app as any).isQuitting) {
+      event.preventDefault()
+      mainWindow?.hide()
+    }
+  })
+
   mainWindow.on('ready-to-show', () => {
     mainWindow?.show()
-    // Start auto-updater after window is visible (3s delayed check inside)
-    if (mainWindow) setupAutoUpdater(mainWindow)
+    // Setup tray and global hotkeys once window is ready
+    if (mainWindow) {
+      setupSystemTray(mainWindow)
+      setupGlobalShortcuts(mainWindow)
+      setupAutoUpdater(mainWindow)
+    }
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -58,7 +72,10 @@ ipcMain.on('window:maximize', () => {
     mainWindow?.maximize()
   }
 })
-ipcMain.on('window:close', () => mainWindow?.close())
+ipcMain.on('window:close', () => {
+  // Minimize to tray on close button click
+  mainWindow?.hide()
+})
 ipcMain.handle('window:isMaximized', () => mainWindow?.isMaximized() ?? false)
 
 // Open external URLs in system browser
@@ -75,6 +92,7 @@ registerFileOrganizerIPC()
 registerClipboardIPC()
 registerNetworkToolsIPC()
 registerImageToolkitIPC()
+registerSettingsIPC()
 
 // ===== App Lifecycle =====
 app.whenReady().then(() => {

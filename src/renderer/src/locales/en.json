@@ -14,6 +14,7 @@
       "passwordGenerator": "Password Generator",
       "qrCode": "QR Code Studio",
       "jsonStudio": "JSON & JWT Studio",
+      "hashStudio": "Hash & Checksum Studio",
       "bulkOrganizer": "Bulk Organizer",
       "clipboardManager": "Clipboard Manager",
       "imageToolkit": "Image Toolkit",
@@ -73,7 +74,16 @@
     "dangerZone": "Danger Zone",
     "deactivateDesc": "Deactivating will log you out and require a license key to use the app again.",
     "deactivateBtn": "Deactivate License",
-    "deactivateConfirm": "Are you sure you want to deactivate your license?"
+    "deactivateConfirm": "Are you sure you want to deactivate your license?",
+    "desktop": {
+      "title": "Desktop Integration",
+      "trayActive": "Tray Active",
+      "autoLaunch": "Launch on Startup",
+      "autoLaunchDesc": "Silently starts in system tray on boot",
+      "hotkeys": "System Hotkeys",
+      "checkUpdates": "Check for Updates",
+      "checkingUpdate": "Checking GitHub releases for updates..."
+    }
   },
   "eula": {
     "title": "End User License Agreement",
@@ -156,8 +166,15 @@
       },
       "jsonStudio": {
         "desc": "Offline JSON beautifier, minifier, validator, and real-time JWT token claim inspector."
+      },
+      "hashStudio": {
+        "desc": "Calculate MD5, SHA-1, SHA-256, and SHA-512 hashes for text and files with instant checksum verification."
       }
     }
+  },
+  "hashStudio": {
+    "title": "Hash & Checksum Studio",
+    "description": "Generate cryptographic checksums (MD5, SHA-1, SHA-256, SHA-512) for text and files with instant integrity verification."
   },
   "qr": {
     "title": "QR Code Studio",

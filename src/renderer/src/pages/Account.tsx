@@ -109,6 +109,77 @@ export default function Account() {
             </div>
           </div>
         </motion.div>
+
+        {/* Desktop Integration & Preferences */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.05 }}
+          className="glass-card p-6 flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <Settings className="w-5 h-5 text-nexus-cyan" />
+                <h2 className="text-lg font-medium">{t('account.desktop.title') || 'Desktop Integration'}</h2>
+              </div>
+              <span className="px-3 py-1 bg-nexus-cyan/10 text-nexus-cyan border border-nexus-cyan/20 rounded-full text-xs font-semibold tracking-wider uppercase">
+                {t('account.desktop.trayActive') || 'Tray Active'}
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              {/* Windows Startup Toggle */}
+              <div className="flex items-center justify-between p-3 rounded-xl bg-nexus-surface/60 border border-white/5">
+                <div>
+                  <p className="text-sm font-medium text-white">{t('account.desktop.autoLaunch') || 'Launch on Startup'}</p>
+                  <p className="text-xs text-nexus-muted mt-0.5">{t('account.desktop.autoLaunchDesc') || 'Silently starts in system tray on boot'}</p>
+                </div>
+                <input
+                  type="checkbox"
+                  id="autoLaunchToggle"
+                  onChange={async (e) => {
+                    const checked = e.target.checked
+                    await window.nexusAPI?.settings?.setAutoLaunch?.(checked)
+                  }}
+                  className="w-4 h-4 rounded border-nexus-border/40 text-nexus-cyan focus:ring-0 cursor-pointer"
+                />
+              </div>
+
+              {/* Global Hotkeys Info */}
+              <div className="p-3 rounded-xl bg-nexus-surface/60 border border-white/5 space-y-2">
+                <p className="text-xs font-semibold text-nexus-muted uppercase tracking-wider">{t('account.desktop.hotkeys') || 'System Hotkeys'}</p>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-nexus-text">Clipboard Summon:</span>
+                  <kbd className="px-2 py-0.5 rounded bg-black/50 border border-white/10 font-mono text-nexus-cyan text-[11px]">
+                    Ctrl + Shift + V
+                  </kbd>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-nexus-text">Command Palette:</span>
+                  <kbd className="px-2 py-0.5 rounded bg-black/50 border border-white/10 font-mono text-nexus-cyan text-[11px]">
+                    Ctrl + Shift + K
+                  </kbd>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Check for Updates Action */}
+          <div className="pt-4 mt-4 border-t border-white/5 flex items-center justify-between">
+            <span className="text-xs text-nexus-muted">NexusHub v1.0.0</span>
+            <button
+              type="button"
+              onClick={() => {
+                window.nexusAPI?.updater?.checkNow?.()
+                alert(t('account.desktop.checkingUpdate') || 'Checking GitHub releases for updates...')
+              }}
+              className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-white transition-colors"
+            >
+              {t('account.desktop.checkUpdates') || 'Check for Updates'}
+            </button>
+          </div>
+        </motion.div>
       </div>
 
       <motion.div

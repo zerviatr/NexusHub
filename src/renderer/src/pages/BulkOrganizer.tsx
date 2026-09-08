@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FolderArchive, FolderOpen, Loader2, Search, Settings2, Play, CheckCircle2, AlertCircle } from 'lucide-react'
+import { FolderArchive, FolderOpen, Loader2, Search, Settings2, Play, CheckCircle2, AlertCircle, Undo2, RotateCcw } from 'lucide-react'
 import BaseToolTemplate from '../components/BaseToolTemplate'
 import { nexusAPI, ScannedFile, FileOperation, OrganizerExecutionResult } from '../lib/ipc'
 import { useT } from '../lib/i18n'
@@ -20,6 +20,41 @@ export default function BulkOrganizer() {
   const [isExecuting, setIsExecuting] = useState(false)
   const [executionResult, setExecutionResult] = useState<OrganizerExecutionResult | null>(null)
 
+  // Undo state
+  const [canUndo, setCanUndo] = useState(false)
+  const [isUndoing, setIsUndoing] = useState(false)
+  const [undoMessage, setUndoMessage] = useState<string | null>(null)
+
+  const checkUndo = async () => {
+    try {
+      const able = await nexusAPI.organizer.canUndo()
+      setCanUndo(able)
+    } catch {}
+  }
+
+  useEffect(() => {
+    checkUndo()
+  }, [])
+
+  const handleUndo = async () => {
+    setIsUndoing(true)
+    setUndoMessage(null)
+    try {
+      const res = await nexusAPI.organizer.undo()
+      if (res.success) {
+        setUndoMessage(`Successfully reverted and restored ${res.restored} files!`)
+        setCanUndo(false)
+        if (selectedDir) handleScan()
+      } else {
+        setUndoMessage(`Revert warning: ${res.errors.join(', ')}`)
+      }
+    } catch (err: any) {
+      setUndoMessage(err.message || 'Failed to undo')
+    } finally {
+      setIsUndoing(false)
+    }
+  }
+
   const handleSelectDir = async () => {
     const result = await nexusAPI.organizer.selectDir()
     if (!result.canceled && result.filePaths.length > 0) {
@@ -33,6 +68,7 @@ export default function BulkOrganizer() {
     if (!selectedDir) return
     setIsScanning(true)
     setExecutionResult(null)
+    setUndoMessage(null)
     try {
       const res = await nexusAPI.organizer.scan(selectedDir)
       if (res.success && res.files) {
@@ -82,6 +118,7 @@ export default function BulkOrganizer() {
       if (res.success) {
         setScannedFiles([]) // clear to prevent re-execution
       }
+      await checkUndo()
     } catch (err) {
       console.error(err)
     } finally {
@@ -96,6 +133,23 @@ export default function BulkOrganizer() {
       icon={FolderArchive}
     >
       <div className="space-y-6">
+
+        {/* Undo feedback banner */}
+        {undoMessage && (
+          <div className="p-4 rounded-xl bg-nexus-cyan/10 border border-nexus-cyan/30 flex items-center justify-between text-xs text-white">
+            <span className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-nexus-cyan shrink-0" />
+              {undoMessage}
+            </span>
+            <button
+              type="button"
+              onClick={() => setUndoMessage(null)}
+              className="text-nexus-muted hover:text-white ml-2 text-xs"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
         
         {/* Step 1: Select & Scan */}
         <div className="glass-card p-6 flex flex-col md:flex-row gap-4 items-center justify-between">
@@ -106,7 +160,20 @@ export default function BulkOrganizer() {
             </p>
           </div>
           
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
+            {canUndo && (
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleUndo}
+                disabled={isUndoing}
+                className="px-4 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-sm font-medium flex items-center gap-2 hover:bg-amber-500/20 transition-all shadow-md"
+              >
+                <Undo2 className={`w-4 h-4 ${isUndoing ? 'animate-spin' : ''}`} />
+                {isUndoing ? 'Reverting...' : 'Undo Last Move'}
+              </motion.button>
+            )}
+
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}

@@ -4,7 +4,11 @@ import { Shield, Key, AlertCircle, Loader2, ExternalLink } from 'lucide-react'
 import TitleBar from '../components/TitleBar'
 import { useLicense } from '../lib/LicenseContext'
 
-export default function Activation() {
+interface ActivationProps {
+  onContinueFree?: () => void
+}
+
+export default function Activation({ onContinueFree }: ActivationProps) {
   const { activate, status } = useLicense()
   const [key, setKey] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -124,6 +128,16 @@ export default function Activation() {
             >
               Purchase a license <ExternalLink className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
             </button>
+
+            {onContinueFree && (
+              <button
+                type="button"
+                onClick={onContinueFree}
+                className="text-xs text-nexus-muted hover:text-nexus-cyan transition-colors underline pt-1"
+              >
+                Or continue with Free Community Edition →
+              </button>
+            )}
           </div>
         </motion.div>
       </div>

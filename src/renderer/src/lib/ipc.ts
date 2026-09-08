@@ -138,6 +138,18 @@ export interface ImageProcessResult {
   error?: string
 }
 
+export interface MyIpResult {
+  success: boolean
+  ip?: string
+  city?: string
+  region?: string
+  country?: string
+  countryCode?: string
+  org?: string
+  timezone?: string
+  error?: string
+}
+
 export const nexusAPI = {
   bypassLink: (url: string): Promise<BypassResult> => {
     return window.nexusAPI.bypassLink(url)
@@ -160,6 +172,9 @@ export const nexusAPI = {
       window.nexusAPI.organizer.scan(dirPath),
     execute: (operations: FileOperation[]): Promise<OrganizerExecutionResult> =>
       window.nexusAPI.organizer.execute(operations),
+    canUndo: (): Promise<boolean> => window.nexusAPI.organizer.canUndo(),
+    undo: (): Promise<{ success: boolean; restored: number; errors: string[] }> =>
+      window.nexusAPI.organizer.undo(),
   },
 
   openExternal: (url: string): Promise<void> => {
@@ -187,6 +202,7 @@ export const nexusAPI = {
     portScan: (host: string, ports: number[]): Promise<PortScanResult> =>
       window.nexusAPI.network.portScan(host, ports),
     ping: (host: string): Promise<PingResult> => window.nexusAPI.network.ping(host),
+    myIp: (): Promise<MyIpResult> => window.nexusAPI.network.myIp(),
   },
 
   // ── Image Toolkit ──────────────────────────────────────────────────────────

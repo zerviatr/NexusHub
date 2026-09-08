@@ -16,6 +16,7 @@ import {
   QrCode,
   Braces,
   Search,
+  FileCheck,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
 
@@ -45,6 +46,7 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { path: '/qr-code',     labelKey: 'nav.tools.qrCode',     icon: QrCode },
       { path: '/json-studio', labelKey: 'nav.tools.jsonStudio', icon: Braces },
+      { path: '/hash-studio', labelKey: 'nav.tools.hashStudio', icon: FileCheck },
     ],
   },
   {

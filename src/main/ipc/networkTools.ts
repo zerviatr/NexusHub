@@ -14,6 +14,7 @@ import * as dns from 'dns'
 import * as net from 'net'
 import { promisify } from 'util'
 import { execFile } from 'child_process'
+import axios from 'axios'
 
 const execFileAsync = promisify(execFile)
 const dnsLookup = promisify(dns.lookup)
@@ -233,6 +234,30 @@ export function registerNetworkToolsIPC(): void {
       }
     } catch (err: any) {
       return { success: false, host, error: err.message || String(err) }
+    }
+  })
+
+  // My IP & Geolocation
+  ipcMain.handle('network:myIp', async (): Promise<any> => {
+    try {
+      const res = await axios.get('https://ipapi.co/json/', { timeout: 6000 })
+      return {
+        success: true,
+        ip: res.data.ip,
+        city: res.data.city,
+        region: res.data.region,
+        country: res.data.country_name,
+        countryCode: res.data.country_code,
+        org: res.data.org,
+        timezone: res.data.timezone,
+      }
+    } catch (err: any) {
+      try {
+        const fallback = await axios.get('https://api.ipify.org?format=json', { timeout: 4000 })
+        return { success: true, ip: fallback.data.ip }
+      } catch {
+        return { success: false, error: err.message || 'Failed to resolve public IP' }
+      }
     }
   })
 }

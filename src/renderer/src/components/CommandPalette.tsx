@@ -16,7 +16,8 @@ import {
   Settings,
   ArrowRight,
   Sparkles,
-  Command
+  Command,
+  FileCheck,
 } from 'lucide-react'
 
 interface PaletteItem {
@@ -38,6 +39,15 @@ const PALETTE_ITEMS: PaletteItem[] = [
     path: '/',
     icon: LayoutDashboard,
     keywords: ['home', 'overview', 'main', 'start']
+  },
+  {
+    id: 'hash-studio',
+    title: 'Hash & Checksum Studio',
+    subtitle: 'Compute MD5, SHA-1, SHA-256, and SHA-512 hashes',
+    category: 'Tools',
+    path: '/hash-studio',
+    icon: FileCheck,
+    keywords: ['hash', 'md5', 'sha256', 'sha512', 'checksum', 'verify', 'integrity']
   },
   {
     id: 'qr-code',

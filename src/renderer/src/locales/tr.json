@@ -14,6 +14,7 @@
       "passwordGenerator": "Parola Üreticisi",
       "qrCode": "QR Kod Stüdyosu",
       "jsonStudio": "JSON & JWT Stüdyosu",
+      "hashStudio": "Hash & Checksum Stüdyosu",
       "bulkOrganizer": "Toplu Düzenleyici",
       "clipboardManager": "Pano Yöneticisi",
       "imageToolkit": "Görsel Araç Seti",
@@ -73,7 +74,16 @@
     "dangerZone": "Tehlikeli Bölge",
     "deactivateDesc": "Devre dışı bırakmak, çıkış yapmanıza neden olur ve uygulamayı kullanmak için tekrar lisans anahtarı girmeniz gerekir.",
     "deactivateBtn": "Lisansı Devre Dışı Bırak",
-    "deactivateConfirm": "Lisansınızı devre dışı bırakmak istediğinize emin misiniz?"
+    "deactivateConfirm": "Lisansınızı devre dışı bırakmak istediğinize emin misiniz?",
+    "desktop": {
+      "title": "Masaüstü Entegrasyonu",
+      "trayActive": "Tepsi Modu Aktif",
+      "autoLaunch": "Başlangıçta Çalıştır",
+      "autoLaunchDesc": "Sistem açılışında tepside sessizce başlar",
+      "hotkeys": "Sistem Kısayolları",
+      "checkUpdates": "Güncellemeleri Denetle",
+      "checkingUpdate": "GitHub sürümleri denetleniyor..."
+    }
   },
   "eula": {
     "title": "Son Kullanıcı Lisans Sözleşmesi",
@@ -156,8 +166,15 @@
       },
       "jsonStudio": {
         "desc": "Çevrimdışı JSON biçimlendirici, doğrulayıcı, küçültücü ve anlık JWT belirteç inceleyicisi."
+      },
+      "hashStudio": {
+        "desc": "Anlık bütünlük doğrulamasıyla metin ve dosyalar için MD5, SHA-1, SHA-256 ve SHA-512 sağlama toplamları hesaplayın."
       }
     }
+  },
+  "hashStudio": {
+    "title": "Hash & Checksum Stüdyosu",
+    "description": "Anlık bütünlük doğrulamasıyla metin ve dosyalar için kriptografik sağlama toplamları (MD5, SHA-1, SHA-256, SHA-512) hesaplayın."
   },
   "qr": {
     "title": "QR Kod Stüdyosu",
