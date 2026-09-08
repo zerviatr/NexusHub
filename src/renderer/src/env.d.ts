@@ -55,11 +55,13 @@ interface NexusAPI {
     onRevoked:  (cb: () => void) => () => void
   }
   updater: {
-    onAvailable:  (cb: (info: unknown) => void) => () => void
-    onProgress:   (cb: (p: unknown) => void) => () => void
-    onDownloaded: (cb: (info: unknown) => void) => () => void
-    installNow: () => void
-    checkNow:   () => Promise<unknown>
+    onAvailable:     (cb: (info: unknown) => void) => () => void
+    onNotAvailable?: (cb: (info: unknown) => void) => () => void
+    onProgress:      (cb: (p: unknown) => void) => () => void
+    onDownloaded:    (cb: (info: unknown) => void) => () => void
+    onError?:        (cb: (err: string) => void) => () => void
+    installNow:      () => void
+    checkNow:        () => Promise<any>
   }
   openExternal: (url: string) => Promise<void>
   minimize: () => void

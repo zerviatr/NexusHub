@@ -48,8 +48,10 @@ export function setupAutoUpdater(win: BrowserWindow): void {
     })
   })
 
-  autoUpdater.on('update-not-available', () => {
-    // Only useful for manual check flows — no automatic UI
+  autoUpdater.on('update-not-available', (info) => {
+    send('updater:not-available', {
+      version: info.version,
+    })
   })
 
   autoUpdater.on('download-progress', (progress) => {
@@ -85,10 +87,32 @@ export function setupAutoUpdater(win: BrowserWindow): void {
   // ─── IPC: renderer can trigger manual check ───────────────────────────────
   ipcMain.handle('updater:check-now', async () => {
     try {
+      const currentVersion = app.getVersion()
+      if (!app.isPackaged) {
+        return {
+          hasUpdate: false,
+          currentVersion,
+          isLatest: true,
+          devMode: true,
+        }
+      }
       const result = await autoUpdater.checkForUpdates()
-      return { hasUpdate: !!result?.updateInfo }
-    } catch {
-      return { hasUpdate: false }
+      const updateVersion = result?.updateInfo?.version
+      const hasUpdate = Boolean(updateVersion && updateVersion !== currentVersion)
+      return {
+        hasUpdate,
+        currentVersion,
+        updateVersion: updateVersion || currentVersion,
+        isLatest: !hasUpdate,
+      }
+    } catch (err: any) {
+      console.warn('[updater] check error:', err?.message || err)
+      return {
+        hasUpdate: false,
+        currentVersion: app.getVersion(),
+        isLatest: true,
+        error: err?.message || 'Check failed',
+      }
     }
   })
 

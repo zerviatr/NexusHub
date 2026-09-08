@@ -77,6 +77,14 @@ const nexusAPI = {
       ipcRenderer.on('updater:downloaded', (_, i) => cb(i))
       return () => ipcRenderer.removeAllListeners('updater:downloaded')
     },
+    onNotAvailable: (cb: (info: unknown) => void) => {
+      ipcRenderer.on('updater:not-available', (_, i) => cb(i))
+      return () => ipcRenderer.removeAllListeners('updater:not-available')
+    },
+    onError: (cb: (err: string) => void) => {
+      ipcRenderer.on('updater:error', (_, msg) => cb(msg))
+      return () => ipcRenderer.removeAllListeners('updater:error')
+    },
     installNow: () => ipcRenderer.send('updater:install-now'),
     checkNow:   () => ipcRenderer.invoke('updater:check-now'),
   },

@@ -1,11 +1,64 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Settings, Key, Shield, LogOut, Clock, Infinity } from 'lucide-react'
+import { Settings, Key, Shield, LogOut, Clock, Infinity, RefreshCw, Check, Download, AlertCircle, Sparkles } from 'lucide-react'
 import { useLicense } from '../lib/LicenseContext'
 import { useT } from '../lib/i18n'
 
 export default function Account() {
   const { tier, key, expiresAt, deactivate } = useLicense()
   const { t, locale, setLocale } = useT()
+
+  const [updateStatus, setUpdateStatus] = useState<'idle' | 'checking' | 'latest' | 'available' | 'ready' | 'error'>('idle')
+  const [updateInfo, setUpdateInfo] = useState<{ version?: string; current?: string; message?: string }>({})
+
+  useEffect(() => {
+    const unbindAvailable = window.nexusAPI?.updater?.onAvailable?.((info: any) => {
+      setUpdateStatus('available')
+      setUpdateInfo({ version: info?.version })
+    })
+    const unbindNotAvailable = window.nexusAPI?.updater?.onNotAvailable?.((info: any) => {
+      setUpdateStatus('latest')
+      setUpdateInfo({ current: info?.version || 'v1.0.0' })
+    })
+    const unbindDownloaded = window.nexusAPI?.updater?.onDownloaded?.((info: any) => {
+      setUpdateStatus('ready')
+      setUpdateInfo({ version: info?.version })
+    })
+    const unbindError = window.nexusAPI?.updater?.onError?.((err: string) => {
+      setUpdateStatus('error')
+      setUpdateInfo({ message: err })
+    })
+    return () => {
+      unbindAvailable?.()
+      unbindNotAvailable?.()
+      unbindDownloaded?.()
+      unbindError?.()
+    }
+  }, [])
+
+  const handleCheckUpdates = async () => {
+    if (updateStatus === 'checking') return
+    setUpdateStatus('checking')
+    try {
+      const res = await window.nexusAPI?.updater?.checkNow?.()
+      if (res?.hasUpdate) {
+        setUpdateStatus('available')
+        setUpdateInfo({ version: res.updateVersion, current: res.currentVersion })
+      } else if (res?.isLatest) {
+        setUpdateStatus('latest')
+        setUpdateInfo({ current: res.currentVersion || 'v1.0.0' })
+      } else if (res?.error) {
+        setUpdateStatus('error')
+        setUpdateInfo({ message: res.error })
+      } else {
+        setUpdateStatus('latest')
+        setUpdateInfo({ current: 'v1.0.0' })
+      }
+    } catch (err: any) {
+      setUpdateStatus('error')
+      setUpdateInfo({ message: err?.message || 'Update check failed' })
+    }
+  }
 
   // Mask the key except for the last 5 characters
   const maskedKey = key
@@ -166,18 +219,70 @@ export default function Account() {
           </div>
 
           {/* Check for Updates Action */}
-          <div className="pt-4 mt-4 border-t border-white/5 flex items-center justify-between">
-            <span className="text-xs text-nexus-muted">NexusHub v1.0.0</span>
-            <button
-              type="button"
-              onClick={() => {
-                window.nexusAPI?.updater?.checkNow?.()
-                alert(t('account.desktop.checkingUpdate') || 'Checking GitHub releases for updates...')
-              }}
-              className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-white transition-colors"
-            >
-              {t('account.desktop.checkUpdates') || 'Check for Updates'}
-            </button>
+          <div className="pt-4 mt-4 border-t border-white/5 space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-xs font-semibold text-white">NexusHub {updateInfo.current || 'v1.0.0'}</span>
+                <p className="text-[11px] text-nexus-muted">
+                  {updateStatus === 'idle' && (t('account.desktop.autoUpdatesActive') || 'Otomatik güncellemeler devrede')}
+                  {updateStatus === 'checking' && (t('account.desktop.checkingUpdate') || 'GitHub sürümleri taranıyor...')}
+                  {updateStatus === 'latest' && (t('account.desktop.allUpToDate') || 'En son kararlı sürümü kullanıyorsunuz')}
+                  {updateStatus === 'available' && (t('account.desktop.updateFound') || 'Yeni sürüm mevcut')}
+                  {updateStatus === 'ready' && (t('account.desktop.updateReadyDesc') || 'Yüklemeye hazır')}
+                  {updateStatus === 'error' && (t('account.desktop.updateErrorDesc') || 'Sürüm sunucusuna erişilemedi')}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                disabled={updateStatus === 'checking'}
+                onClick={handleCheckUpdates}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-medium text-white transition-all hover:border-nexus-cyan/40 disabled:opacity-50"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${updateStatus === 'checking' ? 'animate-spin text-nexus-cyan' : ''}`} />
+                {t('account.desktop.checkUpdates') || 'Güncellemeleri Denetle'}
+              </button>
+            </div>
+
+            {/* Status Badges */}
+            {updateStatus === 'latest' && (
+              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
+                <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>{t('account.desktop.latestMsg') || '✓ Program güncel! Kurulu sürüm:'} {updateInfo.current || 'v1.0.0'}</span>
+              </div>
+            )}
+
+            {updateStatus === 'available' && (
+              <div className="flex items-center justify-between p-2.5 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-medium animate-pulse">
+                <div className="flex items-center gap-2">
+                  <Download className="w-4 h-4 text-sky-400 shrink-0 animate-bounce" />
+                  <span>{t('account.desktop.newVersionDownloading') || 'Yeni sürüm bulundu:'} {updateInfo.version || ''} — {t('account.desktop.downloading') || 'İndiriliyor...'}</span>
+                </div>
+              </div>
+            )}
+
+            {updateStatus === 'ready' && (
+              <div className="flex items-center justify-between p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-white text-xs font-medium">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-nexus-cyan shrink-0" />
+                  <span>{t('account.desktop.updateReady') || 'Güncelleme hazır!'} {updateInfo.version}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => window.nexusAPI?.updater?.installNow?.()}
+                  className="px-3 py-1 rounded bg-nexus-cyan text-black font-semibold hover:bg-nexus-cyan/90 transition-all text-xs"
+                >
+                  {t('account.desktop.restartInstall') || 'Yeniden Başlat & Kur'}
+                </button>
+              </div>
+            )}
+
+            {updateStatus === 'error' && (
+              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-medium">
+                <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>{t('account.desktop.offlineWarning') || 'GitHub sürüm kontrolü yapılamadı (İnternet bağlantınızı kontrol edin).'}</span>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>

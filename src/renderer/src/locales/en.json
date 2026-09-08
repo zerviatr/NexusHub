@@ -59,6 +59,38 @@
       "title": "Bulk Generate",
       "count": "Count:",
       "generate": "Generate {{count}}"
+    },
+    "vault": {
+      "tabGenerator": "Password Generator",
+      "tabVault": "Saved Password Vault",
+      "saveToVault": "Save to Vault",
+      "modalTitle": "Save Password to Vault",
+      "titleLabel": "Service / Title *",
+      "titlePlaceholder": "e.g. Instagram, GitHub, Netflix",
+      "usernameLabel": "Username / Email",
+      "usernamePlaceholder": "e.g. sam@example.com",
+      "categoryLabel": "Category",
+      "notesLabel": "Notes (Optional)",
+      "notesPlaceholder": "e.g. 2FA backup codes, security info...",
+      "saveBtn": "Add to Vault",
+      "cancelBtn": "Cancel",
+      "savedToast": "Password saved to encrypted vault!",
+      "searchPlaceholder": "Search service, username or notes...",
+      "categories": {
+        "all": "All",
+        "social": "Social Media",
+        "work": "Work & Dev",
+        "finance": "Finance",
+        "personal": "Personal",
+        "other": "Other"
+      },
+      "empty": "No saved passwords yet.",
+      "emptySub": "Save generated passwords with tags and notes using the 'Save to Vault' button.",
+      "deleteConfirm": "Are you sure you want to delete this password from the vault?",
+      "exportBtn": "Export (JSON)",
+      "importBtn": "Import",
+      "copied": "Copied!",
+      "itemsCount": "{{count}} entries"
     }
   },
   "account": {

@@ -59,6 +59,38 @@
       "title": "Toplu Üret",
       "count": "Adet:",
       "generate": "{{count}} Tane Üret"
+    },
+    "vault": {
+      "tabGenerator": "Parola Üretici",
+      "tabVault": "Kayıtlı Parola Kasası",
+      "saveToVault": "Kasaya Kaydet",
+      "modalTitle": "Parolayı Kasaya Kaydet",
+      "titleLabel": "Hizmet / Başlık *",
+      "titlePlaceholder": "Örn: Instagram, GitHub, Netflix",
+      "usernameLabel": "Kullanıcı Adı / E-posta",
+      "usernamePlaceholder": "Örn: sam@example.com",
+      "categoryLabel": "Kategori",
+      "notesLabel": "Notlar (Opsiyonel)",
+      "notesPlaceholder": "Örn: 2FA yedek kodu, kurtarma bilgisi...",
+      "saveBtn": "Kasaya Ekle",
+      "cancelBtn": "İptal",
+      "savedToast": "Parola kasaya başarıyla kaydedildi!",
+      "searchPlaceholder": "Hizmet, kullanıcı adı veya notlarda ara...",
+      "categories": {
+        "all": "Tümü",
+        "social": "Sosyal Medya",
+        "work": "İş & Yazılım",
+        "finance": "Finans & Banka",
+        "personal": "Kişisel",
+        "other": "Diğer"
+      },
+      "empty": "Henüz kayıtlı parola bulunmuyor.",
+      "emptySub": "Ürettiğiniz parolaları 'Kasaya Kaydet' butonuyla etiketleyerek burada güvenle saklayabilirsiniz.",
+      "deleteConfirm": "Bu parolayı kasadan silmek istediğinize emin misiniz?",
+      "exportBtn": "Yedekle (JSON)",
+      "importBtn": "İçe Aktar",
+      "copied": "Kopyalandı!",
+      "itemsCount": "{{count}} kayıt"
     }
   },
   "account": {
