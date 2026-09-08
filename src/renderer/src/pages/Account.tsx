@@ -10,6 +10,7 @@ export default function Account() {
 
   const [updateStatus, setUpdateStatus] = useState<'idle' | 'checking' | 'latest' | 'available' | 'ready' | 'error'>('idle')
   const [updateInfo, setUpdateInfo] = useState<{ version?: string; current?: string; message?: string }>({})
+  const [downloadPercent, setDownloadPercent] = useState<number>(0)
 
   useEffect(() => {
     window.nexusAPI?.getVersion?.().then((ver: string) => {
@@ -22,12 +23,19 @@ export default function Account() {
       setUpdateStatus('available')
       setUpdateInfo((prev) => ({ ...prev, version: info?.version ? (String(info.version).startsWith('v') ? info.version : `v${info.version}`) : undefined }))
     })
+    const unbindProgress = window.nexusAPI?.updater?.onProgress?.((prog: any) => {
+      setUpdateStatus('available')
+      if (typeof prog?.percent === 'number') {
+        setDownloadPercent(Math.round(prog.percent))
+      }
+    })
     const unbindNotAvailable = window.nexusAPI?.updater?.onNotAvailable?.((info: any) => {
       setUpdateStatus('latest')
-      setUpdateInfo((prev) => ({ ...prev, current: info?.version ? (String(info.version).startsWith('v') ? info.version : `v${info.version}`) : (prev.current || 'v1.0.1') }))
+      setUpdateInfo((prev) => ({ ...prev, current: info?.version ? (String(info.version).startsWith('v') ? info.version : `v${info.version}`) : (prev.current || 'v1.0.2') }))
     })
     const unbindDownloaded = window.nexusAPI?.updater?.onDownloaded?.((info: any) => {
       setUpdateStatus('ready')
+      setDownloadPercent(100)
       setUpdateInfo((prev) => ({ ...prev, version: info?.version ? (String(info.version).startsWith('v') ? info.version : `v${info.version}`) : undefined }))
     })
     const unbindError = window.nexusAPI?.updater?.onError?.((err: string) => {
@@ -36,6 +44,7 @@ export default function Account() {
     })
     return () => {
       unbindAvailable?.()
+      unbindProgress?.()
       unbindNotAvailable?.()
       unbindDownloaded?.()
       unbindError?.()
@@ -45,27 +54,28 @@ export default function Account() {
   const handleCheckUpdates = async () => {
     if (updateStatus === 'checking') return
     setUpdateStatus('checking')
+    setDownloadPercent(0)
     try {
       const res = await window.nexusAPI?.updater?.checkNow?.()
-      const cur = res?.currentVersion ? (res.currentVersion.startsWith('v') ? res.currentVersion : `v${res.currentVersion}`) : 'v1.0.1'
+      const cur = res?.currentVersion ? (res.currentVersion.startsWith('v') ? res.currentVersion : `v${res.currentVersion}`) : 'v1.0.2'
       const upd = res?.updateVersion ? (res.updateVersion.startsWith('v') ? res.updateVersion : `v${res.updateVersion}`) : undefined
 
-      if (res?.hasUpdate) {
+      if (res?.error) {
+        setUpdateStatus('error')
+        setUpdateInfo({ message: res.error, current: cur })
+      } else if (res?.hasUpdate) {
         setUpdateStatus('available')
         setUpdateInfo({ version: upd, current: cur })
       } else if (res?.isLatest) {
         setUpdateStatus('latest')
         setUpdateInfo({ current: cur })
-      } else if (res?.error) {
-        setUpdateStatus('error')
-        setUpdateInfo({ message: res.error, current: cur })
       } else {
         setUpdateStatus('latest')
         setUpdateInfo({ current: cur })
       }
     } catch (err: any) {
       setUpdateStatus('error')
-      setUpdateInfo({ message: err?.message || 'Update check failed', current: 'v1.0.1' })
+      setUpdateInfo({ message: err?.message || 'Update check failed', current: 'v1.0.2' })
     }
   }
 
@@ -262,11 +272,19 @@ export default function Account() {
             )}
 
             {updateStatus === 'available' && (
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-medium animate-pulse">
-                <div className="flex items-center gap-2">
-                  <Download className="w-4 h-4 text-sky-400 shrink-0 animate-bounce" />
-                  <span>{t('account.desktop.newVersionDownloading') || 'Yeni sürüm bulundu:'} {updateInfo.version || ''} — {t('account.desktop.downloading') || 'İndiriliyor...'}</span>
+              <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-medium">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Download className="w-4 h-4 text-sky-400 shrink-0 animate-bounce" />
+                    <span>{t('account.desktop.newVersionDownloading') || 'Yeni sürüm bulundu:'} {updateInfo.version || ''}</span>
+                  </div>
+                  <span className="font-mono text-[11px] font-semibold">{downloadPercent > 0 ? `%${downloadPercent}` : (t('account.desktop.downloading') || 'İndiriliyor...')}</span>
                 </div>
+                {downloadPercent > 0 && (
+                  <div className="w-full bg-sky-950/60 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-sky-400 h-full rounded-full transition-all duration-300" style={{ width: `${downloadPercent}%` }} />
+                  </div>
+                )}
               </div>
             )}
 
@@ -289,7 +307,7 @@ export default function Account() {
             {updateStatus === 'error' && (
               <div className="flex items-center gap-2 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-medium">
                 <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>{t('account.desktop.offlineWarning') || 'GitHub sürüm kontrolü yapılamadı (İnternet bağlantınızı kontrol edin).'}</span>
+                <span>{updateInfo.message || t('account.desktop.offlineWarning') || 'GitHub sürüm kontrolü yapılamadı.'}</span>
               </div>
             )}
           </div>

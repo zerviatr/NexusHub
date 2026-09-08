@@ -25,6 +25,18 @@ import type { BrowserWindow } from 'electron'
 autoUpdater.autoDownload = true          // Download silently in background
 autoUpdater.autoInstallOnAppQuit = true  // Install when the user quits naturally
 autoUpdater.allowDowngrade = false       // Never roll back without explicit action
+autoUpdater.logger = console
+
+try {
+  autoUpdater.setFeedURL({
+    provider: 'github',
+    owner: 'zerviatr',
+    repo: 'NexusHub',
+    releaseType: 'release'
+  })
+} catch (err) {
+  console.warn('[updater] setFeedURL warning:', err)
+}
 
 export function setupAutoUpdater(win: BrowserWindow): void {
   // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -36,10 +48,11 @@ export function setupAutoUpdater(win: BrowserWindow): void {
 
   // ─── Events ───────────────────────────────────────────────────────────────
   autoUpdater.on('checking-for-update', () => {
-    // Intentionally silent — no UI feedback on routine check
+    console.log('[updater] Checking for update...')
   })
 
   autoUpdater.on('update-available', (info) => {
+    console.log('[updater] Update available:', info.version)
     // Renderer can show "Downloading update vX.Y.Z..." notification
     send('updater:available', {
       version: info.version,
@@ -49,6 +62,7 @@ export function setupAutoUpdater(win: BrowserWindow): void {
   })
 
   autoUpdater.on('update-not-available', (info) => {
+    console.log('[updater] Update not available. Current is latest:', info.version)
     send('updater:not-available', {
       version: info.version,
     })
@@ -64,6 +78,7 @@ export function setupAutoUpdater(win: BrowserWindow): void {
   })
 
   autoUpdater.on('update-downloaded', (info) => {
+    console.log('[updater] Update downloaded successfully:', info.version)
     // Renderer shows "Restart to install v1.2.0" banner
     send('updater:downloaded', {
       version: info.version,
@@ -72,13 +87,13 @@ export function setupAutoUpdater(win: BrowserWindow): void {
   })
 
   autoUpdater.on('error', (err) => {
-    // Swallow update errors silently in production; log for debugging
-    send('updater:error', err.message)
-    console.error('[updater] error:', err.message)
+    console.error('[updater] error:', err?.message || err)
+    send('updater:error', err?.message || 'Update error occurred')
   })
 
   // ─── IPC: renderer can trigger install ────────────────────────────────────
   ipcMain.on('updater:install-now', () => {
+    console.log('[updater] Triggering quitAndInstall...')
     autoUpdater.quitAndInstall(false, true)
     // false = don't force-quit (let window close handlers run)
     // true  = restart immediately after install
@@ -88,6 +103,8 @@ export function setupAutoUpdater(win: BrowserWindow): void {
   ipcMain.handle('updater:check-now', async () => {
     try {
       const currentVersion = app.getVersion()
+      console.log(`[updater] Manual check triggered. Current version: ${currentVersion}, isPackaged: ${app.isPackaged}`)
+
       if (!app.isPackaged) {
         return {
           hasUpdate: false,
@@ -96,9 +113,13 @@ export function setupAutoUpdater(win: BrowserWindow): void {
           devMode: true,
         }
       }
+
       const result = await autoUpdater.checkForUpdates()
       const updateVersion = result?.updateInfo?.version
       const hasUpdate = Boolean(updateVersion && updateVersion !== currentVersion)
+
+      console.log(`[updater] Check completed: updateVersion=${updateVersion}, hasUpdate=${hasUpdate}`)
+
       return {
         hasUpdate,
         currentVersion,
@@ -106,11 +127,11 @@ export function setupAutoUpdater(win: BrowserWindow): void {
         isLatest: !hasUpdate,
       }
     } catch (err: any) {
-      console.warn('[updater] check error:', err?.message || err)
+      console.error('[updater] check error:', err?.message || err)
       return {
         hasUpdate: false,
         currentVersion: app.getVersion(),
-        isLatest: true,
+        isLatest: false,
         error: err?.message || 'Check failed',
       }
     }
@@ -120,8 +141,8 @@ export function setupAutoUpdater(win: BrowserWindow): void {
   // Delayed to not slow down perceived startup time
   setTimeout(() => {
     if (app.isPackaged) {
-      autoUpdater.checkForUpdatesAndNotify().catch(() => {
-        // Network unavailable or GitHub unreachable — fail silently
+      autoUpdater.checkForUpdatesAndNotify().catch((e) => {
+        console.warn('[updater] Initial background check failed silently:', e?.message || e)
       })
     }
   }, 3_000)
