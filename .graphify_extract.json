@@ -1,0 +1,2097 @@
+{
+  "nodes": [
+    {
+      "id": "index",
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "src\\main\\index.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "index_createwindow",
+      "label": "createWindow()",
+      "file_type": "code",
+      "source_file": "src\\main\\index.ts",
+      "source_location": "L13"
+    },
+    {
+      "id": "clipboard",
+      "label": "clipboard.ts",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\clipboard.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "clipboard_generateid",
+      "label": "generateId()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\clipboard.ts",
+      "source_location": "L29"
+    },
+    {
+      "id": "clipboard_addentry",
+      "label": "addEntry()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\clipboard.ts",
+      "source_location": "L33"
+    },
+    {
+      "id": "clipboard_startpoller",
+      "label": "startPoller()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\clipboard.ts",
+      "source_location": "L54"
+    },
+    {
+      "id": "clipboard_registerclipboardipc",
+      "label": "registerClipboardIPC()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\clipboard.ts",
+      "source_location": "L71"
+    },
+    {
+      "id": "fileorganizer",
+      "label": "fileOrganizer.ts",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "fileorganizer_getcategory",
+      "label": "getCategory()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L37"
+    },
+    {
+      "id": "fileorganizer_selectdirectory",
+      "label": "selectDirectory()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L49"
+    },
+    {
+      "id": "fileorganizer_scandirectory",
+      "label": "scanDirectory()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L58"
+    },
+    {
+      "id": "fileorganizer_executeoperations",
+      "label": "executeOperations()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L93"
+    },
+    {
+      "id": "fileorganizer_registerfileorganizeripc",
+      "label": "registerFileOrganizerIPC()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L121"
+    },
+    {
+      "id": "imagetoolkit",
+      "label": "imageToolkit.ts",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\imageToolkit.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "imagetoolkit_registerimagetoolkitipc",
+      "label": "registerImageToolkitIPC()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\imageToolkit.ts",
+      "source_location": "L44"
+    },
+    {
+      "id": "linkbypasser",
+      "label": "linkBypasser.ts",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "linkbypasser_isvalidaylinkurl",
+      "label": "isValidAylinkUrl()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L73"
+    },
+    {
+      "id": "linkbypasser_isfinaldestination",
+      "label": "isFinalDestination()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L93"
+    },
+    {
+      "id": "linkbypasser_resolveredirects",
+      "label": "resolveRedirects()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L107"
+    },
+    {
+      "id": "linkbypasser_bypassaylink",
+      "label": "bypassAylink()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L306"
+    },
+    {
+      "id": "linkbypasser_registerlinkbypasseripc",
+      "label": "registerLinkBypasserIPC()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L495"
+    },
+    {
+      "id": "linkdecrypter",
+      "label": "linkDecrypter.ts",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\linkDecrypter.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "linkdecrypter_decryptandclean",
+      "label": "decryptAndClean()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\linkDecrypter.ts",
+      "source_location": "L36"
+    },
+    {
+      "id": "linkdecrypter_registerlinkdecrypteripc",
+      "label": "registerLinkDecrypterIPC()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\linkDecrypter.ts",
+      "source_location": "L110"
+    },
+    {
+      "id": "networktools",
+      "label": "networkTools.ts",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "networktools_checkport",
+      "label": "checkPort()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L89"
+    },
+    {
+      "id": "networktools_parsepingavg",
+      "label": "parsePingAvg()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L109"
+    },
+    {
+      "id": "networktools_parsepingpacketloss",
+      "label": "parsePingPacketLoss()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L119"
+    },
+    {
+      "id": "networktools_registernetworktoolsipc",
+      "label": "registerNetworkToolsIPC()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L126"
+    },
+    {
+      "id": "tempmail",
+      "label": "tempMail.ts",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\tempMail.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "tempmail_generateemail",
+      "label": "generateEmail()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\tempMail.ts",
+      "source_location": "L24"
+    },
+    {
+      "id": "tempmail_checkinbox",
+      "label": "checkInbox()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\tempMail.ts",
+      "source_location": "L38"
+    },
+    {
+      "id": "tempmail_readmessage",
+      "label": "readMessage()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\tempMail.ts",
+      "source_location": "L63"
+    },
+    {
+      "id": "tempmail_registertempmailipc",
+      "label": "registerTempMailIPC()",
+      "file_type": "code",
+      "source_file": "src\\main\\ipc\\tempMail.ts",
+      "source_location": "L97"
+    },
+    {
+      "id": "index",
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "src\\preload\\index.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "app",
+      "label": "App.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "app_app",
+      "label": "App()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L26"
+    },
+    {
+      "id": "env_d",
+      "label": "env.d.ts",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\env.d.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "main",
+      "label": "main.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\main.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "basetooltemplate",
+      "label": "BaseToolTemplate.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\components\\BaseToolTemplate.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "sidebar",
+      "label": "Sidebar.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\components\\Sidebar.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "sidebar_sidebar",
+      "label": "Sidebar()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\components\\Sidebar.tsx",
+      "source_location": "L28"
+    },
+    {
+      "id": "titlebar",
+      "label": "TitleBar.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\components\\TitleBar.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "titlebar_titlebar",
+      "label": "TitleBar()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\components\\TitleBar.tsx",
+      "source_location": "L5"
+    },
+    {
+      "id": "ipc",
+      "label": "ipc.ts",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\lib\\ipc.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "aylinkbypasser",
+      "label": "AylinkBypasser.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "aylinkbypasser_handlebypass",
+      "label": "handleBypass()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L20"
+    },
+    {
+      "id": "aylinkbypasser_handlecopy",
+      "label": "handleCopy()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L37"
+    },
+    {
+      "id": "aylinkbypasser_handlekeydown",
+      "label": "handleKeyDown()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L43"
+    },
+    {
+      "id": "bulkorganizer",
+      "label": "BulkOrganizer.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "bulkorganizer_handleselectdir",
+      "label": "handleSelectDir()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L21"
+    },
+    {
+      "id": "bulkorganizer_handlescan",
+      "label": "handleScan()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L30"
+    },
+    {
+      "id": "bulkorganizer_generatepreview",
+      "label": "generatePreview()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L47"
+    },
+    {
+      "id": "bulkorganizer_handleexecute",
+      "label": "handleExecute()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L74"
+    },
+    {
+      "id": "clipboardmanager",
+      "label": "ClipboardManager.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "clipboardmanager_timeago",
+      "label": "timeAgo()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L17"
+    },
+    {
+      "id": "clipboardmanager_formatbytes",
+      "label": "formatBytes()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L28"
+    },
+    {
+      "id": "clipboardmanager_refresh",
+      "label": "refresh()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L40"
+    },
+    {
+      "id": "clipboardmanager_handlecopy",
+      "label": "handleCopy()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L57"
+    },
+    {
+      "id": "clipboardmanager_handledelete",
+      "label": "handleDelete()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L63"
+    },
+    {
+      "id": "clipboardmanager_handleclearall",
+      "label": "handleClearAll()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L68"
+    },
+    {
+      "id": "dashboard",
+      "label": "Dashboard.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\Dashboard.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "imagetoolkit",
+      "label": "ImageToolkit.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "imagetoolkit_formatbytes",
+      "label": "formatBytes()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L37"
+    },
+    {
+      "id": "imagetoolkit_handleselectfiles",
+      "label": "handleSelectFiles()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L60"
+    },
+    {
+      "id": "imagetoolkit_handleremove",
+      "label": "handleRemove()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L81"
+    },
+    {
+      "id": "imagetoolkit_handleprocess",
+      "label": "handleProcess()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L86"
+    },
+    {
+      "id": "networktools",
+      "label": "NetworkTools.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "networktools_statusbadge",
+      "label": "StatusBadge()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L30"
+    },
+    {
+      "id": "networktools_clearresults",
+      "label": "clearResults()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L61"
+    },
+    {
+      "id": "networktools_handlerun",
+      "label": "handleRun()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L68"
+    },
+    {
+      "id": "networktools_handlekeydown",
+      "label": "handleKeyDown()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L96"
+    },
+    {
+      "id": "networktools_toggleport",
+      "label": "togglePort()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L100"
+    },
+    {
+      "id": "tempmail",
+      "label": "TempMail.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "tempmail_handlegenerate",
+      "label": "handleGenerate()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L42"
+    },
+    {
+      "id": "tempmail_handlecheck",
+      "label": "handleCheck()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L62"
+    },
+    {
+      "id": "tempmail_handleread",
+      "label": "handleRead()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L78"
+    },
+    {
+      "id": "tempmail_handleback",
+      "label": "handleBack()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L95"
+    },
+    {
+      "id": "tempmail_handlecopy",
+      "label": "handleCopy()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L100"
+    },
+    {
+      "id": "universaldecrypter",
+      "label": "UniversalDecrypter.tsx",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "universaldecrypter_handleprocess",
+      "label": "handleProcess()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L16"
+    },
+    {
+      "id": "universaldecrypter_handlecopy",
+      "label": "handleCopy()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L32"
+    },
+    {
+      "id": "universaldecrypter_handlepaste",
+      "label": "handlePaste()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L39"
+    },
+    {
+      "id": "universaldecrypter_handlereset",
+      "label": "handleReset()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L49"
+    },
+    {
+      "id": "universaldecrypter_handleopenexternal",
+      "label": "handleOpenExternal()",
+      "file_type": "code",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L56"
+    }
+  ],
+  "edges": [
+    {
+      "source": "index",
+      "target": "electron",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\index.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "index",
+      "target": "path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "index",
+      "target": "linkbypasser",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\index.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "index",
+      "target": "tempmail",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\index.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "index",
+      "target": "linkdecrypter",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\index.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "index",
+      "target": "fileorganizer",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\index.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "index",
+      "target": "clipboard",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\index.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "index",
+      "target": "networktools",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\index.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "index",
+      "target": "imagetoolkit",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\index.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "index",
+      "target": "index_createwindow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\index.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboard",
+      "target": "electron",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\clipboard.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboard",
+      "target": "clipboard_generateid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\clipboard.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboard",
+      "target": "clipboard_addentry",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\clipboard.ts",
+      "source_location": "L33",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboard",
+      "target": "clipboard_startpoller",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\clipboard.ts",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboard",
+      "target": "clipboard_registerclipboardipc",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\clipboard.ts",
+      "source_location": "L71",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboard_addentry",
+      "target": "clipboard_generateid",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "src\\main\\ipc\\clipboard.ts",
+      "source_location": "L38",
+      "weight": 0.8
+    },
+    {
+      "source": "clipboard_registerclipboardipc",
+      "target": "clipboard_startpoller",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "src\\main\\ipc\\clipboard.ts",
+      "source_location": "L72",
+      "weight": 0.8
+    },
+    {
+      "source": "fileorganizer",
+      "target": "electron",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "fileorganizer",
+      "target": "promises",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "fileorganizer",
+      "target": "path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "fileorganizer",
+      "target": "fileorganizer_getcategory",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "fileorganizer",
+      "target": "fileorganizer_selectdirectory",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "fileorganizer",
+      "target": "fileorganizer_scandirectory",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L58",
+      "weight": 1.0
+    },
+    {
+      "source": "fileorganizer",
+      "target": "fileorganizer_executeoperations",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L93",
+      "weight": 1.0
+    },
+    {
+      "source": "fileorganizer",
+      "target": "fileorganizer_registerfileorganizeripc",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L121",
+      "weight": 1.0
+    },
+    {
+      "source": "fileorganizer_scandirectory",
+      "target": "fileorganizer_getcategory",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "src\\main\\ipc\\fileOrganizer.ts",
+      "source_location": "L77",
+      "weight": 0.8
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "electron",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\imageToolkit.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "path",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\imageToolkit.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "fs",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\imageToolkit.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "imagetoolkit_registerimagetoolkitipc",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\imageToolkit.ts",
+      "source_location": "L44",
+      "weight": 1.0
+    },
+    {
+      "source": "linkbypasser",
+      "target": "electron",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "linkbypasser",
+      "target": "axios",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "linkbypasser",
+      "target": "cheerio",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "linkbypasser",
+      "target": "validator",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "linkbypasser",
+      "target": "linkbypasser_isvalidaylinkurl",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L73",
+      "weight": 1.0
+    },
+    {
+      "source": "linkbypasser",
+      "target": "linkbypasser_isfinaldestination",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L93",
+      "weight": 1.0
+    },
+    {
+      "source": "linkbypasser",
+      "target": "linkbypasser_resolveredirects",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L107",
+      "weight": 1.0
+    },
+    {
+      "source": "linkbypasser",
+      "target": "linkbypasser_bypassaylink",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L306",
+      "weight": 1.0
+    },
+    {
+      "source": "linkbypasser",
+      "target": "linkbypasser_registerlinkbypasseripc",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L495",
+      "weight": 1.0
+    },
+    {
+      "source": "linkbypasser_resolveredirects",
+      "target": "linkbypasser_isfinaldestination",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L118",
+      "weight": 0.8
+    },
+    {
+      "source": "linkbypasser_bypassaylink",
+      "target": "linkbypasser_isvalidaylinkurl",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L307",
+      "weight": 0.8
+    },
+    {
+      "source": "linkbypasser_bypassaylink",
+      "target": "linkbypasser_resolveredirects",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "src\\main\\ipc\\linkBypasser.ts",
+      "source_location": "L452",
+      "weight": 0.8
+    },
+    {
+      "source": "linkdecrypter",
+      "target": "electron",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkDecrypter.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "linkdecrypter",
+      "target": "axios",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkDecrypter.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "linkdecrypter",
+      "target": "url",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkDecrypter.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "linkdecrypter",
+      "target": "linkdecrypter_decryptandclean",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkDecrypter.ts",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "linkdecrypter",
+      "target": "linkdecrypter_registerlinkdecrypteripc",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\linkDecrypter.ts",
+      "source_location": "L110",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "electron",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "dns",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "net",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "util",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "child_process",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "networktools_checkport",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L89",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "networktools_parsepingavg",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L109",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "networktools_parsepingpacketloss",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L119",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "networktools_registernetworktoolsipc",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\networkTools.ts",
+      "source_location": "L126",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "electron",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\tempMail.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "axios",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\tempMail.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "tempmail_generateemail",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\tempMail.ts",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "tempmail_checkinbox",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\tempMail.ts",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "tempmail_readmessage",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\tempMail.ts",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "tempmail_registertempmailipc",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\main\\ipc\\tempMail.ts",
+      "source_location": "L97",
+      "weight": 1.0
+    },
+    {
+      "source": "index",
+      "target": "electron",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\preload\\index.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "react_router_dom",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "framer_motion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "sidebar",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "titlebar",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "dashboard",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "tempmail",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "universaldecrypter",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "bulkorganizer",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "aylinkbypasser",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "passwordgenerator",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "clipboardmanager",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "networktools",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "imagetoolkit",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "app",
+      "target": "app_app",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\App.tsx",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "main",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\main.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "main",
+      "target": "client",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\main.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "main",
+      "target": "react_router_dom",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\main.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "main",
+      "target": "app",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\main.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "main",
+      "target": "index_css",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\main.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "basetooltemplate",
+      "target": "framer_motion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\components\\BaseToolTemplate.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "basetooltemplate",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\components\\BaseToolTemplate.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "sidebar",
+      "target": "react_router_dom",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\components\\Sidebar.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "sidebar",
+      "target": "framer_motion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\components\\Sidebar.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "sidebar",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\components\\Sidebar.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "sidebar",
+      "target": "sidebar_sidebar",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\components\\Sidebar.tsx",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "titlebar",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\components\\TitleBar.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "titlebar",
+      "target": "framer_motion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\components\\TitleBar.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "titlebar",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\components\\TitleBar.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "titlebar",
+      "target": "titlebar_titlebar",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\components\\TitleBar.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "aylinkbypasser",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "aylinkbypasser",
+      "target": "framer_motion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "aylinkbypasser",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "aylinkbypasser",
+      "target": "basetooltemplate",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "aylinkbypasser",
+      "target": "ipc",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "aylinkbypasser",
+      "target": "aylinkbypasser_handlebypass",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "aylinkbypasser",
+      "target": "aylinkbypasser_handlecopy",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "aylinkbypasser",
+      "target": "aylinkbypasser_handlekeydown",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
+      "source": "aylinkbypasser_handlekeydown",
+      "target": "aylinkbypasser_handlebypass",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "src\\renderer\\src\\pages\\AylinkBypasser.tsx",
+      "source_location": "L44",
+      "weight": 0.8
+    },
+    {
+      "source": "bulkorganizer",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "bulkorganizer",
+      "target": "framer_motion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "bulkorganizer",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "bulkorganizer",
+      "target": "basetooltemplate",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "bulkorganizer",
+      "target": "ipc",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "bulkorganizer",
+      "target": "bulkorganizer_handleselectdir",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "bulkorganizer",
+      "target": "bulkorganizer_handlescan",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "bulkorganizer",
+      "target": "bulkorganizer_generatepreview",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "bulkorganizer",
+      "target": "bulkorganizer_handleexecute",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\BulkOrganizer.tsx",
+      "source_location": "L74",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboardmanager",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboardmanager",
+      "target": "framer_motion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboardmanager",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboardmanager",
+      "target": "basetooltemplate",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboardmanager",
+      "target": "ipc",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboardmanager",
+      "target": "clipboardmanager_timeago",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboardmanager",
+      "target": "clipboardmanager_formatbytes",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboardmanager",
+      "target": "clipboardmanager_refresh",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L40",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboardmanager",
+      "target": "clipboardmanager_handlecopy",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboardmanager",
+      "target": "clipboardmanager_handledelete",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboardmanager",
+      "target": "clipboardmanager_handleclearall",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ClipboardManager.tsx",
+      "source_location": "L68",
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard",
+      "target": "react_router_dom",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\Dashboard.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard",
+      "target": "framer_motion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\Dashboard.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "dashboard",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\Dashboard.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "framer_motion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "basetooltemplate",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "ipc",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "imagetoolkit_formatbytes",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "imagetoolkit_handleselectfiles",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "imagetoolkit_handleremove",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "imagetoolkit",
+      "target": "imagetoolkit_handleprocess",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\ImageToolkit.tsx",
+      "source_location": "L86",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "framer_motion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "basetooltemplate",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "ipc",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "networktools_statusbadge",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L30",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "networktools_clearresults",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L61",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "networktools_handlerun",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L68",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "networktools_handlekeydown",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L96",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools",
+      "target": "networktools_toggleport",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L100",
+      "weight": 1.0
+    },
+    {
+      "source": "networktools_handlerun",
+      "target": "networktools_clearresults",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L71",
+      "weight": 0.8
+    },
+    {
+      "source": "networktools_handlekeydown",
+      "target": "networktools_handlerun",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "src\\renderer\\src\\pages\\NetworkTools.tsx",
+      "source_location": "L97",
+      "weight": 0.8
+    },
+    {
+      "source": "tempmail",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "framer_motion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "basetooltemplate",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "ipc",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "tempmail_handlegenerate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L42",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "tempmail_handlecheck",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L62",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "tempmail_handleread",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L78",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "tempmail_handleback",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L95",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail",
+      "target": "tempmail_handlecopy",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L100",
+      "weight": 1.0
+    },
+    {
+      "source": "tempmail_handlegenerate",
+      "target": "tempmail_handlecheck",
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "source_file": "src\\renderer\\src\\pages\\TempMail.tsx",
+      "source_location": "L53",
+      "weight": 0.8
+    },
+    {
+      "source": "universaldecrypter",
+      "target": "react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "universaldecrypter",
+      "target": "framer_motion",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "universaldecrypter",
+      "target": "lucide_react",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "universaldecrypter",
+      "target": "basetooltemplate",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "universaldecrypter",
+      "target": "ipc",
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "universaldecrypter",
+      "target": "universaldecrypter_handleprocess",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "universaldecrypter",
+      "target": "universaldecrypter_handlecopy",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "universaldecrypter",
+      "target": "universaldecrypter_handlepaste",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L39",
+      "weight": 1.0
+    },
+    {
+      "source": "universaldecrypter",
+      "target": "universaldecrypter_handlereset",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L49",
+      "weight": 1.0
+    },
+    {
+      "source": "universaldecrypter",
+      "target": "universaldecrypter_handleopenexternal",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src\\renderer\\src\\pages\\UniversalDecrypter.tsx",
+      "source_location": "L56",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

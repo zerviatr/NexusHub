@@ -1,0 +1,5 @@
+{
+  "extraPaths": [
+    "../graphify-repo/graphify-main"
+  ]
+}

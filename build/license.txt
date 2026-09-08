@@ -1,0 +1,24 @@
+NexusHub End User License Agreement
+
+Copyright © 2026 NexusHub. All rights reserved.
+
+This End User License Agreement ("Agreement") is a legal agreement between you ("User") and NexusHub ("Company") for the use of NexusHub software ("Software").
+
+BY INSTALLING OR USING THE SOFTWARE, YOU AGREE TO BE BOUND BY THE TERMS OF THIS AGREEMENT.
+
+1. GRANT OF LICENSE
+   The Company grants you a non-exclusive, non-transferable, limited license to install and use the Software on devices you own or control, subject to the terms of this Agreement.
+
+2. RESTRICTIONS
+   You may not: (a) redistribute, sell, or sublicense the Software; (b) reverse engineer or decompile the Software; (c) remove any proprietary notices.
+
+3. DISCLAIMER OF WARRANTIES
+   THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.
+
+4. LIMITATION OF LIABILITY
+   IN NO EVENT SHALL THE COMPANY BE LIABLE FOR ANY INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES.
+
+5. TERMINATION
+   This Agreement terminates automatically if you breach any term.
+
+For the full EULA, visit: https://nexushub.app/legal/eula

@@ -1,0 +1,241 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "subtitle": "Multi-Tool Suite",
+    "groups": {
+      "privacy": "Privacy & Security",
+      "files": "Files & Media",
+      "network": "Network"
+    },
+    "tools": {
+      "tempMail": "TempMail Generator",
+      "decrypter": "Universal Decrypter",
+      "aylinkBypasser": "Aylink Bypasser",
+      "passwordGenerator": "Password Generator",
+      "bulkOrganizer": "Bulk Organizer",
+      "clipboardManager": "Clipboard Manager",
+      "imageToolkit": "Image Toolkit",
+      "networkTools": "Network Tools"
+    },
+    "account": "Account Settings"
+  },
+  "password": {
+    "title": "Password Generator",
+    "description": "Generate cryptographically secure passwords, passphrases, and PINs. All generation happens locally in the renderer — nothing leaves your device.",
+    "tabs": {
+      "password": "Password",
+      "passphrase": "Passphrase",
+      "pin": "PIN"
+    },
+    "generatedLabel": {
+      "password": "Generated Password",
+      "passphrase": "Generated Passphrase",
+      "pin": "Generated PIN"
+    },
+    "strength": {
+      "none": "None",
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong"
+    },
+    "options": {
+      "title": "Options",
+      "length": "Length",
+      "lowercase": "Lowercase (a-z)",
+      "uppercase": "Uppercase (A-Z)",
+      "digits": "Digits (0-9)",
+      "symbols": "Symbols (!@#...)",
+      "excludeAmbiguous": "Exclude ambiguous characters (i, I, l, L, 1, o, O, 0)",
+      "wordCount": "Word Count",
+      "delimiter": "Delimiter",
+      "capitalize": "Capitalize",
+      "pinLength": "PIN Length"
+    },
+    "bulk": {
+      "title": "Bulk Generate",
+      "count": "Count:",
+      "generate": "Generate {{count}}"
+    }
+  },
+  "account": {
+    "title": "Account Settings",
+    "subtitle": "Manage your license and application settings",
+    "licenseStatus": "License Status",
+    "active": "Active",
+    "currentTier": "Current Tier",
+    "licenseKey": "License Key",
+    "validUntil": "Valid Until",
+    "neverExpires": "Never Expires",
+    "lifetime": "Lifetime",
+    "dangerZone": "Danger Zone",
+    "deactivateDesc": "Deactivating will log you out and require a license key to use the app again.",
+    "deactivateBtn": "Deactivate License",
+    "deactivateConfirm": "Are you sure you want to deactivate your license?"
+  },
+  "eula": {
+    "title": "End User License Agreement",
+    "subtitle": "Please read and accept the terms to continue",
+    "s1": {
+      "title": "1. Terms of Use",
+      "body": "By using NexusHub, you agree to these terms. This software is provided for legal, educational, and authorized security testing purposes only."
+    },
+    "s2": {
+      "title": "2. Privacy & Telemetry",
+      "body": "NexusHub processes all data locally on your machine. We do not collect, transmit, or store your passwords, decrypted links, or generated data."
+    },
+    "s3": {
+      "title": "3. Licensing & Restrictions",
+      "body": "Your license is for personal or commercial use depending on your tier. You may not reverse engineer, redistribute, or resell the software."
+    },
+    "s4": {
+      "title": "4. Disclaimer of Warranties",
+      "body": "This software is provided \"as is\", without warranty of any kind. The authors shall not be liable for any damages arising from the use of this software."
+    },
+    "ready": "You can now accept the agreement.",
+    "scroll": "Please scroll to the bottom to accept.",
+    "accept": "I Agree"
+  },
+  "tour": {
+    "welcome": {
+      "title": "Welcome to NexusHub",
+      "desc": "Your premium multi-tool suite is ready. Let's do a quick setup before you get started."
+    },
+    "next": "Continue",
+    "lang": {
+      "title": "Select Language",
+      "desc": "Choose your preferred interface language. You can change this later in Account Settings."
+    },
+    "finish": "Get Started"
+  },
+  "dashboard": {
+    "welcomeBack": "WELCOME BACK",
+    "readyTitle": "Your <span class=\"gradient-text\">NexusHub</span> is ready.",
+    "readyDesc": "A unified suite of powerful tools at your fingertips. Select a tool below to get started.",
+    "stats": {
+      "activeTools": "Active Tools",
+      "security": "Security",
+      "status": "Status",
+      "ipcIsolated": "IPC Isolated",
+      "allSystemsGo": "All Systems Go"
+    },
+    "availableTools": "Available Tools",
+    "launchTool": "Launch Tool",
+    "status": {
+      "online": "Online",
+      "active": "Active",
+      "ready": "Ready",
+      "live": "Live"
+    },
+    "tools": {
+      "tempMail": {
+        "desc": "Instant disposable email addresses to bypass spam and tracking. Reads inbox in real-time."
+      },
+      "decrypter": {
+        "desc": "Resolve shortened links to their true destination and strip privacy-invading trackers."
+      },
+      "bulkOrganizer": {
+        "desc": "Clean up messy directories by instantly categorizing and bulk-renaming files by extension."
+      },
+      "aylinkBypasser": {
+        "desc": "Bypass aylink, cpmlink, ay.live and similar monetised redirect pages instantly without a browser."
+      },
+      "passwordGenerator": {
+        "desc": "Generate cryptographically secure passwords, passphrases, and PINs with strength estimation."
+      },
+      "clipboardManager": {
+        "desc": "Auto-tracks clipboard history up to 50 entries. Search, copy back, and delete with one click."
+      },
+      "networkTools": {
+        "desc": "IP resolution, DNS querying, port scanning, and ICMP ping — all running natively via Node.js."
+      },
+      "imageToolkit": {
+        "desc": "Batch convert images to JPEG, PNG, WebP, or AVIF. Resize, strip EXIF metadata, process locally."
+      }
+    }
+  },
+  "clipboard": {
+    "search": "Search history...",
+    "clear": "Clear All",
+    "total": "Total Entries",
+    "shown": "Shown",
+    "latest": "Latest",
+    "noSearch": "No entries match your search.",
+    "noHistory": "No clipboard history yet. Copy something!",
+    "showMore": "Show more ({{count}} chars)",
+    "showLess": "Show less",
+    "copy": "Copy to clipboard",
+    "delete": "Delete"
+  },
+  "organizer": {
+    "targetDir": "Target Directory",
+    "noFolder": "No folder selected",
+    "selectFolder": "Select Folder",
+    "scan": "Scan",
+    "categorize": "Categorize Files"
+  },
+  "image": {
+    "selectImages": "Select Images",
+    "supported": "JPG, PNG, WebP, AVIF, GIF, TIFF supported",
+    "options": "Conversion Options",
+    "outputFormat": "OUTPUT FORMAT",
+    "quality": "Quality",
+    "resize": "RESIZE PRESET",
+    "originalSize": "Original size",
+    "suffix": "FILENAME SUFFIX",
+    "stripExif": "Strip EXIF",
+    "outputDir": "OUTPUT DIRECTORY",
+    "sameFolder": "Same folder as input..."
+  },
+  "tempMail": {
+    "generate": "Generate New Address",
+    "checking": "Checking inbox...",
+    "refresh": "Refresh",
+    "inbox": "Inbox",
+    "empty": "Inbox is empty. Waiting for emails...",
+    "back": "Back to Inbox",
+    "from": "From",
+    "subject": "Subject"
+  },
+  "decrypter": {
+    "placeholder": "Paste shortened link here (e.g. bit.ly, adf.ly, t.co)...",
+    "decrypt": "Decrypt Link",
+    "decrypting": "Decrypting...",
+    "status": "Ready",
+    "success": "Decrypted Successfully",
+    "failed": "Decryption Failed",
+    "original": "Original",
+    "decrypted": "Decrypted"
+  },
+  "aylink": {
+    "placeholder": "Paste aylink, cpmlink, ay.live link here...",
+    "bypass": "Bypass",
+    "bypassing": "Bypassing...",
+    "status": "Ready to bypass",
+    "success": "Bypass Successful",
+    "failed": "Bypass Failed",
+    "original": "Original",
+    "bypassed": "Bypassed Target",
+    "pasteLink": "Paste Link",
+    "examples": "Examples:",
+    "finalUrl": "Final URL",
+    "intermediateUrl": "Intermediate URL",
+    "recent": "Recent Bypasses",
+    "unknownError": "Unknown error"
+  },
+  "network": {
+    "target": "Target (Domain or IP)",
+    "placeholder": "e.g. google.com or 8.8.8.8",
+    "placeholderPort": "example.com or 1.2.3.4",
+    "placeholderHost": "hostname or IP...",
+    "resolve": "DNS Resolve",
+    "ping": "ICMP Ping",
+    "scan": "Port Scan",
+    "run": "Run",
+    "running": "Running...",
+    "results": "Results",
+    "failed": "Failed",
+    "unknownError": "Unknown error",
+    "rawOutput": "Raw Output"
+  }
+}

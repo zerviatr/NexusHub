@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  macOS Hardened Runtime entitlements for NexusHub.
+  Required for Apple notarization. Only grant what the app actually needs.
+-->
+<plist version="1.0">
+  <dict>
+    <!-- Allow JIT compilation (required by Electron's V8) -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+
+    <!-- Allow unsigned executable memory (required by Electron) -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+
+    <!-- Allow DYLD environment variables (required by Electron) -->
+    <key>com.apple.security.cs.allow-dyld-environment-variables</key>
+    <true/>
+
+    <!-- Network client access (for TempMail, Network Tools, Aylink Bypasser) -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+
+    <!-- File read access for Bulk Organizer and Image Toolkit -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+  </dict>
+</plist>

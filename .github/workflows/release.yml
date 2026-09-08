@@ -1,0 +1,163 @@
+name: Build & Release NexusHub
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'           # Triggers on version tags: v1.0.0, v1.2.3, etc.
+  workflow_dispatch:        # Manual trigger for testing builds without a tag
+    inputs:
+      draft:
+        description: 'Create as draft release'
+        required: false
+        default: 'true'
+
+permissions:
+  contents: write           # Required to create GitHub Releases and upload artifacts
+
+jobs:
+  # ────────────────────────────────────────────────────────────────────────────
+  # Windows Build (signed with EV or OV certificate)
+  # ────────────────────────────────────────────────────────────────────────────
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build & Package (Windows)
+        env:
+          # ─── Code Signing ───────────────────────────────────────────────────
+          # CSC_LINK: Base64-encoded .pfx certificate file.
+          #   To encode: certutil -encode MyCert.pfx cert_b64.txt
+          #   Then paste contents of cert_b64.txt into the GitHub secret.
+          CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          # ─── GitHub Releases (auto-updater) ─────────────────────────────────
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run dist:win
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: |
+            dist/*.exe
+            dist/*.blockmap
+            dist/latest.yml
+          retention-days: 7
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # macOS Build (signed + notarized)
+  # ────────────────────────────────────────────────────────────────────────────
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build & Package (macOS)
+        env:
+          # ─── Code Signing ───────────────────────────────────────────────────
+          # CSC_LINK: Base64-encoded .p12 (exported from Keychain).
+          #   To encode on macOS: base64 -i MyCert.p12 | pbcopy
+          CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+          # ─── Notarization (Apple Developer account) ─────────────────────────
+          # electron-builder v26: notarize:true reads these env vars automatically
+          # Generate app-specific password at: appleid.apple.com → Security
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # ─── GitHub Releases ─────────────────────────────────────────────────
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run dist:mac
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: |
+            dist/*.dmg
+            dist/*.zip
+            dist/*.blockmap
+            dist/latest-mac.yml
+          retention-days: 7
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Linux Build (no signing required)
+  # ────────────────────────────────────────────────────────────────────────────
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Linux packaging dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm fakeroot dpkg
+
+      - name: Build & Package (Linux)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run dist:linux
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build
+          path: |
+            dist/*.AppImage
+            dist/*.deb
+            dist/latest-linux.yml
+          retention-days: 7
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Publish to GitHub Releases (runs after all platform builds succeed)
+  # ────────────────────────────────────────────────────────────────────────────
+  publish:
+    needs: [build-windows, build-macos, build-linux]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+          merge-multiple: true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: ${{ github.event.inputs.draft == 'true' }}
+          generate_release_notes: true
+          files: release-artifacts/**
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
