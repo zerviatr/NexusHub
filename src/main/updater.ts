@@ -93,9 +93,9 @@ export function setupAutoUpdater(win: BrowserWindow): void {
 
   // ─── IPC: renderer can trigger install ────────────────────────────────────
   ipcMain.on('updater:install-now', () => {
-    console.log('[updater] Triggering quitAndInstall...')
-    autoUpdater.quitAndInstall(false, true)
-    // false = don't force-quit (let window close handlers run)
+    console.log('[updater] Triggering silent Discord-style quitAndInstall...')
+    autoUpdater.quitAndInstall(true, true)
+    // true  = silent install in background without wizard UI
     // true  = restart immediately after install
   })
 

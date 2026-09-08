@@ -1,6 +1,6 @@
 {
   "name": "nexushub",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "NexusHub — Premium Multi-Tool Desktop Application",
   "main": "./out/main/index.js",
   "author": {
@@ -63,9 +63,9 @@
       "artifactName": "${productName}-Setup-${version}-${arch}.${ext}"
     },
     "nsis": {
-      "oneClick": false,
+      "oneClick": true,
       "perMachine": false,
-      "allowToChangeInstallationDirectory": true,
+      "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "NexusHub",
@@ -74,8 +74,8 @@
       "uninstallerIcon": "build/icons/icon.ico",
       "installerHeaderIcon": "build/icons/icon.ico",
       "deleteAppDataOnUninstall": false,
-      "artifactName": "${productName}-Setup-${version}.${ext}",
-      "license": "build/license.txt"
+      "runAfterFinish": true,
+      "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "mac": {
       "icon": "build/icons/icon.icns",

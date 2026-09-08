@@ -183,7 +183,7 @@ export default function Sidebar() {
   const navigate = useNavigate()
   const { t } = useT()
   const isHome = location.pathname === '/'
-  const [appVersion, setAppVersion] = useState('1.0.3')
+  const [appVersion, setAppVersion] = useState('1.0.4')
 
   useEffect(() => {
     window.nexusAPI?.getVersion?.().then((v) => {
