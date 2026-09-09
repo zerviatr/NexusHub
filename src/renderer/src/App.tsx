@@ -24,6 +24,7 @@ import OnboardingTour from './components/OnboardingTour'
 import CommandPalette from './components/CommandPalette'
 import ProLockGate from './components/ProLockGate'
 import FloatingOrb from './components/FloatingOrb'
+import UpdateManager from './components/UpdateManager'
 import { useLicense } from './lib/LicenseContext'
 
 const pageVariants = {
@@ -117,6 +118,7 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-nexus-bg">
+      <UpdateManager />
       <CommandPalette />
       {!hasCompletedTour && <OnboardingTour onComplete={handleCompleteTour} />}
       <TitleBar />

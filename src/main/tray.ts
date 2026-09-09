@@ -128,3 +128,12 @@ export function setupSystemTray(mainWindow: BrowserWindow): Tray | null {
 }
 }
 
+export function destroySystemTray(): void {
+  if (tray) {
+    try {
+      tray.destroy()
+    } catch {}
+    tray = null
+  }
+}
+

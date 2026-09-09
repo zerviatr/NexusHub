@@ -296,8 +296,13 @@ export default function Account() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => window.nexusAPI?.updater?.installNow?.()}
-                  className="px-3 py-1 rounded bg-nexus-cyan text-black font-semibold hover:bg-nexus-cyan/90 transition-all text-xs"
+                  onClick={(e) => {
+                    const btn = e.currentTarget
+                    btn.disabled = true
+                    btn.innerText = 'Yeniden Başlatılıyor...'
+                    window.nexusAPI?.updater?.installNow?.()
+                  }}
+                  className="px-3 py-1 rounded bg-nexus-cyan text-black font-semibold hover:bg-nexus-cyan/90 transition-all text-xs active:scale-95 cursor-pointer"
                 >
                   {t('account.desktop.restartInstall') || 'Yeniden Başlat & Kur'}
                 </button>

@@ -17,9 +17,10 @@
  * Renderer triggers install via:
  *   ipcRenderer.send('updater:install-now')
  */
-import { ipcMain, app } from 'electron'
+import { ipcMain, app, BrowserWindow, globalShortcut } from 'electron'
 import { autoUpdater } from 'electron-updater'
-import type { BrowserWindow } from 'electron'
+import { destroySystemTray } from './tray'
+import { spawn } from 'child_process'
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 autoUpdater.autoDownload = true          // Download silently in background
@@ -93,22 +94,61 @@ export function setupAutoUpdater(win: BrowserWindow): void {
 
   // ─── IPC: renderer can trigger install ────────────────────────────────────
   ipcMain.on('updater:install-now', () => {
-    console.log('[updater] Triggering instant silent Discord-style quitAndInstall...')
+    console.log('[updater] Discord-grade update sequence initiated...')
     ;(app as any).isQuitting = true
 
-    // Destroy all windows immediately so nothing blocks the process exit
-    // and Windows doesn't show "(Not Responding)" or freeze for 60 seconds
-    const { BrowserWindow } = require('electron')
-    BrowserWindow.getAllWindows().forEach((w: any) => {
+    // 1. Remove all close prevention listeners so app.quit() is never blocked
+    BrowserWindow.getAllWindows().forEach((w) => {
       try {
         w.removeAllListeners('close')
-        w.destroy()
+        // Hide window so user sees smooth transition
+        w.hide()
       } catch {}
     })
 
-    setImmediate(() => {
-      autoUpdater.quitAndInstall(true, true)
-    })
+    // 2. Safely release OS hooks, global hotkeys and tray
+    try {
+      globalShortcut.unregisterAll()
+    } catch {}
+    try {
+      destroySystemTray()
+    } catch {}
+
+    // 3. Robust Watchdog: If Windows NSIS fails to auto-launch the newly updated binary,
+    // this detached PowerShell supervisor will start NexusHub after 5 seconds
+    try {
+      const exePath = app.getPath('exe')
+      if (app.isPackaged && process.platform === 'win32' && exePath) {
+        const psScript = `
+          Start-Sleep -Seconds 5;
+          $p = Get-Process -Name "NexusHub" -ErrorAction SilentlyContinue;
+          if (-not $p) {
+            Start-Process -FilePath "${exePath.replace(/\\/g, '\\\\')}"
+          }
+        `
+        const watchdog = spawn('powershell.exe', ['-NoProfile', '-WindowStyle', 'Hidden', '-Command', psScript], {
+          detached: true,
+          stdio: 'ignore',
+          windowsHide: true,
+        })
+        watchdog.unref()
+      }
+    } catch (err) {
+      console.warn('[updater] Watchdog spawn warning:', err)
+    }
+
+    // 4. Trigger quitAndInstall(false, true)
+    // - isSilent: false allows NSIS to run with its 1-second clean update progress and execute runAfterFinish
+    // - isForceRunAfter: true passes --force-run to guarantee relaunch
+    setTimeout(() => {
+      try {
+        console.log('[updater] Executing autoUpdater.quitAndInstall(false, true)...')
+        autoUpdater.quitAndInstall(false, true)
+      } catch (err) {
+        console.error('[updater] quitAndInstall failed, attempting fallback app.quit():', err)
+        app.quit()
+      }
+    }, 400)
   })
 
   // ─── IPC: renderer can trigger manual check ───────────────────────────────
