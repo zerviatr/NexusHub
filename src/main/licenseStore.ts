@@ -80,15 +80,27 @@ export function validateKey(rawKey: string): ValidationResult {
   const tier = TIER_MAP[T]
   if (!tier) return { valid: false, reason: 'Unknown license tier' }
 
-  // Validate HMAC
-  const payload  = `${T}${EEE}`
-  const expected = createHmac('sha256', SECRET)
-    .update(payload)
+  // Dual-mode cryptographic signature check:
+  // 1. New Format: SSSS (4 hex chars entropy) + H12 (12 hex chars HMAC of T+EEE+SSSS)
+  const SSSS = H.slice(0, 4)
+  const H12  = H.slice(4)
+  const expectedH12 = createHmac('sha256', SECRET)
+    .update(`${T}${EEE}${SSSS}`)
+    .digest('hex')
+    .slice(0, 12)
+    .toUpperCase()
+
+  // 2. Legacy Format: 16-char HMAC of T+EEE
+  const expectedLegacy = createHmac('sha256', SECRET)
+    .update(`${T}${EEE}`)
     .digest('hex')
     .slice(0, 16)
     .toUpperCase()
 
-  if (H !== expected) {
+  const isValidEntropy = H12 === expectedH12
+  const isValidLegacy  = H === expectedLegacy
+
+  if (!isValidEntropy && !isValidLegacy) {
     return { valid: false, reason: 'Invalid license key' }
   }
 

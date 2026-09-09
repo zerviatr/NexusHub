@@ -229,7 +229,7 @@ licenseRouter.post('/lookup', async (req: Request, res: Response): Promise<void>
       isExpired,
       expiresAt,
       activeDevices,
-      maxDevices: Number(license.max_devices ?? 1),
+      maxDevices: Number((license as any).max_activations ?? (license as any).max_devices ?? 2),
       createdAt: Number(license.created_at ?? 0),
     })
   } catch (err: any) {

@@ -148,11 +148,11 @@ export function registerCyberFortressIPC(): void {
     }
   )
 
-  // AES-256-GCM Vault File Decryptor (Stream-based for large files)
+  // AES-256-GCM Vault File Decryptor (Stream-based for large files with zero data loss protection)
   ipcMain.handle(
     'fortress:decryptFile',
     async (_, { filePath, passphrase }: { filePath: string; passphrase: string }) => {
-      let outPath = ''
+      let stagingPath = ''
       try {
         if (!fs.existsSync(filePath)) throw new Error('Dosya bulunamadı.')
 
@@ -181,30 +181,54 @@ export function registerCyberFortressIPC(): void {
         const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv)
         decipher.setAuthTag(authTag)
 
-        outPath = filePath.replace(/\.nexusvault$/i, '')
-        if (outPath === filePath) {
-          outPath = `${filePath}.restored`
+        let candidatePath = filePath.replace(/\.nexusvault$/i, '')
+        if (candidatePath === filePath) {
+          candidatePath = `${filePath}.restored`
         }
+
+        // Staging path: decrypt into an isolated temporary file first
+        stagingPath = `${candidatePath}.${crypto.randomBytes(4).toString('hex')}.tmp`
 
         await new Promise<void>((resolve, reject) => {
           const inStream = fs.createReadStream(filePath, { start: 51 })
-          const outStream = fs.createWriteStream(outPath)
+          const outStream = fs.createWriteStream(stagingPath)
+
+          const cleanup = () => {
+            try { inStream.destroy() } catch {}
+            try { outStream.destroy() } catch {}
+          }
 
           inStream
             .pipe(decipher)
             .pipe(outStream)
             .on('finish', () => resolve())
-            .on('error', (err) => reject(err))
+            .on('error', (err) => { cleanup(); reject(err) })
 
-          inStream.on('error', (err) => reject(err))
-          decipher.on('error', (err) => reject(err))
+          inStream.on('error', (err) => { cleanup(); reject(err) })
+          decipher.on('error', (err) => { cleanup(); reject(err) })
         })
 
-        return { success: true, outPath, name: path.basename(outPath) }
+        // Collision avoidance: if destination file already exists, don't overwrite it
+        let finalPath = candidatePath
+        if (fs.existsSync(finalPath)) {
+          const ext = path.extname(candidatePath)
+          const base = path.basename(candidatePath, ext)
+          const dir = path.dirname(candidatePath)
+          let counter = 1
+          while (fs.existsSync(path.join(dir, `${base} (${counter})${ext}`))) {
+            counter++
+          }
+          finalPath = path.join(dir, `${base} (${counter})${ext}`)
+        }
+
+        // Atomically rename validated decrypted file into place
+        await fs.promises.rename(stagingPath, finalPath)
+
+        return { success: true, outPath: finalPath, name: path.basename(finalPath) }
       } catch (err: any) {
-        if (outPath && fs.existsSync(outPath)) {
+        if (stagingPath && fs.existsSync(stagingPath)) {
           try {
-            await fs.promises.unlink(outPath)
+            await fs.promises.unlink(stagingPath)
           } catch {}
         }
         return {

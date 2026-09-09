@@ -946,6 +946,16 @@ export function getAdminDashboardHtml(): string {
     let currentBulkKeys = [];
     let confirmResolver = null;
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     // Initialize
     window.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
@@ -1443,14 +1453,14 @@ export function getAdminDashboardHtml(): string {
               <input type="checkbox" data-key="\${k.key}" \${isChecked ? 'checked' : ''} onchange="toggleSelectRow('\${k.key}', this.checked)" class="key-row-cb rounded bg-nexus-surface border-nexus-border text-nexus-cyan focus:ring-0 cursor-pointer" />
             </td>
             <td class="py-3 px-4 font-mono font-bold text-white flex items-center gap-2">
-              <span>\${k.key}</span>
-              <button onclick="copyText('\${k.key}')" class="p-1 rounded text-nexus-muted hover:text-white transition" title="Kopyala">
+              <span>\${escapeHtml(k.key)}</span>
+              <button onclick="copyText('\${escapeHtml(k.key)}')" class="p-1 rounded text-nexus-muted hover:text-white transition" title="Kopyala">
                 <i data-lucide="copy" class="w-3.5 h-3.5"></i>
               </button>
             </td>
             <td class="py-3 px-4">
               <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase border \${tierColor}">
-                \${k.tier}
+                \${escapeHtml(k.tier)}
               </span>
             </td>
             <td class="py-3 px-4">
@@ -1464,20 +1474,20 @@ export function getAdminDashboardHtml(): string {
                 return \`
                   <div class="flex flex-col gap-0.5">
                     <div>\${b}</div>
-                    \${cust ? \`<span class="text-[10px] text-slate-400 truncate max-w-[120px]" title="\${cust}">\${cust}</span>\` : ''}
+                    \${cust ? \`<span class="text-[10px] text-slate-400 truncate max-w-[120px]" title="\${escapeHtml(cust)}">\${escapeHtml(cust)}</span>\` : ''}
                   </div>
                 \`;
               })()}
             </td>
             <td class="py-3 px-4">
-              <div id="note-display-\${k.key}" class="flex items-center gap-1.5 group cursor-pointer" onclick="enableNoteEdit('\${k.key}')">
-                <span class="text-nexus-muted truncate max-w-[130px] group-hover:text-white">\${note || '<span class="italic text-nexus-muted/40">Not ekle...</span>'}</span>
+              <div id="note-display-\${escapeHtml(k.key)}" class="flex items-center gap-1.5 group cursor-pointer" onclick="enableNoteEdit('\${escapeHtml(k.key)}')">
+                <span class="text-nexus-muted truncate max-w-[130px] group-hover:text-white">\${note ? escapeHtml(note) : '<span class="italic text-nexus-muted/40">Not ekle...</span>'}</span>
                 <i data-lucide="pencil" class="w-3 h-3 text-nexus-muted opacity-0 group-hover:opacity-100 transition"></i>
               </div>
-              <div id="note-edit-\${k.key}" class="hidden flex items-center gap-1">
-                <input type="text" id="note-input-\${k.key}" value="\${note}" class="bg-nexus-surface border border-nexus-border rounded px-1.5 py-0.5 text-xs text-white w-28 focus:outline-none" />
-                <button onclick="saveNote('\${k.key}')" class="p-1 text-nexus-emerald hover:text-white"><i data-lucide="check" class="w-3.5 h-3.5"></i></button>
-                <button onclick="cancelNoteEdit('\${k.key}')" class="p-1 text-nexus-rose hover:text-white"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+              <div id="note-edit-\${escapeHtml(k.key)}" class="hidden flex items-center gap-1">
+                <input type="text" id="note-input-\${escapeHtml(k.key)}" value="\${escapeHtml(note)}" class="bg-nexus-surface border border-nexus-border rounded px-1.5 py-0.5 text-xs text-white w-28 focus:outline-none" />
+                <button onclick="saveNote('\${escapeHtml(k.key)}')" class="p-1 text-nexus-emerald hover:text-white"><i data-lucide="check" class="w-3.5 h-3.5"></i></button>
+                <button onclick="cancelNoteEdit('\${escapeHtml(k.key)}')" class="p-1 text-nexus-rose hover:text-white"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
               </div>
             </td>
             <td class="py-3 px-4 font-mono text-slate-300 flex items-center gap-1.5">
@@ -1996,22 +2006,23 @@ export function getAdminDashboardHtml(): string {
           }
           tbody.innerHTML = data.coupons.map(c => {
             const isUsed = Number(c.is_used) === 1;
+            const safeUsedByKey = c.used_by_key ? escapeHtml(c.used_by_key.slice(0, 10)) + '...' : '';
             const statusBadge = isUsed
-              ? \`<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-nexus-rose/10 text-nexus-rose border border-nexus-rose/30">Kullanıldı (\${c.used_by_key ? c.used_by_key.slice(0, 10) + '...' : ''})</span>\`
+              ? \`<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-nexus-rose/10 text-nexus-rose border border-nexus-rose/30">Kullanıldı (\${safeUsedByKey})</span>\`
               : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-nexus-emerald/10 text-nexus-emerald border border-nexus-emerald/30">Kullanılabilir</span>';
             return \`
               <tr class="hover:bg-nexus-surface/50 transition">
                 <td class="py-2.5 px-3 font-mono font-bold text-white flex items-center gap-1.5">
-                  <span>\${c.code}</span>
-                  <button onclick="copyText('\${c.code}')" class="p-1 rounded text-nexus-muted hover:text-white transition" title="Kopyala">
+                  <span>\${escapeHtml(c.code)}</span>
+                  <button onclick="copyText('\${escapeHtml(c.code)}')" class="p-1 rounded text-nexus-muted hover:text-white transition" title="Kopyala">
                     <i data-lucide="copy" class="w-3 h-3"></i>
                   </button>
                 </td>
-                <td class="py-2.5 px-3 font-bold text-nexus-cyan">+\${c.days_to_add} Gün</td>
-                <td class="py-2.5 px-3 text-slate-300">\${c.note || '—'}</td>
+                <td class="py-2.5 px-3 font-bold text-nexus-cyan">+\${Number(c.days_to_add || 0)} Gün</td>
+                <td class="py-2.5 px-3 text-slate-300">\${c.note ? escapeHtml(c.note) : '—'}</td>
                 <td class="py-2.5 px-3">\${statusBadge}</td>
                 <td class="py-2.5 px-3 text-right">
-                  <button onclick="deleteCoupon('\${c.code}')" class="p-1 rounded text-nexus-muted hover:text-nexus-rose transition" title="Kuponu Sil">
+                  <button onclick="deleteCoupon('\${escapeHtml(c.code)}')" class="p-1 rounded text-nexus-muted hover:text-nexus-rose transition" title="Kuponu Sil">
                     <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                   </button>
                 </td>

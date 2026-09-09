@@ -13,8 +13,15 @@ const JAN_2024_MS = new Date('2024-01-01T00:00:00Z').getTime()
 const MONTH_MS = 30.44 * 24 * 3600 * 1000
 const TEST_SECRET = 'TEST_SECRET_KEY_FOR_UNIT_TESTS'
 
-function generateTestKey(tierChar: 'F' | 'P' | 'T' | 'L', monthsFrom2024: number, secret = TEST_SECRET): string {
+function generateTestKey(tierChar: 'F' | 'P' | 'T' | 'L', monthsFrom2024: number, secret = TEST_SECRET, entropy?: string): string {
   const eee = monthsFrom2024.toString(16).padStart(3, '0').toUpperCase()
+  if (entropy) {
+    const ssss = entropy.slice(0, 4).toUpperCase()
+    const payload = tierChar + eee + ssss
+    const hmac = createHmac('sha256', secret).update(payload).digest('hex').toUpperCase().slice(0, 12)
+    const full = `NEXUS${tierChar}${eee}${ssss}${hmac}`
+    return `${full.slice(0, 5)}-${full.slice(5, 10)}-${full.slice(10, 15)}-${full.slice(15, 20)}-${full.slice(20, 25)}`
+  }
   const payload = tierChar + eee
   const hmac = createHmac('sha256', secret).update(payload).digest('hex').toUpperCase().slice(0, 16)
   const full = `NEXUS${tierChar}${eee}${hmac}`
@@ -35,13 +42,25 @@ function validateKeyPure(rawKey: string, secret = TEST_SECRET) {
   const tier = TIER_MAP[T]
   if (!tier) return { valid: false, reason: 'Unknown license tier' }
 
-  const expectedHmac = createHmac('sha256', secret)
+  // Dual entropy & legacy validation
+  const SSSS = H.slice(0, 4)
+  const H12  = H.slice(4)
+  const expectedH12 = createHmac('sha256', secret)
+    .update(`${T}${EEE}${SSSS}`)
+    .digest('hex')
+    .slice(0, 12)
+    .toUpperCase()
+
+  const expectedLegacy = createHmac('sha256', secret)
     .update(T + EEE)
     .digest('hex')
     .toUpperCase()
     .slice(0, 16)
 
-  if (H !== expectedHmac) {
+  const isValidEntropy = H12 === expectedH12
+  const isValidLegacy  = H === expectedLegacy
+
+  if (!isValidEntropy && !isValidLegacy) {
     return { valid: false, reason: 'Cryptographic signature mismatch' }
   }
 
@@ -64,6 +83,18 @@ describe('NexusHub License Cryptography & Validation', () => {
     expect(res.valid).toBe(true)
     expect(res.tier).toBe('lifetime')
     expect(res.expiresAt).toBe(0)
+  })
+
+  it('should successfully validate new entropy-salt keys and prevent collisions', () => {
+    const key1 = generateTestKey('L', 0, TEST_SECRET, 'A1B2')
+    const key2 = generateTestKey('L', 0, TEST_SECRET, 'F9E8')
+    expect(key1).not.toBe(key2)
+    const res1 = validateKeyPure(key1)
+    const res2 = validateKeyPure(key2)
+    expect(res1.valid).toBe(true)
+    expect(res2.valid).toBe(true)
+    expect(res1.tier).toBe('lifetime')
+    expect(res2.tier).toBe('lifetime')
   })
 
   it('should successfully validate a valid Pro key with future expiry', () => {

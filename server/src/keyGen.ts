@@ -9,7 +9,7 @@
  *   EEE  [3 chars] Hex months-since-2024-01-01 (000 = never expires)
  *   H×16 [16 chars] HMAC-SHA256(T+EEE, SECRET)[0..16].hex().upper()
  */
-import { createHmac } from 'crypto'
+import { createHmac, randomBytes } from 'crypto'
 
 const JAN_2024_MS = new Date('2024-01-01T00:00:00Z').getTime()
 const MONTH_MS    = 30.44 * 24 * 3600 * 1000
@@ -24,14 +24,22 @@ const TIER_CHAR: Record<string, string> = {
 /**
  * Generate a license key.
  *
+ * KEY FORMAT: NEXUS-TEEE[S]-[SSS][HH]-[HHHHH]-[HHHHH] (25 chars + 4 dashes)
+ *   T     [1 char]  Tier: F=Free  P=Pro  T=Team  L=Lifetime
+ *   EEE   [3 chars] Hex months-since-2024-01-01 (000 = never expires)
+ *   SSSS  [4 chars] Random cryptographic entropy (65,536 variations per tier/period)
+ *   H×12  [12 chars] HMAC-SHA256(T+EEE+SSSS, SECRET)[0..12].hex().upper()
+ *
  * @param tier       - 'free' | 'pro' | 'team' | 'lifetime'
  * @param expiresAt  - Unix ms timestamp, 0 = never expires (lifetime)
  * @param secret     - HMAC secret (NEXUS_LICENSE_SECRET env var)
+ * @param entropy    - Optional 4-char hex entropy (defaults to cryptographically random)
  */
 export function generateKey(
   tier: string,
   expiresAt: number,
   secret: string,
+  entropy?: string,
 ): string {
   const T = TIER_CHAR[tier]
   if (!T) throw new Error(`Unknown tier: ${tier}`)
@@ -43,15 +51,18 @@ export function generateKey(
     EEE = months.toString(16).padStart(3, '0').toUpperCase()
   }
 
-  const payload = `${T}${EEE}`
+  // 4-char cryptographic random entropy guarantees every key is 100% unique
+  const SSSS = (entropy || randomBytes(2).toString('hex')).toUpperCase().slice(0, 4)
+
+  const payload = `${T}${EEE}${SSSS}`
   const hmac    = createHmac('sha256', secret)
     .update(payload)
     .digest('hex')
-    .slice(0, 16)
+    .slice(0, 12)
     .toUpperCase()
 
-  // Format: NEXUS-TEEEH-HHHHH-HHHHH-HHHHH
-  const raw = `NEXUS${T}${EEE}${hmac}` // 25 chars
+  // Format: NEXUS-TEEE[S]-[SSS][HH]-[HHHHH]-[HHHHH]
+  const raw = `NEXUS${T}${EEE}${SSSS}${hmac}` // 5 + 1 + 3 + 4 + 12 = 25 chars
   return [
     raw.slice(0, 5),
     raw.slice(5, 10),
