@@ -97,52 +97,50 @@ export function renderLandingPage(): string {
   <!-- BACKGROUND GRID -->
   <div class="fixed inset-0 grid-pattern pointer-events-none z-0"></div>
 
-  <!-- NAVIGATION -->
-  <nav class="relative z-50 border-b border-nexus-border/60 bg-nexus-bg/80 backdrop-blur-xl sticky top-0">
-    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-3 group">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-nexus-cyan via-nexus-accent to-nexus-purple p-0.5 shadow-[0_0_20px_rgba(6,182,212,0.4)] group-hover:scale-105 transition-transform">
-          <div class="w-full h-full bg-nexus-bg rounded-[10px] flex items-center justify-center font-mono font-black text-nexus-cyan text-base">
+  <!-- FLOATING MINIMALIST ISLAND NAVBAR -->
+  <header class="sticky top-4 z-50 px-4 pointer-events-none mb-2">
+    <nav class="max-w-4xl mx-auto h-14 px-4 sm:px-5 rounded-full card-glass border border-nexus-border/80 bg-nexus-bg/90 backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] flex items-center justify-between gap-3 pointer-events-auto">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-2.5 group shrink-0">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-nexus-cyan via-nexus-accent to-purple-600 p-0.5 shadow-[0_0_15px_rgba(6,182,212,0.4)] group-hover:scale-105 transition-transform">
+          <div class="w-full h-full bg-nexus-bg rounded-full flex items-center justify-center font-mono font-black text-nexus-cyan text-xs">
             N
           </div>
         </div>
-        <div class="flex flex-col">
-          <span class="font-heading font-black text-lg tracking-wider text-white">NEXUS<span class="text-nexus-cyan">HUB</span></span>
-          <span class="text-[9px] font-mono text-nexus-muted tracking-widest uppercase">Desktop Suite</span>
-        </div>
+        <span class="font-heading font-black text-sm tracking-wider text-white">NEXUS<span class="text-nexus-cyan">HUB</span></span>
       </a>
 
-      <!-- Minimal Essential Links -->
-      <div class="hidden lg:flex items-center gap-8 text-sm font-medium text-nexus-muted">
+      <!-- 4 Core Navigation Anchors -->
+      <div class="hidden md:flex items-center gap-7 text-xs font-medium text-nexus-muted">
         <a href="#simulator" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.preview">Arayüz</a>
         <a href="#arsenal" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.arsenal">Cephanelik</a>
-        <a href="#benchmark" class="hover:text-nexus-cyan transition-colors">Kıyaslama</a>
-        <a href="#pricing" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.pricing">Fiyatlandırma</a>
+        <a href="#pricing" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.pricing">Fiyatlar</a>
         <a href="#faq" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.faq">SSS</a>
       </div>
 
-      <!-- Minimal Right Action Items -->
-      <div class="flex items-center gap-3">
-        <!-- Compact Command Palette Pill -->
-        <button onclick="openCmdPalette()" class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full card-glass border border-nexus-border/80 hover:border-nexus-cyan/60 text-xs font-mono text-nexus-muted hover:text-white transition-all cursor-pointer group" title="Hızlı Komut Paleti (Ctrl + K)">
-          <span class="text-nexus-cyan group-hover:scale-110 transition-transform">⚡</span>
-          <span>Ara</span>
-          <kbd class="px-1.5 py-0.5 rounded bg-nexus-bg border border-nexus-border text-[10px] font-mono text-nexus-cyan">Ctrl K</kbd>
+      <!-- Right Action Items -->
+      <div class="flex items-center gap-2 shrink-0">
+        <!-- Quick Spotlight Search Pill -->
+        <button onclick="openCmdPalette()" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-nexus-surface/60 border border-nexus-border/60 hover:border-nexus-cyan/50 text-[11px] font-mono text-nexus-muted hover:text-white transition-all cursor-pointer">
+          <span class="text-nexus-cyan text-[10px]">⚡</span>
+          <span class="hidden sm:inline">Ctrl K</span>
         </button>
 
-        <!-- Language Switcher -->
-        <button onclick="toggleLanguage()" id="lang-btn" class="px-2.5 py-1.5 rounded-xl border border-nexus-border/80 hover:border-nexus-cyan/50 text-xs font-mono text-nexus-muted hover:text-white transition-all flex items-center gap-1.5 cursor-pointer">
+        <!-- Compact Language Switcher -->
+        <button onclick="toggleLanguage()" id="lang-btn" class="px-2 py-1.5 rounded-full border border-nexus-border/60 hover:border-nexus-cyan/50 text-[11px] font-mono text-nexus-muted hover:text-white transition-all flex items-center gap-1 cursor-pointer">
           <span id="lang-flag">🇹🇷</span>
           <span id="lang-label" class="font-bold">TR</span>
         </button>
 
-        <!-- High-Conversion CTA -->
-        <a href="#pricing" class="px-4 py-2 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-bold font-heading text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(6,182,212,0.35)] transition-all cursor-pointer" data-i18n="nav.buy">
-          Lisans Al
+        <!-- CTA Pill -->
+        <a href="#pricing" class="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-heading font-bold text-xs shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all cursor-pointer" data-i18n="nav.buy">
+          Lisans Al →
         </a>
       </div>
-    </div>
-  </nav>
+
+    </nav>
+  </header>
 
   <!-- HERO SECTION -->
   <section class="relative z-10 pt-16 pb-20 overflow-hidden">
@@ -955,6 +953,81 @@ export function renderLandingPage(): string {
 
       </div>
 
+      <!-- Detailed Plan & Module Comparison Matrix -->
+      <div class="mt-12 max-w-4xl mx-auto">
+        <details class="group rounded-3xl card-glass border border-nexus-border/80 overflow-hidden transition-all">
+          <summary class="p-5 flex items-center justify-between cursor-pointer font-heading font-bold text-sm text-white select-none hover:text-nexus-cyan transition-colors list-none">
+            <span class="flex items-center gap-2.5">
+              <span class="text-base">📊</span>
+              <span>Tüm Paket ve Modülleri Detaylı Karşılaştır (Free vs Pro vs Studio)</span>
+            </span>
+            <span class="text-nexus-cyan group-open:rotate-180 transition-transform font-mono text-xs">▼</span>
+          </summary>
+          <div class="p-6 border-t border-nexus-border/60 overflow-x-auto bg-nexus-surface/40">
+            <table class="w-full text-left text-xs font-mono">
+              <thead>
+                <tr class="border-b border-nexus-border/60 text-nexus-muted uppercase">
+                  <th class="py-3 px-4">Modül / Özellik</th>
+                  <th class="py-3 px-4 text-center">Free Starter</th>
+                  <th class="py-3 px-4 text-center text-nexus-cyan font-bold">Nexus Pro (Ömür Boyu)</th>
+                  <th class="py-3 px-4 text-center text-emerald-400 font-bold">Nexus Studio</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-nexus-border/40 text-nexus-text">
+                <tr>
+                  <td class="py-3 px-4 font-bold text-white">DoD 5220.22-M 7-Pass Dosya İmha</td>
+                  <td class="py-3 px-4 text-center text-red-400 font-bold">✕</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Limitsiz</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Limitsiz</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-white">TempMail & Gerçek Zamanlı Gelen Kutusu</td>
+                  <td class="py-3 px-4 text-center text-red-400 font-bold">✕</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Limitsiz</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Limitsiz</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-white">Evrensel Link Decrypter & Tracker Stripper</td>
+                  <td class="py-3 px-4 text-center text-red-400 font-bold">✕</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Limitsiz</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Limitsiz</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-white">Desktop Floating Cyber Orb HUD</td>
+                  <td class="py-3 px-4 text-center text-red-400 font-bold">✕</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Dahil</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Dahil</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-white">Resource Sentinel & 1-Tık RAM Flush</td>
+                  <td class="py-3 px-4 text-center text-nexus-muted">Temel Monitör</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Tam Optimizasyon</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Tam Optimizasyon</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-white">Eşzamanlı Cihaz / HWID Lisans Hakkı</td>
+                  <td class="py-3 px-4 text-center text-nexus-muted">1 Cihaz</td>
+                  <td class="py-3 px-4 text-center text-nexus-cyan font-bold">1 Cihaz (Sıfırlanabilir)</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">3 Cihaz Eşzamanlı</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-white">Gelecek v2.x & v3.x Tüm Güncellemeler</td>
+                  <td class="py-3 px-4 text-center text-red-400 font-bold">✕</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Ömür Boyu Ücretsiz</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Ömür Boyu Ücretsiz</td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-4 font-bold text-white">VIP Discord Rolü & Öncelikli Destek</td>
+                  <td class="py-3 px-4 text-center text-red-400 font-bold">✕</td>
+                  <td class="py-3 px-4 text-center text-nexus-cyan font-bold">✓ Standart Ticket</td>
+                  <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ 7/24 VIP Öncelikli</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+
       <!-- Payment Badges -->
       <div class="mt-16 text-center">
         <p class="text-xs font-mono text-nexus-muted mb-4" data-i18n="payment.title">GÜVENLİ ÖDEME KANALLARI:</p>
@@ -1036,6 +1109,17 @@ export function renderLandingPage(): string {
         </div>
         <button onclick="copySha256()" id="copy-sha-btn" class="w-full sm:w-auto px-4 py-2 rounded-xl border border-nexus-border hover:border-nexus-cyan/60 bg-nexus-surface text-xs font-mono text-white hover:text-nexus-cyan flex items-center justify-center gap-1.5 cursor-pointer transition-all shrink-0">
           <span id="copy-sha-text">Hash Kopyala</span>
+        </button>
+      </div>
+
+      <!-- Interactive PowerShell Verification Box -->
+      <div class="mt-4 p-4 rounded-2xl bg-nexus-surface/50 border border-nexus-border/80 flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-xs">
+        <div class="flex items-center gap-2.5 truncate w-full">
+          <span class="px-2 py-0.5 rounded bg-nexus-cyan/10 text-nexus-cyan font-bold shrink-0 text-[10px]">POWERSHELL</span>
+          <span class="text-nexus-muted truncate select-all" id="ps-verify-cmd">Get-FileHash -Algorithm SHA256 .\NexusHub-v2.0.3-Setup.exe</span>
+        </div>
+        <button onclick="copyPowerShellCmd()" id="copy-ps-btn" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-nexus-surface hover:bg-nexus-border text-xs text-nexus-cyan hover:text-white border border-nexus-border/80 transition-all shrink-0 cursor-pointer">
+          Komutu Kopyala
         </button>
       </div>
     </div>
@@ -2185,6 +2269,19 @@ export function renderLandingPage(): string {
         playCyberSound('success');
         setTimeout(() => {
           if (text) text.innerText = 'Hash Kopyala';
+        }, 2000);
+      }
+    }
+
+    function copyPowerShellCmd() {
+      const cmd = document.getElementById('ps-verify-cmd')?.innerText.trim();
+      if (cmd && navigator.clipboard) {
+        navigator.clipboard.writeText(cmd);
+        const btn = document.getElementById('copy-ps-btn');
+        if (btn) btn.innerText = '✓ Kopyalandı!';
+        playCyberSound('success');
+        setTimeout(() => {
+          if (btn) btn.innerText = 'Komutu Kopyala';
         }, 2000);
       }
     }
