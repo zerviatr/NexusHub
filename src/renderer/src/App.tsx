@@ -82,6 +82,16 @@ export default function App() {
     setHasChosenFree(true)
   }
 
+  // If license was revoked remotely, clear any free-tier bypass state
+  useEffect(() => {
+    if (status === 'revoked') {
+      try {
+        localStorage.removeItem('nexus_free_tier')
+      } catch {}
+      setHasChosenFree(false)
+    }
+  }, [status])
+
   // Gate 1: EULA
   if (!hasAcceptedEula) {
     return <EulaGate onAccept={handleAcceptEula} />
@@ -92,7 +102,12 @@ export default function App() {
     return <div className="flex h-screen w-screen bg-nexus-bg" /> // Blank while checking
   }
 
-  // Gate 3: License Validation
+  // Gate 3: Instant Kick-Out on Revocation
+  if (status === 'revoked') {
+    return <Activation />
+  }
+
+  // Gate 3b: License Inactive or Expired (unless Free Tier selected)
   if ((status === 'inactive' || status === 'expired') && !hasChosenFree) {
     return <Activation onContinueFree={handleContinueFree} />
   }

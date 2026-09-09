@@ -38,6 +38,10 @@ export function LicenseProvider({ children }: { children: React.ReactNode }) {
     })
 
     const unbindRevoked = window.nexusAPI?.license?.onRevoked?.(() => {
+      console.warn('[LicenseContext] IPC license:revoked received. Purging session.')
+      try {
+        localStorage.removeItem('nexus_free_tier')
+      } catch {}
       setStatus('revoked')
       setTier(null)
       setExpiresAt(null)
@@ -69,25 +73,40 @@ export function LicenseProvider({ children }: { children: React.ReactNode }) {
     setKey(null)
   }, [])
 
-  // ── 24h background verify heartbeat ────────────────────────────────────
+  // ── Instant kick-out verify heartbeat (10s interval + window focus) ────────
   useEffect(() => {
     if (status !== 'active') return
 
-    const INTERVAL_MS = 24 * 60 * 60 * 1000 // 24 hours
+    const INTERVAL_MS = 10 * 1000 // 10 seconds rapid check
 
     const run = async () => {
-      const result: any = await window.nexusAPI.license.bgVerify()
-      if (result && result.valid === false) {
-        // Server revoked — log out
-        setStatus('revoked')
-        setTier(null)
-        setExpiresAt(null)
-        setKey(null)
+      try {
+        const result: any = await window.nexusAPI?.license?.bgVerify?.()
+        if (result && result.valid === false) {
+          console.warn('[LicenseContext] Remote license revoked/deactivated:', result.reason)
+          try {
+            localStorage.removeItem('nexus_free_tier')
+          } catch {}
+          setStatus('revoked')
+          setTier(null)
+          setExpiresAt(null)
+          setKey(null)
+        }
+      } catch (err) {
+        console.warn('[LicenseContext] Heartbeat verify failed:', err)
       }
     }
 
+    // Immediately verify when window gains focus (e.g. user Alt-Tabs from Railway Admin)
+    window.addEventListener('focus', run)
+    window.addEventListener('online', run)
+
     const timer = setInterval(run, INTERVAL_MS)
-    return () => clearInterval(timer)
+    return () => {
+      clearInterval(timer)
+      window.removeEventListener('focus', run)
+      window.removeEventListener('online', run)
+    }
   }, [status])
 
   return (

@@ -146,8 +146,14 @@ export function registerLicenseIPC(): void {
     const result   = await verifyOnline(stored.key, deviceId)
 
     if (!result.ok && !result.networkError) {
-      // Revoked remotely — clear local license
+      // Revoked remotely — clear local license and broadcast instant kick-out
+      console.log('[license] Remote verify reported revoked/invalid key, clearing local license...')
       clearLicense()
+      BrowserWindow.getAllWindows().forEach((win) => {
+        if (!win.isDestroyed()) {
+          win.webContents.send('license:revoked')
+        }
+      })
       return { valid: false, reason: result.reason }
     }
 

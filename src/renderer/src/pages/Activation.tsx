@@ -54,16 +54,38 @@ export default function Activation({ onContinueFree }: ActivationProps) {
           className="w-full max-w-md bg-nexus-surface/50 border border-nexus-surface-light/20 backdrop-blur-xl rounded-2xl shadow-2xl p-8"
         >
           <div className="flex flex-col items-center mb-8 text-center">
-            <div className="w-16 h-16 bg-nexus-accent/10 border border-nexus-accent/30 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(139,92,246,0.15)]">
-              <Shield className="w-8 h-8 text-nexus-accent" />
+            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-all ${
+              status === 'revoked'
+                ? 'bg-red-500/15 border border-red-500/40 shadow-[0_0_35px_rgba(239,68,68,0.25)]'
+                : 'bg-nexus-accent/10 border border-nexus-accent/30 shadow-[0_0_30px_rgba(139,92,246,0.15)]'
+            }`}>
+              <Shield className={`w-8 h-8 ${status === 'revoked' ? 'text-red-400' : 'text-nexus-accent'}`} />
             </div>
-            <h1 className="text-2xl font-semibold mb-2">Activate NexusHub</h1>
+            <h1 className="text-2xl font-semibold mb-2">
+              {status === 'revoked' ? 'Lisans Deaktif Edildi' : 'Activate NexusHub'}
+            </h1>
             <p className="text-sm text-nexus-text-muted">
-              {status === 'expired' 
+              {status === 'revoked'
+                ? 'Lisans anahtarınız yönetici tarafından sonlandırıldı veya silindi. Devam etmek için yeni bir anahtar girin.'
+                : status === 'expired' 
                 ? 'Your license has expired. Please enter a new key to continue using NexusHub.'
                 : 'Enter your license key to unlock the premium multi-tool suite.'}
             </p>
           </div>
+
+          {status === 'revoked' && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 flex items-start gap-3 p-3.5 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs leading-relaxed"
+            >
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
+              <div>
+                <span className="font-semibold text-red-300 block mb-0.5">Oturum Sonlandırıldı (Lisans İptal)</span>
+                Yönetici panelinden yapılan deaktif işlemi sonucu bu cihazın yetkisi durdurulmuştur. Lütfen geçerli bir lisans anahtarı giriniz.
+              </div>
+            </motion.div>
+          )}
 
           <form onSubmit={handleActivate} className="space-y-6">
             <div className="space-y-2">
@@ -129,7 +151,7 @@ export default function Activation({ onContinueFree }: ActivationProps) {
               Purchase a license <ExternalLink className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
             </button>
 
-            {onContinueFree && (
+            {onContinueFree && status !== 'revoked' && (
               <button
                 type="button"
                 onClick={onContinueFree}
