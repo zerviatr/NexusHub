@@ -226,13 +226,14 @@ export function renderLandingPage(): string {
 
       <!-- Hero Action Buttons -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
-        <a href="https://github.com/zerviatr/NexusHub/releases/latest" target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-heading font-black text-base flex items-center justify-center gap-3 shadow-[0_0_35px_rgba(var(--c-cyan),0.5)] transition-all">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-          <span data-i18n="hero.btnDownload">Windows için İndir (v2.2.0)</span>
-        </a>
-        <a href="#pricing" class="w-full sm:w-auto px-8 py-4 rounded-2xl card-glass border border-nexus-border/80 hover:border-nexus-cyan/50 active:scale-95 text-white font-heading font-bold text-base flex items-center justify-center gap-2 transition-all">
+        <button onclick="handleDownloadDisabled()" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border/80 hover:border-nexus-cyan/50 text-white font-heading font-bold text-base flex items-center justify-center gap-3 transition-all cursor-pointer shadow-lg group">
+          <svg class="w-5 h-5 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          <span data-i18n="hero.btnDownload">Windows için İndir</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-nexus-cyan/20 text-nexus-cyan border border-nexus-cyan/30 uppercase tracking-wider" data-i18n="hero.btnSoon">Çok Yakında</span>
+        </button>
+        <a href="#pricing" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-heading font-black text-base flex items-center justify-center gap-2 shadow-[0_0_35px_rgba(var(--c-cyan),0.5)] transition-all">
           <span data-i18n="hero.btnPro">Ömür Boyu Pro Lisans</span>
-          <svg class="w-4 h-4 text-nexus-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
       </div>
 
@@ -1429,9 +1430,10 @@ graph LR
               <li class="flex items-center gap-2.5 text-nexus-muted line-through"><span class="w-4 h-4 shrink-0 text-nexus-border">✕</span> Cyber Fortress Shredder & Vault</li>
             </ul>
           </div>
-          <a href="https://github.com/zerviatr/NexusHub/releases/latest" target="_blank" class="w-full py-3.5 rounded-xl border border-nexus-border/80 hover:border-nexus-cyan text-white text-xs font-mono font-bold text-center transition-all cursor-pointer" data-i18n="plan1.btn">
-            Ücretsiz İndir
-          </a>
+          <button onclick="handleDownloadDisabled()" class="w-full py-3.5 rounded-xl border border-nexus-border/80 bg-nexus-surface/50 hover:border-nexus-cyan/40 text-nexus-muted hover:text-white text-xs font-mono font-bold text-center transition-all cursor-pointer flex items-center justify-center gap-2" data-i18n="plan1.btn">
+            <span>Ücretsiz İndir</span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] bg-nexus-cyan/15 text-nexus-cyan border border-nexus-cyan/30 uppercase font-bold">Çok Yakında</span>
+          </button>
         </div>
 
         <!-- Plan 2: Nexus Pro (HERO TIER) -->
@@ -1964,12 +1966,29 @@ graph LR
       </div>
     </div>
     <div class="flex items-center gap-2 shrink-0">
-      <a href="https://github.com/zerviatr/NexusHub/releases/latest" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-nexus-border text-white font-mono text-xs transition-colors cursor-pointer">
-        İndir (v2.2.0)
-      </a>
+      <button onclick="handleDownloadDisabled()" class="px-3.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-nexus-border text-nexus-muted hover:text-white font-mono text-xs transition-colors cursor-pointer flex items-center gap-1.5">
+        <span>İndir</span>
+        <span class="text-[9px] text-nexus-cyan font-bold">(Yakında)</span>
+      </button>
       <a href="#pricing" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 text-nexus-bg font-heading font-black text-xs shadow-[0_0_15px_rgba(var(--c-cyan),0.4)] transition-all cursor-pointer">
         Lisans Al
       </a>
+    </div>
+  </div>
+
+  <!-- DOWNLOAD NOTICE CYBER TOAST -->
+  <div id="download-notice-toast" class="fixed top-6 right-6 z-50 max-w-md card-glass border border-nexus-cyan/60 p-4 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.85)] backdrop-blur-2xl flex items-start gap-3 transition-all duration-300 -translate-y-20 opacity-0 pointer-events-none">
+    <div class="w-8 h-8 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan flex items-center justify-center text-nexus-cyan shrink-0 text-base">
+      ⏳
+    </div>
+    <div class="flex-1">
+      <div class="text-xs font-heading font-black text-white flex items-center justify-between">
+        <span id="download-notice-title">İNDİRMELER GEÇİCİ OLARAK KAPALI</span>
+        <button onclick="dismissDownloadNotice()" class="text-nexus-muted hover:text-white cursor-pointer text-sm ml-2">✕</button>
+      </div>
+      <p class="text-[11px] text-nexus-muted mt-1 leading-relaxed" id="download-notice-msg">
+        NexusHub v2.2.0 yeni stabilite ve güvenlik yaması hazırlanmaktadır. Çok yakında indirmeye açılacaktır!
+      </p>
     </div>
   </div>
 
@@ -2272,7 +2291,8 @@ graph LR
         'hero.title3': 'Tek Yazılım,',
         'hero.title4': '20+ Siber Güç.',
         'hero.desc': 'Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD askeri veri imha kalkanı, donanım monitörü ve şifreli kasa. Her araca ayrı para ödemeyi bırakın.',
-        'hero.btnDownload': 'Windows için İndir (v2.2.0)',
+        'hero.btnDownload': 'Windows için İndir',
+        'hero.btnSoon': 'Çok Yakında',
         'hero.btnPro': 'Ömür Boyu Pro Lisans',
         'sim.tag': 'Canlı Arayüzü İncele',
         'sim.themeLabel': 'Siber Tema Seçici:',
@@ -2301,7 +2321,7 @@ graph LR
         'plan.onetime': '/ Tek Seferlik',
         'plan1.badge': 'Başlangıç',
         'plan1.desc': 'Temel araçlara sıfır maliyetle erişmek isteyen herkes için ideal giriş paketi.',
-        'plan1.btn': 'Ücretsiz İndir',
+        'plan1.btn': 'Ücretsiz İndir (Çok Yakında)',
         'plan2.badge': '⭐ EN ÇOK SATAN',
         'plan2.sub': 'Ömür boyu kullanım hakkı • Sıfır abonelik',
         'plan2.btn': 'Hemen Satın Al (Anında Teslim)',
@@ -2330,7 +2350,8 @@ graph LR
         'hero.title3': 'One Suite,',
         'hero.title4': '20+ Cyber Tools.',
         'hero.desc': 'Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD military shredder, live hardware sentinel, and encrypted vault. Stop paying separate fees for simple utilities.',
-        'hero.btnDownload': 'Download for Windows (v2.2.0)',
+        'hero.btnDownload': 'Download for Windows',
+        'hero.btnSoon': 'Coming Soon',
         'hero.btnPro': 'Lifetime Pro License',
         'sim.tag': 'Explore the Interface',
         'sim.themeLabel': 'Cyber Theme Engine:',
@@ -2359,7 +2380,7 @@ graph LR
         'plan.onetime': '/ One-time',
         'plan1.badge': 'Starter',
         'plan1.desc': 'Perfect entry pack for anyone wanting core utilities at zero cost.',
-        'plan1.btn': 'Download Free',
+        'plan1.btn': 'Free Download (Coming Soon)',
         'plan2.badge': '⭐ MOST POPULAR',
         'plan2.sub': 'Lifetime access • Zero subscriptions',
         'plan2.btn': 'Get License (Instant Delivery)',
@@ -2645,6 +2666,38 @@ graph LR
       } else {
         annualEl.innerText = '$' + annualUSD + ' / yr';
         tryEl.innerText = '(Zero recurring bills ever)';
+      }
+    }
+
+    // ─── Disabled Download Handler & Notice Toast ───────────────────────────
+    let downloadNoticeTimer = null;
+    function handleDownloadDisabled() {
+      playCyberSound('click');
+      const toast = document.getElementById('download-notice-toast');
+      const title = document.getElementById('download-notice-title');
+      const msg = document.getElementById('download-notice-msg');
+      if (!toast) return;
+
+      if (currentLang === 'tr') {
+        if (title) title.innerText = 'İNDİRMELER GEÇİCİ OLARAK KAPALI';
+        if (msg) msg.innerText = 'NexusHub v2.2.0 yeni stabilite ve güvenlik yaması hazırlanmaktadır. Çok yakında indirmeye açılacaktır!';
+      } else {
+        if (title) title.innerText = 'DOWNLOADS TEMPORARILY PAUSED';
+        if (msg) msg.innerText = 'NexusHub v2.2.0 is receiving a new stability build. Downloads will be available very soon!';
+      }
+
+      toast.classList.remove('-translate-y-20', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+
+      if (downloadNoticeTimer) clearTimeout(downloadNoticeTimer);
+      downloadNoticeTimer = setTimeout(dismissDownloadNotice, 4500);
+    }
+
+    function dismissDownloadNotice() {
+      const toast = document.getElementById('download-notice-toast');
+      if (toast) {
+        toast.classList.add('-translate-y-20', 'opacity-0', 'pointer-events-none');
+        toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
       }
     }
 
