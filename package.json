@@ -1,6 +1,6 @@
 {
   "name": "nexushub",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "NexusHub — Premium Multi-Tool Desktop Application",
   "main": "./out/main/index.js",
   "author": {
@@ -43,6 +43,7 @@
     "asarUnpack": [
       "**/*.node"
     ],
+    "compression": "normal",
     "win": {
       "icon": "build/icons/icon.ico",
       "target": [
@@ -59,6 +60,7 @@
       "oneClick": true,
       "perMachine": false,
       "differentialPackage": true,
+      "packElevateHelper": false,
       "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
