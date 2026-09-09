@@ -91,3 +91,8 @@
 - [x] ClipboardManager, BulkOrganizer, ImageToolkit cevirisi
 - [x] TempMail, UniversalDecrypter, AylinkBypasser, NetworkTools cevirisi
 - [x] PasswordGenerator tam i18n
+- [x] ErrorBoundary & Wildcard Rota Kalkanı — Tanımsız rotalarda veya render hatalarında siyah ekranı önleme
+- [x] Siber Ses Motoru İzolasyonu (`cyberAudio.ts`) — Donanım ses kanallarında sessiz try-catch koruması
+- [x] Anlık Diferansiyel Sessiz Güncelleme — NSIS differentialPackage (.blockmap) ve 150ms kesintisiz geçiş
+- [x] GitHub Actions CI Turbo Optimizasyonu — Yalnızca x64 NSIS, Electron binary önbelleği ve 1.5 dk derleme
+- [x] Main Process IPC Singleton Zırhı — `updater:check-now` mükerrer handle çökmesini kalıcı engelleme (v2.1.3)
