@@ -1,19 +1,17 @@
 /**
  * server/src/routes/admin.ts
  *
- * Secure Web Admin Console API & Dashboard for NexusHub.
+ * Enterprise Web Admin Console API & Dashboard for NexusHub.
  * Strict Zero-PII Policy: Never stores or exposes user personal data.
  *
- * Endpoints:
- *   GET    /admin                  — Serves the modern Web Dashboard HTML
- *   POST   /admin/api/login        — Timing-safe Master Password validation
- *   POST   /admin/api/change-password — Update Master Password in database
- *   GET    /admin/api/keys         — List all licenses (keys, tiers, status, remaining days)
- *   POST   /admin/api/keys/generate— Create new cryptographic license key
- *   POST   /admin/api/keys/revoke  — Revoke / Suspend or Reactivate a key
- *   POST   /admin/api/keys/extend  — Add +X days to an existing key
- *   POST   /admin/api/keys/reset-devices — Clear activation device slots for a key
- *   DELETE /admin/api/keys         — Permanently delete a license key
+ * Capabilities:
+ *   - Timing-safe Master Password authentication with PBKDF2 hash persistence.
+ *   - Single & Bulk License Key Generation with custom durations and device counts.
+ *   - Bulk Actions: Batch Revoke, Batch Extend (+X days), Batch Delete, Batch Device Reset.
+ *   - Inline Note/Tag editing per license.
+ *   - Real-time cryptographic License Diagnostic tool.
+ *   - Security Audit & Activity Logging.
+ *   - Server Telemetry & Latency health checks.
  */
 import { Router, Request, Response, NextFunction } from 'express'
 import { createHmac, timingSafeEqual, randomBytes, pbkdf2Sync } from 'crypto'
@@ -58,7 +56,6 @@ function checkRateLimit(ip: string): { allowed: boolean; waitSec?: number } {
   }
 
   if (record.lockedUntil <= now && record.count >= 10) {
-    // Lock expired, reset
     loginAttempts.delete(ip)
   }
 
@@ -70,7 +67,6 @@ function recordFailedAttempt(ip: string): void {
   const record = loginAttempts.get(ip) ?? { count: 0, lockedUntil: 0 }
   record.count++
   if (record.count >= 10) {
-    // Lock for 5 minutes after 10 failed attempts
     record.lockedUntil = now + 5 * 60 * 1000
   }
   loginAttempts.set(ip, record)
@@ -114,8 +110,6 @@ async function verifyAdminPassword(provided?: string): Promise<boolean> {
       return verifyPasswordAgainstHash(clean, stored)
     }
 
-    // Fallback if not yet customized in DB:
-    // Accept standard default keys:
     const acceptable = [
       'nexus_admin_2026_master',
       'nexus_admin_default_2026',
@@ -130,7 +124,6 @@ async function verifyAdminPassword(provided?: string): Promise<boolean> {
     })
 
     if (isMatch) {
-      // Auto-initialize DB hash on first successful login
       const initialHash = hashPassword(clean)
       await db.execute({
         sql: `INSERT INTO admin_settings (key, value, updated_at) VALUES ('admin_password_hash', ?, ?)
@@ -144,6 +137,19 @@ async function verifyAdminPassword(provided?: string): Promise<boolean> {
   } catch (err) {
     console.error('[admin] verifyAdminPassword error:', err)
     return false
+  }
+}
+
+// ─── Audit Logging Helper ───────────────────────────────────────────────────
+async function recordAudit(action: string, details: string, ip: string = 'internal'): Promise<void> {
+  try {
+    const db = getDb()
+    await db.execute({
+      sql: `INSERT INTO admin_audit_logs (action, details, ip, created_at) VALUES (?, ?, ?, ?)`,
+      args: [action, details, ip, Date.now()]
+    })
+  } catch (err) {
+    console.error('[admin] recordAudit failed silently:', err)
   }
 }
 
@@ -196,13 +202,13 @@ adminRouter.post('/api/login', async (req: Request, res: Response): Promise<void
 
   if (!isValid) {
     recordFailedAttempt(ip)
+    await recordAudit('LOGIN_FAILED', 'Invalid master password attempt', ip)
     res.status(401).json({ success: false, error: 'Geçersiz master şifre!' })
     return
   }
 
   clearFailedAttempts(ip)
 
-  // Issue 24-hour cryptographic token
   const token = randomBytes(32).toString('hex')
   const now = Date.now()
   activeSessions.set(token, {
@@ -211,11 +217,13 @@ adminRouter.post('/api/login', async (req: Request, res: Response): Promise<void
     expiresAt: now + 24 * 3600 * 1000,
   })
 
+  await recordAudit('LOGIN_SUCCESS', 'Admin session started', ip)
   res.json({ success: true, token })
 })
 
 // ─── POST /admin/api/change-password ────────────────────────────────────────
 adminRouter.post('/api/change-password', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
   try {
     const { currentPassword, newPassword } = req.body as {
       currentPassword?: string
@@ -248,6 +256,7 @@ adminRouter.post('/api/change-password', requireAdminAuth, async (req: Request, 
       args: [newHash, Date.now()]
     })
 
+    await recordAudit('PASSWORD_CHANGED', 'Master password updated', ip)
     res.json({ success: true, message: 'Master admin şifresi başarıyla güncellendi!' })
   } catch (err: any) {
     console.error('[admin] change-password error:', err)
@@ -256,7 +265,6 @@ adminRouter.post('/api/change-password', requireAdminAuth, async (req: Request, 
 })
 
 // ─── GET /admin/api/keys ────────────────────────────────────────────────────
-// Strict Zero-PII: Does NOT select or return customer email or machine hashes.
 adminRouter.get('/api/keys', requireAdminAuth, async (_req: Request, res: Response): Promise<void> => {
   try {
     const db = getDb()
@@ -294,6 +302,7 @@ adminRouter.get('/api/keys', requireAdminAuth, async (_req: Request, res: Respon
 
 // ─── POST /admin/api/keys/generate ──────────────────────────────────────────
 adminRouter.post('/api/keys/generate', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
   try {
     const {
       tier = 'pro',
@@ -331,21 +340,150 @@ adminRouter.post('/api/keys/generate', requireAdminAuth, async (req: Request, re
       ]
     })
 
-    res.json({
-      success: true,
-      key,
-      tier,
-      expiresAt,
-      maxActivations
-    })
+    await recordAudit('KEY_GENERATED', `Key ${key} (${tier}, ${durationDays}d)`, ip)
+    res.json({ success: true, key, tier, expiresAt, maxActivations })
   } catch (err: any) {
     console.error('[admin] generate error:', err)
     res.status(500).json({ success: false, error: err.message || 'Lisans üretilemedi' })
   }
 })
 
+// ─── POST /admin/api/keys/bulk-generate ─────────────────────────────────────
+adminRouter.post('/api/keys/bulk-generate', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
+  try {
+    const {
+      tier = 'pro',
+      durationDays = 365,
+      maxActivations = 2,
+      count = 5,
+      notePrefix = 'BULK'
+    } = req.body as {
+      tier?: string
+      durationDays?: number
+      maxActivations?: number
+      count?: number
+      notePrefix?: string
+    }
+
+    const safeCount = Math.min(50, Math.max(1, Number(count) || 1))
+    const secret = process.env['NEXUS_LICENSE_SECRET'] ?? 'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
+
+    let expiresAt = 0
+    if (tier !== 'lifetime' && Number(durationDays) > 0) {
+      expiresAt = Date.now() + Number(durationDays) * 24 * 3600 * 1000
+    }
+
+    const db = getDb()
+    const generated: string[] = []
+    const now = Date.now()
+
+    for (let i = 1; i <= safeCount; i++) {
+      // Offset by i to ensure unique EEE / seeds if generated within same millisecond
+      const key = generateKey(tier, expiresAt === 0 ? 0 : expiresAt + i, secret)
+      const label = `${notePrefix} #${i}`
+
+      await db.execute({
+        sql: `INSERT INTO licenses (key, tier, expires_at, order_id, email, max_activations, is_revoked, created_at)
+              VALUES (?, ?, ?, ?, ?, ?, 0, ?)`,
+        args: [key, tier, expiresAt, label, 'anonymous@nexushub.local', Number(maxActivations) || 2, now + i]
+      })
+
+      generated.push(key)
+    }
+
+    await recordAudit('BULK_KEYS_GENERATED', `${safeCount} keys created (${tier})`, ip)
+    res.json({ success: true, count: safeCount, keys: generated })
+  } catch (err: any) {
+    console.error('[admin] bulk generate error:', err)
+    res.status(500).json({ success: false, error: err.message || 'Toplu lisans üretilemedi' })
+  }
+})
+
+// ─── POST /admin/api/keys/bulk-action ───────────────────────────────────────
+adminRouter.post('/api/keys/bulk-action', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
+  try {
+    const { action, keys = [], daysToAdd = 30 } = req.body as {
+      action?: 'revoke' | 'unrevoke' | 'extend' | 'delete' | 'reset-devices'
+      keys?: string[]
+      daysToAdd?: number
+    }
+
+    if (!Array.isArray(keys) || keys.length === 0) {
+      res.status(400).json({ success: false, error: 'İşlem için en az bir anahtar seçilmelidir' })
+      return
+    }
+
+    const db = getDb()
+
+    if (action === 'revoke' || action === 'unrevoke') {
+      const isRevoked = action === 'revoke' ? 1 : 0
+      for (const k of keys) {
+        await db.execute({
+          sql: 'UPDATE licenses SET is_revoked = ? WHERE key = ?',
+          args: [isRevoked, k]
+        })
+      }
+      await recordAudit('BULK_REVOKE_TOGGLE', `${keys.length} keys set to is_revoked=${isRevoked}`, ip)
+    } else if (action === 'extend') {
+      const ms = Number(daysToAdd) * 24 * 3600 * 1000
+      for (const k of keys) {
+        const row = await db.execute({ sql: 'SELECT expires_at, tier FROM licenses WHERE key = ?', args: [k] })
+        if (row.rows.length > 0 && row.rows[0]?.tier !== 'lifetime' && Number(row.rows[0]?.expires_at) !== 0) {
+          const currentExp = Number(row.rows[0].expires_at)
+          const newExp = Math.max(Date.now(), currentExp) + ms
+          await db.execute({ sql: 'UPDATE licenses SET expires_at = ? WHERE key = ?', args: [newExp, k] })
+        }
+      }
+      await recordAudit('BULK_EXTEND', `${keys.length} keys extended by ${daysToAdd}d`, ip)
+    } else if (action === 'reset-devices') {
+      for (const k of keys) {
+        await db.execute({ sql: 'DELETE FROM activations WHERE license_key = ?', args: [k] })
+      }
+      await recordAudit('BULK_DEVICE_RESET', `${keys.length} keys device slots reset`, ip)
+    } else if (action === 'delete') {
+      for (const k of keys) {
+        await db.execute({ sql: 'DELETE FROM activations WHERE license_key = ?', args: [k] })
+        await db.execute({ sql: 'DELETE FROM licenses WHERE key = ?', args: [k] })
+      }
+      await recordAudit('BULK_DELETE', `${keys.length} keys deleted permanently`, ip)
+    } else {
+      res.status(400).json({ success: false, error: 'Geçersiz aksiyon' })
+      return
+    }
+
+    res.json({ success: true, count: keys.length, action })
+  } catch (err: any) {
+    console.error('[admin] bulk action error:', err)
+    res.status(500).json({ success: false, error: err.message || 'Toplu işlem başarısız' })
+  }
+})
+
+// ─── POST /admin/api/keys/update-note ───────────────────────────────────────
+adminRouter.post('/api/keys/update-note', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { key, note } = req.body as { key?: string; note?: string }
+    if (!key) {
+      res.status(400).json({ success: false, error: 'Key parametresi zorunludur' })
+      return
+    }
+
+    const db = getDb()
+    await db.execute({
+      sql: 'UPDATE licenses SET order_id = ? WHERE key = ?',
+      args: [note || '', key]
+    })
+
+    res.json({ success: true, key, note: note || '' })
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message || 'Not güncellenemedi' })
+  }
+})
+
 // ─── POST /admin/api/keys/revoke ────────────────────────────────────────────
 adminRouter.post('/api/keys/revoke', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
   try {
     const { key, is_revoked } = req.body as { key?: string; is_revoked?: number }
     if (!key) {
@@ -359,6 +497,7 @@ adminRouter.post('/api/keys/revoke', requireAdminAuth, async (req: Request, res:
       args: [is_revoked === 1 ? 1 : 0, key]
     })
 
+    await recordAudit(is_revoked === 1 ? 'KEY_REVOKED' : 'KEY_REACTIVATED', `Key ${key}`, ip)
     res.json({ success: true, key, is_revoked: is_revoked === 1 ? 1 : 0 })
   } catch (err: any) {
     console.error('[admin] revoke error:', err)
@@ -368,6 +507,7 @@ adminRouter.post('/api/keys/revoke', requireAdminAuth, async (req: Request, res:
 
 // ─── POST /admin/api/keys/extend ────────────────────────────────────────────
 adminRouter.post('/api/keys/extend', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
   try {
     const { key, daysToAdd = 30 } = req.body as { key?: string; daysToAdd?: number }
     if (!key) {
@@ -401,6 +541,7 @@ adminRouter.post('/api/keys/extend', requireAdminAuth, async (req: Request, res:
       args: [newExpiresAt, key]
     })
 
+    await recordAudit('KEY_EXTENDED', `Key ${key} +${daysToAdd}d`, ip)
     res.json({ success: true, key, newExpiresAt })
   } catch (err: any) {
     console.error('[admin] extend error:', err)
@@ -410,6 +551,7 @@ adminRouter.post('/api/keys/extend', requireAdminAuth, async (req: Request, res:
 
 // ─── POST /admin/api/keys/reset-devices ──────────────────────────────────────
 adminRouter.post('/api/keys/reset-devices', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
   try {
     const { key } = req.body as { key?: string }
     if (!key) {
@@ -423,6 +565,7 @@ adminRouter.post('/api/keys/reset-devices', requireAdminAuth, async (req: Reques
       args: [key]
     })
 
+    await recordAudit('DEVICE_SLOTS_RESET', `Key ${key}`, ip)
     res.json({ success: true, key })
   } catch (err: any) {
     console.error('[admin] reset-devices error:', err)
@@ -432,6 +575,7 @@ adminRouter.post('/api/keys/reset-devices', requireAdminAuth, async (req: Reques
 
 // ─── POST /admin/api/keys/delete & DELETE /admin/api/keys ───────────────────
 async function handleDeleteKey(req: Request, res: Response): Promise<void> {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
   try {
     const rawKey = req.body?.key || req.query?.key || req.params?.key
     const key = typeof rawKey === 'string' ? rawKey.trim() : ''
@@ -451,6 +595,7 @@ async function handleDeleteKey(req: Request, res: Response): Promise<void> {
       args: [key]
     })
 
+    await recordAudit('KEY_DELETED', `Key ${key}`, ip)
     console.log(`[admin] Key deleted successfully: ${key}`)
     res.json({ success: true, key })
   } catch (err: any) {
@@ -463,3 +608,108 @@ adminRouter.post('/api/keys/delete', requireAdminAuth, handleDeleteKey)
 adminRouter.delete('/api/keys', requireAdminAuth, handleDeleteKey)
 adminRouter.delete('/api/keys/:key', requireAdminAuth, handleDeleteKey)
 
+// ─── POST /admin/api/keys/diagnose ──────────────────────────────────────────
+adminRouter.post('/api/keys/diagnose', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { key = '' } = req.body as { key?: string }
+    const clean = key.trim().toUpperCase().replace(/[^A-Z0-9]/g, '')
+
+    if (!clean.startsWith('NEXUS') || clean.length !== 25) {
+      res.json({
+        validFormat: false,
+        reason: 'Geçersiz format: Anahtar NEXUS ile başlamalı ve toplam 25 karakter olmalıdır.'
+      })
+      return
+    }
+
+    const code = clean.slice(5)
+    const T = code[0]
+    const EEE = code.slice(1, 4)
+    const H = code.slice(4)
+
+    const tierMap: Record<string, string> = { F: 'free', P: 'pro', T: 'team', L: 'lifetime' }
+    const tier = tierMap[T] || 'unknown'
+
+    const secret = process.env['NEXUS_LICENSE_SECRET'] ?? 'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
+    const expectedHmac = createHmac('sha256', secret)
+      .update(`${T}${EEE}`)
+      .digest('hex')
+      .slice(0, 16)
+      .toUpperCase()
+
+    const isHmacValid = H === expectedHmac
+
+    const JAN_2024_MS = new Date('2024-01-01T00:00:00Z').getTime()
+    const MONTH_MS = 30.44 * 24 * 3600 * 1000
+    let decodedExpiresAt = 0
+    if (EEE !== '000') {
+      decodedExpiresAt = JAN_2024_MS + parseInt(EEE, 16) * MONTH_MS
+    }
+
+    // Check database state
+    const db = getDb()
+    const dbRow = await db.execute({
+      sql: `SELECT l.*, (SELECT COUNT(*) FROM activations a WHERE a.license_key = l.key) as act_count FROM licenses l WHERE key = ?`,
+      args: [key.trim().toUpperCase()]
+    })
+
+    const inDb = dbRow.rows.length > 0
+    const dbData = inDb ? dbRow.rows[0] : null
+
+    res.json({
+      validFormat: true,
+      tier,
+      isHmacValid,
+      decodedExpiresAt,
+      isExpired: decodedExpiresAt !== 0 && Date.now() > decodedExpiresAt,
+      inDatabase: inDb,
+      dbDetails: dbData ? {
+        order_id: dbData.order_id,
+        is_revoked: dbData.is_revoked === 1,
+        active_devices: dbData.act_count,
+        max_activations: dbData.max_activations,
+        created_at: dbData.created_at
+      } : null
+    })
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || 'Teşhis başarısız' })
+  }
+})
+
+// ─── GET /admin/api/audit-logs ──────────────────────────────────────────────
+adminRouter.get('/api/audit-logs', requireAdminAuth, async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const db = getDb()
+    const rows = await db.execute(`
+      SELECT id, action, details, ip, created_at
+      FROM admin_audit_logs
+      ORDER BY created_at DESC
+      LIMIT 50
+    `)
+    res.json({ success: true, logs: rows.rows })
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message })
+  }
+})
+
+// ─── GET /admin/api/server-stats ────────────────────────────────────────────
+adminRouter.get('/api/server-stats', requireAdminAuth, async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const dbStart = Date.now()
+    const db = getDb()
+    const countRes = await db.execute('SELECT COUNT(*) as count FROM licenses')
+    const dbLatency = Date.now() - dbStart
+
+    res.json({
+      success: true,
+      uptimeSec: Math.round(process.uptime()),
+      memoryMb: Math.round(process.memoryUsage().rss / (1024 * 1024)),
+      totalLicenses: countRes.rows[0]?.count || 0,
+      dbLatencyMs: dbLatency,
+      nodeVersion: process.version,
+      platform: process.platform
+    })
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message })
+  }
+})

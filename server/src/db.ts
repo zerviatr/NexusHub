@@ -59,5 +59,15 @@ export async function migrate(): Promise<void> {
     )
   `)
 
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS admin_audit_logs (
+      id         INTEGER PRIMARY KEY AUTOINCREMENT,
+      action     TEXT NOT NULL,
+      details    TEXT NOT NULL,
+      ip         TEXT NOT NULL,
+      created_at INTEGER NOT NULL
+    )
+  `)
+
   console.log('[db] Migration complete')
 }
