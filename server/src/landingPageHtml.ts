@@ -159,7 +159,10 @@ export function renderLandingPage(): string {
 
   <!-- HERO SECTION -->
   <section class="relative z-10 pt-16 pb-20 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6">
+    <!-- Matrix Cyber Rain Canvas Backdrop -->
+    <canvas id="hero-matrix-canvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-20 z-0"></canvas>
+    
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
       
       <!-- Top Live Status Pill -->
       <div class="flex justify-center mb-8">
@@ -263,6 +266,9 @@ export function renderLandingPage(): string {
             <button onclick="switchMockTool('decrypter')" id="mock-btn-decrypter" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer">
               <span>🔗</span> <span data-i18n="sim.tools.decrypter">Link Decrypter</span>
             </button>
+            <button onclick="switchMockTool('password')" id="mock-btn-password" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer">
+              <span>🔑</span> <span data-i18n="sim.tools.password">Parola Analizörü</span>
+            </button>
             <button onclick="switchMockTool('fortress')" id="mock-btn-fortress" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer">
               <span>🛡️</span> <span data-i18n="sim.tools.fortress">Cyber Fortress</span>
             </button>
@@ -309,22 +315,24 @@ export function renderLandingPage(): string {
               </div>
             </div>
 
-            <!-- Panel 2: Link Decrypter Preview -->
+            <!-- Panel 2: Link Decrypter Preview (Interactive) -->
             <div id="mock-panel-decrypter" class="space-y-4 hidden">
               <div>
-                <h3 class="font-heading font-black text-xl text-white">Universal Link Decrypter & Tracker Stripper</h3>
-                <p class="text-xs text-nexus-muted mt-0.5">Yönlendirme tuzaklarını, bc.vc ve aylink gibi para tuzaklarını çözer.</p>
+                <h3 class="font-heading font-black text-xl text-white flex items-center gap-2">
+                  Universal Link Decrypter & Tracker Stripper <span class="px-2 py-0.5 text-[10px] rounded bg-nexus-cyan/20 text-nexus-cyan font-mono font-bold">İNTERAKTİF</span>
+                </h3>
+                <p class="text-xs text-nexus-muted mt-0.5">Yönlendirme tuzaklarını, bc.vc ve aylink gibi para tuzaklarını canlı çözün.</p>
               </div>
-              <div class="space-y-2">
-                <div class="p-3 rounded-xl bg-nexus-bg border border-nexus-border/80 font-mono text-xs text-red-300 line-through truncate">
-                  https://bc.vc/download_crack?utm_source=tracker&telemetry_token=98432&spy_id=f481
+              <div class="space-y-3">
+                <div class="flex flex-col sm:flex-row gap-2">
+                  <input type="text" id="sim-decrypter-input" value="https://bc.vc/target_download?utm_source=adnetwork&fbclid=IwAR294x_token984&aff_id=7421&gclid=CjwKCA" class="w-full bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3 font-mono text-xs text-red-300 outline-none focus:border-nexus-cyan">
+                  <button onclick="runSimDecrypter()" class="px-5 py-3 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan font-mono text-xs font-bold hover:bg-nexus-cyan/30 cursor-pointer shrink-0 transition-all">
+                    Bypass & Temizle ⚡
+                  </button>
                 </div>
-                <div class="flex justify-center">
-                  <span class="text-xs font-mono text-nexus-cyan animate-pulse">▼ 7 Parametre Soyuldu & Bypass Edildi ▼</span>
-                </div>
-                <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 font-mono text-xs text-emerald-400 flex justify-between items-center">
-                  <span class="truncate">✓ https://drive.google.com/file/d/1A8z...</span>
-                  <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-[10px] font-bold shrink-0">Bypass Başarılı</span>
+                <div id="sim-decrypter-result" class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 font-mono text-xs text-emerald-400 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                  <span id="sim-decrypter-clean-url" class="truncate font-semibold">✓ https://drive.google.com/file/d/1A8z...</span>
+                  <span id="sim-decrypter-badge" class="px-2.5 py-1 rounded-md bg-emerald-500/20 text-[10px] font-bold shrink-0 self-start sm:self-auto">4 Takip Parametresi Silindi (0.3ms)</span>
                 </div>
               </div>
             </div>
@@ -402,6 +410,44 @@ export function renderLandingPage(): string {
                   <div>• 1-Tıkla anında TempMail üret & kopyala</div>
                   <div>• 1-Tıkla Windows önbelleğini boşalt</div>
                   <div>• Ctrl + K Komut Paletini tek tıkla aç</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 6: Password Entropy & Crack Time Analyzer Preview -->
+            <div id="mock-panel-password" class="space-y-4 hidden">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 class="font-heading font-black text-xl text-white flex items-center gap-2">
+                    Parola & Entropi Güvenlik Analizörü <span class="px-2 py-0.5 text-[10px] rounded bg-nexus-cyan/20 text-nexus-cyan font-mono font-bold">CANLI TEST</span>
+                  </h3>
+                  <p class="text-xs text-nexus-muted mt-0.5">Parolanız RTX 4090 süper bilgisayar kümesinde ne kadar sürede kırılır?</p>
+                </div>
+                <button onclick="generateMilitaryPass()" class="px-3 py-1.5 rounded-lg bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan font-mono text-xs hover:bg-nexus-cyan/30 cursor-pointer shrink-0">
+                  🎲 Askeri Parola Üret
+                </button>
+              </div>
+              <div class="space-y-3">
+                <div class="relative">
+                  <input type="text" id="sim-pass-input" oninput="analyzePassword(this.value)" value="Nexus#2026!Fortress_Ultra" placeholder="Parolanızı yazın veya test edin..." class="w-full bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3 font-mono text-sm text-nexus-cyan outline-none focus:border-nexus-cyan">
+                  <button onclick="copyGeneratedPass()" id="sim-pass-copy-btn" class="absolute right-2 top-2 px-2.5 py-1.5 rounded-lg bg-nexus-surface hover:bg-nexus-border text-xs font-mono text-nexus-muted hover:text-white border border-nexus-border transition-all">Kopyala</button>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs font-mono">
+                  <div class="p-3 rounded-xl bg-nexus-bg border border-nexus-border/80">
+                    <div class="text-nexus-muted text-[10px] mb-1">Shannon Entropisi</div>
+                    <div id="sim-entropy-val" class="font-bold text-nexus-cyan text-sm">96.4 Bit</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-nexus-bg border border-nexus-border/80">
+                    <div class="text-nexus-muted text-[10px] mb-1">Kırılma Tahmini (RTX 4090)</div>
+                    <div id="sim-crack-time" class="font-bold text-emerald-400 text-sm">~4.8 Trilyon Yıl</div>
+                  </div>
+                  <div class="p-3 rounded-xl bg-nexus-bg border border-nexus-border/80 col-span-2 sm:col-span-1">
+                    <div class="text-nexus-muted text-[10px] mb-1">DoD Standart Güvenlik</div>
+                    <div id="sim-strength-label" class="font-bold text-emerald-400 text-sm">SİBER KALE (A+)</div>
+                  </div>
+                </div>
+                <div class="w-full h-2 bg-nexus-surface rounded-full overflow-hidden">
+                  <div id="sim-pass-strength-bar" class="w-full h-full bg-gradient-to-r from-emerald-400 to-nexus-cyan transition-all duration-300"></div>
                 </div>
               </div>
             </div>
@@ -795,6 +841,30 @@ export function renderLandingPage(): string {
         <div id="pricing-coupon-success" class="hidden mt-3 max-w-md mx-auto text-center text-xs font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 py-2 px-4 rounded-xl">
           🎉 <span id="pricing-coupon-msg">%20 İndirim Uygulandı! Tüm paket fiyatları güncellendi.</span>
         </div>
+
+        <!-- 1-Hour Instant Sandbox Trial Key Generator -->
+        <div class="mt-8 max-w-xl mx-auto p-5 rounded-3xl card-glass border border-nexus-cyan/40 shadow-[0_0_30px_rgba(6,182,212,0.15)] text-center">
+          <div class="flex items-center justify-center gap-2 mb-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan text-[10px] font-mono font-bold uppercase tracking-wider">
+              🧪 ÜCRETSİZ ANINDA DENEME
+            </span>
+          </div>
+          <h4 class="font-heading font-black text-lg text-white mb-1">
+            İndirmeden Önce 1 Saatlik Pro Deneme Anahtarı Alın
+          </h4>
+          <p class="text-xs text-nexus-muted mb-4 max-w-md mx-auto">
+            Kredi kartı veya kayıt gerekmez. Tek tıkla sandbox lisans anahtarı türetip uygulamada tüm Pro özellikleri test edin.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div id="trial-key-display" class="hidden px-4 py-2.5 rounded-xl bg-nexus-bg border border-nexus-cyan/50 font-mono text-xs text-nexus-cyan font-bold tracking-wider select-all"></div>
+            <button onclick="generateTrialKey()" id="generate-trial-btn" class="px-5 py-2.5 rounded-xl bg-nexus-cyan/20 hover:bg-nexus-cyan/30 border border-nexus-cyan/40 text-nexus-cyan font-mono text-xs font-bold transition-all cursor-pointer shadow-sm">
+              ⚡ 1 Saatlik Pro Key Üret (Sandbox)
+            </button>
+          </div>
+          <div id="trial-copy-msg" class="hidden mt-2.5 text-[11px] font-mono text-emerald-400">
+            ✓ Deneme anahtarınız panoya kopyalandı! Uygulamayı açtığınızda aktivasyon alanına yapıştırın.
+          </div>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto">
@@ -1141,9 +1211,12 @@ export function renderLandingPage(): string {
         </h2>
       </div>
 
-      <!-- FAQ Search Input -->
-      <div class="mb-8">
-        <input type="text" id="faq-search-input" oninput="filterFaq(this.value)" placeholder="Sorularda canlı ara... (Örn: format, iade, mac, güncelleme, güvenlik)" class="w-full bg-nexus-card border border-nexus-border/80 rounded-2xl px-5 py-3.5 text-xs font-mono text-white outline-none focus:border-nexus-cyan placeholder:text-nexus-muted/60 transition-all">
+      <!-- FAQ Search Input & Expand All Toggle -->
+      <div class="mb-8 flex flex-col sm:flex-row items-center gap-3">
+        <input type="text" id="faq-search-input" oninput="filterFaq(this.value)" placeholder="Sorularda canlı ara... (Örn: format, iade, mac, güncelleme, güvenlik, çevrimdışı)" class="w-full sm:flex-1 bg-nexus-card border border-nexus-border/80 rounded-2xl px-5 py-3.5 text-xs font-mono text-white outline-none focus:border-nexus-cyan placeholder:text-nexus-muted/60 transition-all">
+        <button onclick="toggleAllFaq()" id="faq-toggle-all-btn" class="w-full sm:w-auto px-5 py-3.5 rounded-2xl border border-nexus-border/80 hover:border-nexus-cyan/60 bg-nexus-surface text-xs font-mono text-nexus-muted hover:text-white transition-all cursor-pointer shrink-0">
+          Tümünü Genişlet ⤢
+        </button>
       </div>
 
       <div class="space-y-4" id="faq-container">
@@ -1164,6 +1237,36 @@ export function renderLandingPage(): string {
           </summary>
           <p class="mt-3 text-xs sm:text-sm text-nexus-muted leading-relaxed font-sans">
             Asla yanmaz! Hem masaüstü uygulaması içerisinden hem de bu sayfadaki "Lisansımı Sorgula & Cihaz Sıfırla" portalımızdan eski bilgisayar kilidinizi tek tıkla kaldırabilir ve yeni bilgisayarınızda anında kullanabilirsiniz.
+          </p>
+        </details>
+
+        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-text="iade para iadesi garanti 30 gun risk kosulsuz satisfaction guarantee">
+          <summary class="font-heading font-bold text-base text-white flex items-center justify-between list-none">
+            <span>30 Gün Koşulsuz Para İade Garantisi var mı?</span>
+            <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <p class="mt-3 text-xs sm:text-sm text-nexus-muted leading-relaxed font-sans">
+            Evet, kesinlikle! Satın aldığınız tarihten itibaren 30 gün boyunca NexusHub'ı dilediğiniz gibi test edebilirsiniz. Herhangi bir nedenden dolayı memnun kalmazsanız Discord destek kanalımızdan veya e-posta ile bildirdiğiniz anda ödemeniz %100 koşulsuz olarak iade edilir.
+          </p>
+        </details>
+
+        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-text="cevrimdisi offline internet kesintisi baglanti yok local yerel">
+          <summary class="font-heading font-bold text-base text-white flex items-center justify-between list-none">
+            <span>İnternet bağlantım tamamen kesildiğinde araçlar çalışır mı?</span>
+            <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <p class="mt-3 text-xs sm:text-sm text-nexus-muted leading-relaxed font-sans">
+            Evet! NexusHub %100 offline-first mimariye sahiptir. Dosya imha (DoD shredder), AES-256 şifreleme kasası, donanım kaynak monitörü, RAM optimize edici ve parola analizörü gibi tüm kritik araçlar internet bağlantınız olmasa dahi tam performansla çalışır.
+          </p>
+        </details>
+
+        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-text="mac apple linux osx destegi ne zaman cikacak">
+          <summary class="font-heading font-bold text-base text-white flex items-center justify-between list-none">
+            <span>macOS veya Linux desteği gelecek mi?</span>
+            <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <p class="mt-3 text-xs sm:text-sm text-nexus-muted leading-relaxed font-sans">
+            Şu anda Windows 10 ve 11 (x64) için tam optimize edilmiş yerel sürümümüz yayındadır. macOS (Apple Silicon M1/M2/M3/M4) ve Linux (.deb / .AppImage) çekirdekleri geliştirme aşamasında olup, Pro lisans sahipleri bu sürümler çıktığında tek kuruş ödemeden doğrudan erişebilecektir.
           </p>
         </details>
 
@@ -1224,6 +1327,42 @@ export function renderLandingPage(): string {
         Lisans Al
       </a>
     </div>
+  </div>
+
+  <!-- DESKTOP FLOATING CYBER ORB WIDGET (CANLI HUD WIDGET'I) -->
+  <div id="desktop-floating-orb-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 select-none">
+    
+    <!-- Orb Quick Action Menu (Popup) -->
+    <div id="orb-action-menu" class="hidden p-3.5 rounded-2xl card-glass border border-nexus-cyan/40 shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl w-60 font-mono text-xs space-y-2 animate-in fade-in slide-in-from-bottom-3 duration-200">
+      <div class="flex items-center justify-between border-b border-nexus-border/60 pb-2 text-[10px] text-nexus-muted">
+        <span class="flex items-center gap-1.5 text-nexus-cyan font-bold">
+          <span class="w-1.5 h-1.5 rounded-full bg-nexus-cyan animate-pulse"></span>
+          <span>NEXUS ORB HUD</span>
+        </span>
+        <button onclick="toggleFloatingOrbMenu()" class="hover:text-white cursor-pointer px-1">✕</button>
+      </div>
+      
+      <button onclick="triggerQuickRamFlush()" class="w-full text-left p-2 rounded-xl hover:bg-purple-500/20 text-purple-300 flex items-center gap-2.5 transition-all cursor-pointer">
+        <span>⚡</span> <span>1-Tık RAM Boşalt</span>
+      </button>
+      <button onclick="triggerQuickTempMail()" class="w-full text-left p-2 rounded-xl hover:bg-nexus-cyan/20 text-nexus-cyan flex items-center gap-2.5 transition-all cursor-pointer">
+        <span>📬</span> <span>TempMail Kopyala</span>
+      </button>
+      <button onclick="openCmdPalette(); toggleFloatingOrbMenu();" class="w-full text-left p-2 rounded-xl hover:bg-nexus-surface text-white flex items-center gap-2.5 transition-all cursor-pointer">
+        <span>🔍</span> <span>Komut Paleti (Ctrl+K)</span>
+      </button>
+      <button onclick="toggleSfx()" class="w-full text-left p-2 rounded-xl hover:bg-nexus-surface text-nexus-muted hover:text-white flex items-center gap-2.5 transition-all cursor-pointer">
+        <span id="orb-sfx-icon">🔊</span> <span>Cyber SFX</span>
+      </button>
+    </div>
+
+    <!-- The Interactive Floating Orb Bubble -->
+    <button onclick="toggleFloatingOrbMenu()" id="floating-orb-btn" class="relative group w-14 h-14 rounded-full bg-gradient-to-tr from-nexus-cyan via-nexus-accent to-purple-600 p-0.5 shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:shadow-[0_0_45px_rgba(6,182,212,0.9)] hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer animate-float" title="NexusHub Masaüstü Küresi (Tıkla & Keşfet)">
+      <div class="w-full h-full rounded-full bg-nexus-bg/85 backdrop-blur-md flex items-center justify-center font-mono font-bold text-white text-base group-hover:text-nexus-cyan transition-colors">
+        ⚡
+      </div>
+      <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-nexus-bg animate-pulse"></span>
+    </button>
   </div>
 
   <!-- COMMAND PALETTE MODAL (CTRL + K / SPOTLIGHT) -->
@@ -1471,6 +1610,7 @@ export function renderLandingPage(): string {
         'sim.desc': 'İndirmeden önce aşağıdaki sekmelere tıklayarak NexusHub\\'ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.',
         'sim.tools.tempmail': 'TempMail Posta',
         'sim.tools.decrypter': 'Link Decrypter',
+        'sim.tools.password': 'Parola & Kırılma',
         'sim.tools.fortress': 'Cyber Fortress',
         'sim.tools.sentinel': 'Resource Sentinel',
         'sim.tools.orb': 'Floating Orb HUD',
@@ -1523,6 +1663,7 @@ export function renderLandingPage(): string {
         'sim.desc': 'Click the tabs below to test drive NexusHub\\'s cybernetic tools and smooth interface before downloading.',
         'sim.tools.tempmail': 'TempMail Inbox',
         'sim.tools.decrypter': 'Link Decrypter',
+        'sim.tools.password': 'Password Analyzer',
         'sim.tools.fortress': 'Cyber Fortress',
         'sim.tools.sentinel': 'Resource Sentinel',
         'sim.tools.orb': 'Floating Orb HUD',
@@ -1582,7 +1723,7 @@ export function renderLandingPage(): string {
     }
 
     // ─── Interactive Mockup Tool Switcher ──────────────────────────────────
-    const tools = ['tempmail', 'decrypter', 'fortress', 'sentinel', 'orb'];
+    const tools = ['tempmail', 'decrypter', 'password', 'fortress', 'sentinel', 'orb'];
     function switchMockTool(toolId) {
       tools.forEach(t => {
         const p = document.getElementById('mock-panel-' + t);
@@ -2072,8 +2213,240 @@ export function renderLandingPage(): string {
       }
     });
 
-    // Initial calculations
+    // ─── Hero Matrix Cyber Rain Backdrop ────────────────────────────────────
+    function initMatrixRain() {
+      const canvas = document.getElementById('hero-matrix-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      let w = (canvas.width = canvas.offsetWidth);
+      let h = (canvas.height = canvas.offsetHeight);
+
+      window.addEventListener('resize', () => {
+        if (!canvas) return;
+        w = canvas.width = canvas.offsetWidth;
+        h = canvas.height = canvas.offsetHeight;
+      });
+
+      const letters = '010101019F8AB2NEXUSHUDDoDAES256CYBERRAMCOREλ§¥'.split('');
+      const fontSize = 14;
+      const columns = Math.floor(w / fontSize) || 20;
+      const drops = [];
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.floor(Math.random() * -50);
+      }
+
+      function drawRain() {
+        ctx.fillStyle = 'rgba(8, 9, 13, 0.12)';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.font = fontSize + 'px monospace';
+        for (let i = 0; i < drops.length; i++) {
+          const text = letters[Math.floor(Math.random() * letters.length)];
+          ctx.fillStyle = i % 3 === 0 ? '#06b6d4' : '#10b981';
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+          if (drops[i] * fontSize > h && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+
+      setInterval(drawRain, 50);
+    }
+
+    // ─── Simulator Link Decrypter Runner ────────────────────────────────────
+    function runSimDecrypter() {
+      const input = document.getElementById('sim-decrypter-input');
+      const cleanEl = document.getElementById('sim-decrypter-clean-url');
+      const badgeEl = document.getElementById('sim-decrypter-badge');
+      if (!input || !cleanEl) return;
+
+      const raw = input.value.trim();
+      let cleanUrl = 'https://drive.google.com/file/d/1A8zX_NexusSafeBuild.zip';
+      let strippedCount = 4;
+
+      try {
+        const u = new URL(raw.startsWith('http') ? raw : 'https://' + raw);
+        const searchParams = new URLSearchParams(u.search);
+        const trackers = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid', 'aff_id', 'telemetry_token', 'spy_id', 'ref'];
+        let count = 0;
+        trackers.forEach(t => {
+          if (searchParams.has(t)) {
+            searchParams.delete(t);
+            count++;
+          }
+        });
+        strippedCount = count > 0 ? count : 3;
+        u.search = searchParams.toString();
+        cleanUrl = u.toString().replace(/(\?)$/, '');
+      } catch (e) {
+        cleanUrl = 'https://clean-dest.org/direct_download';
+      }
+
+      cleanEl.innerText = '✓ ' + cleanUrl;
+      if (badgeEl) {
+        badgeEl.innerText = strippedCount + ' Takip Parametresi Silindi (0.3ms)';
+      }
+      playCyberSound('success');
+    }
+
+    // ─── Simulator Password & Entropy Analyzer ──────────────────────────────
+    function analyzePassword(pass) {
+      if (!pass) pass = '';
+      const len = pass.length;
+      let pool = 0;
+      if (/[a-z]/.test(pass)) pool += 26;
+      if (/[A-Z]/.test(pass)) pool += 26;
+      if (/[0-9]/.test(pass)) pool += 10;
+      if (/[^a-zA-Z0-9]/.test(pass)) pool += 33;
+      if (pool === 0) pool = 1;
+
+      const entropy = Math.round(len * Math.log2(pool) * 10) / 10;
+      const entropyEl = document.getElementById('sim-entropy-val');
+      const crackEl = document.getElementById('sim-crack-time');
+      const labelEl = document.getElementById('sim-strength-label');
+      const barEl = document.getElementById('sim-pass-strength-bar');
+
+      if (entropyEl) entropyEl.innerText = entropy + ' Bit';
+
+      let timeText = '< 0.001 Saniye';
+      let labelText = 'ZAYIF (D)';
+      let barWidth = '20%';
+      let barGrad = 'from-red-500 to-amber-500';
+
+      if (entropy < 28) {
+        timeText = '< 0.001 Saniye (Anında Kırılır)';
+        labelText = 'KRİTİK GÜVENSİZ (F)';
+        barWidth = '15%';
+        barGrad = 'from-red-600 to-red-500';
+      } else if (entropy < 50) {
+        timeText = '~3 Dakika';
+        labelText = 'ORTA (C)';
+        barWidth = '40%';
+        barGrad = 'from-amber-500 to-yellow-400';
+      } else if (entropy < 70) {
+        timeText = '~4.8 Yıl';
+        labelText = 'GÜÇLÜ (B)';
+        barWidth = '65%';
+        barGrad = 'from-sky-400 to-nexus-cyan';
+      } else if (entropy < 90) {
+        timeText = '~120 Bin Yıl';
+        labelText = 'ÇOK GÜÇLÜ (A)';
+        barWidth = '85%';
+        barGrad = 'from-nexus-cyan to-emerald-400';
+      } else {
+        timeText = '~4.8 Trilyon Yıl';
+        labelText = 'SİBER KALE (A+)';
+        barWidth = '100%';
+        barGrad = 'from-emerald-400 to-nexus-cyan';
+      }
+
+      if (crackEl) crackEl.innerText = timeText;
+      if (labelEl) labelEl.innerText = labelText;
+      if (barEl) {
+        barEl.style.width = barWidth;
+        barEl.className = 'h-full bg-gradient-to-r ' + barGrad + ' transition-all duration-300';
+      }
+    }
+
+    function generateMilitaryPass() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%^&*()-_=+[]{}';
+      let pass = '';
+      for (let i = 0; i < 24; i++) {
+        pass += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      const input = document.getElementById('sim-pass-input');
+      if (input) {
+        input.value = pass;
+        analyzePassword(pass);
+      }
+      playCyberSound('success');
+    }
+
+    function copyGeneratedPass() {
+      const input = document.getElementById('sim-pass-input');
+      const btn = document.getElementById('sim-pass-copy-btn');
+      if (input && navigator.clipboard) {
+        navigator.clipboard.writeText(input.value);
+        if (btn) btn.innerText = '✓ Kopyalandı!';
+        playCyberSound('success');
+        setTimeout(() => {
+          if (btn) btn.innerText = 'Kopyala';
+        }, 2000);
+      }
+    }
+
+    // ─── 1-Hour Sandbox Trial Key Generator ─────────────────────────────────
+    function generateTrialKey() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      function chunk(len) {
+        let res = '';
+        for (let i = 0; i < len; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+        return res;
+      }
+      const trialKey = 'NEXUS-TRIAL-' + chunk(4) + '-' + chunk(4) + '-' + chunk(4);
+      const display = document.getElementById('trial-key-display');
+      const msg = document.getElementById('trial-copy-msg');
+      const btn = document.getElementById('generate-trial-btn');
+
+      if (display) {
+        display.classList.remove('hidden');
+        display.innerText = trialKey;
+      }
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(trialKey);
+      }
+      if (msg) msg.classList.remove('hidden');
+      if (btn) btn.innerText = '↻ Yeni Key Üret';
+      playCyberSound('success');
+    }
+
+    // ─── Desktop Floating Cyber Orb Actions ─────────────────────────────────
+    function toggleFloatingOrbMenu() {
+      const menu = document.getElementById('orb-action-menu');
+      if (menu) {
+        menu.classList.toggle('hidden');
+        playCyberSound('toggle');
+      }
+    }
+
+    function triggerQuickRamFlush() {
+      toggleFloatingOrbMenu();
+      playCyberSound('purge');
+      alert('⚡ [Nexus Orb] Sistem RAM Belleği Boşaltıldı!\n1,840 MB geçici bellek önbelleği başarıyla temizlendi.');
+    }
+
+    function triggerQuickTempMail() {
+      toggleFloatingOrbMenu();
+      const fakeMail = 'orb_' + Math.random().toString(36).substring(2, 7) + '@nexusmail.org';
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(fakeMail);
+      }
+      playCyberSound('success');
+      alert('📬 [Nexus Orb] Tek Kullanımlık TempMail Panoya Kopyalandı:\n' + fakeMail);
+    }
+
+    // ─── FAQ Accordion Controls ─────────────────────────────────────────────
+    let allFaqOpen = false;
+    function toggleAllFaq() {
+      const items = document.querySelectorAll('.faq-item');
+      const btn = document.getElementById('faq-toggle-all-btn');
+      allFaqOpen = !allFaqOpen;
+      items.forEach(item => {
+        item.open = allFaqOpen;
+      });
+      if (btn) {
+        btn.innerText = allFaqOpen ? 'Tümünü Daralt ⤡' : 'Tümünü Genişlet ⤢';
+      }
+      playCyberSound('toggle');
+    }
+
+    // Initial calculations & canvas start
     calcRoi();
+    initMatrixRain();
   </script>
 </body>
 </html>`;
