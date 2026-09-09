@@ -16,7 +16,6 @@
  *   and only suitable for local testing.
  */
 import { safeStorage, app }    from 'electron'
-import { createHmac }          from 'crypto'
 import path                    from 'path'
 import fs                      from 'fs'
 import { machineIdSync }       from 'node-machine-id'
@@ -31,8 +30,16 @@ const SECRET: string =
 /** Base URL for the license API server. */
 const API_URL: string = 'https://nexushub-production-4a5b.up.railway.app'
 
-// ─── Types ───────────────────────────────────────────────────────────────────
-export type LicenseTier = 'free' | 'pro' | 'team' | 'lifetime'
+import {
+  validateLicenseKey,
+  LicenseTier,
+  ValidationResult,
+  TIER_MAP,
+  JAN_2024_MS,
+  MONTH_MS,
+} from '../shared/licenseValidator'
+
+export type { LicenseTier, ValidationResult }
 
 export type LicenseData = {
   key: string
@@ -42,81 +49,14 @@ export type LicenseData = {
   activatedAt: number
 }
 
-export type ValidationResult =
-  | { valid: true;  tier: LicenseTier; expiresAt: number }
-  | { valid: false; reason: string }
-
 // ─── Constants ───────────────────────────────────────────────────────────────
-const JAN_2024_MS = new Date('2024-01-01T00:00:00Z').getTime()
-const MONTH_MS    = 30.44 * 24 * 3600 * 1000
 const LICENSE_FILE = path.join(app.getPath('userData'), 'license.enc')
 const TRIAL_FILE   = path.join(app.getPath('userData'), 'trial.enc')
 const TRIAL_DURATION_MS = 72 * 60 * 60 * 1000 // 72 hours Pro trial
 
-const TIER_MAP: Record<string, LicenseTier> = {
-  F: 'free',
-  P: 'pro',
-  T: 'team',
-  L: 'lifetime',
-}
-
 // ─── Key validation ───────────────────────────────────────────────────────────
 export function validateKey(rawKey: string): ValidationResult {
-  // Normalise: strip everything except alphanumeric, uppercase
-  const stripped = rawKey.toUpperCase().replace(/[^A-Z0-9]/g, '')
-
-  // Must start with NEXUS + exactly 20 alphanumeric chars = 25 total
-  if (!stripped.startsWith('NEXUS') || stripped.length !== 25) {
-    return { valid: false, reason: 'Invalid key format' }
-  }
-
-  const code = stripped.slice(5) // 20 chars
-
-  const T   = code[0]           // tier char
-  const EEE = code.slice(1, 4)  // 3-char hex expiry months
-  const H   = code.slice(4)     // 16-char HMAC fragment
-
-  // Validate tier
-  const tier = TIER_MAP[T]
-  if (!tier) return { valid: false, reason: 'Unknown license tier' }
-
-  // Dual-mode cryptographic signature check:
-  // 1. New Format: SSSS (4 hex chars entropy) + H12 (12 hex chars HMAC of T+EEE+SSSS)
-  const SSSS = H.slice(0, 4)
-  const H12  = H.slice(4)
-  const expectedH12 = createHmac('sha256', SECRET)
-    .update(`${T}${EEE}${SSSS}`)
-    .digest('hex')
-    .slice(0, 12)
-    .toUpperCase()
-
-  // 2. Legacy Format: 16-char HMAC of T+EEE
-  const expectedLegacy = createHmac('sha256', SECRET)
-    .update(`${T}${EEE}`)
-    .digest('hex')
-    .slice(0, 16)
-    .toUpperCase()
-
-  const isValidEntropy = H12 === expectedH12
-  const isValidLegacy  = H === expectedLegacy
-
-  if (!isValidEntropy && !isValidLegacy) {
-    return { valid: false, reason: 'Invalid license key' }
-  }
-
-  // Decode expiry
-  let expiresAt = 0
-  if (EEE !== '000') {
-    const months   = parseInt(EEE, 16)
-    expiresAt      = JAN_2024_MS + months * MONTH_MS
-  }
-
-  // Check expiry (0 = lifetime, never expires)
-  if (expiresAt !== 0 && Date.now() > expiresAt) {
-    return { valid: false, reason: 'License key has expired' }
-  }
-
-  return { valid: true, tier, expiresAt }
+  return validateLicenseKey(rawKey, SECRET)
 }
 
 // ─── safeStorage persistence ─────────────────────────────────────────────────

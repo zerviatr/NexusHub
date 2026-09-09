@@ -2,6 +2,7 @@ import { ipcMain, dialog } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
 import { PDFDocument } from 'pdf-lib'
+import { parsePageRange } from '../services/pdfService'
 
 export interface PDFFileInfo {
   path: string
@@ -137,35 +138,12 @@ export function registerPdfToolkitIPC(): void {
         const srcPdf = await PDFDocument.load(fileBytes, { ignoreEncryption: true })
         const totalPages = srcPdf.getPageCount()
 
-        // Parse page range string (e.g. "1-3, 5, 8-10")
-        const selectedIndices = new Set<number>()
-        const parts = pageRange.split(',').map((p) => p.trim())
+        const sortedIndices = parsePageRange(pageRange, totalPages)
 
-        for (const part of parts) {
-          if (part.includes('-')) {
-            const [startStr, endStr] = part.split('-').map((s) => s.trim())
-            const start = parseInt(startStr, 10)
-            const end = parseInt(endStr, 10)
-            if (!isNaN(start) && !isNaN(end)) {
-              for (let i = Math.min(start, end); i <= Math.max(start, end); i++) {
-                if (i >= 1 && i <= totalPages) {
-                  selectedIndices.add(i - 1) // 0-indexed
-                }
-              }
-            }
-          } else {
-            const pageNum = parseInt(part, 10)
-            if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
-              selectedIndices.add(pageNum - 1)
-            }
-          }
-        }
-
-        if (selectedIndices.size === 0) {
+        if (sortedIndices.length === 0) {
           throw new Error(`Geçerli bir sayfa aralığı girin (Toplam sayfa: ${totalPages}).`)
         }
 
-        const sortedIndices = Array.from(selectedIndices).sort((a, b) => a - b)
         const newPdf = await PDFDocument.create()
         const copiedPages = await newPdf.copyPages(srcPdf, sortedIndices)
         copiedPages.forEach((page) => newPdf.addPage(page))

@@ -1,16 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { createHmac } from 'crypto'
+import { validateLicenseKey, formatLicenseKey } from '../src/shared/licenseValidator'
 
-// Replicating pure key validation logic for unit testing independent of Electron runtime
-const TIER_MAP: Record<string, string> = {
-  F: 'free',
-  P: 'pro',
-  T: 'team',
-  L: 'lifetime',
-}
-
-const JAN_2024_MS = new Date('2024-01-01T00:00:00Z').getTime()
-const MONTH_MS = 30.44 * 24 * 3600 * 1000
 const TEST_SECRET = 'TEST_SECRET_KEY_FOR_UNIT_TESTS'
 
 function generateTestKey(tierChar: 'F' | 'P' | 'T' | 'L', monthsFrom2024: number, secret = TEST_SECRET, entropy?: string): string {
@@ -20,60 +11,16 @@ function generateTestKey(tierChar: 'F' | 'P' | 'T' | 'L', monthsFrom2024: number
     const payload = tierChar + eee + ssss
     const hmac = createHmac('sha256', secret).update(payload).digest('hex').toUpperCase().slice(0, 12)
     const full = `NEXUS${tierChar}${eee}${ssss}${hmac}`
-    return `${full.slice(0, 5)}-${full.slice(5, 10)}-${full.slice(10, 15)}-${full.slice(15, 20)}-${full.slice(20, 25)}`
+    return formatLicenseKey(full)
   }
   const payload = tierChar + eee
   const hmac = createHmac('sha256', secret).update(payload).digest('hex').toUpperCase().slice(0, 16)
   const full = `NEXUS${tierChar}${eee}${hmac}`
-  return `${full.slice(0, 5)}-${full.slice(5, 10)}-${full.slice(10, 15)}-${full.slice(15, 20)}-${full.slice(20, 25)}`
+  return formatLicenseKey(full)
 }
 
 function validateKeyPure(rawKey: string, secret = TEST_SECRET) {
-  const stripped = rawKey.toUpperCase().replace(/[^A-Z0-9]/g, '')
-  if (!stripped.startsWith('NEXUS') || stripped.length !== 25) {
-    return { valid: false, reason: 'Invalid key format' }
-  }
-
-  const code = stripped.slice(5)
-  const T = code[0]
-  const EEE = code.slice(1, 4)
-  const H = code.slice(4)
-
-  const tier = TIER_MAP[T]
-  if (!tier) return { valid: false, reason: 'Unknown license tier' }
-
-  // Dual entropy & legacy validation
-  const SSSS = H.slice(0, 4)
-  const H12  = H.slice(4)
-  const expectedH12 = createHmac('sha256', secret)
-    .update(`${T}${EEE}${SSSS}`)
-    .digest('hex')
-    .slice(0, 12)
-    .toUpperCase()
-
-  const expectedLegacy = createHmac('sha256', secret)
-    .update(T + EEE)
-    .digest('hex')
-    .toUpperCase()
-    .slice(0, 16)
-
-  const isValidEntropy = H12 === expectedH12
-  const isValidLegacy  = H === expectedLegacy
-
-  if (!isValidEntropy && !isValidLegacy) {
-    return { valid: false, reason: 'Cryptographic signature mismatch' }
-  }
-
-  const months = parseInt(EEE, 16)
-  let expiresAt = 0
-  if (months > 0) {
-    expiresAt = JAN_2024_MS + months * MONTH_MS
-    if (Date.now() > expiresAt) {
-      return { valid: false, reason: 'License has expired' }
-    }
-  }
-
-  return { valid: true, tier, expiresAt }
+  return validateLicenseKey(rawKey, secret)
 }
 
 describe('NexusHub License Cryptography & Validation', () => {
@@ -126,6 +73,6 @@ describe('NexusHub License Cryptography & Validation', () => {
     const expiredKey = generateTestKey('P', 1)
     const res = validateKeyPure(expiredKey)
     expect(res.valid).toBe(false)
-    expect(res.reason).toBe('License has expired')
+    expect(res.reason).toBe('License key has expired')
   })
 })
