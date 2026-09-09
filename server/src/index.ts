@@ -17,6 +17,7 @@ import { migrate } from './db'
 import { webhookRouter } from './routes/webhook'
 import { licenseRouter } from './routes/license'
 import { adminRouter }   from './routes/admin'
+import { renderLandingPage } from './landingPageHtml'
 
 const app  = express()
 const PORT = Number(process.env['PORT'] ?? 3000)
@@ -54,6 +55,11 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
 })
 
 // ── Routes ─────────────────────────────────────────────────────────────────
+app.get('/', (_req: Request, res: Response) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8')
+  res.send(renderLandingPage())
+})
+
 app.use('/webhook',      webhookRouter)
 app.use('/api/license',  licenseRouter)
 app.use('/admin',        adminRouter)
