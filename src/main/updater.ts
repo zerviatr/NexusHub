@@ -120,12 +120,12 @@ export function setupAutoUpdater(win: BrowserWindow): void {
     } catch {}
 
     // 3. Robust Watchdog: If Windows NSIS fails to auto-launch the newly updated binary,
-    // this detached PowerShell supervisor will start NexusHub after 5 seconds
+    // this detached PowerShell supervisor will start NexusHub after 2 seconds
     try {
       const exePath = app.getPath('exe')
       if (app.isPackaged && process.platform === 'win32' && exePath) {
         const psScript = `
-          Start-Sleep -Seconds 5;
+          Start-Sleep -Seconds 2;
           $p = Get-Process -Name "NexusHub" -ErrorAction SilentlyContinue;
           if (-not $p) {
             Start-Process -FilePath "${exePath.replace(/\\/g, '\\\\')}"
@@ -142,18 +142,18 @@ export function setupAutoUpdater(win: BrowserWindow): void {
       console.warn('[updater] Watchdog spawn warning:', err)
     }
 
-    // 4. Trigger quitAndInstall(false, true)
-    // - isSilent: false allows NSIS to run with its 1-second clean update progress and execute runAfterFinish
-    // - isForceRunAfter: true passes --force-run to guarantee relaunch
+    // 4. Trigger quitAndInstall(true, true)
+    // - isSilent: true instructs NSIS to execute with /S (silent differential binary patch, instant, no installer GUI wizard)
+    // - isForceRunAfter: true passes --force-run to guarantee immediate relaunch
     setTimeout(() => {
       try {
-        console.log('[updater] Executing autoUpdater.quitAndInstall(false, true)...')
-        autoUpdater.quitAndInstall(false, true)
+        console.log('[updater] Executing autoUpdater.quitAndInstall(true, true)...')
+        autoUpdater.quitAndInstall(true, true)
       } catch (err) {
         console.error('[updater] quitAndInstall failed, attempting fallback app.quit():', err)
         app.quit()
       }
-    }, 400)
+    }, 150)
   })
 
   // ─── IPC: renderer can trigger manual check ───────────────────────────────

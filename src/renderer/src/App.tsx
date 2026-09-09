@@ -190,6 +190,7 @@ export default function App() {
                 />
                 <Route path="/cyber-fortress" element={<Navigate to="/fortress" replace />} />
                 <Route path="/account" element={<Account />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </motion.div>
           </AnimatePresence>

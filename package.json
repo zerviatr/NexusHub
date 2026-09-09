@@ -1,6 +1,6 @@
 {
   "name": "nexushub",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "NexusHub — Premium Multi-Tool Desktop Application",
   "main": "./out/main/index.js",
   "author": {
@@ -49,22 +49,16 @@
         {
           "target": "nsis",
           "arch": [
-            "x64",
-            "arm64"
-          ]
-        },
-        {
-          "target": "portable",
-          "arch": [
             "x64"
           ]
         }
       ],
-      "artifactName": "${productName}-Setup-${version}-${arch}.${ext}"
+      "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "nsis": {
       "oneClick": true,
       "perMachine": false,
+      "differentialPackage": true,
       "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
