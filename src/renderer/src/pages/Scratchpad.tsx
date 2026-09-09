@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   FileText,
   Copy,
@@ -18,59 +18,417 @@ import {
   Sparkles,
   Link,
   CheckSquare,
+  Plus,
+  X,
+  Printer,
+  FileCode,
+  Search,
+  BookOpen,
+  Share2,
+  Strikethrough,
+  Table as TableIcon,
+  AlignLeft,
 } from 'lucide-react'
 import BaseToolTemplate from '../components/BaseToolTemplate'
 import { cyberAudio } from '../lib/cyberAudio'
 import { useToast } from '../lib/ToastContext'
 
-const DEFAULT_MARKDOWN = `# NexusHub Scratchpad
+interface Note {
+  id: string
+  title: string
+  content: string
+  updatedAt: number
+}
 
-Hızlı notlar, geçici kod blokları, regex parçacıkları veya API şablonları için çevrimdışı not alanı.
+const DEFAULT_NOTE_CONTENT = `# NexusHub Scratchpad Pro
 
-## Özellikler
-- [x] Canlı çift panel (Split-View) önizleme
-- [x] Otomatik yerel kaydetme (LocalStorage)
-- [x] Markdown (.md) ve HTML (.html) dışa aktarma
-- [x] Anlık kelime ve karakter istatistiği
+Geliştiriciler, sistem yöneticileri ve teknik ekipler için tasarlanmış yüksek performanslı çevrimdışı Markdown ve Kod stüdyosu.
+
+## ⚡ Canlı Özellikler
+- [x] Çoklu sekme ve bağımsız not yönetimi
+- [x] Tıklanabilir canlı interaktif görev kutuları
+- [x] Akıllı seçim sarma (Selection wrap) ve klavye kısayolları
+- [x] Senkronize çift panel (Dual-scroll) kaydırma
+- [x] Zengin tablo, kod bloğu ve alıntı render desteği
+- [x] PDF yazdırma ve biçimlendirilmiş HTML kopyalama
+
+### 🛠️ Örnek Tablo
+| Protokol | Port | Açıklama | Güvenlik Seviyesi |
+| :--- | :--- | :--- | :--- |
+| HTTPS | 443 | Güvenli Web Trafiği | TLS 1.3 Aktif |
+| SSH | 22 | Güvenli Kabuk Erişimi | Ed25519 Anahtar |
+| Redis | 6379 | In-Memory Veri Deposu | Dahili Ağ İzolasyonu |
 
 \`\`\`typescript
-// Örnek Kod Bloğu
-const welcome = (name: string): string => {
-  return \`Hoş geldin \${name}! NexusHub gücünü keşfet.\`;
-};
+// NexusHub Hızlı API Test Parçacığı
+async function verifyNetworkIntegrity(host: string): Promise<boolean> {
+  const telemetry = await window.nexusAPI.port.scanActivePorts();
+  return telemetry.length > 0;
+}
 \`\`\`
 
 > "Bütün araçlar tek bir komutta elinizin altında."
 `
 
+const TEMPLATES: Record<string, { title: string; content: string }> = {
+  meeting: {
+    title: 'Toplantı Notu',
+    content: `# 📋 Sprint Planlama & Teknik Değerlendirme
+
+**Tarih:** ${new Date().toLocaleDateString('tr-TR')}  
+**Katılımcılar:** @Takım Lideri, @Backend, @Frontend, @DevOps  
+
+---
+
+## 🎯 Gündem Maddeleri
+1. v2.2.0 mimari hedefleri ve yeni araç eklemeleri
+2. CI/CD derleme sürelerinin düşürülmesi ve blokmap optimizasyonu
+3. Güvenlik taraması ve bağımlılık denetimleri
+
+## 📝 Alınan Kararlar
+- [ ] Yeni mikro araçlar için Lazy-loading standardı korunacak
+- [ ] Windows Defender false-positive risklerine karşı release imzaları doğrulanacak
+- [ ] RAM Sentinel flush eşiği %85 olarak belirlendi
+
+## 📌 Aksiyon Maddeleri
+- [ ] **@Backend:** TCP watchdog port kapatma testlerini tamamla
+- [ ] **@Frontend:** Scratchpad Pro sekme mimarisini doğrula
+- [ ] **@DevOps:** GitHub Actions cache oranını kontrol et
+`,
+  },
+  bug: {
+    title: 'Hata Bildirimi',
+    content: `# 🐛 Hata Raporu: [Hatanın Kısa Tanımı]
+
+**Öncelik:** 🔴 Yüksek / 🟡 Orta / 🟢 Düşük  
+**İlgili Modül:** Örn. NetworkTools / DevSandbox  
+**Sürüm:** NexusHub v2.1.9  
+
+---
+
+## 🔍 Beklenen Davranış
+Butona tıklandığında işlem arka planda kesintisiz çalışmalı ve toast bildirimi göstermelidir.
+
+## ❌ Gerçekleşen Davranış
+İşlem sırasında console'da IPC timeout hatası dönüyor ve ekran donuyor.
+
+## 🔁 Yeniden Üretim Adımları
+1. Uygulama menüsünden ilgili aracı açın
+2. Girdi alanına geçersiz formatta bir IP veya JSON yapıştırın
+3. 'Çalıştır' butonuna basın
+
+## 💻 Sistem Bilgisi
+- **İşletim Sistemi:** Windows 11 Pro 64-bit
+- **Ekran Çözünürlüğü:** 1920x1080
+`,
+  },
+  apiDoc: {
+    title: 'REST API Dokümanı',
+    content: `# 🌐 REST API Uç Nokta Spesifikasyonu
+
+### \`POST /api/v1/auth/verify\`
+Kullanıcı oturum anahtarını doğrular ve geçici JWT token üretir.
+
+---
+
+#### 📥 İstek Başlıkları (Headers)
+| Başlık | Tip | Zorunlu | Açıklama |
+| :--- | :--- | :--- | :--- |
+| Authorization | String | Evet | \`Bearer <API_KEY>\` |
+| Content-Type | String | Evet | \`application/json\` |
+
+#### 📦 İstek Gövdesi (Payload)
+\`\`\`json
+{
+  "client_id": "nexus-client-01",
+  "nonce": 17889342,
+  "fingerprint": "a9f8b2c4e1d3"
+}
+\`\`\`
+
+#### 📤 Başarılı Yanıt (\`200 OK\`)
+\`\`\`json
+{
+  "status": "success",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expires_in": 3600
+}
+\`\`\`
+`,
+  },
+  readme: {
+    title: 'Proje README',
+    content: `# 🚀 Proje Adı
+
+> Kısa ve etkileyici proje açıklaması buraya gelir.
+
+---
+
+## 📦 Kurulum
+\`\`\`bash
+# Depoyu klonlayın
+git clone https://github.com/kullanici/proje.git
+
+# Bağımlılıkları yükleyin
+npm install
+
+# Geliştirme sunucusunu başlatın
+npm run dev
+\`\`\`
+
+## 🛠️ Mimari & Teknoloji Yığını
+- **Arayüz:** React 18 + Tailwind CSS
+- **Masaüstü:** Electron + Vite
+- **Paketleme:** Electron Builder NSIS
+
+## 📄 Lisans
+MIT © 2026 NexusHub
+`,
+  },
+}
+
 export default function Scratchpad() {
   const { success: showToastSuccess, error: showToastError } = useToast()
 
-  const [content, setContent] = useState(() => {
-    return localStorage.getItem('nexus_scratchpad_content') || DEFAULT_MARKDOWN
+  // Multi-tab storage
+  const [notes, setNotes] = useState<Note[]>(() => {
+    try {
+      const stored = localStorage.getItem('nexus_scratchpad_notes')
+      if (stored) {
+        const parsed = JSON.parse(stored)
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed
+      }
+    } catch {}
+    return [
+      {
+        id: 'default-note',
+        title: 'Genel Notlar',
+        content: DEFAULT_NOTE_CONTENT,
+        updatedAt: Date.now(),
+      },
+    ]
   })
+
+  const [activeNoteId, setActiveNoteId] = useState<string>(() => {
+    return notes[0]?.id || 'default-note'
+  })
+
   const [viewMode, setViewMode] = useState<'split' | 'edit' | 'preview'>('split')
   const [copied, setCopied] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [showTemplates, setShowTemplates] = useState(false)
+  const [editingTitleId, setEditingTitleId] = useState<string | null>(null)
+  const [tempTitle, setTempTitle] = useState('')
 
-  // Auto-save
+  const editorRef = useRef<HTMLTextAreaElement>(null)
+  const previewRef = useRef<HTMLDivElement>(null)
+
+  // Current active note
+  const activeNote = notes.find((n) => n.id === activeNoteId) || notes[0]
+
+  // Persist notes
   useEffect(() => {
-    localStorage.setItem('nexus_scratchpad_content', content)
-  }, [content])
+    try {
+      localStorage.setItem('nexus_scratchpad_notes', JSON.stringify(notes))
+    } catch (e) {
+      console.error(e)
+    }
+  }, [notes])
 
-  // Word, char and reading time metrics
-  const charCount = content.length
-  const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0
-  const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200))
+  // Update active note content
+  const updateContent = (newContent: string) => {
+    setNotes((prev) =>
+      prev.map((n) => (n.id === activeNote.id ? { ...n, content: newContent, updatedAt: Date.now() } : n))
+    )
+  }
 
-  const insertSnippet = (prefix: string, suffix: string = '') => {
+  // Create new note
+  const handleAddNote = () => {
     try {
       cyberAudio.click()
     } catch {}
-    setContent((prev) => prev + `\n${prefix}örnek${suffix}\n`)
+    const newNote: Note = {
+      id: `note-${Date.now()}`,
+      title: `Not ${notes.length + 1}`,
+      content: `# Yeni Not\n\nBuraya yazmaya başlayın...\n`,
+      updatedAt: Date.now(),
+    }
+    setNotes((prev) => [...prev, newNote])
+    setActiveNoteId(newNote.id)
+    showToastSuccess('Yeni Not', 'Yeni not sekmesi oluşturuldu.')
   }
 
+  // Close / Delete note
+  const handleDeleteNote = (id: string, e?: React.MouseEvent) => {
+    e?.stopPropagation()
+    if (notes.length <= 1) {
+      showToastError('Uyarı', 'En az bir not sekmesi bulunmalıdır.')
+      return
+    }
+    if (window.confirm('Bu notu silmek istediğinize emin misiniz?')) {
+      try {
+        cyberAudio.shred()
+      } catch {}
+      const nextNotes = notes.filter((n) => n.id !== id)
+      setNotes(nextNotes)
+      if (activeNoteId === id) {
+        setActiveNoteId(nextNotes[0].id)
+      }
+      showToastSuccess('Silindi', 'Not başarıyla kaldırıldı.')
+    }
+  }
+
+  // Rename note
+  const handleSaveTitle = (id: string) => {
+    if (!tempTitle.trim()) {
+      setEditingTitleId(null)
+      return
+    }
+    setNotes((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, title: tempTitle.trim(), updatedAt: Date.now() } : n))
+    )
+    setEditingTitleId(null)
+  }
+
+  // Apply template
+  const handleApplyTemplate = (key: string) => {
+    const tpl = TEMPLATES[key]
+    if (!tpl) return
+    try {
+      cyberAudio.click()
+    } catch {}
+    const newNote: Note = {
+      id: `note-tpl-${Date.now()}`,
+      title: tpl.title,
+      content: tpl.content,
+      updatedAt: Date.now(),
+    }
+    setNotes((prev) => [...prev, newNote])
+    setActiveNoteId(newNote.id)
+    setShowTemplates(false)
+    showToastSuccess('Şablon Eklendi', `${tpl.title} yeni bir sekme olarak açıldı.`)
+  }
+
+  // Smart Selection Wrapping
+  const wrapSelection = (prefix: string, suffix: string = '', placeholder: string = 'metin') => {
+    const textarea = editorRef.current
+    if (!textarea) return
+
+    try {
+      cyberAudio.click()
+    } catch {}
+
+    const start = textarea.selectionStart
+    const end = textarea.selectionEnd
+    const current = activeNote.content
+    const selected = current.substring(start, end)
+
+    let replacement = ''
+    let newCursorPos = 0
+
+    if (selected.length > 0) {
+      replacement = `${prefix}${selected}${suffix}`
+      newCursorPos = start + replacement.length
+    } else {
+      replacement = `${prefix}${placeholder}${suffix}`
+      newCursorPos = start + prefix.length + placeholder.length
+    }
+
+    const updated = current.substring(0, start) + replacement + current.substring(end)
+    updateContent(updated)
+
+    setTimeout(() => {
+      textarea.focus()
+      textarea.setSelectionRange(newCursorPos, newCursorPos)
+    }, 10)
+  }
+
+  // Keyboard Shortcuts in Textarea
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.ctrlKey || e.metaKey) {
+      if (e.key.toLowerCase() === 'b') {
+        e.preventDefault()
+        wrapSelection('**', '**', 'kalın metin')
+      } else if (e.key.toLowerCase() === 'i') {
+        e.preventDefault()
+        wrapSelection('*', '*', 'italik metin')
+      } else if (e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        wrapSelection('[', '](https://)', 'bağlantı metni')
+      } else if (e.shiftKey && e.key.toLowerCase() === 'x') {
+        e.preventDefault()
+        wrapSelection('~~', '~~', 'üstü çizili')
+      } else if (e.key.toLowerCase() === 's') {
+        e.preventDefault()
+        handleDownloadMd()
+      }
+    } else if (e.key === 'Tab') {
+      e.preventDefault()
+      const textarea = editorRef.current
+      if (!textarea) return
+      const start = textarea.selectionStart
+      const end = textarea.selectionEnd
+      const current = activeNote.content
+
+      if (!e.shiftKey) {
+        // Indent 2 spaces
+        const updated = current.substring(0, start) + '  ' + current.substring(end)
+        updateContent(updated)
+        setTimeout(() => {
+          textarea.selectionStart = textarea.selectionEnd = start + 2
+        }, 0)
+      } else {
+        // Unindent
+        if (start >= 2 && current.substring(start - 2, start) === '  ') {
+          const updated = current.substring(0, start - 2) + current.substring(end)
+          updateContent(updated)
+          setTimeout(() => {
+            textarea.selectionStart = textarea.selectionEnd = start - 2
+          }, 0)
+        }
+      }
+    }
+  }
+
+  // Synchronized Dual-Scroll
+  const handleEditorScroll = () => {
+    if (viewMode !== 'split') return
+    const editor = editorRef.current
+    const preview = previewRef.current
+    if (!editor || !preview) return
+
+    const percentage = editor.scrollTop / (editor.scrollHeight - editor.clientHeight || 1)
+    preview.scrollTop = percentage * (preview.scrollHeight - preview.clientHeight)
+  }
+
+  // Interactive Task List Toggle (clicking preview checkbox updates editor line!)
+  const toggleTaskLine = (lineIndex: number) => {
+    const lines = activeNote.content.split('\n')
+    if (lineIndex < 0 || lineIndex >= lines.length) return
+
+    const line = lines[lineIndex]
+    if (line.startsWith('- [ ] ')) {
+      lines[lineIndex] = line.replace('- [ ] ', '- [x] ')
+    } else if (line.startsWith('- [x] ')) {
+      lines[lineIndex] = line.replace('- [x] ', '- [ ] ')
+    }
+
+    try {
+      cyberAudio.click()
+    } catch {}
+
+    updateContent(lines.join('\n'))
+  }
+
+  // Metrics
+  const charCount = activeNote.content.length
+  const wordCount = activeNote.content.trim() ? activeNote.content.trim().split(/\s+/).length : 0
+  const lineCount = activeNote.content.split('\n').length
+  const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200))
+
+  // Copy raw markdown
   const handleCopy = () => {
-    navigator.clipboard.writeText(content)
+    navigator.clipboard.writeText(activeNote.content)
     try {
       cyberAudio.copySuccess()
     } catch {}
@@ -79,140 +437,505 @@ export default function Scratchpad() {
     showToastSuccess('Kopyalandı', 'Markdown içeriği panoya kopyalandı.')
   }
 
+  // Copy formatted HTML
+  const handleCopyHtml = () => {
+    const html = generateStyledHtml(activeNote.content)
+    navigator.clipboard.writeText(html)
+    try {
+      cyberAudio.copySuccess()
+    } catch {}
+    showToastSuccess('HTML Kopyalandı', 'Biçimlendirilmiş HTML panoya kopyalandı.')
+  }
+
+  // Print / Save as PDF
+  const handlePrint = () => {
+    try {
+      cyberAudio.click()
+    } catch {}
+    window.print()
+  }
+
+  // Download .md
   const handleDownloadMd = () => {
     try {
       cyberAudio.copySuccess()
     } catch {}
-    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' })
+    const blob = new Blob([activeNote.content], { type: 'text/markdown;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `nexushub_note_${Date.now()}.md`
+    a.download = `${activeNote.title.toLowerCase().replace(/[^a-z0-9]/gi, '_') || 'note'}.md`
     a.click()
     URL.revokeObjectURL(url)
     showToastSuccess('İndirildi', 'Markdown dosyası kaydedildi.')
   }
 
+  // Download .html
   const handleDownloadHtml = () => {
     try {
       cyberAudio.copySuccess()
     } catch {}
-    const htmlContent = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>NexusHub Scratchpad Export</title><style>body{font-family:sans-serif;padding:2rem;line-height:1.6;background:#0a0a0f;color:#e4e4ed;max-width:800px;margin:auto;}pre{background:#1a1a2e;padding:1rem;border-radius:8px;}blockquote{border-left:4px solid #8b5cf6;padding-left:1rem;color:#a78bfa;}</style></head><body><pre>${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre></body></html>`
+    const htmlContent = generateStyledHtml(activeNote.content)
     const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `nexushub_export_${Date.now()}.html`
+    a.download = `${activeNote.title.toLowerCase().replace(/[^a-z0-9]/gi, '_') || 'note'}.html`
     a.click()
     URL.revokeObjectURL(url)
     showToastSuccess('İndirildi', 'HTML dosyası kaydedildi.')
   }
 
-  const handleClear = () => {
-    if (window.confirm('Not defterini temizlemek istediğinizden emin misiniz?')) {
-      try {
-        cyberAudio.shred()
-      } catch {}
-      setContent('')
-      showToastSuccess('Temizlendi', 'Not defteri sıfırlandı.')
-    }
+  // Filtered notes by search query
+  const filteredNotes = notes.filter((n) => {
+    if (!searchQuery.trim()) return true
+    const q = searchQuery.toLowerCase()
+    return n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q)
+  })
+
+  // Full Rich HTML generator for export
+  const generateStyledHtml = (text: string) => {
+    return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${activeNote.title} - NexusHub Export</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 2.5rem;
+    line-height: 1.7;
+    background: #09090e;
+    color: #e2e8f0;
+    max-width: 860px;
+    margin: auto;
+  }
+  h1 { font-size: 2rem; color: #ffffff; border-bottom: 1px solid #27273a; padding-bottom: 0.5rem; }
+  h2 { font-size: 1.5rem; color: #06b6d4; margin-top: 1.5rem; }
+  h3 { font-size: 1.25rem; color: #8b5cf6; margin-top: 1.25rem; }
+  pre { background: #13131f; padding: 1.25rem; border-radius: 10px; border: 1px solid #27273a; overflow-x: auto; color: #a5f3fc; }
+  code { font-family: monospace; }
+  blockquote { border-left: 4px solid #8b5cf6; padding-left: 1rem; margin: 1rem 0; color: #cbd5e1; background: rgba(139,92,246,0.06); padding: 0.5rem 1rem; border-radius: 0 8px 8px 0; font-style: italic; }
+  table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  th, td { border: 1px solid #27273a; padding: 0.75rem; text-align: left; }
+  th { background: #1a1a2e; color: #06b6d4; }
+  tr:nth-child(even) { background: #0f0f18; }
+  .task-done { text-decoration: line-through; color: #64748b; }
+</style>
+</head>
+<body>
+<pre style="white-space: pre-wrap; font-family: inherit; background: transparent; border: none; padding: 0;">${text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+</body>
+</html>`
   }
 
-  // Basic markdown parser for live preview
-  const renderSimpleMarkdown = (text: string) => {
+  // Advanced Markdown Component Renderer
+  const renderAdvancedMarkdown = (text: string) => {
     const lines = text.split('\n')
-    return lines.map((line, idx) => {
+    let inCodeBlock = false
+    let codeBlockBuffer: string[] = []
+    let inTable = false
+    let tableBuffer: string[] = []
+
+    const elements: React.ReactNode[] = []
+
+    const flushTable = (key: string) => {
+      if (tableBuffer.length === 0) return
+      const rows = tableBuffer.map((r) =>
+        r
+          .split('|')
+          .map((c) => c.trim())
+          .filter((c, i, arr) => (i === 0 && c === '' ? false : i === arr.length - 1 && c === '' ? false : true))
+      )
+      tableBuffer = []
+      inTable = false
+
+      if (rows.length === 0) return
+
+      const headerRow = rows[0]
+      const bodyRows = rows.slice(1).filter((r) => !r.every((cell) => /^:?-+:?$/.test(cell)))
+
+      elements.push(
+        <div key={key} className="overflow-x-auto my-3 rounded-xl border border-nexus-border/60 bg-nexus-surface/30">
+          <table className="w-full text-xs text-left border-collapse">
+            <thead className="bg-nexus-surface/80 text-nexus-cyan font-mono border-b border-nexus-border/60">
+              <tr>
+                {headerRow.map((cell, cIdx) => (
+                  <th key={cIdx} className="p-2.5 font-semibold">
+                    {cell}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-nexus-border/30 text-nexus-text">
+              {bodyRows.map((row, rIdx) => (
+                <tr key={rIdx} className="hover:bg-white/[0.02] transition-colors">
+                  {row.map((cell, cIdx) => (
+                    <td key={cIdx} className="p-2.5">
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
+
+    lines.forEach((line, idx) => {
+      // Code block handling
+      if (line.startsWith('```')) {
+        if (inCodeBlock) {
+          const codeContent = codeBlockBuffer.join('\n')
+          codeBlockBuffer = []
+          inCodeBlock = false
+          elements.push(
+            <div
+              key={`code-${idx}`}
+              className="relative my-3 rounded-xl border border-nexus-border/60 bg-black/60 p-4 font-mono text-xs text-nexus-cyan overflow-x-auto group"
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(codeContent)
+                  try {
+                    cyberAudio.copySuccess()
+                  } catch {}
+                  showToastSuccess('Kopyalandı', 'Kod bloğu panoya kopyalandı.')
+                }}
+                className="absolute top-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity px-2 py-1 rounded bg-nexus-surface border border-nexus-border/60 text-[10px] text-white hover:text-nexus-cyan flex items-center gap-1"
+              >
+                <Copy className="w-3 h-3" />
+                <span>Kopyala</span>
+              </button>
+              <pre className="selection:bg-nexus-cyan/20">
+                <code>{codeContent}</code>
+              </pre>
+            </div>
+          )
+          return
+        } else {
+          inCodeBlock = true
+          codeBlockBuffer = []
+          return
+        }
+      }
+
+      if (inCodeBlock) {
+        codeBlockBuffer.push(line)
+        return
+      }
+
+      // Table handling
+      if (line.trim().startsWith('|') && line.trim().endsWith('|')) {
+        inTable = true
+        tableBuffer.push(line)
+        return
+      } else if (inTable) {
+        flushTable(`table-${idx}`)
+      }
+
+      // Headers
       if (line.startsWith('# ')) {
-        return <h1 key={idx} className="text-2xl font-bold text-white mb-3 mt-4 border-b border-nexus-border pb-2">{line.slice(2)}</h1>
+        elements.push(
+          <h1 key={idx} className="text-2xl font-bold text-white mb-3 mt-4 border-b border-nexus-border/60 pb-2">
+            {line.slice(2)}
+          </h1>
+        )
+        return
       }
       if (line.startsWith('## ')) {
-        return <h2 key={idx} className="text-xl font-bold text-nexus-cyan mb-2 mt-3">{line.slice(3)}</h2>
+        elements.push(
+          <h2 key={idx} className="text-xl font-bold text-nexus-cyan mb-2 mt-3">
+            {line.slice(3)}
+          </h2>
+        )
+        return
       }
       if (line.startsWith('### ')) {
-        return <h3 key={idx} className="text-base font-semibold text-nexus-accent mb-1 mt-2">{line.slice(4)}</h3>
+        elements.push(
+          <h3 key={idx} className="text-base font-semibold text-nexus-accent mb-1 mt-2">
+            {line.slice(4)}
+          </h3>
+        )
+        return
       }
+      if (line.startsWith('#### ')) {
+        elements.push(
+          <h4 key={idx} className="text-sm font-semibold text-white/90 mb-1 mt-1">
+            {line.slice(5)}
+          </h4>
+        )
+        return
+      }
+
+      // Horizontal Rule
+      if (line.trim() === '---' || line.trim() === '***') {
+        elements.push(<hr key={idx} className="my-4 border-nexus-border/40" />)
+        return
+      }
+
+      // Interactive Task Lists
       if (line.startsWith('- [x] ') || line.startsWith('- [ ] ')) {
         const isChecked = line.startsWith('- [x] ')
-        return (
-          <div key={idx} className="flex items-center gap-2 my-1 text-sm">
-            <span className={`w-4 h-4 rounded flex items-center justify-center text-xs ${isChecked ? 'bg-nexus-cyan text-black font-bold' : 'border border-nexus-muted'}`}>
-              {isChecked ? '✓' : ''}
+        elements.push(
+          <div
+            key={idx}
+            onClick={() => toggleTaskLine(idx)}
+            className="flex items-center gap-2.5 my-1.5 text-xs cursor-pointer group select-none"
+          >
+            <span
+              className={`w-4 h-4 rounded flex items-center justify-center text-[10px] transition-all ${
+                isChecked
+                  ? 'bg-nexus-cyan text-black font-bold shadow-sm shadow-nexus-cyan/40'
+                  : 'border border-nexus-border/80 group-hover:border-nexus-cyan text-transparent'
+              }`}
+            >
+              ✓
             </span>
-            <span className={isChecked ? 'line-through text-nexus-muted' : 'text-white'}>{line.slice(6)}</span>
+            <span
+              className={`transition-colors ${
+                isChecked ? 'line-through text-nexus-muted' : 'text-white group-hover:text-nexus-cyan'
+              }`}
+            >
+              {line.slice(6)}
+            </span>
           </div>
         )
+        return
       }
+
+      // Unordered list
       if (line.startsWith('- ') || line.startsWith('* ')) {
-        return (
-          <li key={idx} className="ml-5 list-disc text-sm text-nexus-text my-0.5">
+        elements.push(
+          <li key={idx} className="ml-5 list-disc text-xs text-nexus-text my-1 leading-relaxed">
             {line.slice(2)}
           </li>
         )
+        return
       }
+
+      // Ordered list
+      const numMatch = line.match(/^(\d+)\.\s(.*)/)
+      if (numMatch) {
+        elements.push(
+          <div key={idx} className="ml-4 flex items-start gap-2 my-1 text-xs text-nexus-text">
+            <span className="font-mono text-nexus-cyan font-bold">{numMatch[1]}.</span>
+            <span>{numMatch[2]}</span>
+          </div>
+        )
+        return
+      }
+
+      // Blockquotes
       if (line.startsWith('> ')) {
-        return (
-          <blockquote key={idx} className="border-l-4 border-nexus-accent pl-3 py-1 my-2 bg-nexus-accent/10 rounded-r-lg text-xs italic text-nexus-accent-light">
+        elements.push(
+          <blockquote
+            key={idx}
+            className="border-l-4 border-nexus-accent pl-3 py-1.5 my-2.5 bg-nexus-accent/10 rounded-r-xl text-xs italic text-nexus-accent-light"
+          >
             {line.slice(2)}
           </blockquote>
         )
+        return
       }
-      if (line.startsWith('```')) {
-        return (
-          <div key={idx} className="bg-black/60 p-2.5 rounded-xl border border-nexus-border/60 font-mono text-xs text-nexus-cyan my-1">
-            {line}
-          </div>
-        )
-      }
+
+      // Empty line
       if (!line.trim()) {
-        return <div key={idx} className="h-2" />
+        elements.push(<div key={idx} className="h-2" />)
+        return
       }
-      return (
-        <p key={idx} className="text-sm text-nexus-text/90 my-1 leading-relaxed">
+
+      // Regular paragraph
+      elements.push(
+        <p key={idx} className="text-xs text-nexus-text/90 my-1 leading-relaxed">
           {line}
         </p>
       )
     })
+
+    if (inTable) {
+      flushTable('table-end')
+    }
+
+    return elements
   }
 
   return (
     <BaseToolTemplate
       icon={FileText}
-      title="Markdown & Snippet Scratchpad"
-      description="Canlı çift panel önizleme, anlık istatistikler ve otomatik yerel kayıt desteğine sahip minimalist Markdown not defteri."
+      title="Markdown Scratchpad Pro"
+      description="Çoklu sekme yönetimi, canlı etkileşimli görevler, senkronize çift scroll, klavye kısayolları ve hazır teknik şablon kütüphanesi."
       gradient="from-emerald-600 to-teal-500"
     >
       <div className="space-y-4">
-        {/* Top Action Bar */}
-        <div className="glass-card p-3 flex flex-wrap items-center justify-between gap-3">
+        {/* Multi-Tab Bar & Search Row */}
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 glass-card p-2.5 px-3">
+          {/* Tabs */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none flex-1">
+            {filteredNotes.map((note) => {
+              const isActive = note.id === activeNote.id
+              const isEditing = editingTitleId === note.id
+
+              return (
+                <div
+                  key={note.id}
+                  onClick={() => {
+                    setActiveNoteId(note.id)
+                    try {
+                      cyberAudio.click()
+                    } catch {}
+                  }}
+                  onDoubleClick={() => {
+                    setEditingTitleId(note.id)
+                    setTempTitle(note.title)
+                  }}
+                  className={`group relative flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-medium cursor-pointer transition-all whitespace-nowrap select-none ${
+                    isActive
+                      ? 'bg-nexus-surface border-nexus-accent/60 text-white shadow-lg shadow-nexus-accent/10'
+                      : 'bg-nexus-surface/40 border-white/5 text-nexus-muted hover:text-white hover:bg-nexus-surface/70'
+                  }`}
+                >
+                  <FileText className={`w-3.5 h-3.5 ${isActive ? 'text-nexus-cyan' : 'text-nexus-muted'}`} />
+
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={tempTitle}
+                      autoFocus
+                      onChange={(e) => setTempTitle(e.target.value)}
+                      onBlur={() => handleSaveTitle(note.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleSaveTitle(note.id)
+                        if (e.key === 'Escape') setEditingTitleId(null)
+                      }}
+                      className="bg-black/50 text-white px-1.5 py-0.5 rounded border border-nexus-cyan/40 outline-none w-24"
+                    />
+                  ) : (
+                    <span className="truncate max-w-[120px]">{note.title}</span>
+                  )}
+
+                  {notes.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={(e) => handleDeleteNote(note.id, e)}
+                      className="opacity-0 group-hover:opacity-100 hover:text-rose-400 p-0.5 transition-opacity"
+                      title="Sekmeyi Sil"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+              )
+            })}
+
+            {/* New Tab Button */}
+            <button
+              type="button"
+              onClick={handleAddNote}
+              className="p-1.5 px-2.5 rounded-xl bg-nexus-surface/40 hover:bg-nexus-accent/20 border border-white/5 hover:border-nexus-accent/40 text-nexus-muted hover:text-white transition-all flex items-center gap-1 text-xs"
+              title="Yeni Not Ekle"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Yeni</span>
+            </button>
+          </div>
+
+          {/* Quick Search & Templates */}
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Search className="w-3.5 h-3.5 text-nexus-muted absolute left-2.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Notlarda ara..."
+                className="pl-8 pr-3 py-1 rounded-xl bg-nexus-surface/60 border border-white/10 text-xs text-white placeholder-nexus-muted focus:outline-none focus:border-nexus-cyan/40 w-36 sm:w-44"
+              />
+            </div>
+
+            {/* Templates Popover Trigger */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowTemplates(!showTemplates)}
+                className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all"
+              >
+                <BookOpen className="w-3.5 h-3.5 text-nexus-cyan" />
+                <span>Şablonlar</span>
+              </button>
+
+              <AnimatePresence>
+                {showTemplates && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 5 }}
+                    className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-nexus-surface/95 border border-nexus-cyan/30 shadow-2xl p-2 z-50 backdrop-blur-xl"
+                  >
+                    <div className="text-[10px] font-mono text-nexus-muted uppercase px-2 py-1 border-b border-white/5">
+                      Hazır Şablon Ekle
+                    </div>
+                    <div className="space-y-1 mt-1">
+                      {Object.entries(TEMPLATES).map(([key, tpl]) => (
+                        <button
+                          key={key}
+                          type="button"
+                          onClick={() => handleApplyTemplate(key)}
+                          className="w-full text-left p-2 rounded-xl text-xs text-nexus-text hover:text-white hover:bg-nexus-cyan/10 transition-colors flex items-center justify-between"
+                        >
+                          <span>{tpl.title}</span>
+                          <Plus className="w-3 h-3 text-nexus-cyan" />
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+
+        {/* Toolbar & Actions */}
+        <div className="glass-card p-2.5 px-3 flex flex-wrap items-center justify-between gap-3">
           {/* Quick Format Buttons */}
           <div className="flex items-center gap-1">
             <button
               type="button"
-              onClick={() => insertSnippet('**', '**')}
+              onClick={() => wrapSelection('**', '**', 'kalın metin')}
               className="p-2 rounded-lg bg-nexus-surface hover:bg-white/[0.08] text-nexus-muted hover:text-white transition-colors"
-              title="Kalın"
+              title="Kalın (Ctrl+B)"
             >
               <Bold className="w-3.5 h-3.5" />
             </button>
             <button
               type="button"
-              onClick={() => insertSnippet('*', '*')}
+              onClick={() => wrapSelection('*', '*', 'italik metin')}
               className="p-2 rounded-lg bg-nexus-surface hover:bg-white/[0.08] text-nexus-muted hover:text-white transition-colors"
-              title="İtalik"
+              title="İtalik (Ctrl+I)"
             >
               <Italic className="w-3.5 h-3.5" />
             </button>
             <button
               type="button"
-              onClick={() => insertSnippet('### ')}
+              onClick={() => wrapSelection('~~', '~~', 'üstü çizili')}
               className="p-2 rounded-lg bg-nexus-surface hover:bg-white/[0.08] text-nexus-muted hover:text-white transition-colors"
-              title="Başlık"
+              title="Üstü Çizili (Ctrl+Shift+X)"
+            >
+              <Strikethrough className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => wrapSelection('### ', '', 'Başlık')}
+              className="p-2 rounded-lg bg-nexus-surface hover:bg-white/[0.08] text-nexus-muted hover:text-white transition-colors"
+              title="Başlık 3"
             >
               <Heading className="w-3.5 h-3.5" />
             </button>
             <button
               type="button"
-              onClick={() => insertSnippet('```\n', '\n```')}
+              onClick={() => wrapSelection('```typescript\n', '\n```', '// kodunuz')}
               className="p-2 rounded-lg bg-nexus-surface hover:bg-white/[0.08] text-nexus-muted hover:text-white transition-colors"
               title="Kod Bloğu"
             >
@@ -220,15 +943,37 @@ export default function Scratchpad() {
             </button>
             <button
               type="button"
-              onClick={() => insertSnippet('- [ ] ')}
+              onClick={() => wrapSelection('- [ ] ', '', 'Yapılacak Görev')}
               className="p-2 rounded-lg bg-nexus-surface hover:bg-white/[0.08] text-nexus-muted hover:text-white transition-colors"
               title="Görev Kutusu"
             >
               <CheckSquare className="w-3.5 h-3.5" />
             </button>
+            <button
+              type="button"
+              onClick={() =>
+                wrapSelection(
+                  '| Başlık 1 | Başlık 2 |\n| :--- | :--- |\n| Veri 1 | Veri 2 |\n',
+                  '',
+                  ''
+                )
+              }
+              className="p-2 rounded-lg bg-nexus-surface hover:bg-white/[0.08] text-nexus-muted hover:text-white transition-colors"
+              title="Tablo Ekle"
+            >
+              <TableIcon className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => wrapSelection('[', '](https://)', 'Bağlantı')}
+              className="p-2 rounded-lg bg-nexus-surface hover:bg-white/[0.08] text-nexus-muted hover:text-white transition-colors"
+              title="Link Ekle (Ctrl+K)"
+            >
+              <Link className="w-3.5 h-3.5" />
+            </button>
           </div>
 
-          {/* View mode buttons */}
+          {/* View mode toggle */}
           <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.04] border border-white/5">
             <button
               type="button"
@@ -259,88 +1004,136 @@ export default function Scratchpad() {
             </button>
           </div>
 
-          {/* Export & Copy Actions */}
-          <div className="flex items-center gap-2">
+          {/* Export & Print Actions */}
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={handleCopy}
-              className="px-3 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95"
+              className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95"
+              title="Markdown Kopyala"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>Kopyala</span>
+              <span className="hidden sm:inline">Kopyala</span>
             </button>
+
+            <button
+              type="button"
+              onClick={handleCopyHtml}
+              className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95"
+              title="HTML Kopyala"
+            >
+              <FileCode className="w-3.5 h-3.5 text-nexus-cyan" />
+              <span className="hidden sm:inline">HTML</span>
+            </button>
+
             <button
               type="button"
               onClick={handleDownloadMd}
-              className="px-3 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95"
+              className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95"
+              title="Markdown İndir"
             >
               <Download className="w-3.5 h-3.5" />
               <span>.md</span>
             </button>
+
             <button
               type="button"
               onClick={handleDownloadHtml}
-              className="px-3 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95"
+              className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95"
+              title="HTML İndir"
             >
               <Download className="w-3.5 h-3.5" />
               <span>.html</span>
             </button>
+
             <button
               type="button"
-              onClick={handleClear}
-              className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-all active:scale-95"
-              title="Temizle"
+              onClick={handlePrint}
+              className="p-2 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white transition-all active:scale-95"
+              title="PDF Olarak Yazdır / Kaydet"
             >
-              <Trash2 className="w-3.5 h-3.5" />
+              <Printer className="w-3.5 h-3.5 text-purple-400" />
             </button>
           </div>
         </div>
 
         {/* Dual Editor & Preview Workspace */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-[550px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-[580px]">
           {/* Editor Pane */}
           {(viewMode === 'edit' || viewMode === 'split') && (
-            <div className={`${viewMode === 'split' ? 'lg:col-span-6' : 'lg:col-span-12'} glass-card p-4 flex flex-col h-full`}>
+            <div
+              className={`${
+                viewMode === 'split' ? 'lg:col-span-6' : 'lg:col-span-12'
+              } glass-card p-4 flex flex-col h-full overflow-hidden`}
+            >
               <div className="flex items-center justify-between pb-2 border-b border-nexus-border/30 mb-2">
-                <span className="text-[11px] font-mono text-nexus-muted uppercase">Markdown Girişi</span>
-                <span className="text-[10px] font-mono text-emerald-400">● Otomatik Kayıt Açık</span>
+                <span className="text-[11px] font-mono text-nexus-muted uppercase">
+                  Markdown Girişi & Kodlama
+                </span>
+                <span className="text-[10px] font-mono text-emerald-400">● Otomatik Kaydedildi</span>
               </div>
               <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Markdown metninizi buraya yazın..."
-                className="flex-1 w-full bg-transparent resize-none focus:outline-none font-mono text-xs text-white leading-relaxed placeholder-nexus-muted selection:bg-nexus-accent/30"
+                ref={editorRef}
+                value={activeNote.content}
+                onChange={(e) => updateContent(e.target.value)}
+                onKeyDown={handleKeyDown}
+                onScroll={handleEditorScroll}
+                placeholder="Markdown metninizi buraya yazın... (Ctrl+B, Ctrl+I, Tab desteklenir)"
+                className="flex-1 w-full bg-transparent resize-none focus:outline-none font-mono text-xs text-white leading-relaxed placeholder-nexus-muted selection:bg-nexus-accent/30 overflow-y-auto"
               />
             </div>
           )}
 
           {/* Preview Pane */}
           {(viewMode === 'preview' || viewMode === 'split') && (
-            <div className={`${viewMode === 'split' ? 'lg:col-span-6' : 'lg:col-span-12'} glass-card p-6 overflow-y-auto h-full bg-nexus-surface/40 border-nexus-border/60`}>
+            <div
+              ref={previewRef}
+              className={`${
+                viewMode === 'split' ? 'lg:col-span-6' : 'lg:col-span-12'
+              } glass-card p-6 overflow-y-auto h-full bg-nexus-surface/40 border-nexus-border/60`}
+            >
               <div className="flex items-center justify-between pb-2 border-b border-nexus-border/30 mb-4">
-                <span className="text-[11px] font-mono text-nexus-muted uppercase">Canlı Önizleme</span>
-                <span className="text-[10px] font-mono text-nexus-cyan">Görsel Çıktı</span>
+                <span className="text-[11px] font-mono text-nexus-muted uppercase">Canlı Çıktı</span>
+                <span className="text-[10px] font-mono text-nexus-cyan">Etkileşimli Görevler Aktif</span>
               </div>
               <div className="prose prose-invert max-w-none">
-                {renderSimpleMarkdown(content)}
+                {renderAdvancedMarkdown(activeNote.content)}
               </div>
             </div>
           )}
         </div>
 
-        {/* Statistics Bar */}
-        <div className="glass-card p-3 px-4 flex items-center justify-between text-xs font-mono text-nexus-muted">
+        {/* Live Metrics & Shortcut Hints */}
+        <div className="glass-card p-3 px-4 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-nexus-muted">
           <div className="flex items-center gap-6">
-            <span>Karakter: <strong className="text-white">{charCount}</strong></span>
-            <span>Kelime: <strong className="text-white">{wordCount}</strong></span>
+            <span>
+              Karakter: <strong className="text-white">{charCount}</strong>
+            </span>
+            <span>
+              Kelime: <strong className="text-white">{wordCount}</strong>
+            </span>
+            <span>
+              Satır: <strong className="text-white">{lineCount}</strong>
+            </span>
             <span className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-nexus-cyan" />
-              <span>Okuma Süresi: <strong className="text-white">~{readingTimeMinutes} dk</strong></span>
+              <span>
+                Okuma Süresi: <strong className="text-white">~{readingTimeMinutes} dk</strong>
+              </span>
             </span>
           </div>
-          <span className="text-[11px] text-nexus-muted/70">
-            Veriler tarayıcı yerel deposunda şifreli/güvenli tutulur.
-          </span>
+          <div className="flex items-center gap-3 text-[11px] text-nexus-muted/80">
+            <span>Kısayollar:</span>
+            <kbd className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-nexus-cyan">
+              Ctrl+B (Kalın)
+            </kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-nexus-cyan">
+              Ctrl+K (Link)
+            </kbd>
+            <kbd className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-nexus-cyan">
+              Tab (Girinti)
+            </kbd>
+          </div>
         </div>
       </div>
     </BaseToolTemplate>
