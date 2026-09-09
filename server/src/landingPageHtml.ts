@@ -954,18 +954,6 @@ export function renderLandingPage(): string {
     </div>
   </div>
 
-  <!-- LIVE FOMO SALES TICKER TOAST (BOTTOM-LEFT) -->
-  <div id="fomo-toast" class="fixed bottom-6 left-6 z-40 max-w-sm px-4 py-3 rounded-2xl card-glass border border-nexus-cyan/40 shadow-[0_12px_35px_rgba(0,0,0,0.6)] flex items-center gap-3 transition-all duration-500 translate-y-24 opacity-0 pointer-events-none select-none">
-    <div class="w-8 h-8 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 flex items-center justify-center shrink-0">
-      <span class="text-sm">⚡</span>
-    </div>
-    <div class="truncate text-xs">
-      <div id="fomo-text" class="font-bold text-white truncate">İstanbul'dan bir kullanıcı lisans aldı</div>
-      <div id="fomo-time" class="text-[10px] font-mono text-nexus-cyan">2 dakika önce &bull; Nexus Pro Lifetime</div>
-    </div>
-    <button onclick="dismissFomo()" class="text-nexus-muted hover:text-white text-xs pl-1 cursor-pointer">✕</button>
-  </div>
-
   <!-- CHANGELOG MODAL (v2.0.3 YENİLİKLER) -->
   <div id="changelog-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
     <div class="w-full max-w-lg rounded-3xl card-glass border border-nexus-cyan/50 p-6 sm:p-8 text-nexus-text relative shadow-2xl">
@@ -1271,44 +1259,6 @@ export function renderLandingPage(): string {
         annualEl.innerText = '$' + annualUSD + ' / yr';
         tryEl.innerText = '(Zero recurring bills ever)';
       }
-    }
-
-    // ─── Live Social Proof FOMO Ticker ─────────────────────────────────────
-    const fomoData = [
-      { city: 'İstanbul', plan: 'Nexus Pro Lifetime', time: '2 dakika önce' },
-      { city: 'Ankara', plan: 'Nexus Studio (3 Cihaz)', time: '5 dakika önce' },
-      { city: 'İzmir', plan: 'Nexus Pro Lifetime', time: '8 dakika önce' },
-      { city: 'Bursa', plan: 'Nexus Pro Lifetime', time: '14 dakika önce' },
-      { city: 'Antalya', plan: 'Nexus Studio (3 Cihaz)', time: '19 dakika önce' }
-    ];
-    let fomoIdx = 0;
-    function showNextFomo() {
-      const item = fomoData[fomoIdx];
-      const toast = document.getElementById('fomo-toast');
-      const txt = document.getElementById('fomo-text');
-      const tm = document.getElementById('fomo-time');
-      
-      txt.innerText = item.city + "'dan bir kullanıcı sipariş verdi";
-      tm.innerText = item.time + " • " + item.plan;
-
-      toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
-      toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
-
-      setTimeout(() => {
-        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
-        toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
-      }, 4500);
-
-      fomoIdx = (fomoIdx + 1) % fomoData.length;
-    }
-    setTimeout(() => {
-      showNextFomo();
-      setInterval(showNextFomo, 16000);
-    }, 4000);
-
-    function dismissFomo() {
-      const toast = document.getElementById('fomo-toast');
-      toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
     }
 
     // ─── Self-Service License Lookup & Hardware Reset ───────────────────────
