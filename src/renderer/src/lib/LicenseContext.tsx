@@ -73,13 +73,23 @@ export function LicenseProvider({ children }: { children: React.ReactNode }) {
     setKey(null)
   }, [])
 
-  // ── Instant kick-out verify heartbeat (10s interval + window focus) ────────
+  // ── Production-grade heartbeat verify (60m interval + debounced window focus) ──
   useEffect(() => {
     if (status !== 'active') return
 
-    const INTERVAL_MS = 10 * 1000 // 10 seconds rapid check
+    const BASE_INTERVAL_MS = 60 * 60 * 1000 // 60 minutes regular heartbeat
+    let currentInterval = BASE_INTERVAL_MS
+    let timerId: NodeJS.Timeout | null = null
+    let lastCheckTime = Date.now()
 
-    const run = async () => {
+    const run = async (isFocusTrigger = false) => {
+      // Throttle window focus triggers to minimum 2 minutes apart to prevent spamming server
+      const now = Date.now()
+      if (isFocusTrigger && now - lastCheckTime < 2 * 60 * 1000) {
+        return
+      }
+      lastCheckTime = now
+
       try {
         const result: any = await window.nexusAPI?.license?.bgVerify?.()
         if (result && result.valid === false) {
@@ -92,20 +102,32 @@ export function LicenseProvider({ children }: { children: React.ReactNode }) {
           setExpiresAt(null)
           setKey(null)
         }
+        // Reset to regular interval on success
+        currentInterval = BASE_INTERVAL_MS
       } catch (err) {
-        console.warn('[LicenseContext] Heartbeat verify failed:', err)
+        console.warn('[LicenseContext] Heartbeat verify failed, backing off:', err)
+        // Backoff: 5m, 10m, capped at 60m on network error
+        currentInterval = Math.min(BASE_INTERVAL_MS, Math.max(5 * 60 * 1000, currentInterval * 2))
+      } finally {
+        if (status === 'active') {
+          if (timerId) clearTimeout(timerId)
+          timerId = setTimeout(() => run(false), currentInterval)
+        }
       }
     }
 
-    // Immediately verify when window gains focus (e.g. user Alt-Tabs from Railway Admin)
-    window.addEventListener('focus', run)
-    window.addEventListener('online', run)
+    const onFocus = () => run(true)
+    const onOnline = () => run(false)
 
-    const timer = setInterval(run, INTERVAL_MS)
+    window.addEventListener('focus', onFocus)
+    window.addEventListener('online', onOnline)
+
+    timerId = setTimeout(() => run(false), currentInterval)
+
     return () => {
-      clearInterval(timer)
-      window.removeEventListener('focus', run)
-      window.removeEventListener('online', run)
+      if (timerId) clearTimeout(timerId)
+      window.removeEventListener('focus', onFocus)
+      window.removeEventListener('online', onOnline)
     }
   }, [status])
 

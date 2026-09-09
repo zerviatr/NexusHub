@@ -117,18 +117,15 @@ async function verifyAdminPassword(provided?: string): Promise<boolean> {
       return verifyPasswordAgainstHash(clean, stored)
     }
 
-    const acceptable = [
-      'nexus_admin_2026_master',
-      'nexus_admin_default_2026',
-      process.env['ADMIN_SECRET'] || ''
-    ].filter(Boolean)
+    const adminSecret = (process.env['ADMIN_SECRET'] || '').trim()
+    if (!adminSecret) {
+      console.error('[admin:FATAL] No admin_password_hash found and ADMIN_SECRET environment variable is unset!')
+      throw new Error('ADMIN_SECRET environment variable is not configured on server.')
+    }
 
-    const isMatch = acceptable.some(expected => {
-      const bufA = Buffer.from(clean, 'utf-8')
-      const bufB = Buffer.from(expected, 'utf-8')
-      if (bufA.length !== bufB.length) return false
-      return timingSafeEqual(bufA, bufB)
-    })
+    const bufA = Buffer.from(clean, 'utf-8')
+    const bufB = Buffer.from(adminSecret, 'utf-8')
+    const isMatch = bufA.length === bufB.length && timingSafeEqual(bufA, bufB)
 
     if (isMatch) {
       const initialHash = hashPassword(clean)
@@ -141,7 +138,10 @@ async function verifyAdminPassword(provided?: string): Promise<boolean> {
     }
 
     return false
-  } catch (err) {
+  } catch (err: any) {
+    if (err?.message?.includes('ADMIN_SECRET')) {
+      throw err
+    }
     console.error('[admin] verifyAdminPassword error:', err)
     return false
   }
@@ -205,7 +205,21 @@ adminRouter.post('/api/login', async (req: Request, res: Response): Promise<void
   }
 
   const { password } = req.body as { password?: string }
-  const isValid = await verifyAdminPassword(password)
+  let isValid = false
+  try {
+    isValid = await verifyAdminPassword(password)
+  } catch (err: any) {
+    if (err?.message?.includes('ADMIN_SECRET')) {
+      console.error('[admin:500] Login rejected - ADMIN_SECRET is not configured on the server')
+      res.status(500).json({
+        success: false,
+        error: 'Server security configuration error: ADMIN_SECRET is not set in environment.'
+      })
+      return
+    }
+    res.status(500).json({ success: false, error: 'Internal server error during authentication.' })
+    return
+  }
 
   if (!isValid) {
     recordFailedAttempt(ip)

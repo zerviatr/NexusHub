@@ -20,19 +20,22 @@ export function registerCyberFortressIPC(): void {
     }
   })
 
-  // DoD 5220.22-M 7-Pass Shredder
+  // DoD 5220.22-M 7-Pass Shredder (Non-blocking async stream chunking)
   ipcMain.handle('fortress:shredFile', async (_, filePath: string) => {
+    let fileHandle: fs.promises.FileHandle | null = null
     try {
-      if (!fs.existsSync(filePath)) {
-        throw new Error('Dosya bulunamadı.')
+      try {
+        await fs.promises.access(filePath, fs.constants.F_OK | fs.constants.W_OK)
+      } catch {
+        throw new Error('Dosya bulunamadı veya yazma izni yok.')
       }
 
-      const stat = fs.statSync(filePath)
+      const stat = await fs.promises.stat(filePath)
       const size = stat.size
-      const fd = fs.openSync(filePath, 'r+')
+      fileHandle = await fs.promises.open(filePath, 'r+')
 
-      // 7 Overwrite Passes
-      const passes = [
+      // 7 Overwrite Passes (DoD 5220.22-M specification)
+      const passes: Array<number | null> = [
         0x00, // Pass 1: Zeroes
         0xff, // Pass 2: Ones
         null, // Pass 3: Pseudo-random
@@ -48,26 +51,34 @@ export function registerCyberFortressIPC(): void {
         let written = 0
         while (written < size) {
           const toWrite = Math.min(CHUNK_SIZE, size - written)
-          let buf: Buffer
-          if (val === null) {
-            buf = crypto.randomBytes(toWrite)
-          } else {
-            buf = Buffer.alloc(toWrite, val)
-          }
-          fs.writeSync(fd, buf, 0, toWrite, written)
+          const buf = val === null ? crypto.randomBytes(toWrite) : Buffer.alloc(toWrite, val)
+
+          await fileHandle.write(buf, 0, toWrite, written)
           written += toWrite
+
+          // Yield execution to the Node/Electron event loop to maintain UI 60fps fluidity
+          await new Promise((resolve) => setImmediate(resolve))
         }
-        fs.fsyncSync(fd)
+        await fileHandle.sync()
+        await new Promise((resolve) => setImmediate(resolve))
       }
 
-      fs.closeSync(fd)
+      await fileHandle.close()
+      fileHandle = null
 
-      // Truncate to 0 and delete
-      fs.truncateSync(filePath, 0)
-      fs.unlinkSync(filePath)
+      // Truncate to 0 and remove file entry
+      await fs.promises.truncate(filePath, 0)
+      await fs.promises.unlink(filePath)
 
       return { success: true, passes: 7, size }
     } catch (err: any) {
+      if (fileHandle) {
+        try {
+          await fileHandle.close()
+        } catch {
+          // ignore close error during cleanup
+        }
+      }
       return { success: false, error: err.message || 'Dosya imha edilemedi' }
     }
   })

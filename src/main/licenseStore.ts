@@ -22,7 +22,11 @@ import fs                      from 'fs'
 import { machineIdSync }       from 'node-machine-id'
 
 // ─── Config ──────────────────────────────────────────────────────────────────
-const SECRET: string = 'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
+// Build-time / runtime secret alignment with the licensing server
+const SECRET: string =
+  process.env.NEXUS_LICENSE_SECRET ||
+  process.env['NEXUS_LICENSE_SECRET'] ||
+  'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
 
 /** Base URL for the license API server. */
 const API_URL: string = 'https://nexushub-production-4a5b.up.railway.app'
