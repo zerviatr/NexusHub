@@ -9,6 +9,7 @@ import EulaGate from './pages/EulaGate'
 import OnboardingTour from './components/OnboardingTour'
 import CommandPalette from './components/CommandPalette'
 import MiniHud from './components/MiniHud'
+import KeyboardShortcutsModal from './components/KeyboardShortcutsModal'
 import ProLockGate from './components/ProLockGate'
 import FloatingOrb from './components/FloatingOrb'
 import UpdateManager from './components/UpdateManager'
@@ -149,6 +150,7 @@ export default function App() {
       <UpdateManager />
       <CommandPalette />
       <MiniHud />
+      <KeyboardShortcutsModal />
       {!hasCompletedTour && <OnboardingTour onComplete={handleCompleteTour} />}
       <TitleBar />
       <div className="flex flex-1 overflow-hidden">

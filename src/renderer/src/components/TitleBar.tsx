@@ -67,6 +67,18 @@ export default function TitleBar() {
         <motion.button
           whileHover={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
           whileTap={{ scale: 0.9 }}
+          onClick={() => {
+            cyberAudio.click()
+            window.dispatchEvent(new CustomEvent('nexus:toggle-shortcuts'))
+          }}
+          className="w-10 h-10 flex items-center justify-center text-nexus-muted hover:text-nexus-cyan transition-colors"
+          title="Klavye Kısayolları Kılavuzu (? / F1)"
+        >
+          <span className="text-[11px] font-mono font-bold px-1.5 py-0.5 rounded border border-nexus-border/60 bg-nexus-bg/50">?</span>
+        </motion.button>
+        <motion.button
+          whileHover={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+          whileTap={{ scale: 0.9 }}
           onClick={handleTogglePin}
           className={`w-10 h-10 flex items-center justify-center transition-colors ${
             isPinned ? 'text-nexus-accent bg-nexus-accent/10' : 'text-nexus-muted hover:text-nexus-text'

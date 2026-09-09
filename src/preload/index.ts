@@ -146,6 +146,7 @@ const nexusAPI = {
     scanTemp: () => ipcRenderer.invoke('system:scanTemp'),
     cleanTemp: () => ipcRenderer.invoke('system:cleanTemp'),
     pingHost: (host: string) => ipcRenderer.invoke('system:pingHost', host),
+    optimizeAll: () => ipcRenderer.invoke('system:optimizeAll'),
   },
 
   // System Settings

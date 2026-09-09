@@ -104,3 +104,7 @@
 - [x] Dinamik Siber Temalar (Cyber Themes) — Matrix Emerald, Cyberpunk 2077, Synthwave 80s, Crimson Protocol ve Klasik Mor arayüz motoru (v2.1.9)
 - [x] Web Audio SFX Ses Seviyesi Ayarı (Volume Slider) — Account sekmesinde haptik ses şiddeti kontrolü (v2.1.9)
 - [x] Markdown Scratchpad Ultimate (`/scratchpad`) — Bul & Değiştir (`Ctrl+F`), Sürükle-Bırak Base64 görsel gömme, Satır Numaraları Gutter, AES-256-GCM Şifreli Kasa Modu, Zen Odaklanma Modu, Snapshot Zaman Tüneli, Canlı Akış Şeması (Flowcharts) (v2.2.0)
+- [x] Ana Süreç Kaza Kalkanı & IPC Giriş Doğrulama — `uncaughtException` / `unhandledRejection` yakalayıcıları, güvenli PID tam sayı sınır denetimi ve çapraz platform süreç sonlandırma zırhı (v2.2.1)
+- [x] Etkileşimli Klavye Kısayolları HUD Modalı (`?` / `F1`) — Kategorik kısayol listesi, anlık arama filtresi ve TitleBar kısayol erişim butonu (v2.2.1)
+- [x] Tek Tıkla Siber Turbo Boost — `system:optimizeAll` ile DNS temizleme, geçici disk alanı tasfiyesi ve Sentinel bellek boşaltmayı tek tıkla başlatan süper santral (v2.2.1)
+

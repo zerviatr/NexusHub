@@ -83,6 +83,37 @@ export default function SystemOptimizer() {
     setPinging(false)
   }
 
+  const [turboBoosting, setTurboBoosting] = useState(false)
+  const [turboSuccessMsg, setTurboSuccessMsg] = useState<string | null>(null)
+
+  const handleTurboBoost = async () => {
+    if (turboBoosting) return
+    setTurboBoosting(true)
+    cyberAudio.purge()
+    try {
+      if (window.nexusAPI?.sentinel?.optimizeMemory) {
+        await window.nexusAPI.sentinel.optimizeMemory()
+      }
+      let resultText = ''
+      if (window.nexusAPI?.system?.optimizeAll) {
+        const res = await window.nexusAPI.system.optimizeAll()
+        if (res.success) {
+          resultText = `⚡ Turbo Boost Tamamlandı! ${res.deletedFiles} geçici dosya temizlendi (${res.freedFormatted} alan açıldı) ve DNS önbelleği sıfırlandı.`
+        }
+      } else {
+        await cleanTempFiles()
+        await flushDnsCache()
+        resultText = '⚡ Sistem optimizasyonu ve bellek temizliği tamamlandı.'
+      }
+      setTurboSuccessMsg(resultText)
+      cyberAudio.copySuccess()
+      await scanTempFiles()
+      await benchmarkLatencies()
+    } finally {
+      setTurboBoosting(false)
+    }
+  }
+
   useEffect(() => {
     scanTempFiles()
     benchmarkLatencies()
@@ -91,7 +122,7 @@ export default function SystemOptimizer() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-nexus-text flex items-center gap-3">
             <Cpu className="w-7 h-7 text-nexus-accent" />
@@ -101,7 +132,36 @@ export default function SystemOptimizer() {
             Windows yerel önbellek, DNS çözümleyici ve çöp geçici dosyaları güvenle temizleyen performans santrali
           </p>
         </div>
+
+        {/* Instant Turbo Boost Action */}
+        <button
+          onClick={handleTurboBoost}
+          disabled={turboBoosting}
+          className="px-5 py-3 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-mono font-black text-xs flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(var(--c-cyan),0.4)] transition-all cursor-pointer shrink-0 disabled:opacity-50"
+        >
+          <Sparkles className={`w-4 h-4 ${turboBoosting ? 'animate-spin' : ''}`} />
+          <span>{turboBoosting ? 'SİBER HIZLANDIRILIYOR...' : '⚡ TEK TIKLA TURBO BOOST'}</span>
+        </button>
       </div>
+
+      {turboSuccessMsg && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono flex items-center justify-between shadow-lg"
+        >
+          <div className="flex items-center gap-2.5">
+            <CheckCircle2 className="w-5 h-5 shrink-0" />
+            <span>{turboSuccessMsg}</span>
+          </div>
+          <button
+            onClick={() => setTurboSuccessMsg(null)}
+            className="text-emerald-400/80 hover:text-emerald-300 font-bold ml-2"
+          >
+            ✕
+          </button>
+        </motion.div>
+      )}
 
       {/* Battle Station Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

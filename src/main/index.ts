@@ -18,6 +18,15 @@ import { setupGlobalShortcuts, registerSettingsIPC } from './shortcuts'
 
 let mainWindow: BrowserWindow | null = null
 
+// Guard against unhandled errors taking down the entire desktop application
+process.on('uncaughtException', (error) => {
+  console.error('[NEXUS-MAIN:FATAL_UNCAUGHT_EXCEPTION]', error)
+})
+
+process.on('unhandledRejection', (reason) => {
+  console.error('[NEXUS-MAIN:UNHANDLED_REJECTION]', reason)
+})
+
 function createWindow(): void {
   mainWindow = new BrowserWindow({
     width: 1280,
