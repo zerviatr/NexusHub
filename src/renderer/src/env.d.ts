@@ -85,8 +85,17 @@ interface NexusAPI {
   maximize: () => void
   close: () => void
   isMaximized: () => Promise<boolean>
+  toggleAlwaysOnTop?: () => Promise<boolean>
+  isAlwaysOnTop?: () => Promise<boolean>
   onNavigate?: (cb: (path: string) => void) => () => void
   onPaletteToggle?: (cb: () => void) => () => void
+  onHudToggle?: (cb: () => void) => () => void
+  system?: {
+    flushDns: () => Promise<{ success: boolean; output?: string }>
+    scanTemp: () => Promise<{ path: string; fileCount: number; totalBytes: number; sizeFormatted: string; error?: string }>
+    cleanTemp: () => Promise<{ success: boolean; deletedCount: number; freedBytes: number; freedFormatted: string; error?: string }>
+    pingHost: (host: string) => Promise<{ success: boolean; latency: number | null; host: string }>
+  }
   settings?: {
     getAutoLaunch: () => Promise<boolean>
     setAutoLaunch: (enable: boolean) => Promise<boolean>

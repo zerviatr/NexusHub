@@ -112,10 +112,12 @@ const nexusAPI = {
   getVersion:   () => ipcRenderer.invoke('app:getVersion'),
 
   // Window controls
-  minimize:    () => ipcRenderer.send('window:minimize'),
-  maximize:    () => ipcRenderer.send('window:maximize'),
-  close:       () => ipcRenderer.send('window:close'),
-  isMaximized: () => ipcRenderer.invoke('window:isMaximized'),
+  minimize:            () => ipcRenderer.send('window:minimize'),
+  maximize:            () => ipcRenderer.send('window:maximize'),
+  close:               () => ipcRenderer.send('window:close'),
+  isMaximized:         () => ipcRenderer.invoke('window:isMaximized'),
+  toggleAlwaysOnTop:   () => ipcRenderer.invoke('window:toggleAlwaysOnTop'),
+  isAlwaysOnTop:       () => ipcRenderer.invoke('window:isAlwaysOnTop'),
 
   // Desktop integration & navigation events
   onNavigate: (cb: (path: string) => void) => {
@@ -127,6 +129,19 @@ const nexusAPI = {
     const handler = () => cb()
     ipcRenderer.on('palette:toggle', handler)
     return () => ipcRenderer.removeListener('palette:toggle', handler)
+  },
+  onHudToggle: (cb: () => void) => {
+    const handler = () => cb()
+    ipcRenderer.on('hud:toggle', handler)
+    return () => ipcRenderer.removeListener('hud:toggle', handler)
+  },
+
+  // System Optimizer
+  system: {
+    flushDns: () => ipcRenderer.invoke('system:flushDns'),
+    scanTemp: () => ipcRenderer.invoke('system:scanTemp'),
+    cleanTemp: () => ipcRenderer.invoke('system:cleanTemp'),
+    pingHost: (host: string) => ipcRenderer.invoke('system:pingHost', host),
   },
 
   // System Settings

@@ -21,8 +21,13 @@ import {
   Activity,
   Code2,
   ShieldAlert,
+  Terminal,
+  Zap,
+  Cpu,
+  Send,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
+import { cyberAudio } from '../lib/cyberAudio'
 
 type NavItem = {
   path: string
@@ -49,10 +54,13 @@ const NAV_GROUPS: NavGroup[] = [
   {
     labelKey: 'nav.groups.developer',
     items: [
-      { path: '/dev-sandbox', labelKey: 'nav.tools.devSandbox', icon: Code2 },
-      { path: '/qr-code',     labelKey: 'nav.tools.qrCode',     icon: QrCode },
-      { path: '/json-studio', labelKey: 'nav.tools.jsonStudio', icon: Braces },
-      { path: '/hash-studio', labelKey: 'nav.tools.hashStudio', icon: FileCheck },
+      { path: '/regex-studio', labelKey: 'nav.tools.regexStudio', icon: Terminal },
+      { path: '/fake-data',    labelKey: 'nav.tools.fakeData',    icon: Zap },
+      { path: '/curl-runner',  labelKey: 'nav.tools.curlRunner',  icon: Send },
+      { path: '/dev-sandbox',  labelKey: 'nav.tools.devSandbox',  icon: Code2 },
+      { path: '/qr-code',      labelKey: 'nav.tools.qrCode',      icon: QrCode },
+      { path: '/json-studio',  labelKey: 'nav.tools.jsonStudio',  icon: Braces },
+      { path: '/hash-studio',  labelKey: 'nav.tools.hashStudio',  icon: FileCheck },
     ],
   },
   {
@@ -66,8 +74,9 @@ const NAV_GROUPS: NavGroup[] = [
   {
     labelKey: 'nav.groups.network',
     items: [
-      { path: '/network',  labelKey: 'nav.tools.networkTools', icon: Globe },
-      { path: '/sentinel', labelKey: 'nav.tools.sentinel',     icon: Activity },
+      { path: '/system-optimizer', labelKey: 'nav.tools.systemOptimizer', icon: Cpu },
+      { path: '/network',          labelKey: 'nav.tools.networkTools',     icon: Globe },
+      { path: '/sentinel',         labelKey: 'nav.tools.sentinel',         icon: Activity },
     ],
   },
 ]
@@ -171,7 +180,10 @@ function NavGroupSection({
                   key={item.path}
                   item={item}
                   isActive={currentPath === item.path}
-                  onClick={() => navigate(item.path)}
+                  onClick={() => {
+                    cyberAudio.navigate()
+                    navigate(item.path)
+                  }}
                   label={t(item.labelKey)}
                 />
               ))}

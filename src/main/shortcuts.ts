@@ -26,6 +26,18 @@ export function setupGlobalShortcuts(mainWindow: BrowserWindow): void {
     console.error('Failed to register global shortcut CommandOrControl+Shift+K:', err)
   }
 
+  // Global hotkey: Ctrl + Shift + Space summons Nexus Mini-HUD from anywhere
+  try {
+    globalShortcut.register('CommandOrControl+Shift+Space', () => {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.show()
+      mainWindow.focus()
+      mainWindow.webContents.send('hud:toggle')
+    })
+  } catch (err) {
+    console.error('Failed to register global shortcut CommandOrControl+Shift+Space:', err)
+  }
+
   // Unregister shortcuts on app quit
   app.on('will-quit', () => {
     globalShortcut.unregisterAll()

@@ -354,6 +354,50 @@ export default function UniversalDecrypter() {
                         </div>
                       )}
 
+                      {/* Security & Phishing Heuristic Audit */}
+                      {result.cleanUrl && (() => {
+                        const reasons: string[] = []
+                        try {
+                          const parsed = new URL(result.cleanUrl)
+                          if (parsed.hostname.startsWith('xn--')) {
+                            reasons.push('Punycode tespit edildi (Olası sahte alan adı / homograf saldırısı)')
+                          }
+                          if (/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(parsed.hostname)) {
+                            reasons.push('Doğrudan ham IP adresi yönlendirmesi')
+                          }
+                          const badTlds = ['.xyz', '.top', '.buzz', '.work', '.click', '.loan', '.fit', '.gq', '.cf', '.tk', '.ml']
+                          if (badTlds.some((tld) => parsed.hostname.endsWith(tld))) {
+                            reasons.push('Riskli / spam amaçlı tercih edilen TLD uzantısı')
+                          }
+                          if (parsed.port && !['80', '443', '8080'].includes(parsed.port)) {
+                            reasons.push(`Standart dışı port (: ${parsed.port})`)
+                          }
+                        } catch {
+                          reasons.push('URL yapısı çözümlenemedi')
+                        }
+
+                        const isClean = reasons.length === 0
+                        return (
+                          <div className={`mb-6 p-3.5 rounded-xl border flex items-center justify-between text-xs ${
+                            isClean
+                              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
+                              : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+                          }`}>
+                            <div className="flex items-center gap-2">
+                              {isClean ? <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" /> : <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />}
+                              <span>
+                                {isClean
+                                  ? 'Güvenlik Taraması: Temiz alan adı yapısı, sahte punycode ve şüpheli port tespit edilmedi.'
+                                  : `Güvenlik Uyarısı: ${reasons.join(', ')}`}
+                              </span>
+                            </div>
+                            <span className="font-mono text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-black/30 shrink-0 ml-2">
+                              {isClean ? 'GÜVENLİ' : 'DİKKAT'}
+                            </span>
+                          </div>
+                        )
+                      })()}
+
                       {/* URL Comparison */}
                       <div className="space-y-4 mb-6">
                         <div className="flex items-start gap-4">

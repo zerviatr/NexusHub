@@ -12,6 +12,7 @@ import { registerLicenseIPC } from './ipc/license'
 import { setupSystemTray } from './tray'
 import { registerSentinelIPC } from './ipc/sentinelIPC'
 import { registerCyberFortressIPC } from './ipc/cyberFortressIPC'
+import { registerSystemOptimizerIPC } from './ipc/systemOptimizer'
 import { setupGlobalShortcuts, registerSettingsIPC } from './shortcuts'
 
 let mainWindow: BrowserWindow | null = null
@@ -79,6 +80,13 @@ ipcMain.on('window:close', () => {
   mainWindow?.hide()
 })
 ipcMain.handle('window:isMaximized', () => mainWindow?.isMaximized() ?? false)
+ipcMain.handle('window:toggleAlwaysOnTop', () => {
+  if (!mainWindow) return false
+  const current = mainWindow.isAlwaysOnTop()
+  mainWindow.setAlwaysOnTop(!current)
+  return !current
+})
+ipcMain.handle('window:isAlwaysOnTop', () => mainWindow?.isAlwaysOnTop() ?? false)
 
 // Open external URLs in system browser
 ipcMain.handle('shell:openExternal', (_, url: string) => shell.openExternal(url))
@@ -98,6 +106,7 @@ registerImageToolkitIPC()
 registerSettingsIPC()
 registerSentinelIPC()
 registerCyberFortressIPC()
+registerSystemOptimizerIPC()
 
 // ===== App Lifecycle =====
 app.whenReady().then(() => {

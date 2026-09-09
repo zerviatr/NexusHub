@@ -157,7 +157,19 @@ export default function CyberFortress() {
             }`}
           >
             <Lock className="w-3.5 h-3.5" />
-            <span>AES-256 Kasa (.nexusvault)</span>
+            <span>AES-256 Kasa</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('stego')}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-semibold transition-all ${
+              activeTab === 'stego'
+                ? 'bg-nexus-cyan text-black shadow-lg shadow-nexus-cyan/25'
+                : 'text-nexus-muted hover:text-white'
+            }`}
+          >
+            <Eye className="w-3.5 h-3.5" />
+            <span>Steganografi (PNG)</span>
           </button>
         </div>
 
@@ -348,6 +360,190 @@ export default function CyberFortress() {
                   </motion.button>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* ─── TAB 3: DIGITAL STEGANOGRAPHY STUDIO ─── */}
+        {activeTab === 'stego' && (
+          <div className="space-y-5">
+            <div className="glass-card p-6 border-nexus-cyan/20 space-y-5">
+              <div className="flex items-center gap-3 text-nexus-cyan">
+                <Eye className="w-5 h-5" />
+                <div>
+                  <h3 className="font-bold text-white text-sm">Görsel İçi Veri Gizleme & Çıkarma (LSB Steganography)</h3>
+                  <p className="text-xs text-nexus-muted mt-0.5">
+                    Seçtiğiniz bir PNG görselinin renk piksellerinin en anlamsız bitine (LSB) gizli mesaj gömün veya gizli mesajı çözün.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+                {/* Encode Side */}
+                <div className="bg-nexus-bg/60 p-4 rounded-xl border border-white/5 space-y-3">
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                    <Sparkles className="w-3.5 h-3.5 text-nexus-cyan" /> Mesajı Görsele Göm (Encode)
+                  </h4>
+                  <input
+                    type="file"
+                    accept="image/png"
+                    id="stego-encode-input"
+                    className="text-xs text-nexus-muted file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-nexus-card file:text-white hover:file:bg-white/10 cursor-pointer"
+                  />
+                  <textarea
+                    rows={4}
+                    value={stegoSecretText}
+                    onChange={(e) => setStegoSecretText(e.target.value)}
+                    placeholder="Görselin piksellerine gömülecek gizli mesajı yazın..."
+                    className="w-full bg-nexus-surface border border-nexus-border rounded-xl p-2.5 text-xs text-white font-mono outline-none focus:border-nexus-cyan resize-none"
+                  />
+                  <button
+                    onClick={() => {
+                      const input = document.getElementById('stego-encode-input') as HTMLInputElement
+                      const file = input?.files?.[0]
+                      if (!file || !stegoSecretText.trim()) {
+                        alert('Lütfen bir PNG görseli ve gizlenecek bir mesaj girin.')
+                        return
+                      }
+                      const reader = new FileReader()
+                      reader.onload = (e) => {
+                        const img = new Image()
+                        img.onload = () => {
+                          const canvas = document.createElement('canvas')
+                          canvas.width = img.width
+                          canvas.height = img.height
+                          const ctx = canvas.getContext('2d')
+                          if (!ctx) return
+                          ctx.drawImage(img, 0, 0)
+                          const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+                          const data = imgData.data
+
+                          // Header prefix: 4 bytes length
+                          const textBytes = new TextEncoder().encode(stegoSecretText)
+                          const totalBits = textBytes.length * 8
+                          if (totalBits + 32 > data.length / 4) {
+                            alert('Görsel bu mesajı barındırmak için çok küçük!')
+                            return
+                          }
+
+                          // Embed 32-bit length in first 32 pixels red channel LSB
+                          const len = textBytes.length
+                          for (let i = 0; i < 32; i++) {
+                            const bit = (len >> (31 - i)) & 1
+                            data[i * 4] = (data[i * 4] & 0xfe) | bit
+                          }
+
+                          // Embed text bytes
+                          let bitIdx = 0
+                          for (let i = 0; i < textBytes.length; i++) {
+                            const byte = textBytes[i]
+                            for (let b = 7; b >= 0; b--) {
+                              const bit = (byte >> b) & 1
+                              const pixelIdx = 32 + bitIdx
+                              data[pixelIdx * 4] = (data[pixelIdx * 4] & 0xfe) | bit
+                              bitIdx++
+                            }
+                          }
+
+                          ctx.putImageData(imgData, 0, 0)
+                          canvas.toBlob((blob) => {
+                            if (!blob) return
+                            const url = URL.createObjectURL(blob)
+                            const a = document.createElement('a')
+                            a.href = url
+                            a.download = `stego_secret_${Date.now()}.png`
+                            a.click()
+                            URL.revokeObjectURL(url)
+                            alert('Gizli mesaj başarıyla PNG görseline gömüldü ve indirildi!')
+                          }, 'image/png')
+                        }
+                        img.src = e.target?.result as string
+                      }
+                      reader.readAsDataURL(file)
+                    }}
+                    className="w-full py-2.5 rounded-xl bg-nexus-cyan text-black font-bold text-xs hover:bg-nexus-cyan/90 transition-all shadow-lg shadow-nexus-cyan/20 active:scale-95"
+                  >
+                    Mesajı Göm ve PNG İndir
+                  </button>
+                </div>
+
+                {/* Decode Side */}
+                <div className="bg-nexus-bg/60 p-4 rounded-xl border border-white/5 space-y-3">
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Görseldeki Gizli Mesajı Çöz (Decode)
+                  </h4>
+                  <input
+                    type="file"
+                    accept="image/png"
+                    id="stego-decode-input"
+                    className="text-xs text-nexus-muted file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-nexus-card file:text-white hover:file:bg-white/10 cursor-pointer"
+                  />
+                  <div className="h-28 bg-nexus-surface border border-nexus-border rounded-xl p-2.5 overflow-y-auto text-xs font-mono text-emerald-400 whitespace-pre-wrap">
+                    {stegoResult || 'Görsel seçip çöz butonuna tıkladığınızda tespit edilen gizli mesaj burada belirecektir.'}
+                  </div>
+                  <button
+                    onClick={() => {
+                      const input = document.getElementById('stego-decode-input') as HTMLInputElement
+                      const file = input?.files?.[0]
+                      if (!file) {
+                        alert('Lütfen şifreli PNG görselini seçin.')
+                        return
+                      }
+                      const reader = new FileReader()
+                      reader.onload = (e) => {
+                        const img = new Image()
+                        img.onload = () => {
+                          const canvas = document.createElement('canvas')
+                          canvas.width = img.width
+                          canvas.height = img.height
+                          const ctx = canvas.getContext('2d')
+                          if (!ctx) return
+                          ctx.drawImage(img, 0, 0)
+                          const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data
+
+                          // Extract 32-bit length
+                          let len = 0
+                          for (let i = 0; i < 32; i++) {
+                            const bit = data[i * 4] & 1
+                            len = (len << 1) | bit
+                          }
+
+                          if (len <= 0 || len > 50000) {
+                            setStegoResult('Bu görselde gizlenmiş geçerli bir NexusHub mesajı bulunamadı.')
+                            return
+                          }
+
+                          // Extract bytes
+                          const bytes = new Uint8Array(len)
+                          let bitIdx = 0
+                          for (let i = 0; i < len; i++) {
+                            let byte = 0
+                            for (let b = 0; b < 8; b++) {
+                              const pixelIdx = 32 + bitIdx
+                              const bit = data[pixelIdx * 4] & 1
+                              byte = (byte << 1) | bit
+                              bitIdx++
+                            }
+                            bytes[i] = byte
+                          }
+
+                          try {
+                            const decoded = new TextDecoder().decode(bytes)
+                            setStegoResult(decoded)
+                          } catch {
+                            setStegoResult('Veri çözümlenemedi (Bozulmuş karakterler).')
+                          }
+                        }
+                        img.src = e.target?.result as string
+                      }
+                      reader.readAsDataURL(file)
+                    }}
+                    className="w-full py-2.5 rounded-xl bg-emerald-500 text-black font-bold text-xs hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20 active:scale-95"
+                  >
+                    Görseli Tara & Mesajı Çöz
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}

@@ -21,6 +21,10 @@ import {
   Activity,
   Code2,
   ShieldAlert,
+  Terminal,
+  Zap,
+  Cpu,
+  Send,
 } from 'lucide-react'
 
 interface PaletteItem {
@@ -42,6 +46,42 @@ const PALETTE_ITEMS: PaletteItem[] = [
     path: '/',
     icon: LayoutDashboard,
     keywords: ['home', 'overview', 'main', 'start']
+  },
+  {
+    id: 'regex-studio',
+    title: 'Regex Lab & Live Tester',
+    subtitle: 'Test regular expressions live, view named groups, & cheat sheet',
+    category: 'Tools',
+    path: '/regex-studio',
+    icon: Terminal,
+    keywords: ['regex', 'regular', 'expression', 'test', 'tester', 'pattern', 'match']
+  },
+  {
+    id: 'fake-data',
+    title: 'Fake Data & Mock Generator',
+    subtitle: 'Generate Turkish mock identities, credit cards, phones, and bulk export',
+    category: 'Tools',
+    path: '/fake-data',
+    icon: Zap,
+    keywords: ['fake', 'mock', 'data', 'identity', 'generator', 'tc', 'test', 'csv', 'json']
+  },
+  {
+    id: 'curl-runner',
+    title: 'HTTP & cURL Runner',
+    subtitle: 'Micro API testing client with latency benchmark and JSON viewer',
+    category: 'Tools',
+    path: '/curl-runner',
+    icon: Send,
+    keywords: ['curl', 'http', 'api', 'postman', 'fetch', 'rest', 'request']
+  },
+  {
+    id: 'system-optimizer',
+    title: 'Windows System Optimizer',
+    subtitle: 'Flush DNS resolver cache and purge temporary junk disk files',
+    category: 'Tools',
+    path: '/system-optimizer',
+    icon: Cpu,
+    keywords: ['optimizer', 'dns', 'flush', 'temp', 'cleaner', 'purge', 'disk', 'ram', 'speed']
   },
   {
     id: 'hash-studio',

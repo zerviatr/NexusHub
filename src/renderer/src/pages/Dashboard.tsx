@@ -19,6 +19,9 @@ import {
   Activity,
   Code2,
   ShieldAlert,
+  Terminal,
+  Cpu,
+  Send,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
 
@@ -162,6 +165,46 @@ export default function Dashboard() {
       gradient: 'from-rose-500 to-amber-600',
       glowColor: 'rgba(244, 63, 94, 0.3)',
       status: 'Pro',
+    },
+    {
+      id: 'regex-studio',
+      path: '/regex-studio',
+      title: 'Regex Lab & Live Tester',
+      description: 'Anlık düzenli ifade deneme, grupları yakalama, bayrak kontrolleri ve hazır regex şablonları.',
+      icon: Terminal,
+      gradient: 'from-violet-600 to-purple-600',
+      glowColor: 'rgba(139, 92, 246, 0.3)',
+      status: 'Yeni',
+    },
+    {
+      id: 'fake-data',
+      path: '/fake-data',
+      title: 'Fake Data & Mock Generator',
+      description: 'Geliştirici ve test süreçleri için gerçekçi Türkçe sahte kimlik, geçerli test kartları ve toplu JSON/CSV dışa aktarma.',
+      icon: Zap,
+      gradient: 'from-cyan-600 to-teal-600',
+      glowColor: 'rgba(20, 184, 166, 0.3)',
+      status: 'Yeni',
+    },
+    {
+      id: 'curl-runner',
+      path: '/curl-runner',
+      title: 'HTTP & cURL Micro Runner',
+      description: 'Hafif, anlık API istek testi, JSON yanıt ayrıştırıcı, HTTP durum kodları ve gecikme ölçer.',
+      icon: Send,
+      gradient: 'from-blue-600 to-indigo-600',
+      glowColor: 'rgba(59, 130, 246, 0.3)',
+      status: 'Yeni',
+    },
+    {
+      id: 'system-optimizer',
+      path: '/system-optimizer',
+      title: 'Windows System Optimizer',
+      description: 'Windows DNS önbelleğini temizleme (flushdns) ve geçici disk çöplerini güvenle temizleyerek alan kazanma.',
+      icon: Cpu,
+      gradient: 'from-emerald-600 to-cyan-600',
+      glowColor: 'rgba(16, 185, 129, 0.3)',
+      status: 'Yeni',
     },
   ]
 

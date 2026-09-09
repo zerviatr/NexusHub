@@ -1,4 +1,4 @@
-﻿# NexusHub — Yapilacaklar Listesi
+# NexusHub — Yapilacaklar Listesi
 
 > Bu dosyayi bana goster, devam edelim.
 
@@ -66,6 +66,21 @@
 
 ## Tamamlananlar
 
+- [x] Regex Lab & Live Tester (`/regex-studio`) — canli eslesme, named groups, flagler, cheat sheet
+- [x] Fake Data & Mock Generator (`/fake-data`) — TR ad, telefon, TC/CC test no, UUID, toplu JSON/CSV
+- [x] Windows System Optimizer (`/system-optimizer`) — DNS onbellek flush, %TEMP% temizleme, gecikme benchmark
+- [x] HTTP & cURL Micro Runner (`/curl-runner`) — micro Postman istek testi, JSON ayrıştırıcı, gecikme ölçer
+- [x] Always-on-Top (Pin to Top) — TitleBar raptiye ikonu ile pencereyi daima ustte tutma
+- [x] Nexus Mini-HUD (`Ctrl + Shift + Space`) — hizli Raycast/Spotlight araci, anlik SHA-256 ve arac baslatici
+- [x] Siber Ses Efekti Motoru (`cyberAudio.ts`) — sifir dosya bagimliligi, saf Web Audio mekanik sesler & ayar toggle
+- [x] Yapilandirma Yedekleme & Geri Yukleme (`.nexusbackup` JSON export/import)
+- [x] Steganografi Studyosu — PNG piksellerine LSB ile gizli mesaj gomup okuma
+- [x] URL Guvenlik & Phishing Taramasi — UniversalDecrypter icinde punycode & TLD analizi
+- [x] Tarih / Zaman Cizelgesi Gruplama — BulkOrganizer YYYY-AA klasorleme destegi
+- [x] Hassas Veri Algilama & Maskeleme Kalkanı — ClipboardManager kredi karti, TC, JWT, API key maskeleme
+- [x] Hash & Encode Suite (`/hash-studio`)
+- [x] QR Code Studio (`/qr-code`)
+- [x] JSON / JWT Toolkit (`/json-studio`)
 - [x] Tam i18n sistemi (TR / EN) — tum tool sayfalari
 - [x] Account Settings — dil secici, lisans bilgisi
 - [x] EULA — TR/EN gecisi

@@ -1,30 +1,51 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Minus, Square, X, Copy } from 'lucide-react'
+import { Minus, Square, X, Copy, Pin, PinOff } from 'lucide-react'
+import { cyberAudio } from '../lib/cyberAudio'
 
 export default function TitleBar() {
   const [isMaximized, setIsMaximized] = useState(false)
+  const [isPinned, setIsPinned] = useState(false)
 
   useEffect(() => {
-    const checkMaximized = async () => {
+    const checkStatus = async () => {
       if (window.nexusAPI) {
         const maximized = await window.nexusAPI.isMaximized()
         setIsMaximized(maximized)
+        if (window.nexusAPI.isAlwaysOnTop) {
+          const pinned = await window.nexusAPI.isAlwaysOnTop()
+          setIsPinned(pinned)
+        }
       }
     }
-    checkMaximized()
+    checkStatus()
 
     // Re-check after potential resize events
-    const interval = setInterval(checkMaximized, 1000)
+    const interval = setInterval(checkStatus, 1500)
     return () => clearInterval(interval)
   }, [])
 
-  const handleMinimize = () => window.nexusAPI?.minimize()
+  const handleTogglePin = async () => {
+    if (window.nexusAPI?.toggleAlwaysOnTop) {
+      const state = await window.nexusAPI.toggleAlwaysOnTop()
+      setIsPinned(state)
+      cyberAudio.click()
+    }
+  }
+
+  const handleMinimize = () => {
+    cyberAudio.click()
+    window.nexusAPI?.minimize()
+  }
   const handleMaximize = () => {
+    cyberAudio.click()
     window.nexusAPI?.maximize()
     setIsMaximized(!isMaximized)
   }
-  const handleClose = () => window.nexusAPI?.close()
+  const handleClose = () => {
+    cyberAudio.click()
+    window.nexusAPI?.close()
+  }
 
   return (
     <div className="h-10 flex items-center justify-between bg-nexus-surface/80 backdrop-blur-xl border-b border-nexus-border/20 drag select-none shrink-0">
@@ -34,10 +55,26 @@ export default function TitleBar() {
       {/* Center title */}
       <div className="flex items-center gap-2">
         <span className="text-xs text-nexus-muted font-medium tracking-wide">NexusHub</span>
+        {isPinned && (
+          <span className="text-[10px] px-1.5 py-0.5 rounded bg-nexus-accent/20 text-nexus-accent border border-nexus-accent/30 flex items-center gap-1 font-mono">
+            PINNED
+          </span>
+        )}
       </div>
 
       {/* Window controls */}
       <div className="flex items-center no-drag">
+        <motion.button
+          whileHover={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+          whileTap={{ scale: 0.9 }}
+          onClick={handleTogglePin}
+          className={`w-10 h-10 flex items-center justify-center transition-colors ${
+            isPinned ? 'text-nexus-accent bg-nexus-accent/10' : 'text-nexus-muted hover:text-nexus-text'
+          }`}
+          title={isPinned ? 'Pencere Sabitlendi (Always on Top)' : 'Pencereyi Üstte Sabitle (Pin to Top)'}
+        >
+          {isPinned ? <PinOff className="w-3.5 h-3.5" /> : <Pin className="w-3.5 h-3.5" />}
+        </motion.button>
         <motion.button
           whileHover={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
           whileTap={{ scale: 0.9 }}

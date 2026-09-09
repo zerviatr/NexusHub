@@ -319,6 +319,92 @@ export default function Account() {
         </motion.div>
       </div>
 
+      {/* UX & System Preferences + Backup/Restore */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.05 }}
+        className="glass-card p-6 border-nexus-border/40 mt-8 space-y-6"
+      >
+        <div className="flex items-center justify-between pb-4 border-b border-nexus-border/30">
+          <div>
+            <h3 className="font-semibold text-nexus-text text-sm">Siber Haptik & Ses Efektleri (Audio SFX)</h3>
+            <p className="text-xs text-nexus-muted mt-0.5">Tıklama, kopyalama ve işlem bildirimleri için hafif mekanik sesler</p>
+          </div>
+          <button
+            onClick={() => {
+              const current = cyberAudio.isEnabled()
+              cyberAudio.setEnabled(!current)
+              if (!current) cyberAudio.copySuccess()
+              // force re-render
+              setUpdateStatus((s) => s)
+            }}
+            className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all ${
+              cyberAudio.isEnabled()
+                ? 'bg-nexus-accent text-white shadow-lg shadow-nexus-accent/20'
+                : 'bg-nexus-bg text-nexus-muted border border-nexus-border'
+            }`}
+          >
+            {cyberAudio.isEnabled() ? 'SESLER AÇIK' : 'SESSİZ MOD'}
+          </button>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="font-semibold text-nexus-text text-sm">Veri ve Ayar Yedekleme (Backup & Restore)</h3>
+            <p className="text-xs text-nexus-muted mt-0.5">Tüm yerel ayarları, geçmişi ve tercihleri tek tıkla dışa/içe aktar</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                const dump: Record<string, any> = {}
+                for (let i = 0; i < localStorage.length; i++) {
+                  const k = localStorage.key(i)
+                  if (k) dump[k] = localStorage.getItem(k)
+                }
+                const blob = new Blob([JSON.stringify(dump, null, 2)], { type: 'application/json' })
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = `nexushub_config_backup_${Date.now()}.nexusbackup`
+                a.click()
+                URL.revokeObjectURL(url)
+                cyberAudio.copySuccess()
+              }}
+              className="px-3.5 py-2 rounded-xl bg-nexus-bg hover:bg-nexus-surface border border-nexus-border text-xs font-mono text-nexus-text transition-colors"
+            >
+              Yedek İndir (.nexusbackup)
+            </button>
+
+            <label className="px-3.5 py-2 rounded-xl bg-nexus-accent/10 hover:bg-nexus-accent/20 border border-nexus-accent/30 text-xs font-mono text-nexus-accent transition-colors cursor-pointer">
+              Yedeği Geri Yükle
+              <input
+                type="file"
+                accept=".json,.nexusbackup"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  const reader = new FileReader()
+                  reader.onload = (ev) => {
+                    try {
+                      const data = JSON.parse(ev.target?.result as string)
+                      Object.keys(data).forEach((k) => localStorage.setItem(k, data[k]))
+                      cyberAudio.copySuccess()
+                      alert('NexusHub yapılandırması başarıyla geri yüklendi! Sayfa yenileniyor.')
+                      window.location.reload()
+                    } catch {
+                      alert('Geçersiz yedekleme dosyası!')
+                    }
+                  }
+                  reader.readAsText(file)
+                }}
+              />
+            </label>
+          </div>
+        </div>
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

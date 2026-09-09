@@ -110,21 +110,24 @@ export default function BulkOrganizer() {
   }
 
   const handleSelectDir = async () => {
-    const result = await nexusAPI.organizer.selectDir()
-    if (!result.canceled && result.filePaths.length > 0) {
-      setSelectedDir(result.filePaths[0])
-      setScannedFiles([])
-      setExecutionResult(null)
-      setExcludedIndices(new Set())
+    try {
+      const res = await nexusAPI.organizer.selectDir()
+      if (!res.canceled && res.filePaths.length > 0) {
+        setSelectedDir(res.filePaths[0])
+        setScannedFiles([])
+        setExecutionResult(null)
+      }
+    } catch (err: any) {
+      showToastError('Hata', err.message || 'Klasör seçilemedi.')
     }
   }
 
   const handleScan = async () => {
-    if (!selectedDir) return
+    if (!selectedDir || isScanning) return
     setIsScanning(true)
     setExecutionResult(null)
-    setUndoMessage(null)
     setExcludedIndices(new Set())
+
     try {
       const res = await nexusAPI.organizer.scan(selectedDir)
       if (res.success && res.files) {
@@ -141,6 +144,9 @@ export default function BulkOrganizer() {
   // Generate Preview operations
   const generatePreview = (): (FileOperation & { index: number; originalFile: ScannedFile })[] => {
     if (!selectedDir) return []
+    const now = new Date()
+    const timelineFolder = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+
     return scannedFiles.map((file, index) => {
       let newName = file.originalName
       const ext = file.extension
@@ -151,7 +157,9 @@ export default function BulkOrganizer() {
       }
 
       let targetDir = selectedDir
-      if (organizeByCategory) {
+      if (groupByTimeline) {
+        targetDir = `${selectedDir}\\${timelineFolder}`
+      } else if (organizeByCategory) {
         targetDir = `${selectedDir}\\${file.suggestedCategory}`
       }
 
@@ -401,6 +409,31 @@ export default function BulkOrganizer() {
                   </div>
                   <span className="text-xs text-white font-medium group-hover:text-nexus-accent transition-colors">
                     Kategori Klasörlerine Taşı (Görseller, Belgeler...)
+                  </span>
+                </label>
+
+                <label className="flex items-center gap-3 cursor-pointer group">
+                  <div className="relative">
+                    <input
+                      type="checkbox"
+                      className="sr-only"
+                      checked={groupByTimeline}
+                      onChange={(e) => setGroupByTimeline(e.target.checked)}
+                    />
+                    <div
+                      className={`w-10 h-5 rounded-full transition-colors ${
+                        groupByTimeline ? 'bg-nexus-cyan' : 'bg-nexus-bg border border-nexus-border'
+                      }`}
+                    >
+                      <div
+                        className={`w-3 h-3 rounded-full bg-white absolute top-1 transition-transform ${
+                          groupByTimeline ? 'left-6' : 'left-1'
+                        }`}
+                      />
+                    </div>
+                  </div>
+                  <span className="text-xs text-white font-medium group-hover:text-nexus-cyan transition-colors">
+                    Tarihe Göre Grupla (YYYY-AA Klasörleri)
                   </span>
                 </label>
 

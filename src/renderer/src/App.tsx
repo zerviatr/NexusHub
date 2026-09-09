@@ -17,11 +17,16 @@ import HashStudio from './pages/HashStudio'
 import ResourceSentinel from './pages/ResourceSentinel'
 import DevSandbox from './pages/DevSandbox'
 import CyberFortress from './pages/CyberFortress'
+import RegexStudio from './pages/RegexStudio'
+import FakeDataStudio from './pages/FakeDataStudio'
+import SystemOptimizer from './pages/SystemOptimizer'
+import CurlRunner from './pages/CurlRunner'
 import Account from './pages/Account'
 import Activation from './pages/Activation'
 import EulaGate from './pages/EulaGate'
 import OnboardingTour from './components/OnboardingTour'
 import CommandPalette from './components/CommandPalette'
+import MiniHud from './components/MiniHud'
 import ProLockGate from './components/ProLockGate'
 import FloatingOrb from './components/FloatingOrb'
 import UpdateManager from './components/UpdateManager'
@@ -120,6 +125,7 @@ export default function App() {
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-nexus-bg">
       <UpdateManager />
       <CommandPalette />
+      <MiniHud />
       {!hasCompletedTour && <OnboardingTour onComplete={handleCompleteTour} />}
       <TitleBar />
       <div className="flex flex-1 overflow-hidden">
@@ -172,6 +178,10 @@ export default function App() {
                 <Route path="/qr-code" element={<QrCodeStudio />} />
                 <Route path="/json-studio" element={<JsonStudio />} />
                 <Route path="/hash-studio" element={<HashStudio />} />
+                <Route path="/regex-studio" element={<RegexStudio />} />
+                <Route path="/fake-data" element={<FakeDataStudio />} />
+                <Route path="/curl-runner" element={<CurlRunner />} />
+                <Route path="/system-optimizer" element={<SystemOptimizer />} />
                 <Route path="/sentinel" element={<ResourceSentinel />} />
                 <Route path="/dev-sandbox" element={<DevSandbox />} />
                 <Route

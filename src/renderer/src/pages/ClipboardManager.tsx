@@ -25,6 +25,8 @@ import { nexusAPI, ClipboardEntry } from '../lib/ipc'
 import { useT } from '../lib/i18n'
 import { useToast } from '../lib/ToastContext'
 
+import { cyberAudio } from '../lib/cyberAudio'
+
 type CategoryFilter = 'all' | 'code' | 'urls' | 'colors' | 'sensitive'
 
 function timeAgo(ts: number): string {
@@ -74,8 +76,12 @@ function isSensitive(text: string): boolean {
     /^eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}$/.test(t) || // JWT
     /ghp_[a-zA-Z0-9]{30,}/.test(t) || // GitHub PAT
     /AKIA[0-9A-Z]{16}/.test(t) || // AWS Access Key
+    /sk-[a-zA-Z0-9]{30,}/.test(t) || // OpenAI / Claude API keys
+    /sk_live_[a-zA-Z0-9]{24,}/.test(t) || // Stripe Live Key
+    /\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})\b/.test(t.replace(/[\s-]/g, '')) || // Credit Cards
+    /\b[1-9][0-9]{10}\b/.test(t) || // TC No
     /-----BEGIN[ A-Z_-]+KEY-----/.test(t) || // Private Keys
-    /(?:bearer|api_key|token|secret|password)[=:\s]{1,5}["']?[a-zA-Z0-9_\-.]{16,}["']?/i.test(t)
+    /(?:bearer|api_key|token|secret|password|passwd|sifre)[=:\s]{1,5}["']?[a-zA-Z0-9_\-.]{10,}["']?/i.test(t)
   )
 }
 
