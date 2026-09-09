@@ -38,9 +38,24 @@ export default function Account() {
       setDownloadPercent(100)
       setUpdateInfo((prev) => ({ ...prev, version: info?.version ? (String(info.version).startsWith('v') ? info.version : `v${info.version}`) : undefined }))
     })
+    const sanitizeMsg = (msg?: string) => {
+      const lower = String(msg || '').toLowerCase()
+      if (
+        lower.includes('latest.yml') ||
+        lower.includes('404') ||
+        lower.includes('httperror') ||
+        lower.includes('enotfound') ||
+        lower.includes('econnrefused') ||
+        lower.includes('network')
+      ) {
+        return 'Sunucuya bağlantı kurulamadı veya yeni sürüm şu anda GitHub üzerinde derleniyor. En kısa sürede çözülecektir.'
+      }
+      return msg || 'Sunucuya bağlantı kurulamadı, en kısa sürede çözülecektir.'
+    }
+
     const unbindError = window.nexusAPI?.updater?.onError?.((err: string) => {
       setUpdateStatus('error')
-      setUpdateInfo({ message: err })
+      setUpdateInfo({ message: sanitizeMsg(err) })
     })
     return () => {
       unbindAvailable?.()
@@ -61,8 +76,13 @@ export default function Account() {
       const upd = res?.updateVersion ? (res.updateVersion.startsWith('v') ? res.updateVersion : `v${res.updateVersion}`) : undefined
 
       if (res?.error) {
+        const lower = String(res.error).toLowerCase()
+        const friendly =
+          lower.includes('latest.yml') || lower.includes('404') || lower.includes('httperror') || lower.includes('enotfound')
+            ? 'Sunucuya bağlantı kurulamadı veya yeni sürüm şu anda GitHub üzerinde derleniyor. En kısa sürede çözülecektir.'
+            : res.error
         setUpdateStatus('error')
-        setUpdateInfo({ message: res.error, current: cur })
+        setUpdateInfo({ message: friendly, current: cur })
       } else if (res?.hasUpdate) {
         setUpdateStatus('available')
         setUpdateInfo({ version: upd, current: cur })
@@ -75,7 +95,7 @@ export default function Account() {
       }
     } catch (err: any) {
       setUpdateStatus('error')
-      setUpdateInfo({ message: err?.message || 'Update check failed', current: 'v1.0.2' })
+      setUpdateInfo({ message: 'Sunucuya bağlantı kurulamadı veya yeni sürüm şu anda derleniyor. En kısa sürede çözülecektir.', current: 'v1.0.2' })
     }
   }
 

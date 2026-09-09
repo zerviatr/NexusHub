@@ -89,7 +89,12 @@ export function setupAutoUpdater(win: BrowserWindow): void {
 
   autoUpdater.on('error', (err) => {
     console.error('[updater] error:', err?.message || err)
-    send('updater:error', err?.message || 'Update error occurred')
+    const raw = (err?.message || String(err || '')).toLowerCase()
+    const friendlyMsg =
+      raw.includes('latest.yml') || raw.includes('404') || raw.includes('httperror') || raw.includes('enotfound') || raw.includes('econnrefused')
+        ? 'Sunucuya bağlantı kurulamadı veya yeni sürüm şu anda GitHub üzerinde derleniyor. En kısa sürede çözülecektir.'
+        : 'Güncelleme sunucusuna şu anda erişilemiyor. Lütfen birkaç dakika sonra tekrar deneyin.'
+    send('updater:error', friendlyMsg)
   })
 
   // ─── IPC: renderer can trigger install ────────────────────────────────────
@@ -180,11 +185,16 @@ export function setupAutoUpdater(win: BrowserWindow): void {
       }
     } catch (err: any) {
       console.error('[updater] check error:', err?.message || err)
+      const raw = (err?.message || String(err || '')).toLowerCase()
+      const friendlyMsg =
+        raw.includes('latest.yml') || raw.includes('404') || raw.includes('httperror') || raw.includes('enotfound') || raw.includes('econnrefused')
+          ? 'Sunucuya bağlantı kurulamadı veya yeni sürüm şu anda GitHub üzerinde derleniyor. En kısa sürede çözülecektir.'
+          : 'Güncelleme sunucusuna şu anda erişilemiyor. Lütfen birkaç dakika sonra tekrar deneyin.'
       return {
         hasUpdate: false,
         currentVersion: app.getVersion(),
         isLatest: false,
-        error: err?.message || 'Check failed',
+        error: friendlyMsg,
       }
     }
   })

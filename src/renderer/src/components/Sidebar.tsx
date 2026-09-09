@@ -94,10 +94,12 @@ function ActivePill() {
 
 function ActiveEdge() {
   return (
-    <motion.div
-      layoutId="activeIndicator"
-      className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 rounded-r-full bg-nexus-accent"
-      transition={{ type: 'spring', stiffness: 400, damping: 35 }}
+    <motion.span
+      initial={{ scaleY: 0, opacity: 0 }}
+      animate={{ scaleY: 1, opacity: 1 }}
+      exit={{ scaleY: 0, opacity: 0 }}
+      transition={{ duration: 0.18, ease: 'easeOut' }}
+      className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-nexus-accent shadow-[0_0_8px_rgba(139,92,246,0.9)] pointer-events-none"
     />
   )
 }
