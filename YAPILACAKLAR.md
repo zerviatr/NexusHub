@@ -103,3 +103,4 @@
 - [x] Hızlı Komut Paleti Geçmişi (Recent Tools) — Command Palette'te son kullanılan araçları otomatik hatırlama (v2.1.9)
 - [x] Dinamik Siber Temalar (Cyber Themes) — Matrix Emerald, Cyberpunk 2077, Synthwave 80s, Crimson Protocol ve Klasik Mor arayüz motoru (v2.1.9)
 - [x] Web Audio SFX Ses Seviyesi Ayarı (Volume Slider) — Account sekmesinde haptik ses şiddeti kontrolü (v2.1.9)
+- [x] Markdown Scratchpad Ultimate (`/scratchpad`) — Bul & Değiştir (`Ctrl+F`), Sürükle-Bırak Base64 görsel gömme, Satır Numaraları Gutter, AES-256-GCM Şifreli Kasa Modu, Zen Odaklanma Modu, Snapshot Zaman Tüneli, Canlı Akış Şeması (Flowcharts) (v2.2.0)

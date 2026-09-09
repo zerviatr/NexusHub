@@ -1,6 +1,6 @@
 {
   "name": "nexushub",
-  "version": "2.1.9",
+  "version": "2.2.0",
   "description": "NexusHub — Premium Multi-Tool Desktop Application",
   "main": "./out/main/index.js",
   "author": {
