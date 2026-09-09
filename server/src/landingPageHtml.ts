@@ -797,117 +797,317 @@ graph LR
     </div>
   </section>
 
-  <!-- INTERACTIVE ROI & SAVINGS CALCULATOR ("KAÇ PARA TASARRUF EDERSİN?") -->
-  <section id="roi" class="relative z-10 py-20 border-t border-nexus-border/40 bg-nexus-bg/80 scroll-mt-24">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="text-center max-w-3xl mx-auto mb-12">
-        <span class="text-xs font-mono uppercase tracking-widest text-emerald-400" data-i18n="roi.tag">ROI Tasarruf Simülatörü</span>
-        <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-2 mb-4" data-i18n="roi.title">
-          NexusHub ile Yılda Kaç Para Tasarruf Edersiniz?
+    <!-- INTERACTIVE SAAS WASTE & ROI CALCULATOR -->
+  <section id="roi" class="relative z-10 py-20 border-t border-nexus-border/40 bg-nexus-bg/90 scroll-mt-24 overflow-hidden">
+    <!-- Ambient glowing backdrop -->
+    <div class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-r from-red-500/10 via-nexus-cyan/10 to-emerald-500/10 rounded-full blur-3xl opacity-60"></div>
+
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-red-500/30 bg-red-500/10 text-red-400 text-xs font-mono font-bold tracking-wider mb-4 shadow-[0_0_20px_rgba(239,68,68,0.2)]">
+          <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+          <span data-i18n="roi.tag">🔥 ABONELİK İSRAFI VS ÖMÜR BOYU LİSANS // ROI HESAPLAYICI</span>
+        </div>
+        <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-1 mb-4" data-i18n="roi.title">
+          NexusHub ile Ne Kadar Para Tasarruf Edersiniz?
         </h2>
-        <p class="text-nexus-muted font-sans text-sm sm:text-base" data-i18n="roi.desc">
-          Kullandığınız araçları işaretleyin, her ay SaaS platformlarına saçtığınız paranın NexusHub ile nasıl cebinizde kaldığını görün.
+        <p class="text-nexus-muted font-sans text-sm sm:text-base leading-relaxed" data-i18n="roi.desc">
+          Tek amaçlı küçük araçlara her ay düzenli para saçmayı bırakın. Aşağıdaki servislerden kullandıklarınızı işaretleyin; NexusHub’ın tek seferlik lisansı ile cebinizde kalan net meblağı canlı görün.
         </p>
+
+        <!-- Time Horizon & Quick Action Controls -->
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div class="inline-flex p-1 rounded-2xl bg-nexus-surface/80 border border-nexus-border/80 shadow-lg">
+            <button type="button" onclick="setRoiHorizon(1)" id="roi-hz-1" class="px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all text-nexus-muted hover:text-white cursor-pointer">
+              1 Yıl (12 Ay)
+            </button>
+            <button type="button" onclick="setRoiHorizon(2)" id="roi-hz-2" class="px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all text-nexus-muted hover:text-white cursor-pointer">
+              2 Yıl (24 Ay)
+            </button>
+            <button type="button" onclick="setRoiHorizon(3)" id="roi-hz-3" class="px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all bg-nexus-cyan text-nexus-bg shadow-sm cursor-pointer">
+              ⭐ 3 Yıl (36 Ay)
+            </button>
+            <button type="button" onclick="setRoiHorizon(5)" id="roi-hz-5" class="px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all text-nexus-muted hover:text-white cursor-pointer">
+              5 Yıl (60 Ay)
+            </button>
+          </div>
+
+          <div class="inline-flex gap-2 text-xs font-mono">
+            <button type="button" onclick="toggleAllRoi(true)" class="px-3 py-1.5 rounded-xl border border-nexus-border/60 bg-nexus-surface/40 hover:bg-nexus-surface text-nexus-muted hover:text-nexus-cyan transition-colors cursor-pointer">
+              ✓ Tümünü Seç
+            </button>
+            <button type="button" onclick="toggleAllRoi(false)" class="px-3 py-1.5 rounded-xl border border-nexus-border/60 bg-nexus-surface/40 hover:bg-nexus-surface text-nexus-muted hover:text-red-400 transition-colors cursor-pointer">
+              ✕ Temizle
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div class="p-8 rounded-3xl card-glass border border-emerald-500/30 shadow-2xl grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-        <div class="lg:col-span-2 space-y-3.5">
-          <label class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/80 cursor-pointer hover:border-nexus-cyan/40 transition-all select-none">
-            <div class="flex items-center gap-3">
-              <input type="checkbox" checked onchange="calcRoi()" class="w-4 h-4 accent-nexus-cyan rounded" id="roi-tempmail" data-price="10">
-              <div>
-                <div class="text-xs font-bold text-white">TempMail & Spam Savar Aboneliği</div>
-                <div class="text-[11px] text-nexus-muted">Burner Mail, Inboxes vb.</div>
+      <!-- Main Interactive Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Left: 8 Interactive SaaS Subscriptions (7 Cols) -->
+        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <!-- Item 1: 1Password / Dashlane -->
+          <div id="card-roi-1password" onclick="toggleRoiCard('roi-1password')" class="roi-item p-4 rounded-2xl border border-red-500/30 bg-red-500/5 hover:border-red-500/60 transition-all cursor-pointer select-none group flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm shrink-0">
+                  🔐
+                </div>
+                <div>
+                  <div class="text-xs font-black text-white group-hover:text-red-300 transition-colors">1Password / Dashlane</div>
+                  <div class="text-[10px] text-nexus-muted font-mono">Parola & Güvenli Kasa</div>
+                </div>
               </div>
+              <input type="checkbox" id="roi-1password" data-usd="5" data-try="185" checked onclick="event.stopPropagation(); calcRoi();" class="w-4 h-4 accent-red-500 rounded cursor-pointer mt-1">
             </div>
-            <span class="text-xs font-mono text-red-400 font-bold">$10 / ay</span>
-          </label>
+            <div class="mt-3 pt-2.5 border-t border-nexus-border/30 flex items-center justify-between text-[11px]">
+              <span class="font-mono text-red-400 font-bold">$5.00 / ay</span>
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">→ Cyber Fortress</span>
+            </div>
+          </div>
 
-          <label class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/80 cursor-pointer hover:border-nexus-cyan/40 transition-all select-none">
-            <div class="flex items-center gap-3">
-              <input type="checkbox" checked onchange="calcRoi()" class="w-4 h-4 accent-nexus-cyan rounded" id="roi-postman" data-price="14">
-              <div>
-                <div class="text-xs font-bold text-white">Postman & API Test Yazılımları</div>
-                <div class="text-[11px] text-nexus-muted">cURL Runner & Yerel REST API İstek Motoru</div>
+          <!-- Item 2: Postman Pro -->
+          <div id="card-roi-postman" onclick="toggleRoiCard('roi-postman')" class="roi-item p-4 rounded-2xl border border-red-500/30 bg-red-500/5 hover:border-red-500/60 transition-all cursor-pointer select-none group flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm shrink-0">
+                  🚀
+                </div>
+                <div>
+                  <div class="text-xs font-black text-white group-hover:text-red-300 transition-colors">Postman Pro / Insomnia</div>
+                  <div class="text-[10px] text-nexus-muted font-mono">API Test & İstek İstemcisi</div>
+                </div>
               </div>
+              <input type="checkbox" id="roi-postman" data-usd="15" data-try="555" checked onclick="event.stopPropagation(); calcRoi();" class="w-4 h-4 accent-red-500 rounded cursor-pointer mt-1">
             </div>
-            <span class="text-xs font-mono text-red-400 font-bold">$14 / ay</span>
-          </label>
+            <div class="mt-3 pt-2.5 border-t border-nexus-border/30 flex items-center justify-between text-[11px]">
+              <span class="font-mono text-red-400 font-bold">$15.00 / ay</span>
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">→ cURL Runner</span>
+            </div>
+          </div>
 
-          <label class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/80 cursor-pointer hover:border-nexus-cyan/40 transition-all select-none">
-            <div class="flex items-center gap-3">
-              <input type="checkbox" checked onchange="calcRoi()" class="w-4 h-4 accent-nexus-cyan rounded" id="roi-obsidian" data-price="10">
-              <div>
-                <div class="text-xs font-bold text-white">Bulut Not Alma & Akış Diyagramı Araçları</div>
-                <div class="text-[11px] text-nexus-muted">Scratchpad Ultimate & Canlı Mermaid Motoru</div>
+          <!-- Item 3: CCleaner Pro / CleanMyMac -->
+          <div id="card-roi-cleaner" onclick="toggleRoiCard('roi-cleaner')" class="roi-item p-4 rounded-2xl border border-red-500/30 bg-red-500/5 hover:border-red-500/60 transition-all cursor-pointer select-none group flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm shrink-0">
+                  🧹
+                </div>
+                <div>
+                  <div class="text-xs font-black text-white group-hover:text-red-300 transition-colors">CCleaner / CleanMyMac</div>
+                  <div class="text-[10px] text-nexus-muted font-mono">Sistem & RAM Hızlandırıcı</div>
+                </div>
               </div>
+              <input type="checkbox" id="roi-cleaner" data-usd="3.5" data-try="130" checked onclick="event.stopPropagation(); calcRoi();" class="w-4 h-4 accent-red-500 rounded cursor-pointer mt-1">
             </div>
-            <span class="text-xs font-mono text-red-400 font-bold">$10 / ay</span>
-          </label>
+            <div class="mt-3 pt-2.5 border-t border-nexus-border/30 flex items-center justify-between text-[11px]">
+              <span class="font-mono text-red-400 font-bold">$3.50 / ay</span>
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">→ System Optimizer</span>
+            </div>
+          </div>
 
-          <label class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/80 cursor-pointer hover:border-nexus-cyan/40 transition-all select-none">
-            <div class="flex items-center gap-3">
-              <input type="checkbox" checked onchange="calcRoi()" class="w-4 h-4 accent-nexus-cyan rounded" id="roi-shredder" data-price="12">
-              <div>
-                <div class="text-xs font-bold text-white">DoD 7-Pass Dosya İmha & Şifreli Kasa</div>
-                <div class="text-[11px] text-nexus-muted">Cyber Fortress kalıcı veri silme yazılımları</div>
+          <!-- Item 4: Burner Mail / Inboxes Pro -->
+          <div id="card-roi-tempmail" onclick="toggleRoiCard('roi-tempmail')" class="roi-item p-4 rounded-2xl border border-red-500/30 bg-red-500/5 hover:border-red-500/60 transition-all cursor-pointer select-none group flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm shrink-0">
+                  ✉️
+                </div>
+                <div>
+                  <div class="text-xs font-black text-white group-hover:text-red-300 transition-colors">Burner Mail / Inboxes Pro</div>
+                  <div class="text-[10px] text-nexus-muted font-mono">Kullan-At Geçici Posta</div>
+                </div>
               </div>
+              <input type="checkbox" id="roi-tempmail" data-usd="8" data-try="295" checked onclick="event.stopPropagation(); calcRoi();" class="w-4 h-4 accent-red-500 rounded cursor-pointer mt-1">
             </div>
-            <span class="text-xs font-mono text-red-400 font-bold">$12 / ay</span>
-          </label>
+            <div class="mt-3 pt-2.5 border-t border-nexus-border/30 flex items-center justify-between text-[11px]">
+              <span class="font-mono text-red-400 font-bold">$8.00 / ay</span>
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">→ TempMail Studio</span>
+            </div>
+          </div>
 
-          <label class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/80 cursor-pointer hover:border-nexus-cyan/40 transition-all select-none">
-            <div class="flex items-center gap-3">
-              <input type="checkbox" checked onchange="calcRoi()" class="w-4 h-4 accent-nexus-cyan rounded" id="roi-sentinel" data-price="8">
-              <div>
-                <div class="text-xs font-bold text-white">Donanım Monitörü & RAM Optimizatörü</div>
-                <div class="text-[11px] text-nexus-muted">Resource Sentinel sistem hızlandırma</div>
+          <!-- Item 5: Paste / Maccy Cloud -->
+          <div id="card-roi-paste" onclick="toggleRoiCard('roi-paste')" class="roi-item p-4 rounded-2xl border border-red-500/30 bg-red-500/5 hover:border-red-500/60 transition-all cursor-pointer select-none group flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm shrink-0">
+                  📋
+                </div>
+                <div>
+                  <div class="text-xs font-black text-white group-hover:text-red-300 transition-colors">Paste / Cloud Clipboard</div>
+                  <div class="text-[10px] text-nexus-muted font-mono">Pano Geçmişi & Arama</div>
+                </div>
               </div>
+              <input type="checkbox" id="roi-paste" data-usd="3" data-try="110" checked onclick="event.stopPropagation(); calcRoi();" class="w-4 h-4 accent-red-500 rounded cursor-pointer mt-1">
             </div>
-            <span class="text-xs font-mono text-red-400 font-bold">$8 / ay</span>
-          </label>
+            <div class="mt-3 pt-2.5 border-t border-nexus-border/30 flex items-center justify-between text-[11px]">
+              <span class="font-mono text-red-400 font-bold">$3.00 / ay</span>
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">→ Clipboard Ring</span>
+            </div>
+          </div>
 
-          <label class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/80 cursor-pointer hover:border-nexus-cyan/40 transition-all select-none">
-            <div class="flex items-center gap-3">
-              <input type="checkbox" checked onchange="calcRoi()" class="w-4 h-4 accent-nexus-cyan rounded" id="roi-color" data-price="8">
-              <div>
-                <div class="text-xs font-bold text-white">Tasarım & WCAG Kontrast Araçları</div>
-                <div class="text-[11px] text-nexus-muted">Color Studio & Canlı Kontrast Doğrulayıcı</div>
+          <!-- Item 6: Hazel / Bulk Renamer -->
+          <div id="card-roi-organizer" onclick="toggleRoiCard('roi-organizer')" class="roi-item p-4 rounded-2xl border border-red-500/30 bg-red-500/5 hover:border-red-500/60 transition-all cursor-pointer select-none group flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm shrink-0">
+                  📁
+                </div>
+                <div>
+                  <div class="text-xs font-black text-white group-hover:text-red-300 transition-colors">Hazel / ABetterRename</div>
+                  <div class="text-[10px] text-nexus-muted font-mono">Toplu Dosya Düzenleme</div>
+                </div>
               </div>
+              <input type="checkbox" id="roi-organizer" data-usd="4" data-try="150" checked onclick="event.stopPropagation(); calcRoi();" class="w-4 h-4 accent-red-500 rounded cursor-pointer mt-1">
             </div>
-            <span class="text-xs font-mono text-red-400 font-bold">$8 / ay</span>
-          </label>
+            <div class="mt-3 pt-2.5 border-t border-nexus-border/30 flex items-center justify-between text-[11px]">
+              <span class="font-mono text-red-400 font-bold">$4.00 / ay</span>
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">→ Bulk Organizer</span>
+            </div>
+          </div>
 
-          <label class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/80 cursor-pointer hover:border-nexus-cyan/40 transition-all select-none">
-            <div class="flex items-center gap-3">
-              <input type="checkbox" checked onchange="calcRoi()" class="w-4 h-4 accent-nexus-cyan rounded" id="roi-decrypter" data-price="5">
-              <div>
-                <div class="text-xs font-bold text-white">Link Çözücü & Reklam/Takipçi Temizleyici</div>
-                <div class="text-[11px] text-nexus-muted">Bypass ve reklam geçme servisleri</div>
+          <!-- Item 7: Coolors Pro / Contrast -->
+          <div id="card-roi-color" onclick="toggleRoiCard('roi-color')" class="roi-item p-4 rounded-2xl border border-red-500/30 bg-red-500/5 hover:border-red-500/60 transition-all cursor-pointer select-none group flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm shrink-0">
+                  🎨
+                </div>
+                <div>
+                  <div class="text-xs font-black text-white group-hover:text-red-300 transition-colors">Coolors Pro / Contrast</div>
+                  <div class="text-[10px] text-nexus-muted font-mono">Palet & WCAG Kontrastı</div>
+                </div>
               </div>
+              <input type="checkbox" id="roi-color" data-usd="4" data-try="150" checked onclick="event.stopPropagation(); calcRoi();" class="w-4 h-4 accent-red-500 rounded cursor-pointer mt-1">
             </div>
-            <span class="text-xs font-mono text-red-400 font-bold">$5 / ay</span>
-          </label>
+            <div class="mt-3 pt-2.5 border-t border-nexus-border/30 flex items-center justify-between text-[11px]">
+              <span class="font-mono text-red-400 font-bold">$4.00 / ay</span>
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">→ Color Studio</span>
+            </div>
+          </div>
+
+          <!-- Item 8: Link Bypasser / Decrypter -->
+          <div id="card-roi-decrypter" onclick="toggleRoiCard('roi-decrypter')" class="roi-item p-4 rounded-2xl border border-red-500/30 bg-red-500/5 hover:border-red-500/60 transition-all cursor-pointer select-none group flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm shrink-0">
+                  🔗
+                </div>
+                <div>
+                  <div class="text-xs font-black text-white group-hover:text-red-300 transition-colors">Linkvertise Bypasser / AdSkip</div>
+                  <div class="text-[10px] text-nexus-muted font-mono">Link & Takipçi Temizleme</div>
+                </div>
+              </div>
+              <input type="checkbox" id="roi-decrypter" data-usd="5" data-try="185" checked onclick="event.stopPropagation(); calcRoi();" class="w-4 h-4 accent-red-500 rounded cursor-pointer mt-1">
+            </div>
+            <div class="mt-3 pt-2.5 border-t border-nexus-border/30 flex items-center justify-between text-[11px]">
+              <span class="font-mono text-red-400 font-bold">$5.00 / ay</span>
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">→ Decrypter</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Calculated Outcome Box -->
-        <div class="p-6 rounded-2xl bg-gradient-to-b from-emerald-500/10 via-nexus-surface to-nexus-bg border border-emerald-500/40 text-center flex flex-col justify-between h-full">
-          <div>
-            <span class="text-[11px] font-mono uppercase tracking-widest text-emerald-400 font-bold">YILLIK KAZANCINIZ</span>
-            <div id="roi-annual-val" class="font-heading font-black text-4xl text-emerald-400 mt-2 mb-1">$804</div>
-            <div id="roi-try-val" class="text-xs font-mono text-nexus-muted mb-4">(Yaklaşık ₺29,750 TL Tasarruf)</div>
-            <p class="text-xs text-nexus-text leading-relaxed">
-              NexusHub tek seferlik <b>₺349 ($29)</b> ödeme ile <span class="text-emerald-400 font-bold">13 günde</span> kendi maliyetini amorti eder!
-            </p>
+        <!-- Right: Real-Time Command Center / ROI Gauge (5 Cols) -->
+        <div class="lg:col-span-5">
+          <div class="sticky top-28 p-7 rounded-3xl bg-gradient-to-b from-nexus-surface via-nexus-card to-nexus-bg border-2 border-emerald-500/40 shadow-[0_0_50px_rgba(16,185,129,0.15)] flex flex-col justify-between">
+            <div>
+              <!-- Header Radar Pill -->
+              <div class="flex items-center justify-between pb-4 border-b border-nexus-border/50">
+                <div class="flex items-center gap-2 text-xs font-mono font-bold text-emerald-400">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span id="roi-horizon-label">3 YILLIK AMORTİSMAN RADARI</span>
+                </div>
+                <span id="roi-savings-pct" class="text-[10px] font-mono font-black px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  %98.3 TASARRUF
+                </span>
+              </div>
+
+              <!-- Comparison Visual Bars -->
+              <div class="my-6 space-y-4">
+                <!-- Red Bar: SaaS Recurring Waste -->
+                <div>
+                  <div class="flex justify-between items-center text-xs font-mono mb-1.5">
+                    <span class="text-red-400 flex items-center gap-1 font-bold">
+                      <span>🔥</span> <span id="roi-saas-label">Aylık SaaS İsrafı:</span>
+                    </span>
+                    <span id="roi-monthly-bleed" class="text-red-400 font-black">$47.50 / ay</span>
+                  </div>
+                  <div class="w-full h-3 rounded-full bg-nexus-surface border border-red-500/20 overflow-hidden relative">
+                    <div id="roi-bar-saas" class="h-full rounded-full bg-gradient-to-r from-red-600 to-red-400 w-full transition-all duration-500"></div>
+                  </div>
+                  <div class="flex justify-between text-[11px] font-mono text-nexus-muted mt-1">
+                    <span id="roi-total-bleed-label">3 Yılda Çöpe Giden Para:</span>
+                    <span id="roi-total-bleed-val" class="font-bold text-red-300">$1,710.00</span>
+                  </div>
+                </div>
+
+                <!-- Green Bar: NexusHub Lifetime License -->
+                <div>
+                  <div class="flex justify-between items-center text-xs font-mono mb-1.5">
+                    <span class="text-emerald-400 flex items-center gap-1 font-bold">
+                      <span>🛡️</span> <span>NexusHub Ömür Boyu:</span>
+                    </span>
+                    <span id="roi-nexus-cost" class="text-emerald-400 font-black">$29 (₺349) TEK SEFERLİK</span>
+                  </div>
+                  <div class="w-full h-3 rounded-full bg-nexus-surface border border-emerald-500/20 overflow-hidden relative">
+                    <div id="roi-bar-nexus" class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-nexus-cyan w-[6%] transition-all duration-500 shadow-[0_0_12px_rgba(16,185,129,0.5)]"></div>
+                  </div>
+                  <div class="flex justify-between text-[11px] font-mono text-nexus-muted mt-1">
+                    <span>Yıllık Yenileme & Abonelik:</span>
+                    <span class="font-bold text-emerald-400">$0.00 (SIFIR)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Grand Net Profit Display -->
+              <div class="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center relative overflow-hidden mb-6">
+                <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.2),transparent_70%)]"></div>
+                <div class="relative z-10">
+                  <div class="text-[11px] font-mono uppercase tracking-widest text-emerald-300 font-bold mb-1" id="roi-net-title">
+                    3 YILDA CEBİNİZDE KALAN NET PARA
+                  </div>
+                  <div id="roi-net-saved" class="font-heading font-black text-4xl sm:text-5xl text-emerald-400 tracking-tight drop-shadow-[0_0_25px_rgba(16,185,129,0.4)]">
+                    +$1,681.00
+                  </div>
+                  <div id="roi-net-try" class="text-xs font-mono text-emerald-200/70 mt-1">
+                    (Tam +₺62,197 TL Net Kazanç)
+                  </div>
+                </div>
+              </div>
+
+              <!-- Speedometer & Amortization Insight -->
+              <div class="p-3.5 rounded-xl bg-nexus-surface/60 border border-nexus-border/60 text-xs text-nexus-text space-y-1 font-sans">
+                <div class="flex items-center gap-2 font-bold text-white">
+                  <span class="text-base">⚡</span>
+                  <span id="roi-payback-days">NexusHub 18 Günde Kendi Maliyetini Çıkartır!</span>
+                </div>
+                <p id="roi-payback-desc" class="text-[11px] text-nexus-muted leading-relaxed">
+                  Geriye kalan 1,077 gün boyunca 20+ aracı tek bir kuruş bile ödemeden tamamen ücretsiz kullanırsınız.
+                </p>
+              </div>
+            </div>
+
+            <!-- Conversion Action Button -->
+            <div class="mt-6 pt-4 border-t border-nexus-border/50">
+              <a href="#pricing" onclick="playCyberSound('success')" class="group relative flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-400 to-nexus-cyan hover:from-emerald-400 hover:to-nexus-cyan text-nexus-bg font-heading font-black text-sm transition-all shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:shadow-[0_0_40px_rgba(16,185,129,0.6)] hover:scale-[1.02] active:scale-[0.98]">
+                <span id="roi-cta-btn">Abonelikleri Çöpe At — ₺349 ile Ömür Boyu Al</span>
+                <span class="group-hover:translate-x-1 transition-transform">→</span>
+              </a>
+              <div class="flex items-center justify-center gap-3 text-[10px] font-mono text-nexus-muted text-center mt-3">
+                <span>🛡️ 14 Gün İade</span>
+                <span>•</span>
+                <span>♾️ Ömür Boyu Güncelleme</span>
+                <span>•</span>
+                <span>⚡ Anında Teslimat</span>
+              </div>
+            </div>
           </div>
-          <a href="#pricing" class="mt-6 w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-nexus-bg font-heading font-black text-xs transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)]">
-            Aboneliklerden Kurtul →
-          </a>
         </div>
       </div>
     </div>
   </section>
-
   <!-- SAAS KILLER COMPARISON TABLE -->
   <section id="comparison" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-bg/50 scroll-mt-24">
     <div class="max-w-6xl mx-auto px-6">
@@ -2826,6 +3026,7 @@ graph LR
       if (picker) picker.value = c;
       updateSimColor(c);
       playCyberSound('click');
+      if (typeof calcRoi === 'function') calcRoi();
     }
 
     async function copySimColorToken(type) {
@@ -2906,32 +3107,189 @@ graph LR
       }, 500);
     }
 
-    // ─── ROI Calculator Logic ──────────────────────────────────────────────
-    function calcRoi() {
-      let monthly = 0;
-      ['roi-tempmail', 'roi-postman', 'roi-obsidian', 'roi-shredder', 'roi-sentinel', 'roi-color', 'roi-decrypter'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el && el.checked) {
-          monthly += parseInt(el.getAttribute('data-price') || '0');
+        // ─── Interactive SaaS Waste & ROI Calculator Logic ─────────────────────
+    let roiHorizonYears = 3;
+
+    function setRoiHorizon(years) {
+      roiHorizonYears = years;
+      [1, 2, 3, 5].forEach(y => {
+        const btn = document.getElementById('roi-hz-' + y);
+        if (btn) {
+          if (y === years) {
+            btn.className = 'px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all bg-nexus-cyan text-nexus-bg shadow-sm cursor-pointer';
+          } else {
+            btn.className = 'px-3.5 py-1.5 rounded-xl font-mono text-xs font-bold transition-all text-nexus-muted hover:text-white cursor-pointer';
+          }
         }
       });
+      playCyberSound('click');
+      calcRoi();
+    }
 
-      const annualUSD = monthly * 12;
-      const annualTRY = annualUSD * 37;
-
-      const annualEl = document.getElementById('roi-annual-val');
-      const tryEl = document.getElementById('roi-try-val');
-
-      if (currentLang === 'tr') {
-        annualEl.innerText = '$' + annualUSD;
-        tryEl.innerText = '(Yaklaşık ₺' + annualTRY.toLocaleString('tr-TR') + ' TL Tasarruf)';
-      } else {
-        annualEl.innerText = '$' + annualUSD + ' / yr';
-        tryEl.innerText = '(Zero recurring bills ever)';
+    function toggleRoiCard(id) {
+      const input = document.getElementById(id);
+      if (input) {
+        input.checked = !input.checked;
+        calcRoi();
+        playCyberSound('toggle');
       }
     }
 
-    // ─── Navbar Audio SFX Toggle ───────────────────────────────────────────
+    function toggleAllRoi(checkAll) {
+      ['roi-1password', 'roi-postman', 'roi-cleaner', 'roi-tempmail', 'roi-paste', 'roi-organizer', 'roi-color', 'roi-decrypter'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.checked = checkAll;
+      });
+      playCyberSound('success');
+      calcRoi();
+    }
+
+    function calcRoi() {
+      const itemIds = [
+        'roi-1password',
+        'roi-postman',
+        'roi-cleaner',
+        'roi-tempmail',
+        'roi-paste',
+        'roi-organizer',
+        'roi-color',
+        'roi-decrypter'
+      ];
+
+      let monthlyUSD = 0;
+      let monthlyTRY = 0;
+      let activeCount = 0;
+
+      itemIds.forEach(id => {
+        const el = document.getElementById(id);
+        const card = document.getElementById('card-' + id);
+        if (el) {
+          const u = parseFloat(el.getAttribute('data-usd') || '0');
+          const t = parseFloat(el.getAttribute('data-try') || '0');
+          if (el.checked) {
+            monthlyUSD += u;
+            monthlyTRY += t;
+            activeCount++;
+            if (card) {
+              card.className = 'roi-item p-4 rounded-2xl border border-red-500/40 bg-red-500/5 hover:border-red-500/70 transition-all cursor-pointer select-none group flex flex-col justify-between relative overflow-hidden shadow-[0_0_15px_rgba(239,68,68,0.1)]';
+            }
+          } else {
+            if (card) {
+              card.className = 'roi-item p-4 rounded-2xl border border-nexus-border/40 bg-nexus-surface/20 opacity-40 hover:opacity-75 transition-all cursor-pointer select-none group flex flex-col justify-between relative overflow-hidden';
+            }
+          }
+        }
+      });
+
+      const months = roiHorizonYears * 12;
+      const totalDays = roiHorizonYears * 365;
+
+      const totalBleedUSD = monthlyUSD * months;
+      const totalBleedTRY = monthlyTRY * months;
+
+      // NexusHub cost (Lifetime Pro)
+      const nexusUSD = 29;
+      const nexusTRY = 349;
+
+      const netSavedUSD = Math.max(0, totalBleedUSD - nexusUSD);
+      const netSavedTRY = Math.max(0, totalBleedTRY - nexusTRY);
+
+      // Payback calculation
+      const dailyBleedUSD = monthlyUSD / 30.4;
+      const paybackDays = dailyBleedUSD > 0 ? Math.max(1, Math.ceil(nexusUSD / dailyBleedUSD)) : 999;
+      const remainingFreeDays = Math.max(0, totalDays - paybackDays);
+
+      // Ratio
+      const pctSaved = totalBleedUSD > 0 ? Math.min(99.4, ((netSavedUSD / totalBleedUSD) * 100)).toFixed(1) : '0';
+
+      const isTR = (currentLang === 'tr' || activeCurrency === 'TRY');
+
+      // Update UI elements
+      const horizonLabelEl = document.getElementById('roi-horizon-label');
+      if (horizonLabelEl) {
+        horizonLabelEl.innerText = isTR
+          ? roiHorizonYears + ' YILLIK AMORTİSMAN RADARI'
+          : roiHorizonYears + '-YEAR PAYBACK RADAR';
+      }
+
+      const savingsPctEl = document.getElementById('roi-savings-pct');
+      if (savingsPctEl) {
+        savingsPctEl.innerText = '%' + pctSaved + (isTR ? ' TASARRUF' : ' SAVED');
+      }
+
+      const monthlyBleedEl = document.getElementById('roi-monthly-bleed');
+      if (monthlyBleedEl) {
+        monthlyBleedEl.innerText = isTR ? '₺' + Math.round(monthlyTRY) + ' / ay' : '$' + monthlyUSD.toFixed(2) + ' / mo';
+      }
+
+      const totalBleedLabelEl = document.getElementById('roi-total-bleed-label');
+      if (totalBleedLabelEl) {
+        totalBleedLabelEl.innerText = isTR
+          ? roiHorizonYears + ' Yılda Çöpe Giden Para:'
+          : 'Total Burned in ' + roiHorizonYears + ' Years:';
+      }
+
+      const totalBleedValEl = document.getElementById('roi-total-bleed-val');
+      if (totalBleedValEl) {
+        totalBleedValEl.innerText = isTR ? '₺' + Math.round(totalBleedTRY).toLocaleString('tr-TR') : '$' + totalBleedUSD.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      }
+
+      const netTitleEl = document.getElementById('roi-net-title');
+      if (netTitleEl) {
+        netTitleEl.innerText = isTR ? roiHorizonYears + ' YILDA CEBİNİZDE KALAN NET PARA' : 'NET MONEY KEPT OVER ' + roiHorizonYears + ' YEARS';
+      }
+
+      const netSavedEl = document.getElementById('roi-net-saved');
+      if (netSavedEl) {
+        netSavedEl.innerText = isTR ? '+₺' + Math.round(netSavedTRY).toLocaleString('tr-TR') : '+$' + netSavedUSD.toLocaleString('en-US', { minimumFractionDigits: 0 });
+      }
+
+      const netTryEl = document.getElementById('roi-net-try');
+      if (netTryEl) {
+        if (isTR) {
+          netTryEl.innerText = '(Eşdeğeri: ~$' + Math.round(netSavedUSD) + ' USD Net Tasarruf)';
+        } else {
+          netTryEl.innerText = '(Zero renewals, zero recurring bills ever)';
+        }
+      }
+
+      const paybackDaysEl = document.getElementById('roi-payback-days');
+      if (paybackDaysEl) {
+        if (paybackDays <= 90) {
+          paybackDaysEl.innerText = isTR
+            ? 'NexusHub ' + paybackDays + ' Günde Kendi Maliyetini Çıkartır!'
+            : 'NexusHub Pays For Itself in ' + paybackDays + ' Days!';
+        } else {
+          paybackDaysEl.innerText = isTR
+            ? 'Abonelikleri İptal Ederek Dev Kazanç Sağlayın'
+            : 'Cancel Subscriptions & Protect Your Wallet';
+        }
+      }
+
+      const paybackDescEl = document.getElementById('roi-payback-desc');
+      if (paybackDescEl) {
+        paybackDescEl.innerText = isTR
+          ? 'Geriye kalan ' + remainingFreeDays.toLocaleString('tr-TR') + ' gün boyunca 20+ aracı tek bir kuruş bile ödemeden tamamen ücretsiz kullanırsınız.'
+          : 'For the remaining ' + remainingFreeDays.toLocaleString('en-US') + ' days, you use all 20+ tools completely free of charge.';
+      }
+
+      // Visual bar scaling
+      const nexusBarEl = document.getElementById('roi-bar-nexus');
+      if (nexusBarEl) {
+        const ratio = totalBleedUSD > 0 ? Math.min(100, Math.max(3, (nexusUSD / totalBleedUSD) * 100)) : 100;
+        nexusBarEl.style.width = ratio.toFixed(1) + '%';
+      }
+
+      // CTA Button
+      const ctaBtnEl = document.getElementById('roi-cta-btn');
+      if (ctaBtnEl) {
+        ctaBtnEl.innerText = isTR
+          ? 'Abonelikleri Çöpe At — ₺349 ile Ömür Boyu Al'
+          : 'Ditch Subscriptions — Get Lifetime for $29';
+      }
+    }
+
+// ─── Navbar Audio SFX Toggle ───────────────────────────────────────────
     function toggleNavbarSfx() {
       sfxEnabled = !sfxEnabled;
       const icon = document.getElementById('navbar-sfx-icon');
