@@ -263,6 +263,9 @@ export function renderLandingPage(): string {
             <button onclick="switchMockTool('orb')" id="mock-btn-orb" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer">
               <span>🔮</span> <span data-i18n="sim.tools.orb">Floating Orb HUD</span>
             </button>
+            <button onclick="switchMockTool('hash')" id="mock-btn-hash" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer">
+              <span>⚡</span> <span data-i18n="sim.tools.hash">Hash & Base64</span>
+            </button>
           </div>
 
           <!-- Mock Workspace Panels -->
@@ -433,6 +436,44 @@ export function renderLandingPage(): string {
                 </div>
                 <div class="w-full h-2 bg-nexus-surface rounded-full overflow-hidden">
                   <div id="sim-pass-strength-bar" class="w-full h-full bg-gradient-to-r from-emerald-400 to-nexus-cyan transition-all duration-300"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 7: Hash & Base64 Crypto Studio Preview -->
+            <div id="mock-panel-hash" class="space-y-4 hidden">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 class="font-heading font-black text-xl text-white flex items-center gap-2">
+                    Hash & Base64 Crypto Studio <span class="px-2 py-0.5 text-[10px] rounded bg-nexus-cyan/20 text-nexus-cyan font-mono font-bold">CANLI KRİPTO</span>
+                  </h3>
+                  <p class="text-xs text-nexus-muted mt-0.5">Herhangi bir metni tarayıcınızda sıfır gecikmeyle anında SHA-256 ve Base64'e dönüştürün.</p>
+                </div>
+                <button onclick="setSampleHashText()" class="px-3 py-1.5 rounded-lg bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan font-mono text-xs hover:bg-nexus-cyan/30 cursor-pointer shrink-0">
+                  ⚡ Örnek Yükle
+                </button>
+              </div>
+              <div class="space-y-3 font-mono text-xs">
+                <input type="text" id="sim-hash-input" oninput="computeSimHash(this.value)" value="NexusHub-Safe-Crypto-2026" placeholder="Şifrelenecek metni yazın..." class="w-full bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3 text-white outline-none focus:border-nexus-cyan">
+                
+                <div class="p-3.5 rounded-xl bg-nexus-bg border border-nexus-border/80 space-y-1.5">
+                  <div class="flex items-center justify-between text-[10px] text-nexus-muted">
+                    <span class="text-nexus-cyan font-bold">SHA-256 HASH</span>
+                    <button onclick="copySimSha256()" id="copy-sim-sha-btn" class="hover:text-white text-nexus-cyan cursor-pointer">Kopyala</button>
+                  </div>
+                  <div id="sim-sha256-output" class="text-emerald-400 font-mono text-[11px] truncate select-all">
+                    8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+                  </div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-nexus-bg border border-nexus-border/80 space-y-1.5">
+                  <div class="flex items-center justify-between text-[10px] text-nexus-muted">
+                    <span class="text-purple-400 font-bold">BASE64 ENCODED</span>
+                    <button onclick="copySimBase64()" id="copy-sim-b64-btn" class="hover:text-white text-purple-400 cursor-pointer">Kopyala</button>
+                  </div>
+                  <div id="sim-base64-output" class="text-white font-mono text-[11px] truncate select-all">
+                    TmV4dXNIdWItU2FmZS1DcnlwdG8tMjAyNg==
+                  </div>
                 </div>
               </div>
             </div>
@@ -1275,7 +1316,7 @@ export function renderLandingPage(): string {
         </div>
         <div class="flex flex-wrap items-center gap-6 text-xs font-mono">
           <span class="flex items-center gap-2 text-emerald-400">
-            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Lisans API: 14ms (Çevrimiçi)
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Lisans API: <span id="telemetry-ping" class="font-bold">14ms</span> (Çevrimiçi)
           </span>
           <span class="flex items-center gap-2 text-emerald-400">
             <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Auto-Updater CDN: Aktif
@@ -1298,6 +1339,25 @@ export function renderLandingPage(): string {
         </h2>
       </div>
 
+      <!-- FAQ Category Filter Pills -->
+      <div class="mb-6 flex flex-wrap items-center justify-center gap-2 text-xs font-mono">
+        <button onclick="filterFaqCategory('all', this)" class="faq-cat-btn px-4 py-2 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan font-bold transition-all cursor-pointer">
+          Tüm Sorular (7)
+        </button>
+        <button onclick="filterFaqCategory('license', this)" class="faq-cat-btn px-4 py-2 rounded-xl border border-nexus-border/60 text-nexus-muted hover:text-white bg-nexus-surface/60 transition-all cursor-pointer">
+          🔑 Lisans & Format (3)
+        </button>
+        <button onclick="filterFaqCategory('refund', this)" class="faq-cat-btn px-4 py-2 rounded-xl border border-nexus-border/60 text-nexus-muted hover:text-white bg-nexus-surface/60 transition-all cursor-pointer">
+          💰 30 Gün İade (1)
+        </button>
+        <button onclick="filterFaqCategory('privacy', this)" class="faq-cat-btn px-4 py-2 rounded-xl border border-nexus-border/60 text-nexus-muted hover:text-white bg-nexus-surface/60 transition-all cursor-pointer">
+          🛡️ Gizlilik & Güvenlik (1)
+        </button>
+        <button onclick="filterFaqCategory('offline', this)" class="faq-cat-btn px-4 py-2 rounded-xl border border-nexus-border/60 text-nexus-muted hover:text-white bg-nexus-surface/60 transition-all cursor-pointer">
+          ⚡ Çevrimdışı & Yerel (2)
+        </button>
+      </div>
+
       <!-- FAQ Search Input & Expand All Toggle -->
       <div class="mb-8 flex flex-col sm:flex-row items-center gap-3">
         <input type="text" id="faq-search-input" oninput="filterFaq(this.value)" placeholder="Sorularda canlı ara... (Örn: format, iade, mac, güncelleme, güvenlik, çevrimdışı)" class="w-full sm:flex-1 bg-nexus-card border border-nexus-border/80 rounded-2xl px-5 py-3.5 text-xs font-mono text-white outline-none focus:border-nexus-cyan placeholder:text-nexus-muted/60 transition-all">
@@ -1307,7 +1367,7 @@ export function renderLandingPage(): string {
       </div>
 
       <div class="space-y-4" id="faq-container">
-        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-text="lisans anahtari ne zaman gelir teslimat e-posta aktivasyon">
+        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-category="license" data-text="lisans anahtari ne zaman gelir teslimat e-posta aktivasyon">
           <summary class="font-heading font-bold text-base text-white flex items-center justify-between list-none">
             <span>Lisans anahtarım satın aldıktan sonra ne zaman gelir?</span>
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
@@ -1317,7 +1377,7 @@ export function renderLandingPage(): string {
           </p>
         </details>
 
-        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-text="format cihaz degistirme yeni bilgisayar hwid sifirlama reset">
+        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-category="license" data-text="format cihaz degistirme yeni bilgisayar hwid sifirlama reset">
           <summary class="font-heading font-bold text-base text-white flex items-center justify-between list-none">
             <span>Bilgisayarıma format atarsam veya yenisini alırsam lisansım yanar mı?</span>
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
@@ -1327,7 +1387,7 @@ export function renderLandingPage(): string {
           </p>
         </details>
 
-        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-text="iade para iadesi garanti 30 gun risk kosulsuz satisfaction guarantee">
+        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-category="refund" data-text="iade para iadesi garanti 30 gun risk kosulsuz satisfaction guarantee">
           <summary class="font-heading font-bold text-base text-white flex items-center justify-between list-none">
             <span>30 Gün Koşulsuz Para İade Garantisi var mı?</span>
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
@@ -1337,7 +1397,7 @@ export function renderLandingPage(): string {
           </p>
         </details>
 
-        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-text="cevrimdisi offline internet kesintisi baglanti yok local yerel">
+        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-category="offline" data-text="cevrimdisi offline internet kesintisi baglanti yok local yerel">
           <summary class="font-heading font-bold text-base text-white flex items-center justify-between list-none">
             <span>İnternet bağlantım tamamen kesildiğinde araçlar çalışır mı?</span>
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
@@ -1347,7 +1407,7 @@ export function renderLandingPage(): string {
           </p>
         </details>
 
-        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-text="mac apple linux osx destegi ne zaman cikacak">
+        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-category="offline" data-text="mac apple linux osx destegi ne zaman cikacak">
           <summary class="font-heading font-bold text-base text-white flex items-center justify-between list-none">
             <span>macOS veya Linux desteği gelecek mi?</span>
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
@@ -1357,7 +1417,7 @@ export function renderLandingPage(): string {
           </p>
         </details>
 
-        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-text="guvenlik gizlilik veri log sunucu virustotal yerel offline">
+        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-category="privacy" data-text="guvenlik gizlilik veri log sunucu virustotal yerel offline">
           <summary class="font-heading font-bold text-base text-white flex items-center justify-between list-none">
             <span>Verilerim sunucularınıza iletiliyor mu?</span>
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
@@ -1367,7 +1427,7 @@ export function renderLandingPage(): string {
           </p>
         </details>
 
-        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-text="guncelleme yeni surum ucret omur boyu lifetime update">
+        <details class="faq-item group p-6 rounded-2xl card-glass border border-nexus-border/80 cursor-pointer" data-category="license" data-text="guncelleme yeni surum ucret omur boyu lifetime update">
           <summary class="font-heading font-bold text-base text-white flex items-center justify-between list-none">
             <span>Gelecek güncellemeler için tekrar ücret ödeyecek miyim?</span>
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
@@ -1414,6 +1474,23 @@ export function renderLandingPage(): string {
         Lisans Al
       </a>
     </div>
+  </div>
+
+  <!-- LIVE SOCIAL PROOF FOMO SALES TICKER (BOTTOM-LEFT) -->
+  <div id="sales-fomo-toast" class="fixed bottom-20 left-4 sm:bottom-6 sm:left-6 z-30 max-w-sm card-glass border border-nexus-cyan/40 p-3.5 rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.8)] backdrop-blur-xl flex items-center gap-3 transition-all duration-500 translate-y-24 opacity-0 pointer-events-none sm:pointer-events-auto">
+    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-nexus-cyan/20 to-emerald-500/20 border border-nexus-cyan/40 flex items-center justify-center text-base shrink-0">
+      <span id="fomo-icon">⚡</span>
+    </div>
+    <div class="flex-1 truncate">
+      <div class="text-[10px] font-mono text-nexus-cyan flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+        <span id="fomo-time" class="font-bold">Az önce</span>
+      </div>
+      <div id="fomo-msg" class="text-xs font-sans text-white font-medium truncate">
+        Ahmet K. (İstanbul) Nexus Pro Lifetime satın aldı.
+      </div>
+    </div>
+    <button onclick="dismissFomoToast()" class="text-nexus-muted hover:text-white text-xs p-1 cursor-pointer">✕</button>
   </div>
 
   <!-- DESKTOP FLOATING CYBER ORB WIDGET (CANLI HUD WIDGET'I) -->
@@ -1701,6 +1778,7 @@ export function renderLandingPage(): string {
         'sim.tools.fortress': 'Cyber Fortress',
         'sim.tools.sentinel': 'Resource Sentinel',
         'sim.tools.orb': 'Floating Orb HUD',
+        'sim.tools.hash': 'Hash & Base64',
         'roi.tag': 'ROI Tasarruf Simülatörü',
         'roi.title': 'NexusHub ile Yılda Kaç Para Tasarruf Edersiniz?',
         'roi.desc': 'Kullandığınız araçları işaretleyin, her ay SaaS platformlarına saçtığınız paranın NexusHub ile nasıl cebinizde kaldığını görün.',
@@ -1754,6 +1832,7 @@ export function renderLandingPage(): string {
         'sim.tools.fortress': 'Cyber Fortress',
         'sim.tools.sentinel': 'Resource Sentinel',
         'sim.tools.orb': 'Floating Orb HUD',
+        'sim.tools.hash': 'Hash & Base64',
         'roi.tag': 'ROI Savings Calculator',
         'roi.title': 'How Much Money Do You Save with NexusHub?',
         'roi.desc': 'Check the utilities you use and see how much money you stop wasting on recurring SaaS fees.',
@@ -1811,7 +1890,7 @@ export function renderLandingPage(): string {
     }
 
     // ─── Interactive Mockup Tool Switcher ──────────────────────────────────
-    const tools = ['tempmail', 'decrypter', 'password', 'fortress', 'sentinel', 'orb'];
+    const tools = ['tempmail', 'decrypter', 'password', 'fortress', 'sentinel', 'orb', 'hash'];
     function switchMockTool(toolId) {
       tools.forEach(t => {
         const p = document.getElementById('mock-panel-' + t);
@@ -1962,15 +2041,40 @@ export function renderLandingPage(): string {
       }
     }
 
-    // ─── Instant FAQ Live Search ───────────────────────────────────────────
+    // ─── Instant FAQ Live Search & Category Filtering ───────────────────────
+    let activeFaqCategory = 'all';
+
+    function filterFaqCategory(cat, btn) {
+      activeFaqCategory = cat;
+      const tabs = document.querySelectorAll('.faq-cat-btn');
+      tabs.forEach(t => {
+        t.className = 'faq-cat-btn px-4 py-2 rounded-xl border border-nexus-border/60 text-nexus-muted hover:text-white bg-nexus-surface/60 transition-all cursor-pointer';
+      });
+      if (btn) {
+        btn.className = 'faq-cat-btn px-4 py-2 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan font-bold transition-all cursor-pointer';
+      }
+      applyFaqFilter();
+      playCyberSound('toggle');
+    }
+
     function filterFaq(query) {
-      const q = query.toLowerCase().trim();
+      applyFaqFilter(query);
+    }
+
+    function applyFaqFilter(query) {
+      const q = (query !== undefined ? query : (document.getElementById('faq-search-input')?.value || '')).toLowerCase().trim();
       const items = document.querySelectorAll('.faq-item');
       items.forEach(item => {
         const text = (item.getAttribute('data-text') + ' ' + item.innerText).toLowerCase();
-        if (!q || text.includes(q)) {
+        const cat = item.getAttribute('data-category');
+        const matchesCat = activeFaqCategory === 'all' || cat === activeFaqCategory;
+        const matchesQuery = !q || text.includes(q);
+
+        if (matchesCat && matchesQuery) {
           item.style.display = 'block';
-          if (q) item.open = true;
+          if (q || activeFaqCategory !== 'all') {
+            item.open = true;
+          }
         } else {
           item.style.display = 'none';
         }
@@ -2331,6 +2435,15 @@ export function renderLandingPage(): string {
         e.preventDefault();
         openCmdPalette();
       }
+      // '/' focuses FAQ search when not in an input
+      if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName || '')) {
+        e.preventDefault();
+        const faqInput = document.getElementById('faq-search-input');
+        if (faqInput) {
+          faqInput.scrollIntoView({ behavior: 'smooth' });
+          setTimeout(() => faqInput.focus(), 150);
+        }
+      }
       // Escape closes any open modal
       if (e.key === 'Escape') {
         closeCmdPalette();
@@ -2615,9 +2728,133 @@ export function renderLandingPage(): string {
       playCyberSound('toggle');
     }
 
+    // ─── Simulator Hash & Base64 Crypto Engine ──────────────────────────────
+    async function computeSimHash(text) {
+      if (!text) text = '';
+      try {
+        const b64 = btoa(unescape(encodeURIComponent(text)));
+        const b64El = document.getElementById('sim-base64-output');
+        if (b64El) b64El.innerText = b64 || '—';
+      } catch {
+        const b64El = document.getElementById('sim-base64-output');
+        if (b64El) b64El.innerText = '—';
+      }
+      try {
+        const msgBuffer = new TextEncoder().encode(text);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        const shaEl = document.getElementById('sim-sha256-output');
+        if (shaEl) shaEl.innerText = hashHex;
+      } catch {
+        const shaEl = document.getElementById('sim-sha256-output');
+        if (shaEl) shaEl.innerText = '—';
+      }
+    }
+
+    function setSampleHashText() {
+      const samples = [
+        'NexusHub-AES256-GCM-Encrypted-Payload',
+        'Zervia-Military-DoD-7Pass-Clearance',
+        'Cyber-Defense-Zero-Subscription-2026',
+        'admin:super_secret_token_#9841'
+      ];
+      const s = samples[Math.floor(Math.random() * samples.length)];
+      const input = document.getElementById('sim-hash-input');
+      if (input) {
+        input.value = s;
+        computeSimHash(s);
+      }
+      playCyberSound('success');
+    }
+
+    async function copySimSha256() {
+      const val = document.getElementById('sim-sha256-output')?.innerText.trim();
+      const btn = document.getElementById('copy-sim-sha-btn');
+      if (val && val !== '—') {
+        await safeCopyToClipboard(val);
+        if (btn) btn.innerText = '✓ Kopyalandı!';
+        playCyberSound('success');
+        setTimeout(() => { if (btn) btn.innerText = 'Kopyala'; }, 2000);
+      }
+    }
+
+    async function copySimBase64() {
+      const val = document.getElementById('sim-base64-output')?.innerText.trim();
+      const btn = document.getElementById('copy-sim-b64-btn');
+      if (val && val !== '—') {
+        await safeCopyToClipboard(val);
+        if (btn) btn.innerText = '✓ Kopyalandı!';
+        playCyberSound('success');
+        setTimeout(() => { if (btn) btn.innerText = 'Kopyala'; }, 2000);
+      }
+    }
+
+    // ─── Live Social Proof FOMO Sales Ticker ────────────────────────────────
+    const fomoEvents = [
+      { icon: '⚡', user: 'Ahmet K. (İstanbul)', action: 'Nexus Pro Lifetime lisansını aktive etti', time: '2 dakika önce' },
+      { icon: '🛡️', user: 'DevSecOps Specialist (Berlin)', action: 'Nexus Studio (3 Cihaz) satın aldı', time: '5 dakika önce' },
+      { icon: '🎟️', user: 'Burak T. (İzmir)', action: 'OGRENCI kuponuyla Pro Pakete yükseltti', time: '7 dakika önce' },
+      { icon: '🚀', user: 'Canan D. (Ankara)', action: 'Windows için v2.0.3 Suite indirdi', time: '11 dakika önce' },
+      { icon: '🔑', user: 'Security Analyst (Austin, TX)', action: 'Format sonrası HWID kilidini sıfırladı', time: '14 dakika önce' },
+      { icon: '⭐', user: 'Emre S. (Bursa)', action: 'DoD 7-Pass Dosya İmha Kalkanını çalıştırdı', time: '18 dakika önce' }
+    ];
+    let fomoIndex = 0;
+    let fomoDismissed = false;
+
+    function cycleFomoToast() {
+      if (fomoDismissed) return;
+      const toast = document.getElementById('sales-fomo-toast');
+      const icon = document.getElementById('fomo-icon');
+      const time = document.getElementById('fomo-time');
+      const msg = document.getElementById('fomo-msg');
+      if (!toast || !icon || !time || !msg) return;
+
+      const evt = fomoEvents[fomoIndex % fomoEvents.length];
+      fomoIndex++;
+
+      icon.innerText = evt.icon;
+      time.innerText = evt.time;
+      msg.innerHTML = '<b class="text-white">' + evt.user + '</b> ' + evt.action;
+
+      toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+
+      setTimeout(() => {
+        if (!fomoDismissed && toast) {
+          toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+          toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        }
+      }, 5500);
+    }
+
+    function dismissFomoToast() {
+      fomoDismissed = true;
+      const toast = document.getElementById('sales-fomo-toast');
+      if (toast) {
+        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+        toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+      }
+    }
+
+    // ─── Live Telemetry Heartbeat Latency Jitter ────────────────────────────
+    function initTelemetryHeartbeat() {
+      setInterval(() => {
+        const pingEl = document.getElementById('telemetry-ping');
+        if (pingEl) {
+          const lat = Math.floor(Math.random() * 8 + 12);
+          pingEl.innerText = lat + 'ms';
+        }
+      }, 4500);
+    }
+
     // Initial calculations & canvas start
     calcRoi();
     initMatrixRain();
+    computeSimHash('NexusHub-Safe-Crypto-2026');
+    initTelemetryHeartbeat();
+    setTimeout(cycleFomoToast, 3500);
+    setInterval(cycleFomoToast, 13000);
   </script>
 </body>
 </html>`;
