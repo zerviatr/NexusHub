@@ -223,7 +223,7 @@ export function renderLandingPage(): string {
       <div class="flex justify-center mb-8">
         <div onclick="openChangelogModal()" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full card-glass border border-nexus-cyan/30 text-xs font-mono text-nexus-cyan shadow-[0_0_15px_rgba(var(--c-cyan),0.2)] cursor-pointer hover:border-nexus-cyan transition-all">
           <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-ping"></span>
-          <span>v2.2.0 Yayında</span>
+          <span>v2.3.0 Yayında</span>
           <span class="text-nexus-border">|</span>
           <span class="text-white" data-i18n="hero.pill.tools">20+ Siber Güç</span>
           <span class="text-nexus-border">|</span>
