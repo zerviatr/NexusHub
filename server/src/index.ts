@@ -20,6 +20,7 @@ import { adminRouter }   from './routes/admin'
 import { renderLandingPage } from './landingPageHtml'
 
 const app  = express()
+app.disable('x-powered-by')
 const PORT = Number(process.env['PORT'] ?? 3000)
 
 // ── Raw body capture for webhook signature verification ────────────────────
@@ -35,6 +36,14 @@ app.use('/webhook', (req: Request, _res: Response, next: NextFunction) => {
 
 // ── Body parsing for all other routes ─────────────────────────────────────
 app.use(express.json())
+
+// ── Security Headers ───────────────────────────────────────────────────────
+app.use((_req: Request, res: Response, next: NextFunction) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff')
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN')
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
+  next()
+})
 
 // ── CORS ───────────────────────────────────────────────────────────────────
 app.use((_req: Request, res: Response, next: NextFunction) => {

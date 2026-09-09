@@ -18,7 +18,7 @@ export const licenseRouter = Router()
 
 /** Hash the raw device ID so we never store plain machine identifiers. */
 function hashDevice(rawDeviceId: string): string {
-  const secret = process.env['DEVICE_HMAC_SECRET'] ?? 'change_me_device_secret'
+  const secret = process.env['DEVICE_HMAC_SECRET'] || process.env['NEXUS_LICENSE_SECRET'] || 'nexus_device_guard_2026_entropy_key'
   return createHmac('sha256', secret).update(rawDeviceId).digest('hex')
 }
 
