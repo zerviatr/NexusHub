@@ -833,8 +833,8 @@ export function getAdminDashboardHtml(): string {
       if (!confirm(\`UYARI: \${key} lisansı ve tüm aktivasyonları kalıcı olarak silinecek! Onaylıyor musunuz?\`)) return;
 
       try {
-        const res = await fetch('/admin/api/keys', {
-          method: 'DELETE',
+        const res = await fetch('/admin/api/keys/delete', {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': \`Bearer \${token}\`

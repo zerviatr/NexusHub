@@ -430,10 +430,12 @@ adminRouter.post('/api/keys/reset-devices', requireAdminAuth, async (req: Reques
   }
 })
 
-// ─── DELETE /admin/api/keys ─────────────────────────────────────────────────
-adminRouter.delete('/api/keys', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+// ─── POST /admin/api/keys/delete & DELETE /admin/api/keys ───────────────────
+async function handleDeleteKey(req: Request, res: Response): Promise<void> {
   try {
-    const { key } = req.body as { key?: string }
+    const rawKey = req.body?.key || req.query?.key || req.params?.key
+    const key = typeof rawKey === 'string' ? rawKey.trim() : ''
+
     if (!key) {
       res.status(400).json({ success: false, error: 'Key parametresi zorunludur' })
       return
@@ -449,9 +451,15 @@ adminRouter.delete('/api/keys', requireAdminAuth, async (req: Request, res: Resp
       args: [key]
     })
 
+    console.log(`[admin] Key deleted successfully: ${key}`)
     res.json({ success: true, key })
   } catch (err: any) {
     console.error('[admin] delete error:', err)
     res.status(500).json({ success: false, error: err.message || 'Lisans silinemedi' })
   }
-})
+}
+
+adminRouter.post('/api/keys/delete', requireAdminAuth, handleDeleteKey)
+adminRouter.delete('/api/keys', requireAdminAuth, handleDeleteKey)
+adminRouter.delete('/api/keys/:key', requireAdminAuth, handleDeleteKey)
+
