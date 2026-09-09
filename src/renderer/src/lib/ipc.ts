@@ -259,4 +259,27 @@ export const nexusAPI = {
     decryptFile: (payload: { filePath: string; passphrase: string }): Promise<{ success: boolean; outPath?: string; name?: string; error?: string }> =>
       window.nexusAPI.fortress.decryptFile(payload),
   },
+
+  // ── System Optimizer ────────────────────────────────────────────────────────
+  system: {
+    flushDns: (): Promise<{ success: boolean; output: string }> => window.nexusAPI.system.flushDns(),
+    scanTemp: (): Promise<{ path: string; fileCount: number; totalBytes: number; sizeFormatted: string; error?: string }> =>
+      window.nexusAPI.system.scanTemp(),
+    cleanTemp: (): Promise<{ success: boolean; deletedCount: number; freedBytes: number; freedFormatted: string; error?: string }> =>
+      window.nexusAPI.system.cleanTemp(),
+    pingHost: (host: string): Promise<{ success: boolean; latency: number | null; host: string }> =>
+      window.nexusAPI.system.pingHost(host),
+  },
+
+  // ── Settings & Startup ──────────────────────────────────────────────────────
+  settings: {
+    getAutoLaunch: (): Promise<boolean> => window.nexusAPI.settings.getAutoLaunch(),
+    setAutoLaunch: (enable: boolean): Promise<boolean> => window.nexusAPI.settings.setAutoLaunch(enable),
+  },
+
+  // ── Updater ─────────────────────────────────────────────────────────────────
+  updater: {
+    checkNow: (): Promise<any> => window.nexusAPI.updater.checkNow(),
+    installNow: (): void => window.nexusAPI.updater.installNow(),
+  },
 }

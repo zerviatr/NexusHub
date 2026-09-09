@@ -1,27 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import Sidebar from './components/Sidebar'
 import TitleBar from './components/TitleBar'
 import Dashboard from './pages/Dashboard'
-import TempMail from './pages/TempMail'
-import UniversalDecrypter from './pages/UniversalDecrypter'
-import BulkOrganizer from './pages/BulkOrganizer'
-import PasswordGenerator from './pages/PasswordGenerator'
-import ClipboardManager from './pages/ClipboardManager'
-import NetworkTools from './pages/NetworkTools'
-import ImageToolkit from './pages/ImageToolkit'
-import QrCodeStudio from './pages/QrCodeStudio'
-import JsonStudio from './pages/JsonStudio'
-import HashStudio from './pages/HashStudio'
-import ResourceSentinel from './pages/ResourceSentinel'
-import DevSandbox from './pages/DevSandbox'
-import CyberFortress from './pages/CyberFortress'
-import RegexStudio from './pages/RegexStudio'
-import FakeDataStudio from './pages/FakeDataStudio'
-import SystemOptimizer from './pages/SystemOptimizer'
-import CurlRunner from './pages/CurlRunner'
-import Account from './pages/Account'
 import Activation from './pages/Activation'
 import EulaGate from './pages/EulaGate'
 import OnboardingTour from './components/OnboardingTour'
@@ -31,6 +13,26 @@ import ProLockGate from './components/ProLockGate'
 import FloatingOrb from './components/FloatingOrb'
 import UpdateManager from './components/UpdateManager'
 import { useLicense } from './lib/LicenseContext'
+
+// Code-split heavy tool pages for blazing fast app launch & minimal RAM footprint
+const TempMail = lazy(() => import('./pages/TempMail'))
+const UniversalDecrypter = lazy(() => import('./pages/UniversalDecrypter'))
+const BulkOrganizer = lazy(() => import('./pages/BulkOrganizer'))
+const PasswordGenerator = lazy(() => import('./pages/PasswordGenerator'))
+const ClipboardManager = lazy(() => import('./pages/ClipboardManager'))
+const NetworkTools = lazy(() => import('./pages/NetworkTools'))
+const ImageToolkit = lazy(() => import('./pages/ImageToolkit'))
+const QrCodeStudio = lazy(() => import('./pages/QrCodeStudio'))
+const JsonStudio = lazy(() => import('./pages/JsonStudio'))
+const HashStudio = lazy(() => import('./pages/HashStudio'))
+const ResourceSentinel = lazy(() => import('./pages/ResourceSentinel'))
+const DevSandbox = lazy(() => import('./pages/DevSandbox'))
+const CyberFortress = lazy(() => import('./pages/CyberFortress'))
+const RegexStudio = lazy(() => import('./pages/RegexStudio'))
+const FakeDataStudio = lazy(() => import('./pages/FakeDataStudio'))
+const SystemOptimizer = lazy(() => import('./pages/SystemOptimizer'))
+const CurlRunner = lazy(() => import('./pages/CurlRunner'))
+const Account = lazy(() => import('./pages/Account'))
 
 const pageVariants = {
   initial: { opacity: 0, y: 20, scale: 0.98 },
@@ -106,7 +108,13 @@ export default function App() {
 
   // Gate 2: License Check Loading
   if (status === 'checking') {
-    return <div className="flex h-screen w-screen bg-nexus-bg" /> // Blank while checking
+    return (
+      <div className="flex h-screen w-screen flex-col items-center justify-center bg-nexus-bg select-none">
+        <div className="relative flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full border-2 border-nexus-accent/20 border-t-nexus-cyan animate-spin" />
+        </div>
+      </div>
+    )
   }
 
   // Gate 3: Instant Kick-Out on Revocation
@@ -147,51 +155,59 @@ export default function App() {
               transition={pageTransition}
               className="relative z-10 p-8"
             >
-              <Routes location={location}>
-                <Route path="/" element={<Dashboard />} />
-                <Route
-                  path="/temp-mail"
-                  element={isPro ? <TempMail /> : <ProLockGate toolName="TempMail Generator" toolDesc="Instant disposable email addresses to bypass spam and tracking. Reads inbox in real-time." />}
-                />
-                <Route
-                  path="/decrypter"
-                  element={isPro ? <UniversalDecrypter /> : <ProLockGate toolName="Universal Decrypter" toolDesc="Resolve shortened and monetized redirect links to their true destination and strip privacy trackers." />}
-                />
-                <Route
-                  path="/organizer"
-                  element={isPro ? <BulkOrganizer /> : <ProLockGate toolName="Bulk File Organizer" toolDesc="Clean up messy directories by instantly categorizing and bulk-renaming files with one-click undo." />}
-                />
-                <Route path="/aylink" element={<Navigate to="/decrypter" replace />} />
-                <Route path="/password" element={<PasswordGenerator />} />
-                <Route
-                  path="/clipboard"
-                  element={isPro ? <ClipboardManager /> : <ProLockGate toolName="Clipboard Manager" toolDesc="Auto-tracks local clipboard history up to 50 entries with global shortcut summon." />}
-                />
-                <Route
-                  path="/network"
-                  element={isPro ? <NetworkTools /> : <ProLockGate toolName="Network Tools" toolDesc="Public IP detection, DNS querying, port scanning, and native ICMP ping." />}
-                />
-                <Route
-                  path="/image"
-                  element={isPro ? <ImageToolkit /> : <ProLockGate toolName="Image Toolkit" toolDesc="Batch convert images to JPEG, PNG, WebP, or AVIF with EXIF metadata stripper." />}
-                />
-                <Route path="/qr-code" element={<QrCodeStudio />} />
-                <Route path="/json-studio" element={<JsonStudio />} />
-                <Route path="/hash-studio" element={<HashStudio />} />
-                <Route path="/regex-studio" element={<RegexStudio />} />
-                <Route path="/fake-data" element={<FakeDataStudio />} />
-                <Route path="/curl-runner" element={<CurlRunner />} />
-                <Route path="/system-optimizer" element={<SystemOptimizer />} />
-                <Route path="/sentinel" element={<ResourceSentinel />} />
-                <Route path="/dev-sandbox" element={<DevSandbox />} />
-                <Route
-                  path="/fortress"
-                  element={isPro ? <CyberFortress /> : <ProLockGate toolName="Cyber Fortress" toolDesc="DoD 5220.22-M 7-pass file shredder and military-grade AES-256-GCM vault encryption." />}
-                />
-                <Route path="/cyber-fortress" element={<Navigate to="/fortress" replace />} />
-                <Route path="/account" element={<Account />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
+              <Suspense
+                fallback={
+                  <div className="flex h-64 items-center justify-center">
+                    <div className="w-8 h-8 rounded-full border-2 border-nexus-accent/20 border-t-nexus-cyan animate-spin" />
+                  </div>
+                }
+              >
+                <Routes location={location}>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route
+                    path="/temp-mail"
+                    element={isPro ? <TempMail /> : <ProLockGate toolName="TempMail Generator" toolDesc="Instant disposable email addresses to bypass spam and tracking. Reads inbox in real-time." />}
+                  />
+                  <Route
+                    path="/decrypter"
+                    element={isPro ? <UniversalDecrypter /> : <ProLockGate toolName="Universal Decrypter" toolDesc="Resolve shortened and monetized redirect links to their true destination and strip privacy trackers." />}
+                  />
+                  <Route
+                    path="/organizer"
+                    element={isPro ? <BulkOrganizer /> : <ProLockGate toolName="Bulk File Organizer" toolDesc="Clean up messy directories by instantly categorizing and bulk-renaming files with one-click undo." />}
+                  />
+                  <Route path="/aylink" element={<Navigate to="/decrypter" replace />} />
+                  <Route path="/password" element={<PasswordGenerator />} />
+                  <Route
+                    path="/clipboard"
+                    element={isPro ? <ClipboardManager /> : <ProLockGate toolName="Clipboard Manager" toolDesc="Auto-tracks local clipboard history up to 50 entries with global shortcut summon." />}
+                  />
+                  <Route
+                    path="/network"
+                    element={isPro ? <NetworkTools /> : <ProLockGate toolName="Network Tools" toolDesc="Public IP detection, DNS querying, port scanning, and native ICMP ping." />}
+                  />
+                  <Route
+                    path="/image"
+                    element={isPro ? <ImageToolkit /> : <ProLockGate toolName="Image Toolkit" toolDesc="Batch convert images to JPEG, PNG, WebP, or AVIF with EXIF metadata stripper." />}
+                  />
+                  <Route path="/qr-code" element={<QrCodeStudio />} />
+                  <Route path="/json-studio" element={<JsonStudio />} />
+                  <Route path="/hash-studio" element={<HashStudio />} />
+                  <Route path="/regex-studio" element={<RegexStudio />} />
+                  <Route path="/fake-data" element={<FakeDataStudio />} />
+                  <Route path="/curl-runner" element={<CurlRunner />} />
+                  <Route path="/system-optimizer" element={<SystemOptimizer />} />
+                  <Route path="/sentinel" element={<ResourceSentinel />} />
+                  <Route path="/dev-sandbox" element={<DevSandbox />} />
+                  <Route
+                    path="/fortress"
+                    element={isPro ? <CyberFortress /> : <ProLockGate toolName="Cyber Fortress" toolDesc="DoD 5220.22-M 7-pass file shredder and military-grade AES-256-GCM vault encryption." />}
+                  />
+                  <Route path="/cyber-fortress" element={<Navigate to="/fortress" replace />} />
+                  <Route path="/account" element={<Account />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </Suspense>
             </motion.div>
           </AnimatePresence>
         </main>
