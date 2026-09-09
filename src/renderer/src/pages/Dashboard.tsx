@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import SpotlightCard from '../components/SpotlightCard'
@@ -22,8 +23,12 @@ import {
   Terminal,
   Cpu,
   Send,
+  Star,
+  Palette,
+  FileText,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
+import { cyberAudio } from '../lib/cyberAudio'
 
 
 const fadeUp = {
@@ -34,6 +39,27 @@ const fadeUp = {
 export default function Dashboard() {
   const navigate = useNavigate()
   const { t, locale } = useT()
+
+  const [pinnedIds, setPinnedIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('nexus_pinned_tools')
+      return saved ? JSON.parse(saved) : ['color-studio', 'port-killer', 'scratchpad']
+    } catch {
+      return ['color-studio', 'port-killer', 'scratchpad']
+    }
+  })
+
+  const togglePin = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    try {
+      cyberAudio.click()
+    } catch {}
+    setPinnedIds((prev) => {
+      const next = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      localStorage.setItem('nexus_pinned_tools', JSON.stringify(next))
+      return next
+    })
+  }
 
   const tools = [
     {
@@ -206,6 +232,36 @@ export default function Dashboard() {
       glowColor: 'rgba(16, 185, 129, 0.3)',
       status: 'Yeni',
     },
+    {
+      id: 'color-studio',
+      path: '/color-studio',
+      title: t('nav.tools.colorStudio') || 'Color Studio & Contrast',
+      description: t('dashboard.tools.colorStudio.desc') || 'HEX, RGB, HSL dönüştürücü, ekran damlalığı, görsel palet çıkarıcı ve WCAG kontrast denetleyici.',
+      icon: Palette,
+      gradient: 'from-purple-600 to-pink-500',
+      glowColor: 'rgba(236, 72, 153, 0.3)',
+      status: 'Yeni',
+    },
+    {
+      id: 'port-killer',
+      path: '/port-killer',
+      title: t('nav.tools.portKiller') || 'Port & Process Watchdog',
+      description: t('dashboard.tools.portKiller.desc') || 'Aktif dinlenen portları tarayın, portu hangi process kilitlemiş görün ve tek tıkla sonlandırın.',
+      icon: Activity,
+      gradient: 'from-rose-600 to-amber-600',
+      glowColor: 'rgba(244, 63, 94, 0.3)',
+      status: 'Yeni',
+    },
+    {
+      id: 'scratchpad',
+      path: '/scratchpad',
+      title: t('nav.tools.scratchpad') || 'Markdown Scratchpad',
+      description: t('dashboard.tools.scratchpad.desc') || 'Canlı çift panel önizleme, anlık metin istatistiği ve otomatik kayıt özellikli not alanı.',
+      icon: FileText,
+      gradient: 'from-emerald-600 to-teal-500',
+      glowColor: 'rgba(16, 185, 129, 0.3)',
+      status: 'Yeni',
+    },
   ]
 
   return (
@@ -289,6 +345,49 @@ export default function Dashboard() {
         ))}
       </motion.div>
 
+      {/* Pinned favorites section */}
+      {pinnedIds.length > 0 && (
+        <div className="mb-10">
+          <div className="flex items-center gap-2 mb-4">
+            <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+            <h2 className="text-xs font-semibold text-white tracking-widest uppercase">
+              Sabitlenen Favoriler (Pinned Tools)
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {tools
+              .filter((t) => pinnedIds.includes(t.id))
+              .map((tool) => (
+                <div
+                  key={`pin_${tool.id}`}
+                  onClick={() => navigate(tool.path)}
+                  className="p-3.5 rounded-2xl bg-nexus-card/80 border border-nexus-accent/30 hover:border-nexus-cyan/50 flex items-center justify-between cursor-pointer transition-all hover:scale-[1.02] shadow-lg shadow-black/30 group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center text-white shrink-0`}>
+                      <tool.icon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white group-hover:text-nexus-cyan transition-colors truncate max-w-[150px]">
+                        {tool.title}
+                      </h4>
+                      <span className="text-[10px] text-nexus-muted font-mono">{tool.status}</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => togglePin(tool.id, e)}
+                    className="p-1.5 rounded-lg text-amber-400 hover:text-amber-300"
+                    title="Favorilerden Çıkar"
+                  >
+                    <Star className="w-4 h-4 fill-amber-400" />
+                  </button>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
+
       {/* Tools grid */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -325,10 +424,24 @@ export default function Dashboard() {
                   >
                     <tool.icon className="w-6 h-6 text-white" />
                   </div>
-                  <span className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    {tool.status}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={(e) => togglePin(tool.id, e)}
+                      className={`p-1.5 rounded-lg transition-all ${
+                        pinnedIds.includes(tool.id)
+                          ? 'text-amber-400 bg-amber-400/10 border border-amber-400/30'
+                          : 'text-nexus-muted hover:text-white bg-white/[0.04]'
+                      }`}
+                      title={pinnedIds.includes(tool.id) ? 'Favorilerden Kaldır' : 'Favorilere Sabitle'}
+                    >
+                      <Star className={`w-3.5 h-3.5 ${pinnedIds.includes(tool.id) ? 'fill-amber-400' : ''}`} />
+                    </button>
+                    <span className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      {tool.status}
+                    </span>
+                  </div>
                 </div>
 
                 <h3 className="text-base font-bold text-white mb-1.5 group-hover:text-nexus-cyan transition-colors">

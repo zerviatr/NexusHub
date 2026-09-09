@@ -13,6 +13,7 @@ import { setupSystemTray } from './tray'
 import { registerSentinelIPC } from './ipc/sentinelIPC'
 import { registerCyberFortressIPC } from './ipc/cyberFortressIPC'
 import { registerSystemOptimizerIPC } from './ipc/systemOptimizer'
+import { registerPortWatchdogIPC } from './ipc/portWatchdog'
 import { setupGlobalShortcuts, registerSettingsIPC } from './shortcuts'
 
 let mainWindow: BrowserWindow | null = null
@@ -107,6 +108,7 @@ registerSettingsIPC()
 registerSentinelIPC()
 registerCyberFortressIPC()
 registerSystemOptimizerIPC()
+registerPortWatchdogIPC()
 
 // ===== App Lifecycle & Single Instance Lock =====
 const gotTheLock = app.requestSingleInstanceLock()

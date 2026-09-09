@@ -101,6 +101,21 @@ interface NexusAPI {
     getAutoLaunch: () => Promise<boolean>
     setAutoLaunch: (enable: boolean) => Promise<boolean>
   }
+  port?: {
+    scan: () => Promise<{
+      success: boolean
+      ports: {
+        protocol: string
+        localAddress: string
+        port: number
+        state: string
+        pid: number
+        processName: string
+      }[]
+      error?: string
+    }>
+    kill: (pid: number) => Promise<{ success: boolean; message?: string; error?: string }>
+  }
 }
 
 declare global {

@@ -25,6 +25,10 @@ import {
   Zap,
   Cpu,
   Send,
+  Palette,
+  FileText,
+  Radio,
+  Clock,
 } from 'lucide-react'
 
 interface PaletteItem {
@@ -46,6 +50,33 @@ const PALETTE_ITEMS: PaletteItem[] = [
     path: '/',
     icon: LayoutDashboard,
     keywords: ['home', 'overview', 'main', 'start']
+  },
+  {
+    id: 'color-studio',
+    title: 'Color & Contrast Studio',
+    subtitle: 'HEX/RGB/HSL/CMYK converter, EyeDropper, WCAG 2.1 validator & gradient generator',
+    category: 'Tools',
+    path: '/color-studio',
+    icon: Palette,
+    keywords: ['color', 'contrast', 'wcag', 'hex', 'rgb', 'hsl', 'cmyk', 'eyedropper', 'palette', 'gradient']
+  },
+  {
+    id: 'port-killer',
+    title: 'Port Killer & TCP Watchdog',
+    subtitle: 'Active TCP listeners, PID lookup, process inspector & one-click termination',
+    category: 'Tools',
+    path: '/port-killer',
+    icon: Radio,
+    keywords: ['port', 'killer', 'tcp', 'listener', 'pid', 'process', 'kill', 'watchdog', 'netstat']
+  },
+  {
+    id: 'scratchpad',
+    title: 'Markdown Scratchpad',
+    subtitle: 'Instant live markdown editor with split preview, metrics & export',
+    category: 'Tools',
+    path: '/scratchpad',
+    icon: FileText,
+    keywords: ['markdown', 'scratchpad', 'notes', 'editor', 'preview', 'export', 'text']
   },
   {
     id: 'regex-studio',
@@ -215,8 +246,21 @@ export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [recentIds, setRecentIds] = useState<string[]>([])
   const navigate = useNavigate()
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Load recent items
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('nexus_recent_tools')
+      if (stored) {
+        setRecentIds(JSON.parse(stored))
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }, [isOpen])
 
   // Listen for Ctrl+K / Cmd+K and custom event
   useEffect(() => {
@@ -250,16 +294,25 @@ export default function CommandPalette() {
     }
   }, [isOpen])
 
-  // Filter items based on query
-  const filteredItems = PALETTE_ITEMS.filter((item) => {
-    if (!query.trim()) return true
+  // Filter & sort items based on query + recents
+  const filteredItems = (() => {
+    if (!query.trim()) {
+      // Put recent items first
+      const recents = recentIds
+        .map((id) => PALETTE_ITEMS.find((item) => item.id === id))
+        .filter(Boolean) as PaletteItem[]
+      const others = PALETTE_ITEMS.filter((item) => !recentIds.includes(item.id))
+      return [...recents, ...others]
+    }
     const q = query.toLowerCase()
-    return (
-      item.title.toLowerCase().includes(q) ||
-      item.subtitle.toLowerCase().includes(q) ||
-      item.keywords.some((k) => k.toLowerCase().includes(q))
-    )
-  })
+    return PALETTE_ITEMS.filter((item) => {
+      return (
+        item.title.toLowerCase().includes(q) ||
+        item.subtitle.toLowerCase().includes(q) ||
+        item.keywords.some((k) => k.toLowerCase().includes(q))
+      )
+    })
+  })()
 
   // Keyboard navigation inside palette
   const handleInputKeyDown = (e: React.KeyboardEvent) => {
@@ -272,13 +325,18 @@ export default function CommandPalette() {
     } else if (e.key === 'Enter') {
       e.preventDefault()
       if (filteredItems[selectedIndex]) {
-        navigate(filteredItems[selectedIndex].path)
-        setIsOpen(false)
+        handleSelectItem(filteredItems[selectedIndex].id, filteredItems[selectedIndex].path)
       }
     }
   }
 
-  const handleSelectItem = (path: string) => {
+  const handleSelectItem = (id: string, path: string) => {
+    try {
+      const nextRecents = [id, ...recentIds.filter((x) => x !== id)].slice(0, 5)
+      localStorage.setItem('nexus_recent_tools', JSON.stringify(nextRecents))
+    } catch (e) {
+      console.error(e)
+    }
     navigate(path)
     setIsOpen(false)
   }
@@ -334,12 +392,13 @@ export default function CommandPalette() {
                 filteredItems.map((item, index) => {
                   const Icon = item.icon
                   const isSelected = index === selectedIndex
+                  const isRecent = !query.trim() && recentIds.includes(item.id)
 
                   return (
                     <button
                       key={item.id}
                       type="button"
-                      onClick={() => handleSelectItem(item.path)}
+                      onClick={() => handleSelectItem(item.id, item.path)}
                       onMouseEnter={() => setSelectedIndex(index)}
                       className={`w-full flex items-center justify-between p-3 rounded-xl text-left transition-all ${
                         isSelected
@@ -358,6 +417,11 @@ export default function CommandPalette() {
                         <div>
                           <div className="text-xs font-semibold text-white flex items-center gap-2">
                             {item.title}
+                            {isRecent && (
+                              <span className="flex items-center gap-1 text-[10px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.2 rounded font-normal">
+                                <Clock className="w-2.5 h-2.5" /> Recent
+                              </span>
+                            )}
                             <span className="text-[10px] text-nexus-muted px-1.5 py-0.2 rounded bg-white/5 font-normal">
                               {item.category}
                             </span>

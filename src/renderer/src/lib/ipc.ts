@@ -283,4 +283,10 @@ export const nexusAPI = {
     installNow: (): void => window.nexusAPI.updater.installNow(),
     onApplyingPatch: (cb: () => void): (() => void) | undefined => window.nexusAPI.updater.onApplyingPatch?.(cb),
   },
+
+  // ── Port & Process Watchdog ──────────────────────────────────────────────────
+  port: {
+    scan: () => window.nexusAPI.port?.scan() || Promise.resolve({ success: false, ports: [], error: 'Port IPC unavailable' }),
+    kill: (pid: number) => window.nexusAPI.port?.kill(pid) || Promise.resolve({ success: false, error: 'Port IPC unavailable' }),
+  },
 }

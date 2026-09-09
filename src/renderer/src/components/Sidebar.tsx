@@ -25,6 +25,9 @@ import {
   Zap,
   Cpu,
   Send,
+  Palette,
+  FileText,
+  Radio,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
 import { cyberAudio } from '../lib/cyberAudio'
@@ -54,13 +57,15 @@ const NAV_GROUPS: NavGroup[] = [
   {
     labelKey: 'nav.groups.developer',
     items: [
-      { path: '/regex-studio', labelKey: 'nav.tools.regexStudio', icon: Terminal },
-      { path: '/fake-data',    labelKey: 'nav.tools.fakeData',    icon: Zap },
-      { path: '/curl-runner',  labelKey: 'nav.tools.curlRunner',  icon: Send },
-      { path: '/dev-sandbox',  labelKey: 'nav.tools.devSandbox',  icon: Code2 },
-      { path: '/qr-code',      labelKey: 'nav.tools.qrCode',      icon: QrCode },
-      { path: '/json-studio',  labelKey: 'nav.tools.jsonStudio',  icon: Braces },
-      { path: '/hash-studio',  labelKey: 'nav.tools.hashStudio',  icon: FileCheck },
+      { path: '/scratchpad',   labelKey: 'nav.tools.scratchpad',   icon: FileText },
+      { path: '/color-studio', labelKey: 'nav.tools.colorStudio',  icon: Palette },
+      { path: '/regex-studio', labelKey: 'nav.tools.regexStudio',  icon: Terminal },
+      { path: '/fake-data',    labelKey: 'nav.tools.fakeData',     icon: Zap },
+      { path: '/curl-runner',  labelKey: 'nav.tools.curlRunner',   icon: Send },
+      { path: '/dev-sandbox',  labelKey: 'nav.tools.devSandbox',   icon: Code2 },
+      { path: '/qr-code',      labelKey: 'nav.tools.qrCode',       icon: QrCode },
+      { path: '/json-studio',  labelKey: 'nav.tools.jsonStudio',   icon: Braces },
+      { path: '/hash-studio',  labelKey: 'nav.tools.hashStudio',   icon: FileCheck },
     ],
   },
   {
@@ -74,6 +79,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     labelKey: 'nav.groups.network',
     items: [
+      { path: '/port-killer',      labelKey: 'nav.tools.portKiller',      icon: Radio },
       { path: '/system-optimizer', labelKey: 'nav.tools.systemOptimizer', icon: Cpu },
       { path: '/network',          labelKey: 'nav.tools.networkTools',     icon: Globe },
       { path: '/sentinel',         labelKey: 'nav.tools.sentinel',         icon: Activity },

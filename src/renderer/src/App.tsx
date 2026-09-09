@@ -32,6 +32,9 @@ const RegexStudio = lazy(() => import('./pages/RegexStudio'))
 const FakeDataStudio = lazy(() => import('./pages/FakeDataStudio'))
 const SystemOptimizer = lazy(() => import('./pages/SystemOptimizer'))
 const CurlRunner = lazy(() => import('./pages/CurlRunner'))
+const ColorStudio = lazy(() => import('./pages/ColorStudio'))
+const PortKiller = lazy(() => import('./pages/PortKiller'))
+const Scratchpad = lazy(() => import('./pages/Scratchpad'))
 const Account = lazy(() => import('./pages/Account'))
 
 const pageVariants = {
@@ -64,6 +67,18 @@ export default function App() {
     }
   }, [navigate])
   
+  // Initialize active Cyber Theme on app boot
+  useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem('nexus_cyber_theme') || 'default'
+      if (savedTheme === 'default') {
+        document.documentElement.removeAttribute('data-theme')
+      } else {
+        document.documentElement.setAttribute('data-theme', savedTheme)
+      }
+    } catch {}
+  }, [])
+
   const [hasAcceptedEula, setHasAcceptedEula] = useState<boolean>(
     localStorage.getItem('nexus_eula_accepted') === 'true'
   )
@@ -197,6 +212,9 @@ export default function App() {
                   <Route path="/fake-data" element={<FakeDataStudio />} />
                   <Route path="/curl-runner" element={<CurlRunner />} />
                   <Route path="/system-optimizer" element={<SystemOptimizer />} />
+                  <Route path="/color-studio" element={<ColorStudio />} />
+                  <Route path="/port-killer" element={<PortKiller />} />
+                  <Route path="/scratchpad" element={<Scratchpad />} />
                   <Route path="/sentinel" element={<ResourceSentinel />} />
                   <Route path="/dev-sandbox" element={<DevSandbox />} />
                   <Route

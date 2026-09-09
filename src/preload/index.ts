@@ -153,6 +153,12 @@ const nexusAPI = {
     getAutoLaunch: () => ipcRenderer.invoke('settings:getAutoLaunch'),
     setAutoLaunch: (enable: boolean) => ipcRenderer.invoke('settings:setAutoLaunch', enable),
   },
+
+  // Port & Process Watchdog
+  port: {
+    scan: () => ipcRenderer.invoke('port:scanActivePorts'),
+    kill: (pid: number) => ipcRenderer.invoke('port:killProcess', pid),
+  },
 }
 
 if (process.contextIsolated) {

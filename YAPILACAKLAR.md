@@ -96,3 +96,10 @@
 - [x] Anlık Diferansiyel Sessiz Güncelleme — NSIS differentialPackage (.blockmap) ve 150ms kesintisiz geçiş
 - [x] GitHub Actions CI Turbo Optimizasyonu — Yalnızca x64 NSIS, Electron binary önbelleği ve 1.5 dk derleme
 - [x] Main Process IPC Singleton Zırhı — `updater:check-now` mükerrer handle çökmesini kalıcı engelleme (v2.1.3)
+- [x] Renk & Kontrast Stüdyosu (`/color-studio`) — HEX/RGB/HSL/CMYK dönüştürücü, WCAG 2.1 validator, EyeDropper, CSS gradient oluşturucu (v2.1.9)
+- [x] Port Killer & TCP Gözlemcisi (`/port-killer`) — Aktif dinleyen portları netstat ile listeleme, PID lookup, güvenli süreç sonlandırma (v2.1.9)
+- [x] Markdown Scratchpad Not Defteri (`/scratchpad`) — Ayrık canlı önizleme, anlık metrikler, MD/HTML dışa aktarma, yerel otomatik kaydetme (v2.1.9)
+- [x] Favori Araç Sabitleme (Pinned Tools) — Dashboard üzerinde tek tıkla araç yıldızlama ve hızlı erişim paneli (v2.1.9)
+- [x] Hızlı Komut Paleti Geçmişi (Recent Tools) — Command Palette'te son kullanılan araçları otomatik hatırlama (v2.1.9)
+- [x] Dinamik Siber Temalar (Cyber Themes) — Matrix Emerald, Cyberpunk 2077, Synthwave 80s, Crimson Protocol ve Klasik Mor arayüz motoru (v2.1.9)
+- [x] Web Audio SFX Ses Seviyesi Ayarı (Volume Slider) — Account sekmesinde haptik ses şiddeti kontrolü (v2.1.9)

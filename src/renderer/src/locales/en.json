@@ -25,7 +25,10 @@
       "networkTools": "Network Tools",
       "sentinel": "Resource Sentinel",
       "devSandbox": "DevSandbox API Studio",
-      "cyberFortress": "Cyber Fortress & Shredder"
+      "cyberFortress": "Cyber Fortress & Shredder",
+      "colorStudio": "Color & Contrast Studio",
+      "portKiller": "Port Killer & TCP Watchdog",
+      "scratchpad": "Markdown Scratchpad"
     },
     "account": "Account Settings"
   },

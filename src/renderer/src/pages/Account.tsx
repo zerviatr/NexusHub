@@ -137,6 +137,41 @@ export default function Account() {
     }
   }
 
+  const [sfxVolume, setSfxVolume] = useState<number>(() => {
+    try {
+      return Math.round(cyberAudio.getVolume() * 100)
+    } catch {
+      return 80
+    }
+  })
+
+  const [currentTheme, setCurrentTheme] = useState<string>(() => {
+    try {
+      return localStorage.getItem('nexus_cyber_theme') || 'default'
+    } catch {
+      return 'default'
+    }
+  })
+
+  const THEMES = [
+    { id: 'default', name: 'Cyber Violet', accent: '#8b5cf6', desc: 'Klasik mor neon & amber vurguları' },
+    { id: 'matrix', name: 'Matrix Emerald', accent: '#00ff66', desc: 'Terminal yeşili & fosforik parıltı' },
+    { id: 'cyberpunk', name: 'Cyberpunk 2077', accent: '#ffe600', desc: 'Agresif neon sarı & asit mavisi' },
+    { id: 'synthwave', name: 'Synthwave 80s', accent: '#ff007f', desc: 'Retro neon pembe & 80ler ışıltısı' },
+    { id: 'crimson', name: 'Crimson Protocol', accent: '#ff2a5f', desc: 'Kan kırmızısı & siber savaş estetiği' },
+  ]
+
+  const handleSelectTheme = (themeId: string) => {
+    setCurrentTheme(themeId)
+    localStorage.setItem('nexus_cyber_theme', themeId)
+    if (themeId === 'default') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', themeId)
+    }
+    cyberAudio.copySuccess()
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3 mb-8">
@@ -163,6 +198,57 @@ export default function Account() {
           </button>
         </div>
       </div>
+
+      {/* Cyber Themes Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="glass-card p-6 border-nexus-border/40"
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-base font-semibold text-white flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-nexus-accent" />
+              Siber Tema & Arayüz Renk Motoru (Cyber Themes)
+            </h2>
+            <p className="text-xs text-nexus-muted mt-0.5">Tüm uygulama arayüzünün neon vurgularını ve parıltılarını anında değiştirin</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          {THEMES.map((theme) => {
+            const isSelected = currentTheme === theme.id
+            return (
+              <button
+                key={theme.id}
+                onClick={() => handleSelectTheme(theme.id)}
+                className={`p-3.5 rounded-xl border text-left transition-all relative overflow-hidden group ${
+                  isSelected
+                    ? 'bg-nexus-surface/80 border-nexus-accent shadow-lg shadow-nexus-accent/15'
+                    : 'bg-nexus-surface/30 border-white/5 hover:border-white/20 hover:bg-nexus-surface/50'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span
+                    className="w-4 h-4 rounded-full shadow-sm"
+                    style={{ backgroundColor: theme.accent, boxShadow: `0 0 10px ${theme.accent}` }}
+                  />
+                  {isSelected && (
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-nexus-accent/20 text-nexus-accent border border-nexus-accent/30 font-bold">
+                      AKTİF
+                    </span>
+                  )}
+                </div>
+                <div className="text-xs font-semibold text-white group-hover:text-nexus-cyan transition-colors">
+                  {theme.name}
+                </div>
+                <p className="text-[11px] text-nexus-muted mt-1 leading-tight">{theme.desc}</p>
+              </button>
+            )
+          })}
+        </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <motion.div
@@ -359,28 +445,52 @@ export default function Account() {
         transition={{ duration: 0.3, delay: 0.05 }}
         className="glass-card p-6 border-nexus-border/40 mt-8 space-y-6"
       >
-        <div className="flex items-center justify-between pb-4 border-b border-nexus-border/30">
-          <div>
-            <h3 className="font-semibold text-nexus-text text-sm">Siber Haptik & Ses Efektleri (Audio SFX)</h3>
-            <p className="text-xs text-nexus-muted mt-0.5">Tıklama, kopyalama ve işlem bildirimleri için hafif mekanik sesler</p>
+        <div className="space-y-4 pb-4 border-b border-nexus-border/30">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-nexus-text text-sm">Siber Haptik & Ses Efektleri (Audio SFX)</h3>
+              <p className="text-xs text-nexus-muted mt-0.5">Tıklama, kopyalama ve işlem bildirimleri için hafif mekanik sesler</p>
+            </div>
+            <button
+              onClick={() => {
+                const next = !audioEnabled
+                try {
+                  cyberAudio.setEnabled(next)
+                  setAudioEnabled(next)
+                  if (next) cyberAudio.copySuccess()
+                } catch {}
+              }}
+              className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all ${
+                audioEnabled
+                  ? 'bg-nexus-accent text-white shadow-lg shadow-nexus-accent/20'
+                  : 'bg-nexus-bg text-nexus-muted border border-nexus-border'
+              }`}
+            >
+              {audioEnabled ? 'SESLER AÇIK' : 'SESSİZ MOD'}
+            </button>
           </div>
-          <button
-            onClick={() => {
-              const next = !audioEnabled
-              try {
-                cyberAudio.setEnabled(next)
-                setAudioEnabled(next)
-                if (next) cyberAudio.copySuccess()
-              } catch {}
-            }}
-            className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all ${
-              audioEnabled
-                ? 'bg-nexus-accent text-white shadow-lg shadow-nexus-accent/20'
-                : 'bg-nexus-bg text-nexus-muted border border-nexus-border'
-            }`}
-          >
-            {audioEnabled ? 'SESLER AÇIK' : 'SESSİZ MOD'}
-          </button>
+
+          {audioEnabled && (
+            <div className="flex items-center gap-4 pt-2">
+              <span className="text-xs font-mono text-nexus-muted whitespace-nowrap">Ses Seviyesi:</span>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={sfxVolume}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value, 10)
+                  setSfxVolume(val)
+                  cyberAudio.setVolume(val / 100)
+                }}
+                onMouseUp={() => cyberAudio.click()}
+                className="w-full accent-nexus-accent cursor-pointer"
+              />
+              <span className="text-xs font-mono text-nexus-cyan font-bold min-w-[3rem] text-right">
+                %{sfxVolume}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">

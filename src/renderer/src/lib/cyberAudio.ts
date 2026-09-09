@@ -4,14 +4,17 @@
 class CyberAudioEngine {
   private ctx: AudioContext | null = null
   private enabled: boolean = true
+  private volume: number = 0.8
 
   constructor() {
     const saved = localStorage.getItem('nexus_sfx_enabled')
     this.enabled = saved !== null ? saved === 'true' : true
+    const savedVol = localStorage.getItem('nexus_sfx_volume')
+    this.volume = savedVol !== null ? parseFloat(savedVol) : 0.8
   }
 
   private initContext(): AudioContext | null {
-    if (!this.enabled) return null
+    if (!this.enabled || this.volume <= 0) return null
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext
       if (AudioCtx) {
@@ -33,6 +36,15 @@ class CyberAudioEngine {
     return this.enabled
   }
 
+  public setVolume(val: number) {
+    this.volume = Math.max(0, Math.min(1, val))
+    localStorage.setItem('nexus_sfx_volume', this.volume.toString())
+  }
+
+  public getVolume(): number {
+    return this.volume
+  }
+
   // Mechanical cyber-click
   public click() {
     try {
@@ -47,7 +59,7 @@ class CyberAudioEngine {
       osc.frequency.setValueAtTime(800, now)
       osc.frequency.exponentialRampToValueAtTime(400, now + 0.04)
 
-      gain.gain.setValueAtTime(0.08, now)
+      gain.gain.setValueAtTime(0.08 * this.volume, now)
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04)
 
       osc.connect(gain)
@@ -77,7 +89,7 @@ class CyberAudioEngine {
 
       osc2.frequency.setValueAtTime(1174.66, now + 0.06)
 
-      gain.gain.setValueAtTime(0.06, now)
+      gain.gain.setValueAtTime(0.06 * this.volume, now)
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22)
 
       osc1.connect(gain)
@@ -115,7 +127,7 @@ class CyberAudioEngine {
       filter.Q.setValueAtTime(3, now)
 
       const gain = ctx.createGain()
-      gain.gain.setValueAtTime(0.07, now)
+      gain.gain.setValueAtTime(0.07 * this.volume, now)
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15)
 
       noise.connect(filter)
@@ -141,7 +153,7 @@ class CyberAudioEngine {
       osc.frequency.setValueAtTime(240, now)
       osc.frequency.exponentialRampToValueAtTime(480, now + 0.07)
 
-      gain.gain.setValueAtTime(0.04, now)
+      gain.gain.setValueAtTime(0.04 * this.volume, now)
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07)
 
       osc.connect(gain)
