@@ -45,3 +45,8 @@ electron-builder-cache/
 
 # TypeScript build info
 *.tsbuildinfo
+
+# Antigravity Kit Backups
+.ag-kit-backups/
+.agents/.ag-kit/
+
