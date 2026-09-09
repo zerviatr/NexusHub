@@ -103,8 +103,9 @@ export function renderLandingPage(): string {
       </div>
 
       <div class="flex items-center gap-3">
-        <a href="/admin" class="hidden sm:inline-flex px-3.5 py-1.5 rounded-lg border border-nexus-border hover:border-nexus-cyan/50 text-xs font-mono text-nexus-muted hover:text-white transition-all">
-          Yönetici Paneli
+        <a href="https://github.com/zerviatr/NexusHub/releases/latest" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-nexus-border hover:border-nexus-cyan/50 text-xs font-mono text-nexus-muted hover:text-white transition-all">
+          <svg class="w-3.5 h-3.5 text-nexus-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          <span>v2.0.3 İndir</span>
         </a>
         <a href="#pricing" class="px-4 py-2 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-bold font-heading text-sm shadow-[0_0_20px_rgba(6,182,212,0.35)] transition-all">
           Lisans Al
@@ -550,7 +551,7 @@ export function renderLandingPage(): string {
       </div>
       <div class="flex items-center gap-6 text-xs font-mono text-nexus-muted">
         <a href="https://github.com/zerviatr/NexusHub" target="_blank" class="hover:text-white transition-colors">GitHub Repository</a>
-        <a href="/admin" class="hover:text-nexus-cyan transition-colors">Admin Console</a>
+        <a href="#faq" class="hover:text-nexus-cyan transition-colors">Destek & SSS</a>
         <a href="#pricing" class="text-nexus-cyan font-bold hover:underline">Pro Lisans Al</a>
       </div>
     </div>
