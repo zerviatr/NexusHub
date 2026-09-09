@@ -18,6 +18,7 @@ import { webhookRouter } from './routes/webhook'
 import { licenseRouter } from './routes/license'
 import { adminRouter }   from './routes/admin'
 import { renderLandingPage } from './landingPageHtml'
+import { createRateLimiter } from './middleware/rateLimiter'
 
 const app  = express()
 app.disable('x-powered-by')
@@ -35,14 +36,28 @@ app.use('/webhook', (req: Request, _res: Response, next: NextFunction) => {
 })
 
 // ── Body parsing for all other routes ─────────────────────────────────────
-app.use(express.json())
+app.use(express.json({ limit: '1mb' }))
 
-// ── Security Headers ───────────────────────────────────────────────────────
+// ── Enhanced Security Headers ──────────────────────────────────────────────
 app.use((_req: Request, res: Response, next: NextFunction) => {
   res.setHeader('X-Content-Type-Options', 'nosniff')
   res.setHeader('X-Frame-Options', 'SAMEORIGIN')
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin')
   next()
+})
+
+const waitlistLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  maxRequests: 5,
+  message: 'Kısa süre içinde çok fazla bekleme listesi kaydı yapıldı. Lütfen daha sonra tekrar deneyin.',
+})
+
+const feedLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: 60,
+  message: 'Çok fazla istek gönderildi.',
 })
 
 // ── CORS ───────────────────────────────────────────────────────────────────
@@ -70,7 +85,7 @@ app.get('/', (_req: Request, res: Response) => {
 })
 
 // ── Waitlist Lead Capture ──────────────────────────────────────────────────
-app.post('/api/waitlist', async (req: Request, res: Response) => {
+app.post('/api/waitlist', waitlistLimiter, async (req: Request, res: Response) => {
   try {
     const { email } = req.body as { email?: string }
     if (!email || !email.includes('@') || !email.includes('.')) {
@@ -140,7 +155,7 @@ function resolveTierTitle(tier: string): string {
 }
 
 // ── Real Recent Social Proof Activations Feed ───────────────────────────────
-app.get('/api/recent-activations', async (_req: Request, res: Response) => {
+app.get('/api/recent-activations', feedLimiter, async (_req: Request, res: Response) => {
   try {
     const db = getDb()
     const result = await db.execute(`

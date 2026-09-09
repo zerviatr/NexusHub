@@ -89,7 +89,7 @@ export async function migrate(): Promise<void> {
     )
   `)
 
-  // Safe migrations for commercial metadata in existing DBs
+  // Safe migrations for commercial metadata and anti-piracy controls in existing DBs
   try {
     await db.execute(`ALTER TABLE licenses ADD COLUMN sales_channel TEXT`)
   } catch {}
@@ -102,6 +102,16 @@ export async function migrate(): Promise<void> {
   try {
     await db.execute(`ALTER TABLE licenses ADD COLUMN customer_country TEXT`)
   } catch {}
+  try {
+    await db.execute(`ALTER TABLE licenses ADD COLUMN last_hwid_reset INTEGER DEFAULT 0`)
+  } catch {}
 
-  console.log('[db] Migration complete')
+  // High-performance secondary indexes for O(log N) lookups & anti-piracy queries
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_activations_license_key ON activations(license_key)`)
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_activations_device_id ON activations(device_id)`)
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_licenses_email ON licenses(email)`)
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_licenses_created_at ON licenses(created_at)`)
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_licenses_revoked ON licenses(is_revoked)`)
+
+  console.log('[db] Migration and index optimization complete')
 }

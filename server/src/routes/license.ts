@@ -11,8 +11,34 @@ import { Router, Request, Response } from 'express'
 import { createHmac } from 'crypto'
 import { getDb } from '../db'
 import { notifyKeyActivated } from '../services/notifier'
+import { createRateLimiter } from '../middleware/rateLimiter'
 
 export const licenseRouter = Router()
+
+// Rate limiters for anti-piracy and brute-force mitigation
+const activateLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: 10,
+  message: 'Çok fazla aktivasyon denemesi yapıldı. Lütfen 1 dakika sonra tekrar deneyin.',
+})
+
+const verifyLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: 60,
+  message: 'Lisans doğrulama istek sınırı aşıldı.',
+})
+
+const lookupLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: 20,
+  message: 'Lisans sorgulama istek sınırı aşıldı.',
+})
+
+const resetHwidLimiter = createRateLimiter({
+  windowMs: 60 * 60 * 1000,
+  maxRequests: 5,
+  message: 'Cihaz sıfırlama istek sınırı aşıldı. Lütfen daha sonra tekrar deneyin.',
+})
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -41,7 +67,7 @@ async function getActivationCount(key: string): Promise<number> {
 }
 
 // ─── POST /api/license/activate ──────────────────────────────────────────────
-licenseRouter.post('/activate', async (req: Request, res: Response): Promise<void> => {
+licenseRouter.post('/activate', activateLimiter, async (req: Request, res: Response): Promise<void> => {
   try {
     const { key, deviceId } = req.body as { key?: string; deviceId?: string }
 
@@ -124,7 +150,7 @@ licenseRouter.post('/activate', async (req: Request, res: Response): Promise<voi
 })
 
 // ─── POST /api/license/verify ────────────────────────────────────────────────
-licenseRouter.post('/verify', async (req: Request, res: Response): Promise<void> => {
+licenseRouter.post('/verify', verifyLimiter, async (req: Request, res: Response): Promise<void> => {
   try {
     const { key, deviceId } = req.body as { key?: string; deviceId?: string }
 
@@ -202,7 +228,7 @@ licenseRouter.post('/deactivate', async (req: Request, res: Response): Promise<v
 })
 
 // ─── POST /api/license/lookup (Public Self-Service Portal) ───────────────────
-licenseRouter.post('/lookup', async (req: Request, res: Response): Promise<void> => {
+licenseRouter.post('/lookup', lookupLimiter, async (req: Request, res: Response): Promise<void> => {
   try {
     const { key } = req.body as { key?: string }
     if (!key) {
@@ -238,8 +264,8 @@ licenseRouter.post('/lookup', async (req: Request, res: Response): Promise<void>
   }
 })
 
-// ─── POST /api/license/reset-hardware (Self-Service HWID Clear) ──────────────
-licenseRouter.post('/reset-hardware', async (req: Request, res: Response): Promise<void> => {
+// ─── POST /api/license/reset-hardware (Self-Service HWID Clear with Anti-Piracy Cooldown) ──
+licenseRouter.post('/reset-hardware', resetHwidLimiter, async (req: Request, res: Response): Promise<void> => {
   try {
     const { key } = req.body as { key?: string }
     if (!key) {
@@ -259,9 +285,30 @@ licenseRouter.post('/reset-hardware', async (req: Request, res: Response): Promi
       return
     }
 
+    // Anti-Piracy Cooldown: Enforce 24-hour waiting period between resets
+    const HWID_RESET_COOLDOWN_MS = 24 * 60 * 60 * 1000
+    const lastReset = Number(license['last_hwid_reset'] ?? 0)
+    const elapsed = Date.now() - lastReset
+
+    if (lastReset > 0 && elapsed < HWID_RESET_COOLDOWN_MS) {
+      const remainingHours = Math.max(1, Math.ceil((HWID_RESET_COOLDOWN_MS - elapsed) / (1000 * 60 * 60)))
+      res.status(429).json({
+        success: false,
+        reason: `Donanım sıfırlama sınırına ulaşıldı. Güvenlik gereği cihaz kilidi 24 saatte en fazla bir kez sıfırlanabilir. Kalan süre: ~${remainingHours} saat.`,
+      })
+      return
+    }
+
+    // Clear active activations
     await getDb().execute({
       sql: 'DELETE FROM activations WHERE license_key = ?',
       args: [cleanKey],
+    })
+
+    // Stamp new reset timestamp
+    await getDb().execute({
+      sql: 'UPDATE licenses SET last_hwid_reset = ? WHERE key = ?',
+      args: [Date.now(), cleanKey],
     })
 
     console.log(`[license] Self-service hardware reset completed for key=${cleanKey.slice(0, 8)}...`)
