@@ -941,11 +941,11 @@ graph LR
             <span class="text-nexus-muted">Eşzamanlı Yük Testi:</span>
             <span id="benchmark-load-label" class="font-bold text-nexus-cyan text-sm">5 Aktif Araç / Görev</span>
           </div>
-          <input type="range" id="benchmark-slider" min="1" max="15" value="5" oninput="updateBenchmark(this.value)" class="w-full h-2.5 bg-nexus-bg rounded-lg appearance-none cursor-pointer accent-nexus-cyan border border-nexus-border/60">
+          <input type="range" id="benchmark-slider" min="1" max="20" value="5" oninput="updateBenchmark(this.value)" class="w-full h-2.5 bg-nexus-bg rounded-lg appearance-none cursor-pointer accent-nexus-cyan border border-nexus-border/60">
           <div class="flex justify-between text-[10px] font-mono text-nexus-muted mt-2">
             <span>1 Araç (Hafif)</span>
             <span class="text-nexus-cyan font-bold">5 Araç (Standart Çalışma)</span>
-            <span>15 Araç (Ağır İş Yükü)</span>
+            <span>20 Araç (Ağır İş Yükü)</span>
           </div>
         </div>
 
@@ -1451,7 +1451,7 @@ graph LR
               Ömür boyu kullanım hakkı • Sıfır abonelik
             </p>
             <ul class="space-y-3.5 text-xs text-nexus-text font-medium mb-8">
-              <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> <b>TÜM 15+ Siber Araç (Limitsiz)</b></li>
+              <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> <b>TÜM 20+ Siber Araç (Limitsiz)</b></li>
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> TempMail & Canlı Gelen Kutusu</li>
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Evrensel Link & Reklam Çözücü</li>
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Cyber Fortress (DoD 7-Pass İmha & Kasa)</li>
