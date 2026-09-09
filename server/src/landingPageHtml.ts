@@ -210,7 +210,7 @@ export function renderLandingPage(): string {
   </section>
 
   <!-- INTERACTIVE DESKTOP APP MOCKUP SIMULATOR (CANLI ARAYÜZ VİTRİNİ) -->
-  <section id="simulator" class="relative z-10 py-16 border-t border-nexus-border/40 bg-nexus-surface/20">
+  <section id="simulator" class="relative z-10 py-16 border-t border-nexus-border/40 bg-nexus-surface/20 scroll-mt-24">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto mb-12">
         <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan" data-i18n="sim.tag">Canlı Arayüzü İncele</span>
@@ -310,7 +310,7 @@ export function renderLandingPage(): string {
               </div>
               <div class="space-y-3">
                 <div class="flex flex-col sm:flex-row gap-2">
-                  <input type="text" id="sim-decrypter-input" value="https://bc.vc/target_download?utm_source=adnetwork&fbclid=IwAR294x_token984&aff_id=7421&gclid=CjwKCA" class="w-full bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3 font-mono text-xs text-red-300 outline-none focus:border-nexus-cyan">
+                  <input type="text" id="sim-decrypter-input" onkeydown="if(event.key==='Enter') runSimDecrypter()" value="https://bc.vc/target_download?utm_source=adnetwork&fbclid=IwAR294x_token984&aff_id=7421&gclid=CjwKCA" class="w-full bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3 font-mono text-xs text-red-300 outline-none focus:border-nexus-cyan">
                   <button onclick="runSimDecrypter()" class="px-5 py-3 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan font-mono text-xs font-bold hover:bg-nexus-cyan/30 cursor-pointer shrink-0 transition-all">
                     Bypass & Temizle ⚡
                   </button>
@@ -415,7 +415,7 @@ export function renderLandingPage(): string {
               <div class="space-y-3">
                 <div class="relative">
                   <input type="text" id="sim-pass-input" oninput="analyzePassword(this.value)" value="Nexus#2026!Fortress_Ultra" placeholder="Parolanızı yazın veya test edin..." class="w-full bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3 font-mono text-sm text-nexus-cyan outline-none focus:border-nexus-cyan">
-                  <button onclick="copyGeneratedPass()" id="sim-pass-copy-btn" class="absolute right-2 top-2 px-2.5 py-1.5 rounded-lg bg-nexus-surface hover:bg-nexus-border text-xs font-mono text-nexus-muted hover:text-white border border-nexus-border transition-all">Kopyala</button>
+                  <button onclick="copyGeneratedPass()" id="sim-pass-copy-btn" class="absolute right-2 top-2 px-2.5 py-1.5 rounded-lg bg-nexus-surface hover:bg-nexus-border text-xs font-mono text-nexus-muted hover:text-white border border-nexus-border transition-all cursor-pointer">Kopyala</button>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs font-mono">
                   <div class="p-3 rounded-xl bg-nexus-bg border border-nexus-border/80">
@@ -444,7 +444,7 @@ export function renderLandingPage(): string {
   </section>
 
   <!-- INTERACTIVE ROI & SAVINGS CALCULATOR ("KAÇ PARA TASARRUF EDERSİN?") -->
-  <section id="roi" class="relative z-10 py-20 border-t border-nexus-border/40 bg-nexus-bg/80">
+  <section id="roi" class="relative z-10 py-20 border-t border-nexus-border/40 bg-nexus-bg/80 scroll-mt-24">
     <div class="max-w-5xl mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto mb-12">
         <span class="text-xs font-mono uppercase tracking-widest text-emerald-400" data-i18n="roi.tag">ROI Tasarruf Simülatörü</span>
@@ -522,7 +522,7 @@ export function renderLandingPage(): string {
   </section>
 
   <!-- SAAS KILLER COMPARISON TABLE -->
-  <section id="comparison" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-bg/50">
+  <section id="comparison" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-bg/50 scroll-mt-24">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto mb-16">
         <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan" data-i18n="comp.tag">Neden NexusHub?</span>
@@ -578,7 +578,7 @@ export function renderLandingPage(): string {
   </section>
 
   <!-- LIVE RAM & RESOURCE BENCHMARK SLIDER (NATIVE CORE VS BLOATED SAAS) -->
-  <section id="benchmark" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-surface/10">
+  <section id="benchmark" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-surface/10 scroll-mt-24">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto mb-14">
         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-nexus-cyan/10 border border-nexus-cyan/30 text-nexus-cyan text-xs font-mono mb-3">
@@ -703,7 +703,7 @@ export function renderLandingPage(): string {
   </section>
 
   <!-- ARSENAL 15+ TOOLS GRID -->
-  <section id="arsenal" class="relative z-10 py-24 border-t border-nexus-border/40">
+  <section id="arsenal" class="relative z-10 py-24 border-t border-nexus-border/40 scroll-mt-24">
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto mb-10">
         <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan">15+ Profesyonel Modül</span>
@@ -822,7 +822,7 @@ export function renderLandingPage(): string {
   </section>
 
   <!-- PRICING TIERS SECTION -->
-  <section id="pricing" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-bg/70">
+  <section id="pricing" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-bg/70 scroll-mt-24">
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto mb-16">
         <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan" data-i18n="price.tag">Şeffaf & Adil Fiyatlandırma</span>
@@ -1126,7 +1126,7 @@ export function renderLandingPage(): string {
   </section>
 
   <!-- CUSTOMER REVIEWS WALL (DOĞRULANMIŞ MÜŞTERİ YORUMLARI) -->
-  <section id="reviews" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-surface/10">
+  <section id="reviews" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-surface/10 scroll-mt-24">
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto mb-16">
         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono mb-3">
@@ -1197,7 +1197,7 @@ export function renderLandingPage(): string {
   </section>
 
   <!-- LIVE DISCORD & COMMUNITY PULSE CARD -->
-  <section id="community" class="relative z-10 py-16 border-t border-nexus-border/40 bg-nexus-surface/10">
+  <section id="community" class="relative z-10 py-16 border-t border-nexus-border/40 bg-nexus-surface/10 scroll-mt-24">
     <div class="max-w-6xl mx-auto px-6">
       <div class="p-8 sm:p-10 rounded-3xl card-glass border border-[#5865F2]/40 relative overflow-hidden shadow-[0_0_40px_rgba(88,101,242,0.15)] flex flex-col md:flex-row items-center justify-between gap-8">
         <div class="space-y-3 max-w-xl text-center md:text-left">
@@ -1234,7 +1234,7 @@ export function renderLandingPage(): string {
   </section>
 
   <!-- SELF-SERVICE LICENSE PORTAL (LİSANS SORGULA & HWID SIFIRLA) -->
-  <section id="portal" class="relative z-10 py-20 border-t border-nexus-border/40 bg-nexus-bg">
+  <section id="portal" class="relative z-10 py-20 border-t border-nexus-border/40 bg-nexus-bg scroll-mt-24">
     <div class="max-w-4xl mx-auto px-6">
       <div class="text-center mb-10">
         <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan" data-i18n="portal.tag">Müşteri Portalı</span>
@@ -1248,7 +1248,7 @@ export function renderLandingPage(): string {
 
       <div class="p-6 sm:p-8 rounded-3xl card-glass border border-nexus-border/80 shadow-2xl">
         <div class="flex flex-col sm:flex-row items-center gap-3 mb-6">
-          <input type="text" id="portal-key-input" placeholder="NEXUS-PRO-XXXX-XXXX-XXXX-XXXX" class="w-full sm:flex-1 bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3.5 font-mono text-sm text-nexus-cyan uppercase outline-none focus:border-nexus-cyan">
+          <input type="text" id="portal-key-input" onkeydown="if(event.key==='Enter') handleLicenseLookup()" placeholder="NEXUS-PRO-XXXX-XXXX-XXXX-XXXX" class="w-full sm:flex-1 bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3.5 font-mono text-sm text-nexus-cyan uppercase outline-none focus:border-nexus-cyan">
           <button onclick="handleLicenseLookup()" id="portal-search-btn" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 hover:bg-nexus-cyan/30 text-nexus-cyan font-heading font-bold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer">
             <span>Sorgula</span> 🔍
           </button>
@@ -1289,7 +1289,7 @@ export function renderLandingPage(): string {
   </section>
 
   <!-- FAQ ACCORDION WITH INSTANT SEARCH -->
-  <section id="faq" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-bg">
+  <section id="faq" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-bg scroll-mt-24">
     <div class="max-w-4xl mx-auto px-6">
       <div class="text-center mb-10">
         <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan">Merak Edilenler</span>
@@ -1417,7 +1417,7 @@ export function renderLandingPage(): string {
   </div>
 
   <!-- DESKTOP FLOATING CYBER ORB WIDGET (CANLI HUD WIDGET'I) -->
-  <div id="desktop-floating-orb-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 select-none">
+  <div id="desktop-floating-orb-widget" class="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3 select-none">
     
     <!-- Orb Quick Action Menu (Popup) -->
     <div id="orb-action-menu" class="hidden p-3.5 rounded-2xl card-glass border border-nexus-cyan/40 shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl w-60 font-mono text-xs space-y-2 animate-in fade-in slide-in-from-bottom-3 duration-200">
@@ -1567,8 +1567,8 @@ export function renderLandingPage(): string {
   </div>
 
   <!-- CHANGELOG MODAL (v2.0.3 YENİLİKLER) -->
-  <div id="changelog-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-lg rounded-3xl card-glass border border-nexus-cyan/50 p-6 sm:p-8 text-nexus-text relative shadow-2xl">
+  <div id="changelog-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 cursor-pointer" onclick="closeChangelogModal()">
+    <div class="w-full max-w-lg rounded-3xl card-glass border border-nexus-cyan/50 p-6 sm:p-8 text-nexus-text relative shadow-2xl cursor-default" onclick="event.stopPropagation()">
       <button onclick="closeChangelogModal()" class="absolute top-5 right-5 text-nexus-muted hover:text-white p-1 rounded-lg hover:bg-nexus-border cursor-pointer">✕</button>
       
       <div class="flex items-center gap-2 text-xs font-mono text-nexus-cyan mb-1 uppercase tracking-wider">
@@ -1620,8 +1620,8 @@ export function renderLandingPage(): string {
   </div>
 
   <!-- CHECKOUT MODAL WITH DISCOUNT COUPON INPUT -->
-  <div id="checkout-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-md rounded-3xl card-glass border border-nexus-cyan/50 p-6 sm:p-8 text-nexus-text relative shadow-2xl">
+  <div id="checkout-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 cursor-pointer" onclick="closeCheckoutModal()">
+    <div class="w-full max-w-md rounded-3xl card-glass border border-nexus-cyan/50 p-6 sm:p-8 text-nexus-text relative shadow-2xl cursor-default" onclick="event.stopPropagation()">
       <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 text-nexus-muted hover:text-white p-1 rounded-lg hover:bg-nexus-border cursor-pointer">✕</button>
       
       <div class="text-xs font-mono text-nexus-cyan mb-1 uppercase tracking-wider" data-i18n="modal.tag">GÜVENLİ SİPARİŞ</div>
@@ -1633,7 +1633,7 @@ export function renderLandingPage(): string {
 
       <!-- Coupon Code Box -->
       <div class="mb-5 p-3 rounded-2xl bg-nexus-bg border border-nexus-border/80 flex items-center gap-2">
-        <input type="text" id="coupon-input" placeholder="İndirim / Kupon Kodu (Örn: NEXUS20)" class="w-full bg-transparent text-xs font-mono text-nexus-cyan uppercase outline-none placeholder:text-nexus-muted/50">
+        <input type="text" id="coupon-input" onkeydown="if(event.key==='Enter') applyCoupon()" placeholder="İndirim / Kupon Kodu (Örn: NEXUS20)" class="w-full bg-transparent text-xs font-mono text-nexus-cyan uppercase outline-none placeholder:text-nexus-muted/50">
         <button onclick="applyCoupon()" class="px-3 py-1.5 rounded-lg bg-nexus-cyan/20 border border-nexus-cyan/40 hover:bg-nexus-cyan/30 text-nexus-cyan text-xs font-mono font-bold transition-all cursor-pointer shrink-0">Uygula</button>
       </div>
 
@@ -1794,17 +1794,18 @@ export function renderLandingPage(): string {
         }
       });
 
-      // Update prices
+      // Update prices with active coupon discount preserved
+      const discount = globalDiscountMultiplier || 1.0;
       if (currentLang === 'tr') {
         document.getElementById('price-free').innerText = '₺0';
-        document.getElementById('price-pro').innerText = '₺349';
+        document.getElementById('price-pro').innerText = '₺' + Math.round(349 * discount);
         document.getElementById('price-pro-old').innerText = '₺699';
-        document.getElementById('price-studio').innerText = '₺699';
+        document.getElementById('price-studio').innerText = '₺' + Math.round(699 * discount);
       } else {
         document.getElementById('price-free').innerText = '$0';
-        document.getElementById('price-pro').innerText = '$29';
+        document.getElementById('price-pro').innerText = '$' + Math.round(29 * discount);
         document.getElementById('price-pro-old').innerText = '$59';
-        document.getElementById('price-studio').innerText = '$49';
+        document.getElementById('price-studio').innerText = '$' + Math.round(49 * discount);
       }
       calcRoi();
     }
@@ -1969,6 +1970,7 @@ export function renderLandingPage(): string {
         const text = (item.getAttribute('data-text') + ' ' + item.innerText).toLowerCase();
         if (!q || text.includes(q)) {
           item.style.display = 'block';
+          if (q) item.open = true;
         } else {
           item.style.display = 'none';
         }
@@ -2140,11 +2142,17 @@ export function renderLandingPage(): string {
         if (sfxEnabled) {
           btn.innerHTML = '<span>🔊</span><span class="hidden sm:inline font-bold">SFX</span>';
           btn.className = 'px-2.5 py-1.5 rounded-lg border border-nexus-cyan/40 bg-nexus-cyan/10 text-nexus-cyan hover:bg-nexus-cyan/20 text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer';
-          playCyberSound('toggle');
         } else {
           btn.innerHTML = '<span>🔇</span><span class="hidden sm:inline font-bold">SFX</span>';
           btn.className = 'px-2.5 py-1.5 rounded-lg border border-nexus-border text-nexus-muted hover:text-white text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer';
         }
+      }
+      const orbIcon = document.getElementById('orb-sfx-icon');
+      if (orbIcon) {
+        orbIcon.innerText = sfxEnabled ? '🔊' : '🔇';
+      }
+      if (sfxEnabled) {
+        playCyberSound('toggle');
       }
     }
 
@@ -2233,13 +2241,43 @@ export function renderLandingPage(): string {
       });
     }
 
-    function executeCmd(action) {
+    // ─── Universal Safe Clipboard Helper (HTTPS + HTTP / WebView Fallback) ──
+    async function safeCopyToClipboard(text) {
+      if (!text) return false;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (e) {
+        // Fall through to execCommand fallback
+      }
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        textArea.setAttribute('readonly', '');
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        return successful;
+      } catch (err) {
+        console.error('Clipboard copy failed:', err);
+        return false;
+      }
+    }
+
+    async function executeCmd(action) {
       closeCmdPalette();
       playCyberSound('success');
 
       if (action === 'tempmail') {
         const fakeMail = 'temp_' + Math.random().toString(36).substring(2, 8) + '@nexushub.cloud';
-        navigator.clipboard?.writeText(fakeMail);
+        await safeCopyToClipboard(fakeMail);
         alert('⚡ Tek Kullanımlık Posta Üretildi ve Kopyalandı:\n' + fakeMail);
       } else if (action === 'ram') {
         playCyberSound('purge');
@@ -2260,10 +2298,10 @@ export function renderLandingPage(): string {
     }
 
     // ─── SHA-256 Copy Helper ────────────────────────────────────────────────
-    function copySha256() {
+    async function copySha256() {
       const hash = document.getElementById('sha256-hash')?.innerText.trim();
-      if (hash && navigator.clipboard) {
-        navigator.clipboard.writeText(hash);
+      if (hash) {
+        await safeCopyToClipboard(hash);
         const text = document.getElementById('copy-sha-text');
         if (text) text.innerText = '✓ Kopyalandı!';
         playCyberSound('success');
@@ -2273,10 +2311,10 @@ export function renderLandingPage(): string {
       }
     }
 
-    function copyPowerShellCmd() {
+    async function copyPowerShellCmd() {
       const cmd = document.getElementById('ps-verify-cmd')?.innerText.trim();
-      if (cmd && navigator.clipboard) {
-        navigator.clipboard.writeText(cmd);
+      if (cmd) {
+        await safeCopyToClipboard(cmd);
         const btn = document.getElementById('copy-ps-btn');
         if (btn) btn.innerText = '✓ Kopyalandı!';
         playCyberSound('success');
@@ -2298,18 +2336,32 @@ export function renderLandingPage(): string {
         closeCmdPalette();
         closeChangelogModal();
         closeCheckoutModal();
+        const orbMenu = document.getElementById('orb-action-menu');
+        if (orbMenu) orbMenu.classList.add('hidden');
       }
     });
 
     // ─── Sticky Bottom Bar on Scroll ───────────────────────────────────────
     window.addEventListener('scroll', () => {
       const bar = document.getElementById('sticky-bar');
+      if (!bar) return;
       if (window.scrollY > 400) {
         bar.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
         bar.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
       } else {
         bar.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
         bar.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+      }
+    });
+
+    // Close Orb Menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const orbMenu = document.getElementById('orb-action-menu');
+      const orbBtn = document.getElementById('floating-orb-btn');
+      if (orbMenu && !orbMenu.classList.contains('hidden')) {
+        if (!orbMenu.contains(e.target) && !orbBtn?.contains(e.target)) {
+          orbMenu.classList.add('hidden');
+        }
       }
     });
 
@@ -2466,11 +2518,11 @@ export function renderLandingPage(): string {
       playCyberSound('success');
     }
 
-    function copyGeneratedPass() {
+    async function copyGeneratedPass() {
       const input = document.getElementById('sim-pass-input');
       const btn = document.getElementById('sim-pass-copy-btn');
-      if (input && navigator.clipboard) {
-        navigator.clipboard.writeText(input.value);
+      if (input && input.value) {
+        await safeCopyToClipboard(input.value);
         if (btn) btn.innerText = '✓ Kopyalandı!';
         playCyberSound('success');
         setTimeout(() => {
@@ -2480,7 +2532,7 @@ export function renderLandingPage(): string {
     }
 
     // ─── 1-Hour Sandbox Trial Key Generator ─────────────────────────────────
-    function generateTrialKey() {
+    async function generateTrialKey() {
       const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
       function chunk(len) {
         let res = '';
@@ -2496,9 +2548,7 @@ export function renderLandingPage(): string {
         display.classList.remove('hidden');
         display.innerText = trialKey;
       }
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(trialKey);
-      }
+      await safeCopyToClipboard(trialKey);
       if (msg) msg.classList.remove('hidden');
       if (btn) btn.innerText = '↻ Yeni Key Üret';
       playCyberSound('success');
@@ -2519,12 +2569,10 @@ export function renderLandingPage(): string {
       alert('⚡ [Nexus Orb] Sistem RAM Belleği Boşaltıldı!\n1,840 MB geçici bellek önbelleği başarıyla temizlendi.');
     }
 
-    function triggerQuickTempMail() {
+    async function triggerQuickTempMail() {
       toggleFloatingOrbMenu();
       const fakeMail = 'orb_' + Math.random().toString(36).substring(2, 7) + '@nexusmail.org';
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(fakeMail);
-      }
+      await safeCopyToClipboard(fakeMail);
       playCyberSound('success');
       alert('📬 [Nexus Orb] Tek Kullanımlık TempMail Panoya Kopyalandı:\n' + fakeMail);
     }
