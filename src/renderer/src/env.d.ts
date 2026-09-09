@@ -76,6 +76,7 @@ interface NexusAPI {
     onProgress:      (cb: (p: unknown) => void) => () => void
     onDownloaded:    (cb: (info: unknown) => void) => () => void
     onError?:        (cb: (err: string) => void) => () => void
+    onApplyingPatch?: (cb: () => void) => () => void
     installNow:      () => void
     checkNow:        () => Promise<any>
   }

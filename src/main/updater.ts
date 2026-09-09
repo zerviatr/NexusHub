@@ -113,16 +113,18 @@ export function setupAutoUpdater(win: BrowserWindow): void {
     console.log('[updater] Discord-grade update sequence initiated...')
     ;(app as any).isQuitting = true
 
-    // 1. Remove all close prevention listeners so app.quit() is never blocked
+    // 1. Inform renderer to trigger the fullscreen patching splash immediately
+    send('updater:applying-patch')
+
+    // 2. Remove all close prevention listeners so app.quit() is never blocked
     BrowserWindow.getAllWindows().forEach((w) => {
       try {
         w.removeAllListeners('close')
-        // Hide window so user sees smooth transition
-        w.hide()
+        // DO NOT hide the window! Keep it open displaying the futuristic cyber patch splash!
       } catch {}
     })
 
-    // 2. Safely release OS hooks, global hotkeys and tray
+    // 3. Safely release OS hooks, global hotkeys and tray
     try {
       globalShortcut.unregisterAll()
     } catch {}
@@ -130,13 +132,13 @@ export function setupAutoUpdater(win: BrowserWindow): void {
       destroySystemTray()
     } catch {}
 
-    // 3. Robust Watchdog: If Windows NSIS fails to auto-launch the newly updated binary,
-    // this detached PowerShell supervisor will start NexusHub after 2 seconds
+    // 4. Robust Watchdog: If Windows NSIS fails to auto-launch the newly updated binary,
+    // this detached PowerShell supervisor will start NexusHub after 5 seconds
     try {
       const exePath = app.getPath('exe')
       if (app.isPackaged && process.platform === 'win32' && exePath) {
         const psScript = `
-          Start-Sleep -Seconds 2;
+          Start-Sleep -Seconds 5;
           $p = Get-Process -Name "NexusHub" -ErrorAction SilentlyContinue;
           if (-not $p) {
             Start-Process -FilePath "${exePath.replace(/\\/g, '\\\\')}"
@@ -153,9 +155,7 @@ export function setupAutoUpdater(win: BrowserWindow): void {
       console.warn('[updater] Watchdog spawn warning:', err)
     }
 
-    // 4. Trigger quitAndInstall(true, true)
-    // - isSilent: true instructs NSIS to execute with /S (silent differential binary patch, instant, no installer GUI wizard)
-    // - isForceRunAfter: true passes --force-run to guarantee immediate relaunch
+    // 5. Allow user to see the sleek cyber patch transition for 1200ms before quitAndInstall
     setTimeout(() => {
       try {
         console.log('[updater] Executing autoUpdater.quitAndInstall(true, true)...')
@@ -164,7 +164,7 @@ export function setupAutoUpdater(win: BrowserWindow): void {
         console.error('[updater] quitAndInstall failed, attempting fallback app.quit():', err)
         app.quit()
       }
-    }, 150)
+    }, 1200)
   })
 
   // ─── IPC: renderer can trigger manual check ───────────────────────────────

@@ -31,19 +31,31 @@ export default function UpdateManager() {
       setIsDismissed(false)
     })
 
+    const unbindApplyingPatch = (api as any).onApplyingPatch?.(() => {
+      setIsInstalling(true)
+    })
+
+    const handleCustomUpdatingStart = (e: any) => {
+      setIsInstalling(true)
+      if (e?.detail?.version) {
+        setDownloadedVersion(e.detail.version)
+      }
+    }
+    window.addEventListener('nexus:updating-start', handleCustomUpdatingStart)
+
     return () => {
       unbindAvailable?.()
       unbindProgress?.()
       unbindDownloaded?.()
+      unbindApplyingPatch?.()
+      window.removeEventListener('nexus:updating-start', handleCustomUpdatingStart)
     }
   }, [])
 
   const handleInstallNow = () => {
     setIsInstalling(true)
-    // Small delay so the user sees the Discord-style updating transition
-    setTimeout(() => {
-      window.nexusAPI?.updater?.installNow?.()
-    }, 450)
+    // Trigger global update sequence
+    window.nexusAPI?.updater?.installNow?.()
   }
 
   return (

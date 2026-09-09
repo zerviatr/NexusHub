@@ -329,6 +329,10 @@ export default function Account() {
                     const btn = e.currentTarget
                     btn.disabled = true
                     btn.innerText = 'Yeniden Başlatılıyor...'
+                    try {
+                      cyberAudio.copySuccess()
+                    } catch {}
+                    window.dispatchEvent(new CustomEvent('nexus:updating-start', { detail: { version: updateInfo.version } }))
                     window.nexusAPI?.updater?.installNow?.()
                   }}
                   className="px-3 py-1 rounded bg-nexus-cyan text-black font-semibold hover:bg-nexus-cyan/90 transition-all text-xs active:scale-95 cursor-pointer"

@@ -103,6 +103,10 @@ const nexusAPI = {
       ipcRenderer.on('updater:error', (_, msg) => cb(msg))
       return () => ipcRenderer.removeAllListeners('updater:error')
     },
+    onApplyingPatch: (cb: () => void) => {
+      ipcRenderer.on('updater:applying-patch', () => cb())
+      return () => ipcRenderer.removeAllListeners('updater:applying-patch')
+    },
     installNow: () => ipcRenderer.send('updater:install-now'),
     checkNow:   () => ipcRenderer.invoke('updater:check-now'),
   },

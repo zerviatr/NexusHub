@@ -290,7 +290,13 @@ export default function Sidebar() {
         {downloadedUpdate && (
           <button
             type="button"
-            onClick={() => window.nexusAPI?.updater?.installNow?.()}
+            onClick={() => {
+              try {
+                cyberAudio.copySuccess()
+              } catch {}
+              window.dispatchEvent(new CustomEvent('nexus:updating-start', { detail: { version: downloadedUpdate } }))
+              window.nexusAPI?.updater?.installNow?.()
+            }}
             className="w-full flex items-center justify-center gap-1.5 py-2 px-3 mb-3 rounded-xl bg-gradient-to-r from-nexus-cyan via-nexus-accent to-emerald-400 text-black font-bold text-xs shadow-lg shadow-nexus-cyan/30 animate-pulse active:scale-95 transition-all cursor-pointer no-drag"
           >
             <Sparkles className="w-3.5 h-3.5" />

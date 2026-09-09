@@ -281,5 +281,6 @@ export const nexusAPI = {
   updater: {
     checkNow: (): Promise<any> => window.nexusAPI.updater.checkNow(),
     installNow: (): void => window.nexusAPI.updater.installNow(),
+    onApplyingPatch: (cb: () => void): (() => void) | undefined => window.nexusAPI.updater.onApplyingPatch?.(cb),
   },
 }
