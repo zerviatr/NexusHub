@@ -39,11 +39,21 @@ try {
   console.warn('[updater] setFeedURL warning:', err)
 }
 
+let isAutoUpdaterInitialized = false
+let activeWindow: BrowserWindow | null = null
+
 export function setupAutoUpdater(win: BrowserWindow): void {
+  activeWindow = win
+
+  if (isAutoUpdaterInitialized) {
+    return
+  }
+  isAutoUpdaterInitialized = true
+
   // ─── Helpers ──────────────────────────────────────────────────────────────
   const send = (channel: string, payload?: unknown) => {
-    if (!win.isDestroyed()) {
-      win.webContents.send(channel, payload)
+    if (activeWindow && !activeWindow.isDestroyed()) {
+      activeWindow.webContents.send(channel, payload)
     }
   }
 
@@ -98,6 +108,7 @@ export function setupAutoUpdater(win: BrowserWindow): void {
   })
 
   // ─── IPC: renderer can trigger install ────────────────────────────────────
+  ipcMain.removeAllListeners('updater:install-now')
   ipcMain.on('updater:install-now', () => {
     console.log('[updater] Discord-grade update sequence initiated...')
     ;(app as any).isQuitting = true
@@ -157,6 +168,7 @@ export function setupAutoUpdater(win: BrowserWindow): void {
   })
 
   // ─── IPC: renderer can trigger manual check ───────────────────────────────
+  ipcMain.removeHandler('updater:check-now')
   ipcMain.handle('updater:check-now', async () => {
     try {
       const currentVersion = app.getVersion()

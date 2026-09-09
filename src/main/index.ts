@@ -43,9 +43,9 @@ function createWindow(): void {
     }
   })
 
-  mainWindow.on('ready-to-show', () => {
+  mainWindow.once('ready-to-show', () => {
     mainWindow?.show()
-    // Setup tray and global hotkeys once window is ready
+    // Setup tray, global hotkeys and updater once window is ready
     if (mainWindow) {
       setupSystemTray(mainWindow)
       setupGlobalShortcuts(mainWindow)
