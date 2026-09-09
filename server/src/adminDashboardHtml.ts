@@ -134,6 +134,14 @@ export function getAdminDashboardHtml(): string {
 
       <!-- Quick Action Buttons -->
       <div class="flex items-center gap-1.5 sm:gap-2">
+        <button onclick="openNotifModal()" class="p-2 px-2.5 rounded-xl bg-nexus-card border border-nexus-border text-amber-400 hover:bg-amber-400/10 transition text-xs font-semibold flex items-center gap-1.5" title="Telegram & Discord Bildirimleri">
+          <i data-lucide="bell" class="w-3.5 h-3.5"></i>
+          <span class="hidden md:inline">Bildirimler</span>
+        </button>
+        <button onclick="openCouponsModal()" class="p-2 px-2.5 rounded-xl bg-nexus-card border border-nexus-border text-nexus-cyan hover:bg-nexus-cyan/10 transition text-xs font-semibold flex items-center gap-1.5" title="Kuponlar & Süre Uzatma">
+          <i data-lucide="ticket" class="w-3.5 h-3.5"></i>
+          <span class="hidden md:inline">Kuponlar</span>
+        </button>
         <button onclick="openDiagnosticsModal()" class="p-2 px-2.5 rounded-xl bg-nexus-card border border-nexus-border text-nexus-cyan hover:bg-nexus-cyan/10 transition text-xs font-semibold flex items-center gap-1.5" title="Lisans Teşhis & Simülatör">
           <i data-lucide="scan-search" class="w-3.5 h-3.5"></i>
           <span class="hidden md:inline">Teşhis</span>
@@ -227,7 +235,7 @@ export function getAdminDashboardHtml(): string {
         </div>
 
         <!-- 1. Single Generator Form -->
-        <form id="single-gen-form" onsubmit="handleSingleGenerate(event)" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <form id="single-gen-form" onsubmit="handleSingleGenerate(event)" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
           <div>
             <label class="block text-[11px] font-bold uppercase tracking-wider text-nexus-muted mb-1.5">Lisans Tipi</label>
             <select id="single-tier" class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none neon-border-cyan">
@@ -259,11 +267,27 @@ export function getAdminDashboardHtml(): string {
           </div>
 
           <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-nexus-muted mb-1.5">Özel Not / Etiket</label>
-            <input type="text" id="single-note" placeholder="Örn: VIP Client, Hediye" class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none neon-border-cyan" />
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-nexus-muted mb-1.5">Satış Kanalı</label>
+            <select id="single-channel" class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none neon-border-cyan">
+              <option value="Direct" selected>Doğrudan / Web</option>
+              <option value="Shopier">Shopier</option>
+              <option value="Discord">Discord Direct</option>
+              <option value="Crypto">Kripto</option>
+              <option value="Diğer">Diğer</option>
+            </select>
           </div>
 
-          <div class="md:col-span-4 flex items-center justify-between pt-2">
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-nexus-muted mb-1.5">Müşteri Bilgisi</label>
+            <input type="text" id="single-customer" placeholder="Ahmet Y. / @discord" class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none neon-border-cyan" />
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-nexus-muted mb-1.5">Özel Not / Etiket</label>
+            <input type="text" id="single-note" placeholder="VIP Client, vb." class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none neon-border-cyan" />
+          </div>
+
+          <div class="md:col-span-3 lg:col-span-6 flex items-center justify-between pt-2">
             <span class="text-xs text-nexus-muted">Kişisel veri gerektirmez. Üretilen anahtar anında aktifleştirilebilir.</span>
             <button type="submit" id="single-gen-btn" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-gradient-to-r from-nexus-cyan to-blue-500 hover:from-nexus-cyan/90 hover:to-blue-600 text-black shadow-lg shadow-nexus-cyan/20 transition duration-200 flex items-center gap-2">
               <i data-lucide="plus" class="w-4 h-4"></i>
@@ -273,7 +297,7 @@ export function getAdminDashboardHtml(): string {
         </form>
 
         <!-- 2. Bulk Generator Form -->
-        <form id="bulk-gen-form" onsubmit="handleBulkGenerate(event)" class="hidden grid grid-cols-1 md:grid-cols-5 gap-4">
+        <form id="bulk-gen-form" onsubmit="handleBulkGenerate(event)" class="hidden grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
           <div>
             <label class="block text-[11px] font-bold uppercase tracking-wider text-nexus-muted mb-1.5">Üretilecek Adet</label>
             <select id="bulk-count" class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none neon-border-cyan">
@@ -313,11 +337,22 @@ export function getAdminDashboardHtml(): string {
           </div>
 
           <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-nexus-muted mb-1.5">Satış Kanalı</label>
+            <select id="bulk-channel" class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs font-semibold text-white focus:outline-none neon-border-cyan">
+              <option value="Direct" selected>Doğrudan / Web</option>
+              <option value="Shopier">Shopier</option>
+              <option value="Discord">Discord Direct</option>
+              <option value="Crypto">Kripto</option>
+              <option value="Diğer">Diğer</option>
+            </select>
+          </div>
+
+          <div>
             <label class="block text-[11px] font-bold uppercase tracking-wider text-nexus-muted mb-1.5">Etiket Ön Eki</label>
             <input type="text" id="bulk-prefix" placeholder="Örn: BATCH_MAYIS" value="BULK" class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none neon-border-cyan" />
           </div>
 
-          <div class="md:col-span-5 flex items-center justify-between pt-2">
+          <div class="md:col-span-3 lg:col-span-6 flex items-center justify-between pt-2">
             <span class="text-xs text-nexus-muted">Toplu üretilen anahtarları anında TXT veya CSV olarak indirebilirsiniz.</span>
             <button type="submit" id="bulk-gen-btn" class="px-5 py-2.5 rounded-xl font-bold text-xs bg-gradient-to-r from-nexus-accent to-purple-600 hover:from-nexus-accent/90 hover:to-purple-700 text-white shadow-lg shadow-nexus-accent/20 transition duration-200 flex items-center gap-2">
               <i data-lucide="layers" class="w-4 h-4"></i>
@@ -404,6 +439,7 @@ export function getAdminDashboardHtml(): string {
                 </th>
                 <th class="py-3 px-4">Lisans Anahtarı</th>
                 <th class="py-3 px-4">Tip</th>
+                <th class="py-3 px-4">Kanal & Müşteri</th>
                 <th class="py-3 px-4">Not / Etiket (Düzenle)</th>
                 <th class="py-3 px-4">Cihaz Slotu</th>
                 <th class="py-3 px-4">Kalan Süre</th>
@@ -413,7 +449,7 @@ export function getAdminDashboardHtml(): string {
             </thead>
             <tbody id="keys-table-body" class="divide-y divide-nexus-border/50">
               <tr>
-                <td colspan="8" class="py-8 text-center text-nexus-muted">
+                <td colspan="9" class="py-8 text-center text-nexus-muted">
                   <div class="flex items-center justify-center gap-2">
                     <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
                     <span>Lisanslar yükleniyor...</span>
@@ -635,6 +671,224 @@ export function getAdminDashboardHtml(): string {
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- 7. WEBHOOK & NOTIFICATIONS MODAL -->
+  <!-- ========================================================================= -->
+  <div id="notif-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="glass-card w-full max-w-xl p-6 rounded-2xl shadow-2xl border border-nexus-border space-y-5 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-nexus-border">
+        <div class="flex items-center gap-2 text-amber-400">
+          <i data-lucide="bell-ring" class="w-5 h-5"></i>
+          <h3 class="font-bold text-white text-sm">Telegram & Discord Bildirim Merkezi</h3>
+        </div>
+        <button onclick="closeNotifModal()" class="p-1 rounded-lg text-nexus-muted hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Telegram Config Card -->
+      <div class="p-4 rounded-xl bg-nexus-surface/80 border border-nexus-border space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400">
+              <i data-lucide="send" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-white">Telegram Bot Bildirimleri</p>
+              <p class="text-[10px] text-nexus-muted">Aktivasyon ve alarmları Telegram grubuna veya özel chat'e yollar</p>
+            </div>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="notif-tg-enabled" class="sr-only peer">
+            <div class="w-9 h-5 bg-nexus-surface border border-nexus-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-500"></div>
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-nexus-muted mb-1">Bot Token</label>
+            <input type="password" id="notif-tg-token" placeholder="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11" class="w-full bg-nexus-card border border-nexus-border rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none neon-border-cyan font-mono" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-nexus-muted mb-1">Chat ID</label>
+            <input type="text" id="notif-tg-chat" placeholder="-100123456789 veya 98765432" class="w-full bg-nexus-card border border-nexus-border rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none neon-border-cyan font-mono" />
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-1">
+          <button type="button" onclick="testNotification('telegram')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-500/15 text-sky-400 border border-sky-500/30 hover:bg-sky-500/25 transition flex items-center gap-1.5">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            <span>Telegram Test Gönder</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Discord Config Card -->
+      <div class="p-4 rounded-xl bg-nexus-surface/80 border border-nexus-border space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+              <i data-lucide="message-square" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-white">Discord Webhook</p>
+              <p class="text-[10px] text-nexus-muted">Zenginleştirilmiş renkli Embed mesajlarıyla Discord sunucuna iletir</p>
+            </div>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="notif-dc-enabled" class="sr-only peer">
+            <div class="w-9 h-5 bg-nexus-surface border border-nexus-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-500"></div>
+          </label>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-nexus-muted mb-1">Webhook URL</label>
+          <input type="password" id="notif-dc-webhook" placeholder="https://discord.com/api/webhooks/..." class="w-full bg-nexus-card border border-nexus-border rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none neon-border-cyan font-mono" />
+        </div>
+
+        <div class="flex justify-end pt-1">
+          <button type="button" onclick="testNotification('discord')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-500/25 transition flex items-center gap-1.5">
+            <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+            <span>Discord Test Gönder</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Notification Triggers Toggles -->
+      <div class="p-4 rounded-xl bg-nexus-surface/80 border border-nexus-border space-y-2.5">
+        <p class="text-xs font-bold text-white mb-1">Bildirim Tetikleyicileri</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+          <label class="flex items-center gap-2 text-nexus-muted cursor-pointer hover:text-white">
+            <input type="checkbox" id="notif-on-activate" class="rounded bg-nexus-surface border-nexus-border text-nexus-cyan focus:ring-0 cursor-pointer">
+            <span>Yeni Aktivasyon</span>
+          </label>
+          <label class="flex items-center gap-2 text-nexus-muted cursor-pointer hover:text-white">
+            <input type="checkbox" id="notif-on-revoke" class="rounded bg-nexus-surface border-nexus-border text-nexus-rose focus:ring-0 cursor-pointer">
+            <span>Lisans İptal / Kick</span>
+          </label>
+          <label class="flex items-center gap-2 text-nexus-muted cursor-pointer hover:text-white">
+            <input type="checkbox" id="notif-on-alert" class="rounded bg-nexus-surface border-nexus-border text-nexus-amber focus:ring-0 cursor-pointer">
+            <span>Güvenlik Uyarısı</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-nexus-border">
+        <button type="button" onclick="closeNotifModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-nexus-muted hover:text-white hover:bg-nexus-card transition">
+          Kapat
+        </button>
+        <button type="button" onclick="saveNotifSettings()" class="px-5 py-2 rounded-xl text-xs font-bold bg-amber-400 text-black hover:bg-amber-300 transition shadow-lg shadow-amber-400/20">
+          Ayarları Kaydet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 8. COUPONS MANAGEMENT MODAL -->
+  <!-- ========================================================================= -->
+  <div id="coupons-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="glass-card w-full max-w-3xl p-6 rounded-2xl shadow-2xl border border-nexus-border space-y-5 max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-nexus-border">
+        <div class="flex items-center gap-2 text-nexus-cyan">
+          <i data-lucide="ticket" class="w-5 h-5"></i>
+          <h3 class="font-bold text-white text-sm">Süre Uzatma Kuponları (Coupons Engine)</h3>
+        </div>
+        <button onclick="closeCouponsModal()" class="p-1 rounded-lg text-nexus-muted hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Coupon Generator Form -->
+      <form onsubmit="handleCreateCoupons(event)" class="p-4 rounded-xl bg-nexus-surface/80 border border-nexus-border grid grid-cols-1 sm:grid-cols-4 gap-3">
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-nexus-muted mb-1">Eklenecek Gün</label>
+          <select id="coupon-days" class="w-full bg-nexus-card border border-nexus-border rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none neon-border-cyan">
+            <option value="30" selected>+30 Gün (1 Ay)</option>
+            <option value="60">+60 Gün (2 Ay)</option>
+            <option value="90">+90 Gün (3 Ay)</option>
+            <option value="180">+180 Gün (6 Ay)</option>
+            <option value="365">+365 Gün (1 Yıl)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-nexus-muted mb-1">Adet</label>
+          <select id="coupon-count" class="w-full bg-nexus-card border border-nexus-border rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none neon-border-cyan">
+            <option value="1">1 Adet</option>
+            <option value="5" selected>5 Adet</option>
+            <option value="10">10 Adet</option>
+            <option value="25">25 Adet</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-nexus-muted mb-1">Kampanya / Not</label>
+          <input type="text" id="coupon-note" placeholder="Shopier Hediye vb." class="w-full bg-nexus-card border border-nexus-border rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none neon-border-cyan" />
+        </div>
+        <div class="flex items-end">
+          <button type="submit" id="coupon-gen-btn" class="w-full py-2 px-3 rounded-xl text-xs font-bold bg-nexus-cyan text-black hover:bg-nexus-cyan/90 transition shadow-lg shadow-nexus-cyan/20 flex items-center justify-center gap-1.5">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Kupon Üret</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Coupons Table List -->
+      <div class="flex-1 overflow-y-auto pr-1">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-nexus-surface text-nexus-muted uppercase tracking-wider font-bold border-b border-nexus-border text-[10px]">
+            <tr>
+              <th class="py-2.5 px-3">Kupon Kodu</th>
+              <th class="py-2.5 px-3">Süre</th>
+              <th class="py-2.5 px-3">Not</th>
+              <th class="py-2.5 px-3">Durum</th>
+              <th class="py-2.5 px-3 text-right">İşlemler</th>
+            </tr>
+          </thead>
+          <tbody id="coupons-table-body" class="divide-y divide-nexus-border/50">
+            <tr><td colspan="5" class="py-8 text-center text-nexus-muted">Kuponlar yükleniyor...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 9. REDEEM COUPON MODAL -->
+  <!-- ========================================================================= -->
+  <div id="redeem-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="glass-card w-full max-w-md p-6 rounded-2xl shadow-2xl border border-nexus-border space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-nexus-border">
+        <div class="flex items-center gap-2 text-nexus-cyan">
+          <i data-lucide="gift" class="w-5 h-5"></i>
+          <h3 class="font-bold text-white text-sm">Lisansa Kupon Uygula</h3>
+        </div>
+        <button onclick="closeRedeemModal()" class="p-1 rounded-lg text-nexus-muted hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleRedeemCoupon(event)" class="space-y-3">
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-nexus-muted mb-1">Hedef Lisans Anahtarı</label>
+          <input type="text" id="redeem-target-key" readonly class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs font-mono text-nexus-cyan focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-nexus-muted mb-1">Kupon Kodu</label>
+          <input type="text" id="redeem-coupon-code" required placeholder="NEXUS-EXT-30D-XXXXXXXX" class="w-full bg-nexus-card border border-nexus-border rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none neon-border-cyan uppercase" />
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-nexus-border">
+          <button type="button" onclick="closeRedeemModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-nexus-muted hover:text-white transition">
+            Vazgeç
+          </button>
+          <button type="submit" id="redeem-submit-btn" class="px-5 py-2 rounded-xl text-xs font-bold bg-nexus-cyan text-black hover:bg-nexus-cyan/90 transition shadow-lg shadow-nexus-cyan/20">
+            Kuponu Uygula & Uzat
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- JavaScript App Logic -->
   <script>
     let token = localStorage.getItem('nexus_admin_token') || '';
@@ -661,6 +915,9 @@ export function getAdminDashboardHtml(): string {
           closeChangePasswordModal();
           closeDiagnosticsModal();
           closeAuditLogsModal();
+          closeNotifModal();
+          closeCouponsModal();
+          closeRedeemModal();
         }
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
           e.preventDefault();
@@ -777,6 +1034,8 @@ export function getAdminDashboardHtml(): string {
       const tier = document.getElementById('single-tier').value;
       const duration = parseInt(document.getElementById('single-duration').value, 10);
       const devices = parseInt(document.getElementById('single-devices').value, 10);
+      const channel = document.getElementById('single-channel').value;
+      const customer = document.getElementById('single-customer').value.trim();
       const note = document.getElementById('single-note').value.trim();
 
       const btn = document.getElementById('single-gen-btn');
@@ -789,7 +1048,14 @@ export function getAdminDashboardHtml(): string {
             'Content-Type': 'application/json',
             'Authorization': \`Bearer \${token}\`
           },
-          body: JSON.stringify({ tier, durationDays: duration, maxActivations: devices, note })
+          body: JSON.stringify({
+            tier,
+            durationDays: duration,
+            maxActivations: devices,
+            note,
+            salesChannel: channel,
+            customerNote: customer
+          })
         });
 
         const data = await res.json();
@@ -798,6 +1064,7 @@ export function getAdminDashboardHtml(): string {
           document.getElementById('new-key-box').classList.remove('hidden');
           document.getElementById('new-key-display').innerText = data.key;
           document.getElementById('single-note').value = '';
+          document.getElementById('single-customer').value = '';
           refreshKeys();
         } else {
           showToast(data.error || 'Lisans oluşturulamadı', 'error');
@@ -816,6 +1083,7 @@ export function getAdminDashboardHtml(): string {
       const tier = document.getElementById('bulk-tier').value;
       const duration = parseInt(document.getElementById('bulk-duration').value, 10);
       const devices = parseInt(document.getElementById('bulk-devices').value, 10);
+      const channel = document.getElementById('bulk-channel').value;
       const prefix = document.getElementById('bulk-prefix').value.trim() || 'BULK';
 
       const btn = document.getElementById('bulk-gen-btn');
@@ -829,7 +1097,15 @@ export function getAdminDashboardHtml(): string {
             'Content-Type': 'application/json',
             'Authorization': \`Bearer \${token}\`
           },
-          body: JSON.stringify({ count, tier, durationDays: duration, maxActivations: devices, notePrefix: prefix })
+          body: JSON.stringify({
+            count,
+            tier,
+            durationDays: duration,
+            maxActivations: devices,
+            notePrefix: prefix,
+            salesChannel: channel,
+            customerNote: prefix
+          })
         });
 
         const data = await res.json();
@@ -884,14 +1160,17 @@ export function getAdminDashboardHtml(): string {
         return;
       }
 
-      const headers = ['License Key', 'Tier', 'Note', 'Active Devices', 'Max Devices', 'Status', 'Expires At', 'Created At'];
+      const headers = ['License Key', 'Tier', 'Sales Channel', 'Customer Note', 'Note', 'Active Devices', 'Max Devices', 'Status', 'Expires At', 'Created At'];
       const rows = allKeys.map(k => {
         const isRevoked = k.is_revoked === 1;
         const isExpired = k.expires_at !== 0 && k.expires_at <= Date.now();
         const status = isRevoked ? 'Revoked' : (isExpired ? 'Expired' : 'Active');
         const exp = k.expires_at === 0 ? 'Lifetime' : new Date(k.expires_at).toISOString();
         const created = new Date(k.created_at).toISOString();
-        return [k.key, k.tier, \`"\${(k.order_id || '').replace(/"/g, '""')}"\`, k.activation_count, k.max_activations, status, exp, created];
+        const ch = (k.sales_channel || 'Direct').replace(/"/g, '""');
+        const cust = (k.customer_note || '').replace(/"/g, '""');
+        const note = (k.order_id || '').replace(/"/g, '""');
+        return [k.key, k.tier, \`"\${ch}"\`, \`"\${cust}"\`, \`"\${note}"\`, k.activation_count, k.max_activations, status, exp, created];
       });
 
       const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\\n');
@@ -1097,6 +1376,22 @@ export function getAdminDashboardHtml(): string {
               </span>
             </td>
             <td class="py-3 px-4">
+              \${(() => {
+                const ch = (k.sales_channel || 'Direct').trim();
+                let b = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-nexus-cyan/10 text-nexus-cyan border border-nexus-cyan/30">Direct</span>';
+                if (ch.toLowerCase().includes('shopier')) b = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/15 text-purple-400 border border-purple-500/30">Shopier</span>';
+                else if (ch.toLowerCase().includes('discord')) b = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">Discord</span>';
+                else if (ch.toLowerCase().includes('crypto') || ch.toLowerCase().includes('kripto')) b = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">Crypto</span>';
+                const cust = (k.customer_note || '').trim();
+                return \`
+                  <div class="flex flex-col gap-0.5">
+                    <div>\${b}</div>
+                    \${cust ? \`<span class="text-[10px] text-slate-400 truncate max-w-[120px]" title="\${cust}">\${cust}</span>\` : ''}
+                  </div>
+                \`;
+              })()}
+            </td>
+            <td class="py-3 px-4">
               <div id="note-display-\${k.key}" class="flex items-center gap-1.5 group cursor-pointer" onclick="enableNoteEdit('\${k.key}')">
                 <span class="text-nexus-muted truncate max-w-[130px] group-hover:text-white">\${note || '<span class="italic text-nexus-muted/40">Not ekle...</span>'}</span>
                 <i data-lucide="pencil" class="w-3 h-3 text-nexus-muted opacity-0 group-hover:opacity-100 transition"></i>
@@ -1120,6 +1415,9 @@ export function getAdminDashboardHtml(): string {
             <td class="py-3 px-4 text-right">
               <div class="flex items-center justify-end gap-1.5">
                 \${!isLifetime ? \`
+                  <button onclick="openRedeemModal('\${k.key}')" class="px-2 py-1 rounded bg-nexus-card border border-nexus-border text-amber-400 hover:bg-amber-400/10 font-bold text-[11px] transition flex items-center gap-1" title="Kupon ile Süre Uzat">
+                    <i data-lucide="ticket" class="w-3 h-3"></i> Kupon
+                  </button>
                   <button onclick="extendKey('\${k.key}', 30)" class="px-2 py-1 rounded bg-nexus-card border border-nexus-border text-nexus-cyan hover:bg-nexus-cyan/10 font-bold text-[11px] transition" title="Süreye +30 Gün Ekle">
                     +30g
                   </button>
@@ -1463,6 +1761,241 @@ export function getAdminDashboardHtml(): string {
         }
       } catch {
         container.innerHTML = '<p class="text-center text-xs text-nexus-rose py-6">Loglar yüklenemedi.</p>';
+      }
+    }
+
+    // ── Notifications Modal ──────────────────────────────────────────────────
+    async function openNotifModal() {
+      document.getElementById('notif-modal').classList.remove('hidden');
+      await fetchNotifSettings();
+      lucide.createIcons();
+    }
+
+    function closeNotifModal() {
+      document.getElementById('notif-modal').classList.add('hidden');
+    }
+
+    async function fetchNotifSettings() {
+      try {
+        const res = await fetch('/admin/api/notifications/settings', {
+          headers: { 'Authorization': \`Bearer \${token}\` }
+        });
+        const data = await res.json();
+        if (data.success && data.settings) {
+          const s = data.settings;
+          document.getElementById('notif-tg-token').value = s.telegram_bot_token || '';
+          document.getElementById('notif-tg-chat').value = s.telegram_chat_id || '';
+          document.getElementById('notif-tg-enabled').checked = !!s.telegram_enabled;
+          document.getElementById('notif-dc-webhook').value = s.discord_webhook_url || '';
+          document.getElementById('notif-dc-enabled').checked = !!s.discord_enabled;
+          document.getElementById('notif-on-activate').checked = s.notify_on_activate !== false;
+          document.getElementById('notif-on-revoke').checked = s.notify_on_revoke !== false;
+          document.getElementById('notif-on-alert').checked = s.notify_on_alert !== false;
+        }
+      } catch {
+        showToast('Bildirim ayarları alınamadı', 'error');
+      }
+    }
+
+    async function saveNotifSettings() {
+      const payload = {
+        telegram_bot_token: document.getElementById('notif-tg-token').value.trim(),
+        telegram_chat_id: document.getElementById('notif-tg-chat').value.trim(),
+        telegram_enabled: document.getElementById('notif-tg-enabled').checked,
+        discord_webhook_url: document.getElementById('notif-dc-webhook').value.trim(),
+        discord_enabled: document.getElementById('notif-dc-enabled').checked,
+        notify_on_activate: document.getElementById('notif-on-activate').checked,
+        notify_on_revoke: document.getElementById('notif-on-revoke').checked,
+        notify_on_alert: document.getElementById('notif-on-alert').checked,
+      };
+
+      try {
+        const res = await fetch('/admin/api/notifications/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': \`Bearer \${token}\` },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Bildirim ayarları kaydedildi!');
+          closeNotifModal();
+        } else {
+          showToast(data.error || 'Ayarlar kaydedilemedi', 'error');
+        }
+      } catch {
+        showToast('Bağlantı hatası', 'error');
+      }
+    }
+
+    async function testNotification(channel) {
+      showToast('Test bildirimi gönderiliyor...');
+      try {
+        const res = await fetch('/admin/api/notifications/test', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': \`Bearer \${token}\` },
+          body: JSON.stringify({ channel })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message || 'Test mesajı başarıyla yollandı!');
+        } else {
+          showToast(data.error || 'Test başarısız', 'error');
+        }
+      } catch {
+        showToast('Bağlantı hatası', 'error');
+      }
+    }
+
+    // ── Coupons Modal ────────────────────────────────────────────────────────
+    async function openCouponsModal() {
+      document.getElementById('coupons-modal').classList.remove('hidden');
+      await fetchCoupons();
+      lucide.createIcons();
+    }
+
+    function closeCouponsModal() {
+      document.getElementById('coupons-modal').classList.add('hidden');
+    }
+
+    async function fetchCoupons() {
+      const tbody = document.getElementById('coupons-table-body');
+      try {
+        const res = await fetch('/admin/api/coupons/list', {
+          headers: { 'Authorization': \`Bearer \${token}\` }
+        });
+        const data = await res.json();
+        if (data.success && Array.isArray(data.coupons)) {
+          if (data.coupons.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-nexus-muted">Henüz oluşturulmuş kupon yok.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = data.coupons.map(c => {
+            const isUsed = Number(c.is_used) === 1;
+            const statusBadge = isUsed
+              ? \`<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-nexus-rose/10 text-nexus-rose border border-nexus-rose/30">Kullanıldı (\${c.used_by_key ? c.used_by_key.slice(0, 10) + '...' : ''})</span>\`
+              : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-nexus-emerald/10 text-nexus-emerald border border-nexus-emerald/30">Kullanılabilir</span>';
+            return \`
+              <tr class="hover:bg-nexus-surface/50 transition">
+                <td class="py-2.5 px-3 font-mono font-bold text-white flex items-center gap-1.5">
+                  <span>\${c.code}</span>
+                  <button onclick="copyText('\${c.code}')" class="p-1 rounded text-nexus-muted hover:text-white transition" title="Kopyala">
+                    <i data-lucide="copy" class="w-3 h-3"></i>
+                  </button>
+                </td>
+                <td class="py-2.5 px-3 font-bold text-nexus-cyan">+\${c.days_to_add} Gün</td>
+                <td class="py-2.5 px-3 text-slate-300">\${c.note || '—'}</td>
+                <td class="py-2.5 px-3">\${statusBadge}</td>
+                <td class="py-2.5 px-3 text-right">
+                  <button onclick="deleteCoupon('\${c.code}')" class="p-1 rounded text-nexus-muted hover:text-nexus-rose transition" title="Kuponu Sil">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  </button>
+                </td>
+              </tr>
+            \`;
+          }).join('');
+          lucide.createIcons();
+        }
+      } catch {
+        tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-nexus-rose">Kuponlar yüklenemedi.</td></tr>';
+      }
+    }
+
+    async function handleCreateCoupons(e) {
+      e.preventDefault();
+      const daysToAdd = parseInt(document.getElementById('coupon-days').value, 10);
+      const count = parseInt(document.getElementById('coupon-count').value, 10);
+      const note = document.getElementById('coupon-note').value.trim();
+      const btn = document.getElementById('coupon-gen-btn');
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/admin/api/coupons/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': \`Bearer \${token}\` },
+          body: JSON.stringify({ daysToAdd, count, note })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(\`\${count} adet kupon başarıyla üretildi!\`);
+          document.getElementById('coupon-note').value = '';
+          fetchCoupons();
+        } else {
+          showToast(data.error || 'Kupon üretilemedi', 'error');
+        }
+      } catch {
+        showToast('Bağlantı hatası', 'error');
+      } finally {
+        btn.disabled = false;
+        lucide.createIcons();
+      }
+    }
+
+    async function deleteCoupon(code) {
+      const confirmed = await customConfirm('Kuponu Sil?', \`\${code} kuponu kalıcı olarak silinecek.\`);
+      if (!confirmed) return;
+
+      try {
+        const res = await fetch('/admin/api/coupons/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': \`Bearer \${token}\` },
+          body: JSON.stringify({ code })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Kupon silindi.');
+          fetchCoupons();
+        } else {
+          showToast(data.error || 'Silinemedi', 'error');
+        }
+      } catch {
+        showToast('Bağlantı hatası', 'error');
+      }
+    }
+
+    // ── Redeem Coupon Modal ──────────────────────────────────────────────────
+    let currentRedeemKey = '';
+    function openRedeemModal(key) {
+      currentRedeemKey = key;
+      document.getElementById('redeem-target-key').value = key;
+      document.getElementById('redeem-coupon-code').value = '';
+      document.getElementById('redeem-modal').classList.remove('hidden');
+      document.getElementById('redeem-coupon-code').focus();
+    }
+
+    function closeRedeemModal() {
+      document.getElementById('redeem-modal').classList.add('hidden');
+      currentRedeemKey = '';
+    }
+
+    async function handleRedeemCoupon(e) {
+      e.preventDefault();
+      const key = currentRedeemKey;
+      const couponCode = document.getElementById('redeem-coupon-code').value.trim();
+      if (!key || !couponCode) return;
+
+      const btn = document.getElementById('redeem-submit-btn');
+      btn.disabled = true;
+      btn.innerText = 'Uygulanıyor...';
+
+      try {
+        const res = await fetch('/admin/api/coupons/redeem', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': \`Bearer \${token}\` },
+          body: JSON.stringify({ key, couponCode })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(\`Kupon uygulandı! +\${data.daysAdded} gün eklendi (Yeni Bitiş: \${data.newExpiryDate})\`);
+          closeRedeemModal();
+          refreshKeys();
+        } else {
+          showToast(data.error || 'Kupon uygulanamadı', 'error');
+        }
+      } catch {
+        showToast('Bağlantı hatası', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Kuponu Uygula & Uzat';
       }
     }
   </script>

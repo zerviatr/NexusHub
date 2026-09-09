@@ -10,6 +10,7 @@
 import { Router, Request, Response } from 'express'
 import { createHmac } from 'crypto'
 import { getDb } from '../db'
+import { notifyKeyActivated } from '../services/notifier'
 
 export const licenseRouter = Router()
 
@@ -105,6 +106,15 @@ licenseRouter.post('/activate', async (req: Request, res: Response): Promise<voi
     })
 
     console.log(`[license] Activated key=${key.slice(-8)} device=${hashedDevice.slice(0, 8)}...`)
+
+    notifyKeyActivated({
+      key,
+      tier: String(license.tier),
+      deviceId: hashedDevice,
+      salesChannel: license['sales_channel'] ? String(license['sales_channel']) : undefined,
+      customerInfo: license['customer_note'] ? String(license['customer_note']) : (license['email'] ? String(license['email']) : undefined),
+      expiresAt,
+    })
 
     res.json({ success: true, tier: license.tier, expiresAt })
   } catch (err: any) {

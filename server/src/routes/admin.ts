@@ -18,6 +18,13 @@ import { createHmac, timingSafeEqual, randomBytes, pbkdf2Sync } from 'crypto'
 import { getDb } from '../db'
 import { generateKey } from '../keyGen'
 import { getAdminDashboardHtml } from '../adminDashboardHtml'
+import {
+  getNotificationSettings,
+  saveNotificationSettings,
+  sendTelegram,
+  sendDiscord,
+  notifyKeyRevoked
+} from '../services/notifier'
 
 export const adminRouter = Router()
 
@@ -274,6 +281,8 @@ adminRouter.get('/api/keys', requireAdminAuth, async (_req: Request, res: Respon
         l.tier, 
         l.expires_at, 
         l.order_id, 
+        l.sales_channel,
+        l.customer_note,
         l.max_activations, 
         l.is_revoked, 
         l.created_at,
@@ -287,6 +296,8 @@ adminRouter.get('/api/keys', requireAdminAuth, async (_req: Request, res: Respon
       tier: row.tier,
       expires_at: Number(row.expires_at || 0),
       order_id: row.order_id || '',
+      sales_channel: row.sales_channel || '',
+      customer_note: row.customer_note || '',
       max_activations: Number(row.max_activations || 2),
       is_revoked: Number(row.is_revoked || 0),
       created_at: Number(row.created_at || 0),
@@ -308,12 +319,16 @@ adminRouter.post('/api/keys/generate', requireAdminAuth, async (req: Request, re
       tier = 'pro',
       durationDays = 365,
       maxActivations = 2,
-      note = ''
+      note = '',
+      salesChannel = 'Direct',
+      customerNote = ''
     } = req.body as {
       tier?: string
       durationDays?: number
       maxActivations?: number
       note?: string
+      salesChannel?: string
+      customerNote?: string
     }
 
     const secret = process.env['NEXUS_LICENSE_SECRET'] ?? 'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
@@ -327,8 +342,8 @@ adminRouter.post('/api/keys/generate', requireAdminAuth, async (req: Request, re
     const db = getDb()
 
     await db.execute({
-      sql: `INSERT INTO licenses (key, tier, expires_at, order_id, email, max_activations, is_revoked, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, 0, ?)`,
+      sql: `INSERT INTO licenses (key, tier, expires_at, order_id, email, max_activations, is_revoked, created_at, sales_channel, customer_note)
+            VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?, ?)`,
       args: [
         key,
         tier,
@@ -336,11 +351,13 @@ adminRouter.post('/api/keys/generate', requireAdminAuth, async (req: Request, re
         note || `MANUAL-${Date.now().toString().slice(-6)}`,
         'anonymous@nexushub.local',
         Number(maxActivations) || 2,
-        Date.now()
+        Date.now(),
+        salesChannel,
+        customerNote
       ]
     })
 
-    await recordAudit('KEY_GENERATED', `Key ${key} (${tier}, ${durationDays}d)`, ip)
+    await recordAudit('KEY_GENERATED', `Key ${key} (${tier}, ${durationDays}d, ${salesChannel})`, ip)
     res.json({ success: true, key, tier, expiresAt, maxActivations })
   } catch (err: any) {
     console.error('[admin] generate error:', err)
@@ -357,13 +374,17 @@ adminRouter.post('/api/keys/bulk-generate', requireAdminAuth, async (req: Reques
       durationDays = 365,
       maxActivations = 2,
       count = 5,
-      notePrefix = 'BULK'
+      notePrefix = 'BULK',
+      salesChannel = 'Direct',
+      customerNote = ''
     } = req.body as {
       tier?: string
       durationDays?: number
       maxActivations?: number
       count?: number
       notePrefix?: string
+      salesChannel?: string
+      customerNote?: string
     }
 
     const safeCount = Math.min(50, Math.max(1, Number(count) || 1))
@@ -384,15 +405,25 @@ adminRouter.post('/api/keys/bulk-generate', requireAdminAuth, async (req: Reques
       const label = `${notePrefix} #${i}`
 
       await db.execute({
-        sql: `INSERT INTO licenses (key, tier, expires_at, order_id, email, max_activations, is_revoked, created_at)
-              VALUES (?, ?, ?, ?, ?, ?, 0, ?)`,
-        args: [key, tier, expiresAt, label, 'anonymous@nexushub.local', Number(maxActivations) || 2, now + i]
+        sql: `INSERT INTO licenses (key, tier, expires_at, order_id, email, max_activations, is_revoked, created_at, sales_channel, customer_note)
+              VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?, ?)`,
+        args: [
+          key,
+          tier,
+          expiresAt,
+          label,
+          'anonymous@nexushub.local',
+          Number(maxActivations) || 2,
+          now + i,
+          salesChannel,
+          customerNote
+        ]
       })
 
       generated.push(key)
     }
 
-    await recordAudit('BULK_KEYS_GENERATED', `${safeCount} keys created (${tier})`, ip)
+    await recordAudit('BULK_KEYS_GENERATED', `${safeCount} keys created (${tier}, ${salesChannel})`, ip)
     res.json({ success: true, count: safeCount, keys: generated })
   } catch (err: any) {
     console.error('[admin] bulk generate error:', err)
@@ -496,6 +527,10 @@ adminRouter.post('/api/keys/revoke', requireAdminAuth, async (req: Request, res:
       sql: 'UPDATE licenses SET is_revoked = ? WHERE key = ?',
       args: [is_revoked === 1 ? 1 : 0, key]
     })
+
+    if (is_revoked === 1) {
+      notifyKeyRevoked({ key, reason: 'Admin panelinden manuel iptal edildi', ip })
+    }
 
     await recordAudit(is_revoked === 1 ? 'KEY_REVOKED' : 'KEY_REACTIVATED', `Key ${key}`, ip)
     res.json({ success: true, key, is_revoked: is_revoked === 1 ? 1 : 0 })
@@ -711,5 +746,228 @@ adminRouter.get('/api/server-stats', requireAdminAuth, async (_req: Request, res
     })
   } catch (err: any) {
     res.status(500).json({ success: false, error: err.message })
+  }
+})
+
+// ─── GET /admin/api/notifications/settings ──────────────────────────────────
+adminRouter.get('/api/notifications/settings', requireAdminAuth, async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const settings = await getNotificationSettings()
+    res.json({ success: true, settings })
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message })
+  }
+})
+
+// ─── POST /admin/api/notifications/settings ─────────────────────────────────
+adminRouter.post('/api/notifications/settings', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
+  try {
+    await saveNotificationSettings(req.body)
+    await recordAudit('NOTIF_SETTINGS_UPDATED', 'Webhook/Telegram config updated', ip)
+    res.json({ success: true, message: 'Bildirim ayarları kaydedildi' })
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message })
+  }
+})
+
+// ─── POST /admin/api/notifications/test ─────────────────────────────────────
+adminRouter.post('/api/notifications/test', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { channel } = req.body as { channel?: 'telegram' | 'discord' }
+    const settings = await getNotificationSettings()
+
+    if (channel === 'telegram') {
+      if (!settings.telegram_bot_token || !settings.telegram_chat_id) {
+        res.status(400).json({ success: false, error: 'Telegram Bot Token veya Chat ID eksik' })
+        return
+      }
+      const testMsg = `<b>🔔 NexusHub Test Bildirimi</b>\n\nTelegram bağlantınız başarıyla doğrulandı! Sunucu ve bildirim botu aktif.`
+      const result = await sendTelegram(settings.telegram_bot_token, settings.telegram_chat_id, testMsg)
+      if (!result.success) {
+        res.status(400).json({ success: false, error: result.error })
+        return
+      }
+      res.json({ success: true, message: 'Telegram test mesajı başarıyla gönderildi!' })
+      return
+    }
+
+    if (channel === 'discord') {
+      if (!settings.discord_webhook_url) {
+        res.status(400).json({ success: false, error: 'Discord Webhook URL eksik' })
+        return
+      }
+      const result = await sendDiscord(settings.discord_webhook_url, {
+        title: '🔔 NexusHub Test Bildirimi',
+        description: 'Discord Webhook bağlantınız başarıyla doğrulandı! Sunucu lisans ve güvenlik alarmları bu kanala akacaktır.',
+        color: 0x8b5cf6, // Purple
+        fields: [
+          { name: 'Durum', value: '🟢 Bağlantı Başarılı', inline: true },
+          { name: 'Sunucu', value: 'Railway Production', inline: true },
+        ],
+      })
+      if (!result.success) {
+        res.status(400).json({ success: false, error: result.error })
+        return
+      }
+      res.json({ success: true, message: 'Discord test mesajı başarıyla gönderildi!' })
+      return
+    }
+
+    res.status(400).json({ success: false, error: 'Geçersiz bildirim kanalı' })
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message })
+  }
+})
+
+// ─── POST /admin/api/coupons/generate ───────────────────────────────────────
+adminRouter.post('/api/coupons/generate', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
+  try {
+    const { daysToAdd = 30, count = 1, note = '' } = req.body as {
+      daysToAdd?: number
+      count?: number
+      note?: string
+    }
+
+    const safeCount = Math.min(50, Math.max(1, Number(count) || 1))
+    const days = Math.max(1, Number(daysToAdd) || 30)
+    const db = getDb()
+    const now = Date.now()
+    const created: any[] = []
+
+    for (let i = 0; i < safeCount; i++) {
+      const randStr = randomBytes(4).toString('hex').toUpperCase()
+      const code = `NEXUS-EXT-${days}D-${randStr}`
+
+      await db.execute({
+        sql: `INSERT INTO coupons (code, days_to_add, is_used, note, created_at)
+              VALUES (?, ?, 0, ?, ?)`,
+        args: [code, days, note || `Kupon +${days} Gün`, now + i]
+      })
+
+      created.push({ code, days_to_add: days, note: note || `Kupon +${days} Gün` })
+    }
+
+    await recordAudit('COUPONS_GENERATED', `${safeCount} coupons generated (+${days}d)`, ip)
+    res.json({ success: true, count: safeCount, coupons: created })
+  } catch (err: any) {
+    console.error('[admin] coupon generate error:', err)
+    res.status(500).json({ success: false, error: err.message || 'Kupon üretilemedi' })
+  }
+})
+
+// ─── GET /admin/api/coupons/list ────────────────────────────────────────────
+adminRouter.get('/api/coupons/list', requireAdminAuth, async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const db = getDb()
+    const resRows = await db.execute(`
+      SELECT code, days_to_add, is_used, used_by_key, note, created_at, used_at
+      FROM coupons
+      ORDER BY created_at DESC
+      LIMIT 200
+    `)
+    res.json({ success: true, coupons: resRows.rows })
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message })
+  }
+})
+
+// ─── POST /admin/api/coupons/delete ─────────────────────────────────────────
+adminRouter.post('/api/coupons/delete', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
+  try {
+    const { code } = req.body as { code?: string }
+    if (!code) {
+      res.status(400).json({ success: false, error: 'Kupon kodu zorunludur' })
+      return
+    }
+    const db = getDb()
+    await db.execute({ sql: 'DELETE FROM coupons WHERE code = ?', args: [code] })
+    await recordAudit('COUPON_DELETED', `Coupon ${code} deleted`, ip)
+    res.json({ success: true, code })
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message })
+  }
+})
+
+// ─── POST /admin/api/coupons/redeem ─────────────────────────────────────────
+adminRouter.post('/api/coupons/redeem', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
+  try {
+    const { key, couponCode } = req.body as { key?: string; couponCode?: string }
+    if (!key || !couponCode) {
+      res.status(400).json({ success: false, error: 'Lisans anahtarı ve kupon kodu gereklidir' })
+      return
+    }
+
+    const cleanKey = key.trim().toUpperCase()
+    const cleanCoupon = couponCode.trim().toUpperCase()
+    const db = getDb()
+
+    // 1. Check coupon validity
+    const couponRes = await db.execute({
+      sql: 'SELECT * FROM coupons WHERE code = ?',
+      args: [cleanCoupon]
+    })
+
+    if (couponRes.rows.length === 0) {
+      res.status(400).json({ success: false, error: 'Kupon kodu bulunamadı' })
+      return
+    }
+
+    const coupon = couponRes.rows[0] as any
+    if (Number(coupon.is_used) === 1) {
+      res.status(400).json({ success: false, error: 'Bu kupon daha önce kullanılmıştır' })
+      return
+    }
+
+    // 2. Check license exists
+    const licenseRes = await db.execute({
+      sql: 'SELECT * FROM licenses WHERE key = ?',
+      args: [cleanKey]
+    })
+
+    if (licenseRes.rows.length === 0) {
+      res.status(400).json({ success: false, error: 'Uzatılacak lisans anahtarı bulunamadı' })
+      return
+    }
+
+    const license = licenseRes.rows[0] as any
+    if (license.tier === 'lifetime') {
+      res.status(400).json({ success: false, error: 'Bu lisans zaten Ömür Boyu (Lifetime) pakettir' })
+      return
+    }
+
+    const daysToAdd = Number(coupon.days_to_add) || 30
+    const msToAdd = daysToAdd * 24 * 3600 * 1000
+    const currentExp = Number(license.expires_at || 0)
+    const newExpiresAt = Math.max(Date.now(), currentExp) + msToAdd
+
+    // 3. Update license
+    await db.execute({
+      sql: 'UPDATE licenses SET expires_at = ? WHERE key = ?',
+      args: [newExpiresAt, cleanKey]
+    })
+
+    // 4. Mark coupon as used
+    await db.execute({
+      sql: 'UPDATE coupons SET is_used = 1, used_by_key = ?, used_at = ? WHERE code = ?',
+      args: [cleanKey, Date.now(), cleanCoupon]
+    })
+
+    await recordAudit('COUPON_REDEEMED', `Coupon ${cleanCoupon} applied to key ${cleanKey} (+${daysToAdd}d)`, ip)
+
+    res.json({
+      success: true,
+      key: cleanKey,
+      couponCode: cleanCoupon,
+      daysAdded: daysToAdd,
+      newExpiresAt,
+      newExpiryDate: new Date(newExpiresAt).toLocaleDateString('tr-TR')
+    })
+  } catch (err: any) {
+    console.error('[admin] redeem coupon error:', err)
+    res.status(500).json({ success: false, error: err.message || 'Kupon uygulanamadı' })
   }
 })

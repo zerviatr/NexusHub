@@ -69,5 +69,25 @@ export async function migrate(): Promise<void> {
     )
   `)
 
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS coupons (
+      code         TEXT PRIMARY KEY,
+      days_to_add  INTEGER NOT NULL,
+      is_used      INTEGER NOT NULL DEFAULT 0,
+      used_by_key  TEXT,
+      note         TEXT,
+      created_at   INTEGER NOT NULL,
+      used_at      INTEGER
+    )
+  `)
+
+  // Safe migrations for commercial metadata in existing DBs
+  try {
+    await db.execute(`ALTER TABLE licenses ADD COLUMN sales_channel TEXT`)
+  } catch {}
+  try {
+    await db.execute(`ALTER TABLE licenses ADD COLUMN customer_note TEXT`)
+  } catch {}
+
   console.log('[db] Migration complete')
 }

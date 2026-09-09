@@ -23,6 +23,7 @@ import EulaGate from './pages/EulaGate'
 import OnboardingTour from './components/OnboardingTour'
 import CommandPalette from './components/CommandPalette'
 import ProLockGate from './components/ProLockGate'
+import FloatingOrb from './components/FloatingOrb'
 import { useLicense } from './lib/LicenseContext'
 
 const pageVariants = {
@@ -182,6 +183,7 @@ export default function App() {
           </AnimatePresence>
         </main>
       </div>
+      <FloatingOrb />
     </div>
   )
 }
