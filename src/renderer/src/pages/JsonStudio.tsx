@@ -11,10 +11,15 @@ import {
   CheckCircle2,
   Clock,
   Shield,
-  FileCode
+  FileCode,
+  Bot,
+  Loader2,
+  X
 } from 'lucide-react'
 import BaseToolTemplate from '../components/BaseToolTemplate'
 import { useT } from '../lib/i18n'
+import { askAI } from '../lib/aiClient'
+import { cyberAudio } from '../lib/cyberAudio'
 
 type StudioTab = 'json' | 'jwt'
 
@@ -69,6 +74,38 @@ export default function JsonStudio() {
   // JWT Studio state
   const [rawJwt, setRawJwt] = useState<string>(SAMPLE_JWT)
   const [copiedJwtPayload, setCopiedJwtPayload] = useState<boolean>(false)
+
+  // AI Schema Generator state
+  const [showAiModal, setShowAiModal] = useState<boolean>(false)
+  const [aiTarget, setAiTarget] = useState<'typescript' | 'sql'>('typescript')
+  const [aiLoading, setAiLoading] = useState<boolean>(false)
+  const [aiOutput, setAiOutput] = useState<string>('')
+  const [aiError, setAiError] = useState<string>('')
+  const [copiedAi, setCopiedAi] = useState<boolean>(false)
+
+  const handleRunAiSchema = async (target: 'typescript' | 'sql') => {
+    if (!rawJson.trim()) return
+    setAiTarget(target)
+    setShowAiModal(true)
+    setAiLoading(true)
+    setAiError('')
+    setAiOutput('')
+    try {
+      const prompt =
+        target === 'typescript'
+          ? `Generate clean, fully-typed TypeScript interface declarations for this JSON data. Return ONLY the TypeScript code without markdown code fences:\n\n${rawJson}`
+          : `Generate a clean, standard SQL CREATE TABLE statement with appropriate data types for this JSON structure. Return ONLY the SQL code without markdown code fences:\n\n${rawJson}`
+
+      const res = await askAI(prompt, 'You are an expert software engineer generating schema types from JSON.')
+      const clean = res.replace(/^```[a-z]*\n?|```$/gim, '').trim()
+      setAiOutput(clean)
+      cyberAudio.copySuccess()
+    } catch (err: any) {
+      setAiError(err.message || 'AI çağrısı başarısız oldu. Lütfen Account sayfasından AI ayarlarınızı kontrol edin.')
+    } finally {
+      setAiLoading(false)
+    }
+  }
 
   // JSON Analysis & Validation
   const jsonAnalysis = useMemo(() => {
@@ -270,6 +307,23 @@ export default function JsonStudio() {
                 >
                   <FileCode className="w-3.5 h-3.5" />
                   Load Sample
+                </button>
+                <div className="h-4 w-px bg-white/10 mx-1 hidden md:block" />
+                <button
+                  type="button"
+                  onClick={() => handleRunAiSchema('typescript')}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-xs font-medium text-purple-300 transition-colors shadow-sm"
+                >
+                  <Bot className="w-3.5 h-3.5 text-purple-400" />
+                  AI &rarr; TypeScript
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleRunAiSchema('sql')}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-xs font-medium text-purple-300 transition-colors shadow-sm"
+                >
+                  <Bot className="w-3.5 h-3.5 text-purple-400" />
+                  AI &rarr; SQL Table
                 </button>
               </div>
 
@@ -476,6 +530,71 @@ export default function JsonStudio() {
             )}
           </div>
         )}
+      {/* AI Schema Generator Modal */}
+      {showAiModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-2xl bg-nexus-surface border border-nexus-border/60 rounded-2xl p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-nexus-border/30">
+              <div className="flex items-center gap-2 text-purple-400 font-semibold text-sm">
+                <Bot className="w-4 h-4" />
+                <span>AI Schema Engine &bull; {aiTarget === 'typescript' ? 'TypeScript Interface' : 'SQL Table DDL'}</span>
+              </div>
+              <button
+                onClick={() => setShowAiModal(false)}
+                className="p-1 rounded-lg hover:bg-white/10 text-nexus-muted hover:text-white transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {aiLoading ? (
+              <div className="flex flex-col items-center justify-center py-12 space-y-3">
+                <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
+                <p className="text-xs text-nexus-muted">JSON şeması analiz ediliyor ve kod üretiliyor...</p>
+              </div>
+            ) : aiError ? (
+              <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-xs text-red-400">
+                {aiError}
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-nexus-muted font-mono">
+                    {aiTarget === 'typescript' ? 'generated-types.ts' : 'schema.sql'}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(aiOutput)
+                      cyberAudio.copySuccess()
+                      setCopiedAi(true)
+                      setTimeout(() => setCopiedAi(false), 2000)
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-mono text-nexus-cyan transition-colors"
+                  >
+                    {copiedAi ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedAi ? 'Kopyalandı' : 'Kodu Kopyala'}</span>
+                  </button>
+                </div>
+                <div className="p-4 rounded-xl bg-nexus-bg border border-nexus-border/40 max-h-96 overflow-y-auto">
+                  <pre className="text-xs font-mono text-purple-200 leading-relaxed whitespace-pre-wrap">
+                    {aiOutput}
+                  </pre>
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                onClick={() => setShowAiModal(false)}
+                className="px-4 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-nexus-muted hover:text-white transition-colors"
+              >
+                Kapat
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       </div>
     </BaseToolTemplate>
   )

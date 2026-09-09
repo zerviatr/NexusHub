@@ -63,6 +63,15 @@ const nexusAPI = {
       ipcRenderer.invoke('fortress:decryptFile', payload),
   },
 
+  // PDF Toolkit
+  pdf: {
+    selectFiles: (allowMultiple?: boolean) => ipcRenderer.invoke('pdf:selectFiles', allowMultiple),
+    merge: (payload: { filePaths: string[]; outputFileName?: string }) =>
+      ipcRenderer.invoke('pdf:merge', payload),
+    split: (payload: { filePath: string; pageRange: string }) =>
+      ipcRenderer.invoke('pdf:split', payload),
+  },
+
   // ─── License & Activation ─────────────────────────────────────────────────
   license: {
     /** Check persisted license on startup. Returns status + tier if active. */

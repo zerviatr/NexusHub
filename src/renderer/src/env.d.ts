@@ -63,6 +63,11 @@ interface NexusAPI {
     encryptFile: (payload: { filePath: string; passphrase: string }) => Promise<any>
     decryptFile: (payload: { filePath: string; passphrase: string }) => Promise<any>
   }
+  pdf: {
+    selectFiles: (allowMultiple?: boolean) => Promise<Array<{ path: string; name: string; size: number; pageCount?: number; title?: string; author?: string }>>
+    merge: (payload: { filePaths: string[]; outputFileName?: string }) => Promise<{ success: boolean; outputPath?: string; totalCount?: number; size?: number; canceled?: boolean; error?: string }>
+    split: (payload: { filePath: string; pageRange: string }) => Promise<{ success: boolean; outputPath?: string; pageCount?: number; size?: number; canceled?: boolean; error?: string }>
+  }
   license: {
     check:      () => Promise<{ status: string; tier?: string; expiresAt?: number }>
     activate:   (key: string) => Promise<{ success: boolean; tier?: string; reason?: string }>

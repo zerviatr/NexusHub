@@ -7,6 +7,7 @@ interface LicenseContextValue {
   tier: string | null
   expiresAt: number | null
   key: string | null
+  trialHoursLeft: number | null
   activate: (key: string) => Promise<{ success: boolean; reason?: string }>
   deactivate: () => Promise<void>
 }
@@ -18,6 +19,7 @@ export function LicenseProvider({ children }: { children: React.ReactNode }) {
   const [tier, setTier] = useState<string | null>(null)
   const [expiresAt, setExpiresAt] = useState<number | null>(null)
   const [key, setKey] = useState<string | null>(null)
+  const [trialHoursLeft, setTrialHoursLeft] = useState<number | null>(null)
 
   useEffect(() => {
     // Initial check on mount
@@ -31,6 +33,9 @@ export function LicenseProvider({ children }: { children: React.ReactNode }) {
         setTier(res.tier)
         setExpiresAt(res.expiresAt)
         setKey(res.key)
+        if (res.trialHoursLeft !== undefined) {
+          setTrialHoursLeft(res.trialHoursLeft)
+        }
       }
     })?.catch((err: any) => {
       console.warn('License check failed:', err)
@@ -132,7 +137,7 @@ export function LicenseProvider({ children }: { children: React.ReactNode }) {
   }, [status])
 
   return (
-    <LicenseContext.Provider value={{ status, tier, expiresAt, key, activate, deactivate }}>
+    <LicenseContext.Provider value={{ status, tier, expiresAt, key, trialHoursLeft, activate, deactivate }}>
       {children}
     </LicenseContext.Provider>
   )

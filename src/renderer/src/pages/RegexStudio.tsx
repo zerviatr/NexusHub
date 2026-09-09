@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { Terminal, Copy, Check, Play, BookOpen, AlertCircle, Sparkles } from 'lucide-react'
+import { Terminal, Copy, Check, Play, BookOpen, AlertCircle, Sparkles, Bot, Loader2, X } from 'lucide-react'
 import { cyberAudio } from '../lib/cyberAudio'
+import { askAI } from '../lib/aiClient'
 
 interface RegexPreset {
   name: string
@@ -63,6 +64,43 @@ export default function RegexStudio() {
     'Bize info@nexushub.io üzerinden veya support@company.org adresinden ulaşabilirsiniz.\nGeçersiz: user@.com'
   )
   const [copied, setCopied] = useState(false)
+
+  // AI Co-Pilot state
+  const [showAiModal, setShowAiModal] = useState(false)
+  const [aiMode, setAiMode] = useState<'generate' | 'explain'>('generate')
+  const [aiPrompt, setAiPrompt] = useState('')
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiResult, setAiResult] = useState('')
+  const [aiError, setAiError] = useState('')
+
+  const handleRunAI = async () => {
+    setAiLoading(true)
+    setAiError('')
+    setAiResult('')
+    try {
+      if (aiMode === 'generate') {
+        const res = await askAI(
+          `Generate a JavaScript compatible regex pattern for this requirement: "${aiPrompt}". Return ONLY the raw regex pattern itself, no slashes, no quotes, no markdown, no explanation.`,
+          'You are a strict regex engine assistant. Return ONLY the regex string.'
+        )
+        const clean = res.replace(/^\/|\/[a-z]*$/g, '').replace(/`/g, '').trim()
+        setPattern(clean)
+        setAiResult(`Desen başarıyla yüklendi: /${clean}/`)
+        cyberAudio.copySuccess()
+      } else {
+        const res = await askAI(
+          `Explain this regex pattern in Turkish concisely in bullet points: "/${pattern}/${flags}". Test string sample: "${testString.slice(0, 100)}"`,
+          'You are an expert developer assistant explaining regex in Turkish.'
+        )
+        setAiResult(res)
+        cyberAudio.copySuccess()
+      }
+    } catch (err: any) {
+      setAiError(err.message || 'AI çağrısı başarısız oldu. Account sayfasından AI ayarlarınızı kontrol edin.')
+    } finally {
+      setAiLoading(false)
+    }
+  }
 
   // Toggle flag helper
   const toggleFlag = (f: string) => {
@@ -145,6 +183,16 @@ export default function RegexStudio() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              cyberAudio.click()
+              setShowAiModal(true)
+            }}
+            className="flex items-center gap-2 px-3.5 py-2 bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 rounded-xl text-xs font-medium text-purple-300 transition-colors shadow-lg shadow-purple-600/10"
+          >
+            <Bot className="w-3.5 h-3.5 text-purple-400" />
+            <span>AI Co-Pilot</span>
+          </button>
           <button
             onClick={handleCopyPattern}
             className="flex items-center gap-2 px-3.5 py-2 bg-nexus-surface border border-nexus-border rounded-xl text-xs font-mono text-nexus-text hover:border-nexus-accent/40 transition-colors"
@@ -264,6 +312,116 @@ export default function RegexStudio() {
           ))}
         </div>
       </div>
+      {/* AI Co-Pilot Modal */}
+      {showAiModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="w-full max-w-lg bg-nexus-surface border border-nexus-border/60 rounded-2xl p-6 shadow-2xl space-y-4"
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-nexus-border/30">
+              <div className="flex items-center gap-2 text-purple-400 font-semibold text-sm">
+                <Bot className="w-4 h-4" />
+                <span>AI Regex Co-Pilot</span>
+              </div>
+              <button
+                onClick={() => setShowAiModal(false)}
+                className="p-1 rounded-lg hover:bg-white/10 text-nexus-muted hover:text-white transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Mode selection */}
+            <div className="flex rounded-xl bg-nexus-bg p-1 border border-nexus-border/40">
+              <button
+                onClick={() => {
+                  setAiMode('generate')
+                  setAiResult('')
+                }}
+                className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${
+                  aiMode === 'generate'
+                    ? 'bg-purple-600 text-white shadow-sm'
+                    : 'text-nexus-muted hover:text-white'
+                }`}
+              >
+                Doğal Dilden Regex Üret
+              </button>
+              <button
+                onClick={() => {
+                  setAiMode('explain')
+                  setAiResult('')
+                }}
+                className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${
+                  aiMode === 'explain'
+                    ? 'bg-purple-600 text-white shadow-sm'
+                    : 'text-nexus-muted hover:text-white'
+                }`}
+              >
+                Mevcut Deseni Açıkla
+              </button>
+            </div>
+
+            {aiMode === 'generate' ? (
+              <div className="space-y-2">
+                <label className="text-xs text-nexus-muted">
+                  Nasıl bir metin yakalamak istiyorsunuz?
+                </label>
+                <textarea
+                  rows={3}
+                  value={aiPrompt}
+                  onChange={(e) => setAiPrompt(e.target.value)}
+                  placeholder="Örn: '16 haneli kredi kartı numaraları (boşluklu veya tireli)' ya da 'yalnızca gmail ve hotmail uzantılı mailler'..."
+                  className="w-full bg-nexus-bg border border-nexus-border rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500 font-sans"
+                />
+              </div>
+            ) : (
+              <div className="p-3 rounded-xl bg-nexus-bg/60 border border-nexus-border/30 text-xs font-mono text-purple-300">
+                Açıklanacak Desen: <span className="font-bold text-white">/{pattern}/{flags}</span>
+              </div>
+            )}
+
+            {aiError && (
+              <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
+                {aiError}
+              </div>
+            )}
+
+            {aiResult && (
+              <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20 text-xs text-purple-200 whitespace-pre-wrap max-h-48 overflow-y-auto font-sans leading-relaxed">
+                {aiResult}
+              </div>
+            )}
+
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                onClick={() => setShowAiModal(false)}
+                className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-nexus-muted hover:text-white transition-colors"
+              >
+                Kapat
+              </button>
+              <button
+                disabled={aiLoading || (aiMode === 'generate' && !aiPrompt.trim())}
+                onClick={handleRunAI}
+                className="flex items-center gap-2 px-4 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-xs font-semibold text-white transition-all shadow-md shadow-purple-600/20 active:scale-95"
+              >
+                {aiLoading ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>AI Yanıtlıyor...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>{aiMode === 'generate' ? 'Regex Üret & Yükle' : 'Deseni Açıkla'}</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   )
 }

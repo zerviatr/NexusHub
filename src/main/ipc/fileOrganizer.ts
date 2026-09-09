@@ -110,6 +110,20 @@ async function getUniquePath(targetPath: string): Promise<string> {
   }
 }
 
+async function safeMoveFile(sourcePath: string, destPath: string): Promise<void> {
+  try {
+    await fs.rename(sourcePath, destPath)
+  } catch (err: any) {
+    if (err.code === 'EXDEV') {
+      // Cross-device link fallback (e.g. C: to D: partition)
+      await fs.copyFile(sourcePath, destPath)
+      await fs.unlink(sourcePath)
+    } else {
+      throw err
+    }
+  }
+}
+
 let lastExecutionMoves: FileOperation[] = []
 
 async function executeOperations(operations: FileOperation[]): Promise<ExecutionResult> {
@@ -131,8 +145,8 @@ async function executeOperations(operations: FileOperation[]): Promise<Execution
       // Prevent silent overwrite by finding a unique destination path
       const safePath = await getUniquePath(op.newPath)
 
-      // Perform the move/rename
-      await fs.rename(op.oldPath, safePath)
+      // Perform the move/rename safely with cross-device support
+      await safeMoveFile(op.oldPath, safePath)
       recordedMoves.push({ oldPath: op.oldPath, newPath: safePath })
       result.successfulOperations++
     } catch (error: any) {
@@ -160,7 +174,7 @@ async function undoLastExecution(): Promise<{ success: boolean; restored: number
   // Move back in reverse
   for (const move of [...lastExecutionMoves].reverse()) {
     try {
-      await fs.rename(move.newPath, move.oldPath)
+      await safeMoveFile(move.newPath, move.oldPath)
       restored++
     } catch (err: any) {
       errors.push(`Failed to restore ${move.newPath} to ${move.oldPath}: ${err.message}`)

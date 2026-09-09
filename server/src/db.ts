@@ -96,6 +96,12 @@ export async function migrate(): Promise<void> {
   try {
     await db.execute(`ALTER TABLE licenses ADD COLUMN customer_note TEXT`)
   } catch {}
+  try {
+    await db.execute(`ALTER TABLE licenses ADD COLUMN customer_name TEXT`)
+  } catch {}
+  try {
+    await db.execute(`ALTER TABLE licenses ADD COLUMN customer_country TEXT`)
+  } catch {}
 
   console.log('[db] Migration complete')
 }

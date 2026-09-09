@@ -4542,15 +4542,8 @@ graph LR
       }
     }
 
-    // ─── Live Social Proof FOMO Sales Ticker ────────────────────────────────
-    const fomoEvents = [
-      { icon: '⚡', user: 'Ahmet K. (İstanbul)', action: 'Nexus Pro Lifetime lisansını aktive etti', time: '2 dakika önce' },
-      { icon: '🛡️', user: 'DevSecOps Specialist (Berlin)', action: 'Nexus Studio (3 Cihaz) satın aldı', time: '5 dakika önce' },
-      { icon: '🎟️', user: 'Burak T. (İzmir)', action: 'OGRENCI kuponuyla Pro Pakete yükseltti', time: '7 dakika önce' },
-      { icon: '🚀', user: 'Canan D. (Ankara)', action: 'Windows için v2.0.3 Suite indirdi', time: '11 dakika önce' },
-      { icon: '🔑', user: 'Security Analyst (Austin, TX)', action: 'Format sonrası HWID kilidini sıfırladı', time: '14 dakika önce' },
-      { icon: '⭐', user: 'Emre S. (Bursa)', action: 'DoD 7-Pass Dosya İmha Kalkanını çalıştırdı', time: '18 dakika önce' }
-    ];
+    // ─── Real Live Social Proof Events (Zero-Fake Policy) ──────────────────
+    let fomoEvents = [];
     let fomoIndex = 0;
     let fomoDismissed = false;
 
@@ -4637,18 +4630,23 @@ graph LR
         const res = await fetch("/api/recent-activations");
         if (res.ok) {
           const data = await res.json();
-          if (data.success && Array.isArray(data.activations) && data.activations.length > 0) {
-            const realEvents = data.activations.map(a => ({
-              icon: "⚡",
-              user: a.country + " " + a.city + " (" + a.key + ")",
-              action: "Nexus " + (a.tier === "lifetime" ? "Studio Lifetime" : "Pro") + " lisansını aktive etti",
-              time: "az önce"
-            }));
-            fomoEvents.unshift(...realEvents);
+          const list = data.activations || data.feed || [];
+          if (Array.isArray(list) && list.length > 0) {
+            fomoEvents = list.map(function(a) {
+              return {
+                icon: a.icon || "⚡",
+                user: a.user,
+                action: a.action,
+                time: a.time || "az önce"
+              };
+            });
+            // Zero fake: Cycle toasts ONLY when real purchases/activations exist
+            setTimeout(cycleFomoToast, 2500);
+            setInterval(cycleFomoToast, 14000);
           }
         }
       } catch (e) {
-        // static fomoEvents fallback
+        // Zero-fake policy: stay completely silent on network/server error
       }
     }
 
@@ -4704,8 +4702,6 @@ function cycleFomoToast() {
     loadLiveActivationsFeed();
     computeSimHash('NexusHub-Safe-Crypto-2026');
     initTelemetryHeartbeat();
-    setTimeout(cycleFomoToast, 3500);
-    setInterval(cycleFomoToast, 13000);
   </script>
 </body>
 </html>`;

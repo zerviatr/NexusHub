@@ -98,12 +98,15 @@ webhookRouter.post(
         return
       }
 
+      const userName = (attrs?.user_name || attrs?.customer_name || '').trim()
+      const userCountry = (attrs?.country || attrs?.billing_address?.country || '').trim()
+
       await db.execute({
         sql: `
-          INSERT INTO licenses (key, tier, expires_at, order_id, email, max_activations, created_at)
-          VALUES (?, ?, ?, ?, ?, ?, ?)
+          INSERT INTO licenses (key, tier, expires_at, order_id, email, customer_name, customer_country, max_activations, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `,
-        args: [key, tier, expiresAt, orderId, email, tier === 'team' ? 5 : 2, Date.now()],
+        args: [key, tier, expiresAt, orderId, email, userName || null, userCountry || null, tier === 'team' ? 5 : 2, Date.now()],
       })
 
       // Send email with the key

@@ -19,13 +19,14 @@ import {
   activateOnline,
   verifyOnline,
   deactivateOnline,
+  getOrCreateTrial,
   type LicenseData,
   type LicenseTier,
 } from '../licenseStore'
 
 export type LicenseStatusPayload =
-  | { status: 'active';   tier: string; expiresAt: number; key: string }
-  | { status: 'inactive' }
+  | { status: 'active';   tier: string; expiresAt: number; key: string; trialHoursLeft?: number }
+  | { status: 'inactive'; trialExpired?: boolean }
   | { status: 'expired';  tier: string }
 
 export type LicenseActivateResult =
@@ -36,12 +37,34 @@ export function registerLicenseIPC(): void {
   // ─── Check stored license (called on startup) ──────────────────────────
   ipcMain.handle('license:check', async (): Promise<LicenseStatusPayload> => {
     const stored = loadLicense()
-    if (!stored) return { status: 'inactive' }
+    if (!stored) {
+      const trial = getOrCreateTrial()
+      if (trial.active) {
+        return {
+          status: 'active',
+          tier: 'trial',
+          expiresAt: trial.expiresAt,
+          key: 'TRIAL-72H-NEXUS-PRO',
+          trialHoursLeft: trial.hoursLeft,
+        }
+      }
+      return { status: 'inactive', trialExpired: true }
+    }
 
     const result = checkStoredLicense()
     if (!result || !result.valid) {
       clearLicense()
-      return { status: 'inactive' }
+      const trial = getOrCreateTrial()
+      if (trial.active) {
+        return {
+          status: 'active',
+          tier: 'trial',
+          expiresAt: trial.expiresAt,
+          key: 'TRIAL-72H-NEXUS-PRO',
+          trialHoursLeft: trial.hoursLeft,
+        }
+      }
+      return { status: 'inactive', trialExpired: true }
     }
 
     if (result.expiresAt !== 0 && Date.now() > result.expiresAt) {

@@ -36,6 +36,7 @@ const CurlRunner = lazy(() => import('./pages/CurlRunner'))
 const ColorStudio = lazy(() => import('./pages/ColorStudio'))
 const PortKiller = lazy(() => import('./pages/PortKiller'))
 const Scratchpad = lazy(() => import('./pages/Scratchpad'))
+const PdfStudio = lazy(() => import('./pages/PdfStudio'))
 const Account = lazy(() => import('./pages/Account'))
 
 const pageVariants = {
@@ -217,6 +218,7 @@ export default function App() {
                   <Route path="/color-studio" element={<ColorStudio />} />
                   <Route path="/port-killer" element={<PortKiller />} />
                   <Route path="/scratchpad" element={<Scratchpad />} />
+                  <Route path="/pdf-studio" element={<PdfStudio />} />
                   <Route path="/sentinel" element={<ResourceSentinel />} />
                   <Route path="/dev-sandbox" element={<DevSandbox />} />
                   <Route

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Settings, Key, Shield, LogOut, Clock, Infinity, RefreshCw, Check, Download, AlertCircle, Sparkles } from 'lucide-react'
+import { Settings, Key, Shield, LogOut, Clock, Infinity, RefreshCw, Check, Download, AlertCircle, Sparkles, Bot } from 'lucide-react'
 import { useLicense } from '../lib/LicenseContext'
 import { useT } from '../lib/i18n'
 import { cyberAudio } from '../lib/cyberAudio'
+import { getAIConfig, saveAIConfig, type AIConfig, type AIProvider } from '../lib/aiClient'
 
 export default function Account() {
   const { tier, key, expiresAt, deactivate } = useLicense()
@@ -20,6 +21,16 @@ export default function Account() {
   const [updateStatus, setUpdateStatus] = useState<'idle' | 'checking' | 'latest' | 'available' | 'ready' | 'error'>('idle')
   const [updateInfo, setUpdateInfo] = useState<{ version?: string; current?: string; message?: string }>({})
   const [downloadPercent, setDownloadPercent] = useState<number>(0)
+
+  const [aiConfig, setAiConfig] = useState<AIConfig>(getAIConfig)
+  const [aiSaved, setAiSaved] = useState(false)
+
+  const handleSaveAI = () => {
+    saveAIConfig(aiConfig)
+    setAiSaved(true)
+    cyberAudio.copySuccess()
+    setTimeout(() => setAiSaved(false), 2000)
+  }
 
   useEffect(() => {
     window.nexusAPI?.getVersion?.().then((ver: string) => {
@@ -546,6 +557,103 @@ export default function Account() {
               />
             </label>
           </div>
+        </div>
+      </motion.div>
+
+      {/* AI Co-Pilot Engine Settings */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.08 }}
+        className="glass-card p-6 border-nexus-border/40 mt-8 space-y-6"
+      >
+        <div className="flex items-center justify-between pb-4 border-b border-nexus-border/30">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+              <Bot className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-white font-medium">AI Co-Pilot & LLM Motoru</h3>
+              <p className="text-xs text-nexus-muted">
+                Regex Studio, JSON Studio ve Scratchpad için yerel (Ollama) veya bulut AI entegrasyonu.
+              </p>
+            </div>
+          </div>
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono">
+            {aiConfig.provider.toUpperCase()}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="text-xs text-nexus-muted font-mono mb-1.5 block">AI Sağlayıcı (Provider)</label>
+            <select
+              value={aiConfig.provider}
+              onChange={(e) => {
+                const p = e.target.value as AIProvider
+                let defaultUrl = 'http://localhost:11434'
+                let defaultModel = 'llama3'
+                if (p === 'openai') {
+                  defaultUrl = 'https://api.openai.com/v1'
+                  defaultModel = 'gpt-4o-mini'
+                } else if (p === 'groq') {
+                  defaultUrl = 'https://api.groq.com/openai/v1'
+                  defaultModel = 'llama-3.3-70b-versatile'
+                }
+                setAiConfig({ ...aiConfig, provider: p, baseUrl: defaultUrl, model: defaultModel })
+              }}
+              className="w-full bg-nexus-bg border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-nexus-cyan/50"
+            >
+              <option value="ollama">Ollama (Yerel / Gizli / Çevrimdışı)</option>
+              <option value="openai">OpenAI (GPT-4o Mini / GPT-4o)</option>
+              <option value="groq">Groq Cloud (Ultra Hızlı Llama 3.3)</option>
+              <option value="custom">Özel OpenAI Uyumlu Uç Nokta</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="text-xs text-nexus-muted font-mono mb-1.5 block">Model Adı</label>
+            <input
+              type="text"
+              value={aiConfig.model}
+              onChange={(e) => setAiConfig({ ...aiConfig, model: e.target.value })}
+              placeholder={aiConfig.provider === 'ollama' ? 'llama3, qwen2.5-coder vb.' : 'gpt-4o-mini'}
+              className="w-full bg-nexus-bg border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-nexus-cyan/50 font-mono"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs text-nexus-muted font-mono mb-1.5 block">Base URL</label>
+            <input
+              type="text"
+              value={aiConfig.baseUrl}
+              onChange={(e) => setAiConfig({ ...aiConfig, baseUrl: e.target.value })}
+              className="w-full bg-nexus-bg border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-nexus-cyan/50 font-mono"
+            />
+          </div>
+
+          {aiConfig.provider !== 'ollama' && (
+            <div>
+              <label className="text-xs text-nexus-muted font-mono mb-1.5 block">API Anahtarı (API Key)</label>
+              <input
+                type="password"
+                value={aiConfig.apiKey}
+                onChange={(e) => setAiConfig({ ...aiConfig, apiKey: e.target.value })}
+                placeholder="sk-..."
+                className="w-full bg-nexus-bg border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-nexus-cyan/50 font-mono"
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="flex justify-end pt-2">
+          <button
+            onClick={handleSaveAI}
+            className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-medium transition-all shadow-lg shadow-purple-600/20 active:scale-95"
+          >
+            {aiSaved ? <Check className="w-3.5 h-3.5" /> : <Sparkles className="w-3.5 h-3.5" />}
+            {aiSaved ? 'Ayarlar Kaydedildi!' : 'AI Ayarlarını Kaydet'}
+          </button>
         </div>
       </motion.div>
 

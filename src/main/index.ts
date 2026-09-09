@@ -14,6 +14,7 @@ import { registerSentinelIPC } from './ipc/sentinelIPC'
 import { registerCyberFortressIPC } from './ipc/cyberFortressIPC'
 import { registerSystemOptimizerIPC } from './ipc/systemOptimizer'
 import { registerPortWatchdogIPC } from './ipc/portWatchdog'
+import { registerPdfToolkitIPC } from './ipc/pdfToolkit'
 import { setupGlobalShortcuts, registerSettingsIPC } from './shortcuts'
 
 let mainWindow: BrowserWindow | null = null
@@ -118,6 +119,7 @@ registerSentinelIPC()
 registerCyberFortressIPC()
 registerSystemOptimizerIPC()
 registerPortWatchdogIPC()
+registerPdfToolkitIPC()
 
 // ===== App Lifecycle & Single Instance Lock =====
 const gotTheLock = app.requestSingleInstanceLock()

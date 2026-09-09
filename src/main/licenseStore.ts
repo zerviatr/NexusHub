@@ -50,6 +50,8 @@ export type ValidationResult =
 const JAN_2024_MS = new Date('2024-01-01T00:00:00Z').getTime()
 const MONTH_MS    = 30.44 * 24 * 3600 * 1000
 const LICENSE_FILE = path.join(app.getPath('userData'), 'license.enc')
+const TRIAL_FILE   = path.join(app.getPath('userData'), 'trial.enc')
+const TRIAL_DURATION_MS = 72 * 60 * 60 * 1000 // 72 hours Pro trial
 
 const TIER_MAP: Record<string, LicenseTier> = {
   F: 'free',
@@ -157,6 +159,56 @@ export function checkStoredLicense(): ValidationResult | null {
   const stored = loadLicense()
   if (!stored) return null
   return validateKey(stored.key)
+}
+
+export interface TrialStatus {
+  active: boolean
+  isExpired: boolean
+  expiresAt: number
+  hoursLeft: number
+}
+
+/** Check or initiate a 72-hour Pro Trial for this device. */
+export function getOrCreateTrial(): TrialStatus {
+  const now = Date.now()
+  let trialData: { startedAt: number; expiresAt: number; deviceId: string } | null = null
+
+  if (fs.existsSync(TRIAL_FILE) && canUseStorage()) {
+    try {
+      const buf = fs.readFileSync(TRIAL_FILE)
+      const json = safeStorage.decryptString(buf)
+      trialData = JSON.parse(json)
+    } catch {}
+  } else if (fs.existsSync(TRIAL_FILE + '.dev')) {
+    try {
+      trialData = JSON.parse(fs.readFileSync(TRIAL_FILE + '.dev', 'utf8'))
+    } catch {}
+  }
+
+  if (!trialData) {
+    // First-time launch: initialize 72-hour Pro trial
+    trialData = {
+      startedAt: now,
+      expiresAt: now + TRIAL_DURATION_MS,
+      deviceId: getDeviceId(),
+    }
+    const json = JSON.stringify(trialData)
+    if (canUseStorage()) {
+      fs.writeFileSync(TRIAL_FILE, safeStorage.encryptString(json))
+    } else {
+      fs.writeFileSync(TRIAL_FILE + '.dev', json, 'utf8')
+    }
+  }
+
+  const hoursLeft = Math.max(0, Math.ceil((trialData.expiresAt - now) / (60 * 60 * 1000)))
+  const active = now < trialData.expiresAt
+
+  return {
+    active,
+    isExpired: !active,
+    expiresAt: trialData.expiresAt,
+    hoursLeft,
+  }
 }
 
 // ─── Device fingerprint ───────────────────────────────────────────────────────

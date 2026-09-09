@@ -71,6 +71,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     labelKey: 'nav.groups.files',
     items: [
+      { path: '/pdf-studio', labelKey: 'nav.tools.pdfStudio',        icon: FileText },
       { path: '/organizer',  labelKey: 'nav.tools.bulkOrganizer',    icon: FolderArchive },
       { path: '/clipboard',  labelKey: 'nav.tools.clipboardManager', icon: Clipboard },
       { path: '/image',      labelKey: 'nav.tools.imageToolkit',     icon: ImageIcon },

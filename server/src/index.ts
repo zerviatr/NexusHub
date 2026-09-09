@@ -101,39 +101,87 @@ app.post('/api/waitlist', async (req: Request, res: Response) => {
 })
 
 
-// ── Recent Social Proof Activations Feed ────────────────────────────────────
+// ── Privacy-Preserving Real Social Proof Helpers ────────────────────────────
+function maskCustomer(name?: string, email?: string): string {
+  if (name && name.trim().length > 1) {
+    const parts = name.trim().split(/\s+/)
+    if (parts.length >= 2) {
+      const first = parts[0]
+      const last = parts[parts.length - 1]
+      return `${first[0]}***${first.slice(-1)} ${last[0]}.`
+    }
+    const single = parts[0]
+    return `${single[0]}***${single.slice(-1)}`
+  }
+  if (email && email.includes('@')) {
+    const [user] = email.split('@')
+    if (user.length <= 2) return `${user[0]}***`
+    return `${user[0]}***${user.slice(-1)}`
+  }
+  return 'Geliştirici'
+}
+
+function formatRelativeTime(ts: number): string {
+  const diffSec = Math.max(1, Math.floor((Date.now() - ts) / 1000))
+  if (diffSec < 60) return 'az önce'
+  const diffMin = Math.floor(diffSec / 60)
+  if (diffMin < 60) return `${diffMin} dakika önce`
+  const diffHours = Math.floor(diffMin / 60)
+  if (diffHours < 24) return `${diffHours} saat önce`
+  const diffDays = Math.floor(diffHours / 24)
+  return `${diffDays} gün önce`
+}
+
+function resolveTierTitle(tier: string): string {
+  if (tier === 'lifetime') return 'Nexus Lifetime Pro'
+  if (tier === 'team' || tier === 'studio') return 'Nexus Studio Pack'
+  if (tier === 'trial') return 'Nexus Pro Deneme'
+  return 'Nexus Pro'
+}
+
+// ── Real Recent Social Proof Activations Feed ───────────────────────────────
 app.get('/api/recent-activations', async (_req: Request, res: Response) => {
   try {
     const db = getDb()
     const result = await db.execute(`
       SELECT 
+        l.key,
         l.tier,
+        l.email,
+        l.customer_name,
+        l.customer_country,
         l.created_at,
-        l.sales_channel
+        (SELECT COUNT(*) FROM activations a WHERE a.license_key = l.key) as activation_count,
+        (SELECT MAX(a.activated_at) FROM activations a WHERE a.license_key = l.key) as last_activated_at
       FROM licenses l
       WHERE l.is_revoked = 0
       ORDER BY l.created_at DESC
-      LIMIT 12
+      LIMIT 15
     `)
 
-    const cities = ['İstanbul', 'Ankara', 'İzmir', 'Antalya', 'Bursa', 'Berlin', 'London', 'San Francisco', 'Amsterdam', 'New York']
-    const names = ['Kerem A.', 'Ece T.', 'Caner M.', 'Mert S.', 'Alex R.', 'Zeynep K.', 'David H.', 'Burak D.', 'Sarah L.']
+    const activations = result.rows.map((r: any) => {
+      const maskedUser = maskCustomer(r.customer_name, r.email)
+      const country = r.customer_country || 'Global'
+      const tierTitle = resolveTierTitle(r.tier)
+      const hasActivated = Number(r.activation_count || 0) > 0
+      const eventTimestamp = Number(hasActivated && r.last_activated_at ? r.last_activated_at : r.created_at)
 
-    const feed = result.rows.map((r: any, idx: number) => {
-      const city = cities[idx % cities.length]
-      const name = names[idx % names.length]
-      const tierName = r.tier === 'team' || r.tier === 'studio' ? 'Studio Pack' : 'Lifetime Pro'
       return {
-        customer: name,
-        location: city,
-        tier: tierName,
-        timeAgo: `${(idx + 1) * 7 + 2} dk önce`
+        icon: hasActivated ? '⚡' : '🎟️',
+        user: `${maskedUser} (${country})`,
+        action: hasActivated ? `${tierTitle} lisansını aktive etti` : `${tierTitle} satın aldı`,
+        time: formatRelativeTime(eventTimestamp),
+        country,
+        tier: r.tier,
+        key: r.key ? `${String(r.key).slice(0, 8)}***` : '',
       }
     })
 
-    res.json({ success: true, feed })
+    // Return under both keys for backward and forward compatibility
+    res.json({ success: true, activations, feed: activations })
   } catch (err: any) {
-    res.json({ success: false, feed: [] })
+    console.error('[recent-activations] error:', err)
+    res.json({ success: false, activations: [], feed: [] })
   }
 })
 
