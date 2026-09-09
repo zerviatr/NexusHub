@@ -99,58 +99,45 @@ export function renderLandingPage(): string {
 
   <!-- NAVIGATION -->
   <nav class="relative z-50 border-b border-nexus-border/60 bg-nexus-bg/80 backdrop-blur-xl sticky top-0">
-    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
       <a href="#" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-nexus-cyan via-nexus-accent to-nexus-purple p-0.5 shadow-[0_0_20px_rgba(6,182,212,0.4)] group-hover:scale-105 transition-transform">
-          <div class="w-full h-full bg-nexus-bg rounded-[10px] flex items-center justify-center font-mono font-black text-nexus-cyan text-lg">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-nexus-cyan via-nexus-accent to-nexus-purple p-0.5 shadow-[0_0_20px_rgba(6,182,212,0.4)] group-hover:scale-105 transition-transform">
+          <div class="w-full h-full bg-nexus-bg rounded-[10px] flex items-center justify-center font-mono font-black text-nexus-cyan text-base">
             N
           </div>
         </div>
         <div class="flex flex-col">
-          <span class="font-heading font-black text-xl tracking-wider text-white">NEXUS<span class="text-nexus-cyan">HUB</span></span>
-          <span class="text-[10px] font-mono text-nexus-muted tracking-widest uppercase">Multi-Tool Desktop Suite</span>
+          <span class="font-heading font-black text-lg tracking-wider text-white">NEXUS<span class="text-nexus-cyan">HUB</span></span>
+          <span class="text-[9px] font-mono text-nexus-muted tracking-widest uppercase">Desktop Suite</span>
         </div>
       </a>
 
-      <div class="hidden lg:flex items-center gap-6 text-sm font-medium text-nexus-muted">
+      <!-- Minimal Essential Links -->
+      <div class="hidden lg:flex items-center gap-8 text-sm font-medium text-nexus-muted">
         <a href="#simulator" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.preview">Arayüz</a>
+        <a href="#arsenal" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.arsenal">Cephanelik</a>
         <a href="#benchmark" class="hover:text-nexus-cyan transition-colors">Kıyaslama</a>
-        <a href="#roi" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.roi">Tasarruf Hesabı</a>
-        <a href="#comparison" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.comparison">SaaS Katili</a>
-        <a href="#arsenal" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.arsenal">15+ Cephane</a>
         <a href="#pricing" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.pricing">Fiyatlandırma</a>
-        <a href="#reviews" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.reviews">Yorumlar</a>
-        <a href="#portal" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.portal">Lisans Sorgula</a>
         <a href="#faq" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.faq">SSS</a>
       </div>
 
-      <div class="flex items-center gap-2.5">
-        <!-- Command Palette Trigger -->
-        <button onclick="openCmdPalette()" class="hidden md:flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-nexus-border/80 hover:border-nexus-cyan/60 bg-nexus-surface/60 text-xs font-mono text-nexus-muted hover:text-white transition-all cursor-pointer group" title="Hızlı Komut Paleti (Ctrl + K)">
+      <!-- Minimal Right Action Items -->
+      <div class="flex items-center gap-3">
+        <!-- Compact Command Palette Pill -->
+        <button onclick="openCmdPalette()" class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full card-glass border border-nexus-border/80 hover:border-nexus-cyan/60 text-xs font-mono text-nexus-muted hover:text-white transition-all cursor-pointer group" title="Hızlı Komut Paleti (Ctrl + K)">
           <span class="text-nexus-cyan group-hover:scale-110 transition-transform">⚡</span>
-          <span class="hidden xl:inline">Komut</span>
+          <span>Ara</span>
           <kbd class="px-1.5 py-0.5 rounded bg-nexus-bg border border-nexus-border text-[10px] font-mono text-nexus-cyan">Ctrl K</kbd>
         </button>
 
-        <!-- SFX Cyber Sound Toggle -->
-        <button onclick="toggleSfx()" id="sfx-toggle-btn" class="px-2.5 py-1.5 rounded-lg border border-nexus-cyan/40 bg-nexus-cyan/10 text-nexus-cyan hover:bg-nexus-cyan/20 text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer" title="Cyber Ses Efektleri">
-          <span>🔊</span>
-          <span class="hidden sm:inline font-bold">SFX</span>
-        </button>
-
         <!-- Language Switcher -->
-        <button onclick="toggleLanguage()" id="lang-btn" class="px-2.5 py-1.5 rounded-lg border border-nexus-border/80 hover:border-nexus-cyan/50 text-xs font-mono text-nexus-muted hover:text-white transition-all flex items-center gap-1.5 cursor-pointer">
+        <button onclick="toggleLanguage()" id="lang-btn" class="px-2.5 py-1.5 rounded-xl border border-nexus-border/80 hover:border-nexus-cyan/50 text-xs font-mono text-nexus-muted hover:text-white transition-all flex items-center gap-1.5 cursor-pointer">
           <span id="lang-flag">🇹🇷</span>
-          <span id="lang-label" class="font-bold">TR (₺)</span>
+          <span id="lang-label" class="font-bold">TR</span>
         </button>
 
-        <!-- Changelog Button -->
-        <button onclick="openChangelogModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-nexus-border hover:border-nexus-cyan/50 text-xs font-mono text-nexus-muted hover:text-white transition-all cursor-pointer">
-          <span class="w-1.5 h-1.5 rounded-full bg-nexus-cyan animate-ping"></span>
-          <span>v2.0.3</span>
-        </button>
-
-        <a href="#pricing" class="px-4 py-2 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-bold font-heading text-sm shadow-[0_0_20px_rgba(6,182,212,0.35)] transition-all cursor-pointer" data-i18n="nav.buy">
+        <!-- High-Conversion CTA -->
+        <a href="#pricing" class="px-4 py-2 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-bold font-heading text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(6,182,212,0.35)] transition-all cursor-pointer" data-i18n="nav.buy">
           Lisans Al
         </a>
       </div>
@@ -720,20 +707,36 @@ export function renderLandingPage(): string {
   <!-- ARSENAL 15+ TOOLS GRID -->
   <section id="arsenal" class="relative z-10 py-24 border-t border-nexus-border/40">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="text-center max-w-3xl mx-auto mb-10">
         <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan">15+ Profesyonel Modül</span>
         <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-2 mb-4">
           Cebinizdeki Siber İsviçre Çakısı.
         </h2>
-        <p class="text-nexus-muted font-sans text-base sm:text-lg">
+        <p class="text-nexus-muted font-sans text-base sm:text-lg mb-8">
           Geliştiriciler, güvenlik araştırmacıları, freelancerlar ve gizliliğine önem verenler için hazırlandı.
         </p>
+
+        <!-- Category Filter Pills -->
+        <div class="inline-flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-2xl card-glass border border-nexus-border/80 text-xs font-mono">
+          <button onclick="filterArsenal('all', this)" class="arsenal-tab-btn px-4 py-2 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan font-bold transition-all cursor-pointer">
+            Tüm Modüller (15+)
+          </button>
+          <button onclick="filterArsenal('privacy', this)" class="arsenal-tab-btn px-4 py-2 rounded-xl text-nexus-muted hover:text-white border border-transparent transition-all cursor-pointer">
+            🛡️ Gizlilik & İmha
+          </button>
+          <button onclick="filterArsenal('system', this)" class="arsenal-tab-btn px-4 py-2 rounded-xl text-nexus-muted hover:text-white border border-transparent transition-all cursor-pointer">
+            ⚡ Donanım & Sistem
+          </button>
+          <button onclick="filterArsenal('tools', this)" class="arsenal-tab-btn px-4 py-2 rounded-xl text-nexus-muted hover:text-white border border-transparent transition-all cursor-pointer">
+            🔗 Ağ & Dosya Stüdyosu
+          </button>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="arsenal-grid">
 
         <!-- Tool 1: TempMail -->
-        <div class="p-6 rounded-3xl card-glass flex flex-col justify-between group">
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="privacy">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-nexus-cyan/10 border border-nexus-cyan/30 flex items-center justify-center text-nexus-cyan mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
@@ -747,7 +750,7 @@ export function renderLandingPage(): string {
         </div>
 
         <!-- Tool 2: Universal Decrypter -->
-        <div class="p-6 rounded-3xl card-glass flex flex-col justify-between group">
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="tools">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-nexus-accent/10 border border-nexus-accent/30 flex items-center justify-center text-nexus-accent mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
@@ -761,7 +764,7 @@ export function renderLandingPage(): string {
         </div>
 
         <!-- Tool 3: Cyber Fortress -->
-        <div class="p-6 rounded-3xl card-glass flex flex-col justify-between group">
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="privacy">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
@@ -775,7 +778,7 @@ export function renderLandingPage(): string {
         </div>
 
         <!-- Tool 4: Resource Sentinel -->
-        <div class="p-6 rounded-3xl card-glass flex flex-col justify-between group">
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="system">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
@@ -789,7 +792,7 @@ export function renderLandingPage(): string {
         </div>
 
         <!-- Tool 5: Floating Orb Widget -->
-        <div class="p-6 rounded-3xl card-glass flex flex-col justify-between group">
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="system">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
@@ -803,7 +806,7 @@ export function renderLandingPage(): string {
         </div>
 
         <!-- Tool 6: Bulk File Organizer & Toolkit -->
-        <div class="p-6 rounded-3xl card-glass flex flex-col justify-between group">
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="tools">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
@@ -2441,6 +2444,29 @@ export function renderLandingPage(): string {
       if (btn) {
         btn.innerText = allFaqOpen ? 'Tümünü Daralt ⤡' : 'Tümünü Genişlet ⤢';
       }
+      playCyberSound('toggle');
+    }
+
+    // ─── Arsenal Category Filter Engine ─────────────────────────────────────
+    function filterArsenal(cat, btn) {
+      const cards = document.querySelectorAll('.arsenal-card');
+      const tabs = document.querySelectorAll('.arsenal-tab-btn');
+      
+      tabs.forEach(t => {
+        t.className = 'arsenal-tab-btn px-4 py-2 rounded-xl text-nexus-muted hover:text-white border border-transparent transition-all cursor-pointer';
+      });
+      if (btn) {
+        btn.className = 'arsenal-tab-btn px-4 py-2 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan font-bold transition-all cursor-pointer';
+      }
+
+      cards.forEach(card => {
+        const itemCat = card.getAttribute('data-category');
+        if (cat === 'all' || itemCat === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
       playCyberSound('toggle');
     }
 
