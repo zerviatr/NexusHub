@@ -272,7 +272,7 @@ export function renderLandingPage(): string {
       <!-- Trust Badges -->
       <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-mono text-nexus-muted mb-16">
         <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Windows 10 & 11 (x64)</span>
-        <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> %100 Offline-First Yerel İcra</span>
+        <span onclick="openPrivacyModal()" class="flex items-center gap-2 cursor-pointer hover:text-emerald-400 transition-colors group" title="Sıfır Telemetri & Ağ Güvenliği Raporunu İncele"><svg class="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> <span class="group-hover:underline">%100 Offline-First Yerel İcra</span> <span class="px-1.5 py-0.5 rounded text-[9px] bg-emerald-500/20 text-emerald-400 font-bold">Rapor 🛡️</span></span>
         <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> VirusTotal: 0/72 Temiz</span>
         <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Anında Otomatik Anahtar Teslimi</span>
       </div>
@@ -330,13 +330,16 @@ export function renderLandingPage(): string {
             <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
             <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
             <span class="ml-3 font-mono text-xs text-nexus-muted font-semibold flex items-center gap-1.5">
-              <span>NexusHub v2.2.0 Pro Edition</span>
+              <span class="hidden sm:inline">NexusHub v2.2.0 Pro Edition</span>
+              <span class="sm:hidden text-[11px]">v2.2 Pro</span>
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             </span>
           </div>
           <div class="flex items-center gap-2 text-xs font-mono text-nexus-muted">
-            <button onclick="unlockSimulatorProDemo()" id="sim-pro-unlock-btn" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-400 font-mono text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer shadow-sm animate-pulse">
-              <span>🔑</span> <span>Demo Lisans Çöz</span>
+            <button onclick="unlockSimulatorProDemo()" id="sim-pro-unlock-btn" class="px-2 py-1 sm:px-2.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-400 font-mono text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer shadow-sm animate-pulse shrink-0">
+              <span>🔑</span>
+              <span class="hidden sm:inline">Demo Lisans Çöz</span>
+              <span class="sm:hidden">Demo Çöz</span>
             </button>
             <span class="px-2 py-0.5 rounded bg-nexus-bg border border-nexus-border/60 hidden sm:inline">Ctrl + K</span>
           </div>
@@ -1449,6 +1452,13 @@ graph LR
             ✓ Deneme anahtarınız panoya kopyalandı! Uygulamayı açtığınızda aktivasyon alanına yapıştırın.
           </div>
         </div>
+      <!-- Dynamic Currency Switcher -->
+      <div class="flex items-center justify-center gap-2 mb-8">
+        <div class="p-1 rounded-2xl card-glass border border-nexus-border/80 flex items-center gap-1 shadow-md">
+          <button onclick="setPricingCurrency('TRY')" id="curr-btn-TRY" class="px-4 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer bg-nexus-cyan text-nexus-bg shadow-sm">₺ TRY</button>
+          <button onclick="setPricingCurrency('USD')" id="curr-btn-USD" class="px-4 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer text-nexus-muted hover:text-white">$ USD</button>
+          <button onclick="setPricingCurrency('EUR')" id="curr-btn-EUR" class="px-4 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer text-nexus-muted hover:text-white">€ EUR</button>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto">
@@ -2054,7 +2064,7 @@ graph LR
   </div>
 
   <!-- DESKTOP FLOATING CYBER ORB WIDGET (CANLI HUD WIDGET'I) -->
-  <div id="desktop-floating-orb-widget" class="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3 select-none">
+  <div id="desktop-floating-orb-widget" class="fixed hidden sm:flex sm:bottom-6 sm:right-6 z-50 flex-col items-end gap-3 select-none">
     
     <!-- Orb Quick Action Menu (Popup) -->
     <div id="orb-action-menu" class="hidden p-3.5 rounded-2xl card-glass border border-nexus-cyan/40 shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl w-60 font-mono text-xs space-y-2 animate-in fade-in slide-in-from-bottom-3 duration-200">
@@ -2144,6 +2154,72 @@ graph LR
             </div>
           </div>
           <span class="text-nexus-cyan opacity-0 group-hover:opacity-100 transition-opacity">Git ↵</span>
+        </div>
+
+        <div onclick="executeCmd('tool:fortress')" class="cmd-item p-3 rounded-xl hover:bg-nexus-cyan/15 hover:border-nexus-cyan/40 border border-transparent cursor-pointer flex items-center justify-between transition-all group" data-keywords="fortress shredder kasa askeri dosya silme dod silici vault">
+          <div class="flex items-center gap-3">
+            <span class="p-2 rounded-lg bg-nexus-cyan/10 text-nexus-cyan group-hover:scale-110 transition-transform">🛡️</span>
+            <div>
+              <div class="font-bold text-white group-hover:text-nexus-cyan transition-colors">Cyber Fortress & DoD 7-Pass Shredder</div>
+              <div class="text-[11px] text-nexus-muted">Geri getirilemez askeri dosya imhası ve yerel şifreli kasa</div>
+            </div>
+          </div>
+          <span class="text-nexus-cyan opacity-0 group-hover:opacity-100 transition-opacity">İncele ↵</span>
+        </div>
+
+        <div onclick="executeCmd('tool:portkiller')" class="cmd-item p-3 rounded-xl hover:bg-red-500/15 hover:border-red-500/40 border border-transparent cursor-pointer flex items-center justify-between transition-all group" data-keywords="port killer tcp udp watchdog localhost 3000 8080 process kill">
+          <div class="flex items-center gap-3">
+            <span class="p-2 rounded-lg bg-red-500/10 text-red-400 group-hover:scale-110 transition-transform">⚡</span>
+            <div>
+              <div class="font-bold text-white group-hover:text-red-400 transition-colors">Port Killer (TCP/UDP Watchdog)</div>
+              <div class="text-[11px] text-nexus-muted">Kilitlenen portları tespit edip PID üzerinden tek tıkla sonlandırın</div>
+            </div>
+          </div>
+          <span class="text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">İncele ↵</span>
+        </div>
+
+        <div onclick="executeCmd('tool:scratchpad')" class="cmd-item p-3 rounded-xl hover:bg-nexus-cyan/15 hover:border-nexus-cyan/40 border border-transparent cursor-pointer flex items-center justify-between transition-all group" data-keywords="scratchpad not flow mermaid akis sema markdown editor">
+          <div class="flex items-center gap-3">
+            <span class="p-2 rounded-lg bg-nexus-cyan/10 text-nexus-cyan group-hover:scale-110 transition-transform">📝</span>
+            <div>
+              <div class="font-bold text-white group-hover:text-nexus-cyan transition-colors">Scratchpad Ultimate & Flowchart</div>
+              <div class="text-[11px] text-nexus-muted">Canlı Mermaid akış diyagramları ve anlık yerel şifrelemeli not defteri</div>
+            </div>
+          </div>
+          <span class="text-nexus-cyan opacity-0 group-hover:opacity-100 transition-opacity">İncele ↵</span>
+        </div>
+
+        <div onclick="executeCmd('tool:color')" class="cmd-item p-3 rounded-xl hover:bg-pink-500/15 hover:border-pink-500/40 border border-transparent cursor-pointer flex items-center justify-between transition-all group" data-keywords="color studio wcag kontrast erisilebilirlik renk damlalik palette">
+          <div class="flex items-center gap-3">
+            <span class="p-2 rounded-lg bg-pink-500/10 text-pink-400 group-hover:scale-110 transition-transform">🎨</span>
+            <div>
+              <div class="font-bold text-white group-hover:text-pink-400 transition-colors">Color Studio & WCAG 2.1 Kontrast</div>
+              <div class="text-[11px] text-nexus-muted">Göz damlalığı, AA/AAA erişilebilirlik denetimi ve Tailwind renk paletleri</div>
+            </div>
+          </div>
+          <span class="text-pink-400 opacity-0 group-hover:opacity-100 transition-opacity">İncele ↵</span>
+        </div>
+
+        <div onclick="executeCmd('tool:decrypter')" class="cmd-item p-3 rounded-xl hover:bg-nexus-cyan/15 hover:border-nexus-cyan/40 border border-transparent cursor-pointer flex items-center justify-between transition-all group" data-keywords="decrypter link cozucuu aylink reklam atlayici tracking temizle">
+          <div class="flex items-center gap-3">
+            <span class="p-2 rounded-lg bg-nexus-cyan/10 text-nexus-cyan group-hover:scale-110 transition-transform">🔗</span>
+            <div>
+              <div class="font-bold text-white group-hover:text-nexus-cyan transition-colors">Evrensel Link Decrypter</div>
+              <div class="text-[11px] text-nexus-muted">Sayaçları, captcha bekleme duvarlarını ve UTM takipçilerini atlayın</div>
+            </div>
+          </div>
+          <span class="text-nexus-cyan opacity-0 group-hover:opacity-100 transition-opacity">İncele ↵</span>
+        </div>
+
+        <div onclick="executeCmd('privacy')" class="cmd-item p-3 rounded-xl hover:bg-emerald-500/15 hover:border-emerald-500/40 border border-transparent cursor-pointer flex items-center justify-between transition-all group" data-keywords="gizlilik manifesto telemetri guvenlik wireshark ag kaniti offline">
+          <div class="flex items-center gap-3">
+            <span class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:scale-110 transition-transform">🛡️</span>
+            <div>
+              <div class="font-bold text-white group-hover:text-emerald-400 transition-colors">Sıfır Telemetri & Ağ Güvenliği Manifestosu</div>
+              <div class="text-[11px] text-nexus-muted">Wireshark ağ sızıntı raporu ve yerel veri taahhütnamesini görüntüleyin</div>
+            </div>
+          </div>
+          <span class="text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity">Aç ↵</span>
         </div>
 
         <div onclick="executeCmd('pricing')" class="cmd-item p-3 rounded-xl hover:bg-nexus-cyan/15 hover:border-nexus-cyan/40 border border-transparent cursor-pointer flex items-center justify-between transition-all group" data-keywords="fiyat satin al lisans pro ucret odeme">
@@ -2259,6 +2335,58 @@ graph LR
       <div class="mt-6 pt-4 border-t border-nexus-border/60 flex justify-end">
         <button onclick="closeChangelogModal()" class="px-5 py-2 rounded-xl bg-nexus-cyan text-nexus-bg font-bold font-heading text-xs cursor-pointer">
           Anladım
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ZERO TELEMETRY & PRIVACY MANIFESTO MODAL -->
+  <div id="privacy-manifesto-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 cursor-pointer" onclick="closePrivacyModal()">
+    <div class="w-full max-w-lg rounded-3xl card-glass border border-emerald-500/50 p-6 sm:p-8 text-nexus-text relative shadow-[0_0_50px_rgba(16,185,129,0.2)] cursor-default" onclick="event.stopPropagation()">
+      <button onclick="closePrivacyModal()" class="absolute top-5 right-5 text-nexus-muted hover:text-white p-1 rounded-lg hover:bg-nexus-border cursor-pointer">✕</button>
+      
+      <div class="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-1 uppercase tracking-wider font-bold">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <span>SIFIR TELEMETRİ TAAHHÜTNAMESİ</span>
+      </div>
+      <h3 class="font-heading font-black text-2xl text-white mb-2">Verileriniz Cihazınızdan Asla Çıkmaz</h3>
+      <p class="text-xs text-nexus-muted mb-4 font-sans leading-relaxed">
+        NexusHub, modern yazılımlardaki gizli analitik ve telemetri casusluğuna tepki olarak geliştirilmiştir. Kodlarımız şeffaf, mimarimiz %100 yereldir.
+      </p>
+
+      <!-- Live Network Wireshark Audit Box -->
+      <div class="p-4 rounded-2xl bg-black/60 border border-emerald-500/30 font-mono text-xs space-y-2 mb-4">
+        <div class="text-[10px] text-emerald-400/80 border-b border-emerald-500/20 pb-1.5 flex items-center justify-between">
+          <span>📡 AĞ PAKET DENETİMİ (WIRESHARK LIVE DUMP)</span>
+          <span class="text-emerald-400 font-bold">TEMİZ (0 BYTES LEAK)</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-[11px]">
+          <div><span class="text-nexus-muted">Dış IP İstekleri:</span> <b class="text-emerald-400">0 Paket</b></div>
+          <div><span class="text-nexus-muted">DNS Sorguları:</span> <b class="text-emerald-400">0 Query</b></div>
+          <div><span class="text-nexus-muted">Telemetri / İzleme:</span> <b class="text-emerald-400">%0 (Kapalı)</b></div>
+          <div><span class="text-nexus-muted">Kayıt Logları:</span> <b class="text-emerald-400">Yok (Sıfır Log)</b></div>
+        </div>
+        <div class="text-[10px] text-nexus-muted pt-1 border-t border-nexus-border/40">
+          ✓ Dosya İmhası: <b class="text-white">DoD 5220.22-M (7-Pass Overwrite)</b><br>
+          ✓ Kasa Koruması: <b class="text-white">AES-256-GCM + PBKDF2 Donanım Kilidi</b>
+        </div>
+      </div>
+
+      <div class="space-y-2 text-xs text-nexus-muted mb-5">
+        <div class="flex items-start gap-2">
+          <span class="text-emerald-400 font-bold">✓</span>
+          <span><b>Offline-First Mimari:</b> İnternet bağlantınız tamamen kesilse dahi tüm araçlar milisaniye gecikmeyle çalışmaya devam eder.</span>
+        </div>
+        <div class="flex items-start gap-2">
+          <span class="text-emerald-400 font-bold">✓</span>
+          <span><b>Donanım Kilidi Özgürlüğü:</b> Bilgisayarınıza format attığınızda lisansınızı Müşteri Portalı üzerinden tek tıkla kendiniz sıfırlayabilirsiniz.</span>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-nexus-border/60 flex items-center justify-between">
+        <span class="text-[11px] font-mono text-nexus-muted">NexusHub Security Core</span>
+        <button onclick="closePrivacyModal()" class="px-5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 text-emerald-400 font-bold text-xs cursor-pointer transition-all">
+          Kapat
         </button>
       </div>
     </div>
@@ -2552,19 +2680,8 @@ graph LR
         }
       });
 
-      // Update prices with active coupon discount preserved
-      const discount = globalDiscountMultiplier || 1.0;
-      if (currentLang === 'tr') {
-        document.getElementById('price-free').innerText = '₺0';
-        document.getElementById('price-pro').innerText = '₺' + Math.round(349 * discount);
-        document.getElementById('price-pro-old').innerText = '₺699';
-        document.getElementById('price-studio').innerText = '₺' + Math.round(699 * discount);
-      } else {
-        document.getElementById('price-free').innerText = '$0';
-        document.getElementById('price-pro').innerText = '$' + Math.round(29 * discount);
-        document.getElementById('price-pro-old').innerText = '$59';
-        document.getElementById('price-studio').innerText = '$' + Math.round(49 * discount);
-      }
+      // Sync currency switcher with active language
+      setPricingCurrency(currentLang === 'tr' ? 'TRY' : 'USD');
       calcRoi();
     }
 
@@ -3177,10 +3294,63 @@ graph LR
       document.getElementById('changelog-modal').classList.add('hidden');
     }
 
+    // ─── Privacy Manifesto Modal Control ───────────────────────────────────
+    function openPrivacyModal() {
+      const modal = document.getElementById('privacy-manifesto-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        playCyberSound('toggle');
+      }
+    }
+    function closePrivacyModal() {
+      const modal = document.getElementById('privacy-manifesto-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+    }
+
+    // ─── Dynamic Currency Switcher Engine ──────────────────────────────────
+    let activeCurrency = 'TRY';
+    const currencyData = {
+      TRY: { symbol: '₺', pro: 349, proOld: 699, studio: 699, free: 0, provider: 'shopier' },
+      USD: { symbol: '$', pro: 29, proOld: 59, studio: 49, free: 0, provider: 'lemonsqueezy' },
+      EUR: { symbol: '€', pro: 27, proOld: 55, studio: 45, free: 0, provider: 'lemonsqueezy' }
+    };
+
+    function setPricingCurrency(curr) {
+      if (!currencyData[curr]) curr = 'TRY';
+      activeCurrency = curr;
+
+      ['TRY', 'USD', 'EUR'].forEach(c => {
+        const btn = document.getElementById('curr-btn-' + c);
+        if (btn) {
+          if (c === curr) {
+            btn.className = 'px-4 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer bg-nexus-cyan text-nexus-bg shadow-sm';
+          } else {
+            btn.className = 'px-4 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer text-nexus-muted hover:text-white';
+          }
+        }
+      });
+
+      const data = currencyData[curr];
+      const mult = globalDiscountMultiplier || 1.0;
+      const proEl = document.getElementById('price-pro');
+      const proOldEl = document.getElementById('price-pro-old');
+      const studioEl = document.getElementById('price-studio');
+      const freeEl = document.getElementById('price-free');
+
+      if (proEl) proEl.innerText = data.symbol + Math.round(data.pro * mult);
+      if (proOldEl) proOldEl.innerText = data.symbol + data.proOld;
+      if (studioEl) studioEl.innerText = data.symbol + Math.round(data.studio * mult);
+      if (freeEl) freeEl.innerText = data.symbol + '0';
+
+      playCyberSound('click');
+    }
+
     // ─── Checkout Modal with Promo Code Engine ─────────────────────────────
     let selectedPlan = 'pro';
-    let basePriceTR = 349;
-    let basePriceEN = 29;
+    let globalDiscountMultiplier = 1.0;
+    let appliedCouponCode = '';
 
     function openCheckoutModal(plan) {
       selectedPlan = plan;
@@ -3193,30 +3363,30 @@ graph LR
       document.getElementById('modal-discount-tag').classList.add('hidden');
       document.getElementById('coupon-input').value = '';
 
+      const curr = currencyData[activeCurrency] || currencyData.TRY;
+      const planBase = plan === 'pro' ? curr.pro : curr.studio;
+
       if (plan === 'pro') {
         modalName.innerText = currentLang === 'tr' ? 'Nexus Pro Lifetime' : 'Nexus Pro Lifetime License';
-        basePriceTR = 349;
-        basePriceEN = 29;
       } else {
         modalName.innerText = currentLang === 'tr' ? 'Nexus Studio (3 Cihaz)' : 'Nexus Studio (3 Devices)';
-        basePriceTR = 699;
-        basePriceEN = 49;
       }
 
-      // Dynamic Provider Configuration
-      if (currentLang === 'en') {
-        if (primaryLink) primaryLink.href = 'https://nexushub.lemonsqueezy.com';
-        if (provTitle) provTitle.innerText = 'Pay with LemonSqueezy (Global)';
-        if (provDesc) provDesc.innerText = 'Credit Card, Apple Pay, Google Pay, PayPal';
-        if (provCta) provCta.innerText = 'Buy Now →';
-      } else {
+      // Dynamic Provider Configuration based on Currency / Region
+      if (activeCurrency === 'TRY') {
         if (primaryLink) primaryLink.href = 'https://shopier.com';
         if (provTitle) provTitle.innerText = 'Shopier ile Güvenli Öde';
         if (provDesc) provDesc.innerText = 'Kredi Kartı / Banka Kartı / 3D Secure';
         if (provCta) provCta.innerText = 'Satın Al →';
+      } else {
+        if (primaryLink) primaryLink.href = 'https://nexushub.lemonsqueezy.com';
+        if (provTitle) provTitle.innerText = 'Pay with LemonSqueezy (Global)';
+        if (provDesc) provDesc.innerText = 'Credit Card, Apple Pay, Google Pay, PayPal';
+        if (provCta) provCta.innerText = 'Buy Now →';
       }
 
-      modalPrice.innerText = currentLang === 'tr' ? '₺' + basePriceTR : '$' + basePriceEN;
+      const finalPrice = Math.round(planBase * globalDiscountMultiplier);
+      modalPrice.innerText = curr.symbol + finalPrice;
       document.getElementById('checkout-modal').classList.remove('hidden');
       playCyberSound('click');
     }
@@ -3224,9 +3394,6 @@ graph LR
     function closeCheckoutModal() {
       document.getElementById('checkout-modal').classList.add('hidden');
     }
-
-    let globalDiscountMultiplier = 1.0;
-    let appliedCouponCode = '';
 
     function applyCoupon() {
       const code = document.getElementById('coupon-input').value.trim().toUpperCase();
@@ -3236,11 +3403,13 @@ graph LR
       if (code === 'NEXUS20' || code === 'OGRENCI' || code === 'DISCORD' || code === 'SPECIAL') {
         globalDiscountMultiplier = 0.8;
         appliedCouponCode = code;
-        const discountedTR = Math.round(basePriceTR * 0.8);
-        const discountedEN = Math.round(basePriceEN * 0.8);
-        priceEl.innerText = currentLang === 'tr' ? '₺' + discountedTR : '$' + discountedEN;
+        const curr = currencyData[activeCurrency] || currencyData.TRY;
+        const planBase = selectedPlan === 'pro' ? curr.pro : curr.studio;
+        const discounted = Math.round(planBase * 0.8);
+        priceEl.innerText = curr.symbol + discounted;
         tag.classList.remove('hidden');
         tag.innerText = '%20 İNDİRİM UYGULANDI (' + code + ')';
+        setPricingCurrency(activeCurrency);
         playCyberSound('success');
       } else if (code) {
         alert('Geçersiz veya süresi dolmuş kupon kodu.');
@@ -3259,15 +3428,7 @@ graph LR
         appliedCouponCode = code;
         if (successBox) successBox.classList.remove('hidden');
         if (msgBox) msgBox.innerText = '🎉 %20 İndirim Kodu (' + code + ') Aktif! Tüm paketlere uygulandı.';
-        
-        // Update display prices
-        if (currentLang === 'tr') {
-          document.getElementById('price-pro').innerText = '₺' + Math.round(349 * 0.8);
-          document.getElementById('price-studio').innerText = '₺' + Math.round(699 * 0.8);
-        } else {
-          document.getElementById('price-pro').innerText = '$' + Math.round(29 * 0.8);
-          document.getElementById('price-studio').innerText = '$' + Math.round(49 * 0.8);
-        }
+        setPricingCurrency(activeCurrency);
         playCyberSound('success');
       } else {
         alert('Geçersiz kupon kodu. Deneyebileceğiniz kodlar: NEXUS20, OGRENCI');
@@ -3485,7 +3646,16 @@ graph LR
       closeCmdPalette();
       playCyberSound('success');
 
-      if (action === 'tempmail') {
+      if (action.startsWith('tool:')) {
+        const tool = action.replace('tool:', '');
+        const sim = document.getElementById('simulator');
+        if (sim) sim.scrollIntoView({ behavior: 'smooth' });
+        if (typeof switchMockTool === 'function') {
+          switchMockTool(tool);
+        }
+      } else if (action === 'privacy') {
+        openPrivacyModal();
+      } else if (action === 'tempmail') {
         const fakeMail = 'temp_' + Math.random().toString(36).substring(2, 8) + '@nexushub.cloud';
         await safeCopyToClipboard(fakeMail);
         alert('⚡ Tek Kullanımlık Posta Üretildi ve Kopyalandı:\\n' + fakeMail);
@@ -3564,7 +3734,16 @@ graph LR
     window.addEventListener('scroll', () => {
       const bar = document.getElementById('sticky-bar');
       if (!bar) return;
-      if (window.scrollY > 400) {
+      const pricing = document.getElementById('pricing');
+      let isOverPricing = false;
+      if (pricing) {
+        const rect = pricing.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 100 && rect.bottom > 100) {
+          isOverPricing = true;
+        }
+      }
+
+      if (window.scrollY > 400 && !isOverPricing) {
         bar.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
         bar.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
       } else {
