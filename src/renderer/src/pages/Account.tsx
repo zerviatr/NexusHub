@@ -3,10 +3,19 @@ import { motion } from 'framer-motion'
 import { Settings, Key, Shield, LogOut, Clock, Infinity, RefreshCw, Check, Download, AlertCircle, Sparkles } from 'lucide-react'
 import { useLicense } from '../lib/LicenseContext'
 import { useT } from '../lib/i18n'
+import { cyberAudio } from '../lib/cyberAudio'
 
 export default function Account() {
   const { tier, key, expiresAt, deactivate } = useLicense()
   const { t, locale, setLocale } = useT()
+
+  const [audioEnabled, setAudioEnabled] = useState(() => {
+    try {
+      return cyberAudio.isEnabled()
+    } catch {
+      return true
+    }
+  })
 
   const [updateStatus, setUpdateStatus] = useState<'idle' | 'checking' | 'latest' | 'available' | 'ready' | 'error'>('idle')
   const [updateInfo, setUpdateInfo] = useState<{ version?: string; current?: string; message?: string }>({})
@@ -353,19 +362,20 @@ export default function Account() {
           </div>
           <button
             onClick={() => {
-              const current = cyberAudio.isEnabled()
-              cyberAudio.setEnabled(!current)
-              if (!current) cyberAudio.copySuccess()
-              // force re-render
-              setUpdateStatus((s) => s)
+              const next = !audioEnabled
+              try {
+                cyberAudio.setEnabled(next)
+                setAudioEnabled(next)
+                if (next) cyberAudio.copySuccess()
+              } catch {}
             }}
             className={`px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all ${
-              cyberAudio.isEnabled()
+              audioEnabled
                 ? 'bg-nexus-accent text-white shadow-lg shadow-nexus-accent/20'
                 : 'bg-nexus-bg text-nexus-muted border border-nexus-border'
             }`}
           >
-            {cyberAudio.isEnabled() ? 'SESLER AÇIK' : 'SESSİZ MOD'}
+            {audioEnabled ? 'SESLER AÇIK' : 'SESSİZ MOD'}
           </button>
         </div>
 

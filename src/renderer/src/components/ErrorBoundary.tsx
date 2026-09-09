@@ -38,9 +38,14 @@ export default class ErrorBoundary extends Component<Props, State> {
           </div>
 
           <h2 className="text-xl font-bold text-white mb-2">Beklenmeyen Bir Görünüm Hatası Oluştu</h2>
-          <p className="text-xs text-nexus-muted max-w-md mb-6 leading-relaxed">
+          <p className="text-xs text-nexus-muted max-w-md mb-3 leading-relaxed">
             Arayüz bileşeni yüklenirken bir sorunla karşılaşıldı. Verileriniz güvende. Aşağıdaki butonla ana ekrana dönebilirsiniz.
           </p>
+          {this.state.error?.message && (
+            <p className="text-[11px] font-mono text-rose-400/80 bg-rose-500/10 px-3 py-1.5 rounded-lg border border-rose-500/20 max-w-lg mb-6 truncate">
+              {this.state.error.message}
+            </p>
+          )}
 
           <div className="flex items-center gap-3">
             <button

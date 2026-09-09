@@ -204,11 +204,17 @@ export default function Sidebar() {
   const { t } = useT()
   const isHome = location.pathname === '/'
   const [appVersion, setAppVersion] = useState('1.0.5')
+  const [downloadedUpdate, setDownloadedUpdate] = useState<string | null>(null)
 
   useEffect(() => {
     window.nexusAPI?.getVersion?.().then((v) => {
       if (v) setAppVersion(v.replace(/^v/, ''))
     })
+
+    const unbind = window.nexusAPI?.updater?.onDownloaded?.((info: any) => {
+      if (info?.version) setDownloadedUpdate(info.version)
+    })
+    return () => unbind?.()
   }, [])
 
   return (
@@ -281,6 +287,16 @@ export default function Sidebar() {
 
       {/* Footer */}
       <div className="p-3">
+        {downloadedUpdate && (
+          <button
+            type="button"
+            onClick={() => window.nexusAPI?.updater?.installNow?.()}
+            className="w-full flex items-center justify-center gap-1.5 py-2 px-3 mb-3 rounded-xl bg-gradient-to-r from-nexus-cyan via-nexus-accent to-emerald-400 text-black font-bold text-xs shadow-lg shadow-nexus-cyan/30 animate-pulse active:scale-95 transition-all cursor-pointer no-drag"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Güncelle ({downloadedUpdate})</span>
+          </button>
+        )}
         <button
           onClick={() => navigate('/account')}
           className={`
