@@ -10,7 +10,7 @@
  *  - Live System Health & Status Radar (uptime & response telemetry)
  *  - Release Changelog Modal (v2.0.3 What's New drawer)
  *  - Interactive FAQ Live Search Filter
- *  - Live Social Proof FOMO Sales Ticker (bottom-left rotating alerts)
+
  *  - Self-Service License Lookup & HWID Reset Portal (/api/license/*)
  *  - Promo Coupon code calculator in checkout modal
  *  - VirusTotal 0/72 Clean Code security verification
@@ -2356,22 +2356,6 @@ graph LR
     </div>
   </div>
 
-  <!-- LIVE SOCIAL PROOF FOMO SALES TICKER (BOTTOM-LEFT) -->
-  <div id="sales-fomo-toast" class="fixed bottom-20 left-4 sm:bottom-6 sm:left-6 z-30 max-w-sm card-glass border border-nexus-cyan/40 p-3.5 rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,0.8)] backdrop-blur-xl flex items-center gap-3 transition-all duration-500 translate-y-24 opacity-0 pointer-events-none sm:pointer-events-auto">
-    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-nexus-cyan/20 to-emerald-500/20 border border-nexus-cyan/40 flex items-center justify-center text-base shrink-0">
-      <span id="fomo-icon">⚡</span>
-    </div>
-    <div class="flex-1 truncate">
-      <div class="text-[10px] font-mono text-nexus-cyan flex items-center gap-1.5">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-        <span id="fomo-time" class="font-bold">Az önce</span>
-      </div>
-      <div id="fomo-msg" class="text-xs font-sans text-white font-medium truncate">
-        Ahmet K. (İstanbul) Nexus Pro Lifetime satın aldı.
-      </div>
-    </div>
-    <button onclick="dismissFomoToast()" class="text-nexus-muted hover:text-white text-xs p-1 cursor-pointer">✕</button>
-  </div>
 
   <!-- DESKTOP FLOATING CYBER ORB WIDGET (CANLI HUD WIDGET'I) -->
   <div id="desktop-floating-orb-widget" class="fixed hidden sm:flex sm:bottom-6 sm:right-6 z-50 flex-col items-end gap-3 select-none">
@@ -4542,10 +4526,7 @@ graph LR
       }
     }
 
-    // ─── Real Live Social Proof Events (Zero-Fake Policy) ──────────────────
-    let fomoEvents = [];
-    let fomoIndex = 0;
-    let fomoDismissed = false;
+
 
     
     // ─── Interactive Tool Recommender Quiz Logic ──────────────────────────
@@ -4624,67 +4605,6 @@ graph LR
       document.getElementById("quiz-result").classList.add("hidden");
     }
 
-    // ─── Real Live Activations Connect into FOMO Ticker ────────────────────
-    async function loadLiveActivationsFeed() {
-      try {
-        const res = await fetch("/api/recent-activations");
-        if (res.ok) {
-          const data = await res.json();
-          const list = data.activations || data.feed || [];
-          if (Array.isArray(list) && list.length > 0) {
-            fomoEvents = list.map(function(a) {
-              return {
-                icon: a.icon || "⚡",
-                user: a.user,
-                action: a.action,
-                time: a.time || "az önce"
-              };
-            });
-            // Zero fake: Cycle toasts ONLY when real purchases/activations exist
-            setTimeout(cycleFomoToast, 2500);
-            setInterval(cycleFomoToast, 14000);
-          }
-        }
-      } catch (e) {
-        // Zero-fake policy: stay completely silent on network/server error
-      }
-    }
-
-function cycleFomoToast() {
-      if (fomoDismissed) return;
-      const toast = document.getElementById('sales-fomo-toast');
-      const icon = document.getElementById('fomo-icon');
-      const time = document.getElementById('fomo-time');
-      const msg = document.getElementById('fomo-msg');
-      if (!toast || !icon || !time || !msg) return;
-
-      const evt = fomoEvents[fomoIndex % fomoEvents.length];
-      fomoIndex++;
-
-      icon.innerText = evt.icon;
-      time.innerText = evt.time;
-      msg.innerHTML = '<b class="text-white">' + evt.user + '</b> ' + evt.action;
-
-      toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
-      toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
-
-      setTimeout(() => {
-        if (!fomoDismissed && toast) {
-          toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
-          toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
-        }
-      }, 5500);
-    }
-
-    function dismissFomoToast() {
-      fomoDismissed = true;
-      const toast = document.getElementById('sales-fomo-toast');
-      if (toast) {
-        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
-        toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
-      }
-    }
-
     // ─── Live Telemetry Heartbeat Latency Jitter ────────────────────────────
     function initTelemetryHeartbeat() {
       setInterval(() => {
@@ -4699,7 +4619,6 @@ function cycleFomoToast() {
     // Initial calculations & canvas start
     calcRoi();
     initMatrixRain();
-    loadLiveActivationsFeed();
     computeSimHash('NexusHub-Safe-Crypto-2026');
     initTelemetryHeartbeat();
   </script>
