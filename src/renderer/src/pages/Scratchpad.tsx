@@ -1192,7 +1192,7 @@ export default function Scratchpad() {
       >
         <div className="space-y-4">
           {/* Multi-Tab Bar & Search Row */}
-          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 glass-card p-2.5 px-3">
+          <div className="relative z-30 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 glass-card p-2.5 px-3">
             {/* Tabs */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none flex-1">
               {filteredNotes.map((note) => {
@@ -1307,7 +1307,7 @@ export default function Scratchpad() {
               </button>
 
               {/* Timeline Snapshots Trigger */}
-              <div className="relative">
+              <div className="relative z-50">
                 <button
                   type="button"
                   onClick={() => setShowTimeline(!showTimeline)}
@@ -1323,7 +1323,7 @@ export default function Scratchpad() {
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 5 }}
-                      className="absolute right-0 top-full mt-2 w-72 rounded-2xl bg-nexus-surface/95 border border-amber-500/30 shadow-2xl p-3 z-50 backdrop-blur-xl"
+                      className="absolute right-0 top-full mt-2 w-72 rounded-2xl bg-nexus-surface/98 border border-amber-500/40 shadow-2xl p-3 z-50 backdrop-blur-xl"
                     >
                       <div className="text-[10px] font-mono text-amber-400 uppercase pb-2 border-b border-white/5 flex items-center justify-between">
                         <span>Zaman Tüneli Snapshots</span>
@@ -1363,7 +1363,7 @@ export default function Scratchpad() {
               </div>
 
               {/* Templates Popover Trigger */}
-              <div className="relative">
+              <div className="relative z-50">
                 <button
                   type="button"
                   onClick={() => setShowTemplates(!showTemplates)}
@@ -1379,7 +1379,7 @@ export default function Scratchpad() {
                       initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 5 }}
-                      className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-nexus-surface/95 border border-nexus-cyan/30 shadow-2xl p-2 z-50 backdrop-blur-xl"
+                      className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-nexus-surface/98 border border-nexus-cyan/40 shadow-2xl p-2 z-50 backdrop-blur-xl"
                     >
                       <div className="text-[10px] font-mono text-nexus-muted uppercase px-2 py-1 border-b border-white/5">
                         Hazır Şablon Ekle
@@ -1425,7 +1425,7 @@ export default function Scratchpad() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="glass-card p-3 flex flex-wrap items-center justify-between gap-3 border-nexus-cyan/40 bg-nexus-surface/80"
+                className="relative z-20 glass-card p-3 flex flex-wrap items-center justify-between gap-3 border-nexus-cyan/40 bg-nexus-surface/90"
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <div className="relative">
@@ -1494,7 +1494,7 @@ export default function Scratchpad() {
           </AnimatePresence>
 
           {/* Toolbar & Actions */}
-          <div className="glass-card p-2.5 px-3 flex flex-wrap items-center justify-between gap-3">
+          <div className="relative z-10 glass-card p-2.5 px-3 flex flex-wrap items-center justify-between gap-3">
             {/* Quick Format Buttons */}
             <div className="flex items-center gap-1">
               <button
