@@ -32,7 +32,7 @@ try {
   autoUpdater.setFeedURL({
     provider: 'github',
     owner: 'zerviatr',
-    repo: 'NexusHub',
+    repo: 'ZenDev',
     releaseType: 'release'
   })
 } catch (err) {
@@ -133,13 +133,13 @@ export function setupAutoUpdater(win: BrowserWindow): void {
     } catch {}
 
     // 4. Robust Watchdog: If Windows NSIS fails to auto-launch the newly updated binary,
-    // this detached PowerShell supervisor will start NexusHub after 5 seconds
+    // this detached PowerShell supervisor will start ZenDev after 5 seconds
     try {
       const exePath = app.getPath('exe')
       if (app.isPackaged && process.platform === 'win32' && exePath) {
         const psScript = `
           Start-Sleep -Seconds 5;
-          $p = Get-Process -Name "NexusHub" -ErrorAction SilentlyContinue;
+          $p = Get-Process -Name "ZenDev" -ErrorAction SilentlyContinue;
           if (-not $p) {
             Start-Process -FilePath "${exePath.replace(/\\/g, '\\\\')}"
           }

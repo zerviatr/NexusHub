@@ -1,6 +1,6 @@
 # Project Map Güncelleme Kuralı
 
-NexusHub projesinde her değişiklik sonrası `.agents/rules/nexushub-project-map.md` dosyasını güncelle.
+ZenDev projesinde her değişiklik sonrası `.agents/rules/zendev-project-map.md` dosyasını güncelle.
 
 Güncelleme gerektiren durumlar:
 - Yeni dosya/modül/sayfa eklenmesi

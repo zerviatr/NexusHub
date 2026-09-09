@@ -1,12 +1,12 @@
 ---
-name: nexushub
+name: zendev
 description: >-
-  NexusHub Electron uygulamasina ait mimari bilgi, i18n kaliplari,
-  IPC conventions, teknoloji stack ve backlog. NexusHub'da degisiklik
+  ZenDev Electron uygulamasina ait mimari bilgi, i18n kaliplari,
+  IPC conventions, teknoloji stack ve backlog. ZenDev'da degisiklik
   yapilacagi zaman bu skill'i oku.
 ---
 
-# NexusHub Proje Skill
+# ZenDev Proje Skill
 
 ## Stack
 - **Runtime:** Electron (main) + Vite + React 18 + TypeScript (renderer)
@@ -45,10 +45,10 @@ src/
       tr.json
 .agents/
   rules/
-    nexushub-project-map.md   — Canli proje haritasi
+    zendev-project-map.md   — Canli proje haritasi
     update-project-map.md     — Haritayi ne zaman guncelle kurali
   skills/
-    nexushub/SKILL.md         — Bu dosya
+    zendev/SKILL.md         — Bu dosya
 YAPILACAKLAR.md               — Backlog (proje kokunde)
 ```
 
@@ -87,7 +87,7 @@ ipcMain.handle('channel-name', async (_, ...args) => {
    - `dashboard.tools.toolAdi.desc`
    - Tool-specific namespace block
 8. IPC gerektiriyorsa `src/main/index.ts`'e handler, `ipc.ts`'e tip ekle
-9. `.agents/rules/nexushub-project-map.md` guncelle
+9. `.agents/rules/zendev-project-map.md` guncelle
 
 ## Tasarim Tokenlari
 ```

@@ -1,7 +1,7 @@
 /**
  * server/src/routes/admin.ts
  *
- * Enterprise Web Admin Console API & Dashboard for NexusHub.
+ * Enterprise Web Admin Console API & Dashboard for ZenDev.
  * Strict Zero-PII Policy: Never stores or exposes user personal data.
  *
  * Capabilities:
@@ -364,7 +364,7 @@ adminRouter.post('/api/keys/generate', requireAdminAuth, async (req: Request, re
         tier,
         expiresAt,
         note || `MANUAL-${Date.now().toString().slice(-6)}`,
-        'anonymous@nexushub.local',
+        'anonymous@zendev.local',
         Number(maxActivations) || 2,
         Date.now(),
         salesChannel,
@@ -427,7 +427,7 @@ adminRouter.post('/api/keys/bulk-generate', requireAdminAuth, async (req: Reques
           tier,
           expiresAt,
           label,
-          'anonymous@nexushub.local',
+          'anonymous@zendev.local',
           Number(maxActivations) || 2,
           now + i,
           salesChannel,
@@ -797,7 +797,7 @@ adminRouter.post('/api/notifications/test', requireAdminAuth, async (req: Reques
         res.status(400).json({ success: false, error: 'Telegram Bot Token veya Chat ID eksik' })
         return
       }
-      const testMsg = `<b>🔔 NexusHub Test Bildirimi</b>\n\nTelegram bağlantınız başarıyla doğrulandı! Sunucu ve bildirim botu aktif.`
+      const testMsg = `<b>🔔 ZenDev Test Bildirimi</b>\n\nTelegram bağlantınız başarıyla doğrulandı! Sunucu ve bildirim botu aktif.`
       const result = await sendTelegram(settings.telegram_bot_token, settings.telegram_chat_id, testMsg)
       if (!result.success) {
         res.status(400).json({ success: false, error: result.error })
@@ -813,7 +813,7 @@ adminRouter.post('/api/notifications/test', requireAdminAuth, async (req: Reques
         return
       }
       const result = await sendDiscord(settings.discord_webhook_url, {
-        title: '🔔 NexusHub Test Bildirimi',
+        title: '🔔 ZenDev Test Bildirimi',
         description: 'Discord Webhook bağlantınız başarıyla doğrulandı! Sunucu lisans ve güvenlik alarmları bu kanala akacaktır.',
         color: 0x8b5cf6, // Purple
         fields: [

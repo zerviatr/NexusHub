@@ -73,12 +73,12 @@ export default function EulaGate({ onAccept }: EulaGateProps) {
           >
             <section>
               <h3 className="text-white font-semibold mb-2">{t('eula.s1.title') || '1. Terms of Use'}</h3>
-              <p>{t('eula.s1.body') || 'By using NexusHub, you agree to these terms. This software is provided for legal, educational, and authorized security testing purposes only.'}</p>
+              <p>{t('eula.s1.body') || 'By using ZenDev, you agree to these terms. This software is provided for legal, educational, and authorized security testing purposes only.'}</p>
             </section>
             
             <section>
               <h3 className="text-white font-semibold mb-2">{t('eula.s2.title') || '2. Privacy & Telemetry'}</h3>
-              <p>{t('eula.s2.body') || 'NexusHub processes all data locally on your machine. We do not collect, transmit, or store your passwords, decrypted links, or generated data.'}</p>
+              <p>{t('eula.s2.body') || 'ZenDev processes all data locally on your machine. We do not collect, transmit, or store your passwords, decrypted links, or generated data.'}</p>
             </section>
 
             <section>

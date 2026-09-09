@@ -1,8 +1,8 @@
-NexusHub End User License Agreement
+ZenDev End User License Agreement
 
-Copyright © 2026 NexusHub. All rights reserved.
+Copyright © 2026 ZenDev. All rights reserved.
 
-This End User License Agreement ("Agreement") is a legal agreement between you ("User") and NexusHub ("Company") for the use of NexusHub software ("Software").
+This End User License Agreement ("Agreement") is a legal agreement between you ("User") and ZenDev ("Company") for the use of ZenDev software ("Software").
 
 BY INSTALLING OR USING THE SOFTWARE, YOU AGREE TO BE BOUND BY THE TERMS OF THIS AGREEMENT.
 
@@ -21,4 +21,4 @@ BY INSTALLING OR USING THE SOFTWARE, YOU AGREE TO BE BOUND BY THE TERMS OF THIS 
 5. TERMINATION
    This Agreement terminates automatically if you breach any term.
 
-For the full EULA, visit: https://nexushub.app/legal/eula
+For the full EULA, visit: https://zendev.app/legal/eula

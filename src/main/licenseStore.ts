@@ -18,6 +18,7 @@
 import { safeStorage, app }    from 'electron'
 import path                    from 'path'
 import fs                      from 'fs'
+import { createHmac }          from 'crypto'
 import { machineIdSync }       from 'node-machine-id'
 
 // ─── Config ──────────────────────────────────────────────────────────────────
@@ -28,7 +29,7 @@ const SECRET: string =
   'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
 
 /** Base URL for the license API server. */
-const API_URL: string = 'https://nexushub-production-4a5b.up.railway.app'
+const API_URL: string = 'https://zendev-production-4a5b.up.railway.app'
 
 import {
   validateLicenseKey,
@@ -66,6 +67,10 @@ function canUseStorage(): boolean {
 
 export function storeLicense(data: LicenseData): void {
   if (!canUseStorage()) {
+    if (app.isPackaged) {
+      console.error('[license] safeStorage encryption unavailable in production!')
+      return
+    }
     // Fallback: plain JSON (dev only — safeStorage not available without OS keychain)
     fs.writeFileSync(LICENSE_FILE + '.dev', JSON.stringify(data), 'utf8')
     return
@@ -88,13 +93,15 @@ export function loadLicense(): LicenseData | null {
     }
   }
 
-  // Dev fallback
-  const devFile = LICENSE_FILE + '.dev'
-  if (fs.existsSync(devFile)) {
-    try {
-      return JSON.parse(fs.readFileSync(devFile, 'utf8')) as LicenseData
-    } catch {
-      fs.rmSync(devFile, { force: true })
+  // Dev fallback only when NOT packaged
+  if (!app.isPackaged) {
+    const devFile = LICENSE_FILE + '.dev'
+    if (fs.existsSync(devFile)) {
+      try {
+        return JSON.parse(fs.readFileSync(devFile, 'utf8')) as LicenseData
+      } catch {
+        fs.rmSync(devFile, { force: true })
+      }
     }
   }
 
@@ -102,8 +109,10 @@ export function loadLicense(): LicenseData | null {
 }
 
 export function clearLicense(): void {
-  fs.rmSync(LICENSE_FILE,          { force: true })
-  fs.rmSync(LICENSE_FILE + '.dev', { force: true })
+  fs.rmSync(LICENSE_FILE, { force: true })
+  if (!app.isPackaged) {
+    fs.rmSync(LICENSE_FILE + '.dev', { force: true })
+  }
 }
 
 /** Check if a stored license is currently valid (re-validates key + expiry). */
@@ -131,7 +140,7 @@ export function getOrCreateTrial(): TrialStatus {
       const json = safeStorage.decryptString(buf)
       trialData = JSON.parse(json)
     } catch {}
-  } else if (fs.existsSync(TRIAL_FILE + '.dev')) {
+  } else if (!app.isPackaged && fs.existsSync(TRIAL_FILE + '.dev')) {
     try {
       trialData = JSON.parse(fs.readFileSync(TRIAL_FILE + '.dev', 'utf8'))
     } catch {}
@@ -147,7 +156,7 @@ export function getOrCreateTrial(): TrialStatus {
     const json = JSON.stringify(trialData)
     if (canUseStorage()) {
       fs.writeFileSync(TRIAL_FILE, safeStorage.encryptString(json))
-    } else {
+    } else if (!app.isPackaged) {
       fs.writeFileSync(TRIAL_FILE + '.dev', json, 'utf8')
     }
   }

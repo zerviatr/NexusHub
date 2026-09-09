@@ -25,7 +25,7 @@ type StudioTab = 'json' | 'jwt'
 
 const SAMPLE_JSON = JSON.stringify(
   {
-    app: 'NexusHub',
+    app: 'ZenDev',
     version: '1.0.0',
     tier: 'Lifetime Pro',
     license: {

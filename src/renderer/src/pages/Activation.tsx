@@ -33,7 +33,7 @@ export default function Activation({ onContinueFree }: ActivationProps) {
   }
 
   const handlePurchase = () => {
-    const storeUrl = (import.meta as any).env?.VITE_STORE_URL || 'https://github.com/zerviatr/NexusHub#get-license'
+    const storeUrl = (import.meta as any).env?.VITE_STORE_URL || 'https://github.com/zerviatr/ZenDev#get-license'
     window.nexusAPI.openExternal(storeUrl)
   }
 
@@ -62,13 +62,13 @@ export default function Activation({ onContinueFree }: ActivationProps) {
               <Shield className={`w-8 h-8 ${status === 'revoked' ? 'text-red-400' : 'text-nexus-accent'}`} />
             </div>
             <h1 className="text-2xl font-semibold mb-2">
-              {status === 'revoked' ? 'Lisans Deaktif Edildi' : 'Activate NexusHub'}
+              {status === 'revoked' ? 'Lisans Deaktif Edildi' : 'Activate ZenDev'}
             </h1>
             <p className="text-sm text-nexus-text-muted">
               {status === 'revoked'
                 ? 'Lisans anahtarınız yönetici tarafından sonlandırıldı veya silindi. Devam etmek için yeni bir anahtar girin.'
                 : status === 'expired' 
-                ? 'Your license has expired. Please enter a new key to continue using NexusHub.'
+                ? 'Your license has expired. Please enter a new key to continue using ZenDev.'
                 : 'Enter your license key to unlock the premium multi-tool suite.'}
             </p>
           </div>

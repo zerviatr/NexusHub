@@ -1,7 +1,7 @@
 /**
  * server/src/index.ts
  *
- * NexusHub License API Server
+ * ZenDev License API Server
  * Express + LibSQL (Turso) + LemonSqueezy webhooks + Resend email
  *
  * Endpoints:
@@ -107,7 +107,7 @@ app.post('/api/waitlist', waitlistLimiter, async (req: Request, res: Response) =
     res.json({
       success: true,
       message: 'Erken erişim bekleme listesine başarıyla eklendiniz! Lansmanda %20 indirim kuponunuzla birlikte e-posta alacaksınız.',
-      coupon: 'NEXUS20',
+      coupon: 'ZENDEV20',
     })
   } catch (err: any) {
     console.error('[waitlist] error:', err)
@@ -148,10 +148,10 @@ function formatRelativeTime(ts: number): string {
 }
 
 function resolveTierTitle(tier: string): string {
-  if (tier === 'lifetime') return 'Nexus Lifetime Pro'
-  if (tier === 'team' || tier === 'studio') return 'Nexus Studio Pack'
-  if (tier === 'trial') return 'Nexus Pro Deneme'
-  return 'Nexus Pro'
+  if (tier === 'lifetime') return 'ZenDev Lifetime Pro'
+  if (tier === 'team' || tier === 'studio') return 'ZenDev Studio Pack'
+  if (tier === 'trial') return 'ZenDev Pro Deneme'
+  return 'ZenDev Pro'
 }
 
 // ── Real Recent Social Proof Activations Feed ───────────────────────────────
@@ -223,7 +223,7 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 async function start(): Promise<void> {
   await migrate()
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[server] NexusHub License API running on port ${PORT}`)
+    console.log(`[server] ZenDev License API running on port ${PORT}`)
     console.log(`[server] Env: ${process.env['NODE_ENV'] ?? 'development'}`)
   })
 }

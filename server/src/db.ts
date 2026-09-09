@@ -2,7 +2,7 @@
  * server/src/db.ts
  *
  * LibSQL (Turso-compatible) database layer.
- * - Local dev:  TURSO_URL=file:./nexushub.db  (no auth)
+ * - Local dev:  TURSO_URL=file:./zendev.db  (no auth)
  * - Production: TURSO_URL=libsql://...  TURSO_AUTH_TOKEN=...
  *
  * Tables:
@@ -16,7 +16,7 @@ let _db: Client | null = null
 export function getDb(): Client {
   if (!_db) {
     _db = createClient({
-      url:       process.env['TURSO_URL']        ?? 'file:./nexushub.db',
+      url:       process.env['TURSO_URL']        ?? 'file:./zendev.db',
       authToken: process.env['TURSO_AUTH_TOKEN'] ?? undefined,
     })
   }

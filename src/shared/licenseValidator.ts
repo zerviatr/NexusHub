@@ -1,7 +1,7 @@
 /**
  * src/shared/licenseValidator.ts
  *
- * Decoupled, runtime-agnostic cryptographic license validator for NexusHub.
+ * Decoupled, runtime-agnostic cryptographic license validator for ZenDev.
  * Works uniformly in Electron main process, Node.js background workers, and Vitest test suites.
  *
  * KEY FORMAT: NEXUS-TEEEH-HHHHH-HHHHH-HHHHH (25 visible chars + 4 dashes)
@@ -43,7 +43,7 @@ export const DEFAULT_LICENSE_SECRET =
   'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
 
 /**
- * Validates a NexusHub license key against the HMAC secret.
+ * Validates a ZenDev license key against the HMAC secret.
  * Decoupled from filesystem, Electron APIs, and UI state.
  */
 export function validateLicenseKey(rawKey: string, secret: string = DEFAULT_LICENSE_SECRET): ValidationResult {

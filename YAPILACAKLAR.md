@@ -1,4 +1,4 @@
-# NexusHub — Yapilacaklar Listesi
+# ZenDev — Yapilacaklar Listesi
 
 > Bu dosyayi bana goster, devam edelim.
 

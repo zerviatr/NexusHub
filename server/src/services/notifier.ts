@@ -1,7 +1,7 @@
 /**
  * server/src/services/notifier.ts
  *
- * Real-time notification engine for NexusHub Server.
+ * Real-time notification engine for ZenDev Server.
  * Supports:
  *   - Telegram Bot API
  *   - Discord Webhook Embeds
@@ -111,13 +111,13 @@ export async function sendDiscord(webhookUrl: string, payload: {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        username: 'NexusHub Sentinel',
-        avatar_url: 'https://raw.githubusercontent.com/zerviatr/NexusHub/main/build/icons/icon.png',
+        username: 'ZenDev Sentinel',
+        avatar_url: 'https://raw.githubusercontent.com/zerviatr/ZenDev/main/build/icons/icon.png',
         embeds: [
           {
             ...payload,
             timestamp: new Date().toISOString(),
-            footer: { text: 'NexusHub Central Hub • Railway Production' },
+            footer: { text: 'ZenDev Central Hub • Railway Production' },
           },
         ],
       }),
@@ -180,7 +180,7 @@ export function notifyKeyActivated(payload: {
         ? new Date(payload.expiresAt).toLocaleDateString('tr-TR') 
         : 'Ömür Boyu (Lifetime)'
 
-      const html = `<b>🚀 NexusHub Yeni Aktivasyon!</b>\n\n` +
+      const html = `<b>🚀 ZenDev Yeni Aktivasyon!</b>\n\n` +
         `🔑 <b>Lisans:</b> <code>${maskedKey}</code>\n` +
         `💎 <b>Paket:</b> ${payload.tier.toUpperCase()}\n` +
         `💻 <b>Cihaz:</b> <code>${payload.deviceId.slice(0, 10)}...</code>\n` +
@@ -198,7 +198,7 @@ export function notifyKeyActivated(payload: {
 
       await broadcastNotification({
         title: '🚀 Yeni Lisans Aktivasyonu',
-        plainText: `Bir cihaz başarıyla NexusHub ${payload.tier.toUpperCase()} lisansını etkinleştirdi.`,
+        plainText: `Bir cihaz başarıyla ZenDev ${payload.tier.toUpperCase()} lisansını etkinleştirdi.`,
         htmlText: html,
         color: 0x10b981, // Emerald green
         fields,
@@ -253,7 +253,7 @@ export function notifySecurityAlert(payload: {
       const settings = await getNotificationSettings()
       if (!settings.notify_on_alert) return
 
-      const html = `<b>🛡️ NexusHub Güvenlik Alarmı</b>\n\n` +
+      const html = `<b>🛡️ ZenDev Güvenlik Alarmı</b>\n\n` +
         `⚠️ <b>Olay:</b> ${payload.action}\n` +
         `🌐 <b>IP Adresi:</b> <code>${payload.ip}</code>\n` +
         `📝 <b>Detay:</b> ${payload.details}\n`

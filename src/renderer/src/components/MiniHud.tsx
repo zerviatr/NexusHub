@@ -178,7 +178,7 @@ export default function MiniHud() {
           {/* Footer */}
           <div className="px-4 py-2 bg-nexus-bg/70 border-t border-nexus-border/20 flex items-center justify-between text-[11px] text-nexus-muted">
             <span>ESC ile kapat</span>
-            <span className="font-mono text-nexus-accent">NexusHub HUD v2.5</span>
+            <span className="font-mono text-nexus-accent">ZenDev HUD v2.5</span>
           </div>
         </motion.div>
       </div>

@@ -119,14 +119,14 @@ export default function FakeDataStudio() {
     if (format === 'json') {
       const content = JSON.stringify(list, null, 2)
       blob = new Blob([content], { type: 'application/json' })
-      filename = `nexushub_mock_data_${bulkCount}.json`
+      filename = `zendev_mock_data_${bulkCount}.json`
     } else {
       const header = 'id,fullName,email,phone,city,company,tcNo,creditCard,uuid\n'
       const rows = list
         .map((u) => `"${u.id}","${u.fullName}","${u.email}","${u.phone}","${u.city}","${u.company}","${u.tcNo}","${u.creditCard}","${u.uuid}"`)
         .join('\n')
       blob = new Blob([header + rows], { type: 'text/csv;charset=utf-8;' })
-      filename = `nexushub_mock_data_${bulkCount}.csv`
+      filename = `zendev_mock_data_${bulkCount}.csv`
     }
 
     const url = URL.createObjectURL(blob)

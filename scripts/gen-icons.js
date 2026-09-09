@@ -2,7 +2,7 @@
 /**
  * scripts/gen-icons.js
  *
- * Generates NexusHub app icons from an inline SVG design.
+ * Generates ZenDev app icons from an inline SVG design.
  * Output:
  *   build/icons/icon.png  — 512×512 master PNG
  *   build/icons/icon.ico  — multi-size ICO (16/32/48/64/128/256 px)
@@ -22,7 +22,7 @@ fs.mkdirSync(OUT, { recursive: true })
 
 // ─── SVG Design ─────────────────────────────────────────────────────────────
 // 512×512. Brand palette: #8b5cf6 (violet) → #06b6d4 (cyan), bg #0a0a0f
-// Concept: central nexus hub — a hexagon network with a glowing core node.
+// Concept: central zendev — a hexagon network with a glowing core node.
 // Reads cleanly at 16 px (only the core ring survives) and pops at 256 px+.
 
 const SVG = `<svg
@@ -211,7 +211,7 @@ function buildIco(images) {
 
 // ─── Main ───────────────────────────────────────────────────────────────────
 async function main() {
-  console.log('NexusHub icon generator starting...\n')
+  console.log('ZenDev icon generator starting...\n')
 
   const svgBuffer = Buffer.from(SVG)
 

@@ -144,11 +144,11 @@
     "subtitle": "Devam etmek için lütfen şartları okuyup kabul edin",
     "s1": {
       "title": "1. Kullanım Şartları",
-      "body": "NexusHub'ı kullanarak bu şartları kabul etmiş olursunuz. Bu yazılım sadece yasal, eğitim amaçlı ve yetkili güvenlik testleri için sağlanmıştır."
+      "body": "ZenDev'ı kullanarak bu şartları kabul etmiş olursunuz. Bu yazılım sadece yasal, eğitim amaçlı ve yetkili güvenlik testleri için sağlanmıştır."
     },
     "s2": {
       "title": "2. Gizlilik & Telemetri",
-      "body": "NexusHub tüm verileri makinenizde yerel olarak işler. Parolalarınızı, çözülmüş bağlantıları veya üretilen verileri toplamayız, iletmeyiz veya saklamayız."
+      "body": "ZenDev tüm verileri makinenizde yerel olarak işler. Parolalarınızı, çözülmüş bağlantıları veya üretilen verileri toplamayız, iletmeyiz veya saklamayız."
     },
     "s3": {
       "title": "3. Lisanslama & Kısıtlamalar",
@@ -164,7 +164,7 @@
   },
   "tour": {
     "welcome": {
-      "title": "NexusHub'a Hoş Geldiniz",
+      "title": "ZenDev'a Hoş Geldiniz",
       "desc": "Premium çoklu araç setiniz hazır. Başlamadan önce kısa bir kurulum yapalım."
     },
     "next": "Devam Et",
@@ -176,7 +176,7 @@
   },
   "dashboard": {
     "welcomeBack": "TEKRAR HOŞ GELDİNİZ",
-    "readyTitle": "<span class=\"gradient-text\">NexusHub</span> hazır.",
+    "readyTitle": "<span class=\"gradient-text\">ZenDev</span> hazır.",
     "readyDesc": "Güçlü araçlardan oluşan birleşik bir paket elinizin altında. Başlamak için aşağıdan bir araç seçin.",
     "stats": {
       "activeTools": "Aktif Araçlar",

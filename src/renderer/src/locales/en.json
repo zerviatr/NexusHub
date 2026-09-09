@@ -144,11 +144,11 @@
     "subtitle": "Please read and accept the terms to continue",
     "s1": {
       "title": "1. Terms of Use",
-      "body": "By using NexusHub, you agree to these terms. This software is provided for legal, educational, and authorized security testing purposes only."
+      "body": "By using ZenDev, you agree to these terms. This software is provided for legal, educational, and authorized security testing purposes only."
     },
     "s2": {
       "title": "2. Privacy & Telemetry",
-      "body": "NexusHub processes all data locally on your machine. We do not collect, transmit, or store your passwords, decrypted links, or generated data."
+      "body": "ZenDev processes all data locally on your machine. We do not collect, transmit, or store your passwords, decrypted links, or generated data."
     },
     "s3": {
       "title": "3. Licensing & Restrictions",
@@ -164,7 +164,7 @@
   },
   "tour": {
     "welcome": {
-      "title": "Welcome to NexusHub",
+      "title": "Welcome to ZenDev",
       "desc": "Your premium multi-tool suite is ready. Let's do a quick setup before you get started."
     },
     "next": "Continue",
@@ -176,7 +176,7 @@
   },
   "dashboard": {
     "welcomeBack": "WELCOME BACK",
-    "readyTitle": "Your <span class=\"gradient-text\">NexusHub</span> is ready.",
+    "readyTitle": "Your <span class=\"gradient-text\">ZenDev</span> is ready.",
     "readyDesc": "A unified suite of powerful tools at your fingertips. Select a tool below to get started.",
     "stats": {
       "activeTools": "Active Tools",

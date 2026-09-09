@@ -329,7 +329,7 @@ export default function PasswordGenerator() {
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(vaultItems, null, 2))
     const dlAnchor = document.createElement('a')
     dlAnchor.setAttribute('href', dataStr)
-    dlAnchor.setAttribute('download', `nexushub-vault-backup-${new Date().toISOString().slice(0, 10)}.json`)
+    dlAnchor.setAttribute('download', `zendev-vault-backup-${new Date().toISOString().slice(0, 10)}.json`)
     dlAnchor.click()
   }
 

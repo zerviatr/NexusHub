@@ -106,7 +106,7 @@ export default function PdfStudio() {
     try {
       const res = await window.nexusAPI?.pdf?.merge({
         filePaths: mergeFiles.map((f) => f.path),
-        outputFileName: 'NexusHub_Birlestirilmis.pdf',
+        outputFileName: 'ZenDev_Birlestirilmis.pdf',
       })
       if (res && res.success) {
         setMergeResult({ success: true, path: res.outputPath, pageCount: res.totalCount, size: res.size })

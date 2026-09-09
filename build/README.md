@@ -20,18 +20,18 @@ Option A — from a single 1024×1024 PNG source image (recommended):
 
   macOS .icns:
     On macOS only (requires Xcode command line tools):
-    mkdir nexushub.iconset
-    sips -z 16 16     icon-1024.png --out nexushub.iconset/icon_16x16.png
-    sips -z 32 32     icon-1024.png --out nexushub.iconset/icon_16x16@2x.png
-    sips -z 32 32     icon-1024.png --out nexushub.iconset/icon_32x32.png
-    sips -z 64 64     icon-1024.png --out nexushub.iconset/icon_32x32@2x.png
-    sips -z 128 128   icon-1024.png --out nexushub.iconset/icon_128x128.png
-    sips -z 256 256   icon-1024.png --out nexushub.iconset/icon_128x128@2x.png
-    sips -z 256 256   icon-1024.png --out nexushub.iconset/icon_256x256.png
-    sips -z 512 512   icon-1024.png --out nexushub.iconset/icon_256x256@2x.png
-    sips -z 512 512   icon-1024.png --out nexushub.iconset/icon_512x512.png
-    cp icon-1024.png nexushub.iconset/icon_512x512@2x.png
-    iconutil -c icns nexushub.iconset -o icon.icns
+    mkdir zendev.iconset
+    sips -z 16 16     icon-1024.png --out zendev.iconset/icon_16x16.png
+    sips -z 32 32     icon-1024.png --out zendev.iconset/icon_16x16@2x.png
+    sips -z 32 32     icon-1024.png --out zendev.iconset/icon_32x32.png
+    sips -z 64 64     icon-1024.png --out zendev.iconset/icon_32x32@2x.png
+    sips -z 128 128   icon-1024.png --out zendev.iconset/icon_128x128.png
+    sips -z 256 256   icon-1024.png --out zendev.iconset/icon_128x128@2x.png
+    sips -z 256 256   icon-1024.png --out zendev.iconset/icon_256x256.png
+    sips -z 512 512   icon-1024.png --out zendev.iconset/icon_256x256@2x.png
+    sips -z 512 512   icon-1024.png --out zendev.iconset/icon_512x512.png
+    cp icon-1024.png zendev.iconset/icon_512x512@2x.png
+    iconutil -c icns zendev.iconset -o icon.icns
 
   Cross-platform (no macOS required):
     Use https://cloudconvert.com/png-to-icns

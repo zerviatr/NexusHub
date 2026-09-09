@@ -1,7 +1,7 @@
 /**
  * server/src/landingPageHtml.ts
  *
- * NexusHub Official High-Conversion "Harpoon" Landing Page.
+ * ZenDev Official High-Conversion "Harpoon" Landing Page.
  * Full Enterprise Suite:
  *  - Multilingual (TR / EN) + Multi-Currency (₺ / $) instant switcher
  *  - Interactive Desktop App Mockup Simulator with live tool tabs
@@ -23,21 +23,21 @@ export function renderLandingPage(): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="meta-title">NexusHub — Abonelik Tuzağına Son. 20+ Siber Güç Tek Yazılımda.</title>
+  <title id="meta-title">ZenDev — Abonelik Tuzağına Son. 20+ Siber Güç Tek Yazılımda.</title>
   <meta name="description" content="Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD 7-Pass Dosya İmha Kalkanı, Canlı Donanım Teşhisi ve Şifreleme Kasası. Tek seferlik ödeme, sıfır abonelik.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='25' fill='%2308090d'/%3E%3Ccircle cx='50' cy='50' r='36' stroke='%2306b6d4' stroke-width='8' fill='none'/%3E%3Cpath d='M32 50L45 64L68 36' stroke='%2338bdf8' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
-  <meta property="og:title" content="NexusHub — Abonelik Tuzağına Son. 20+ Siber Güç Tek Yazılımda.">
+  <meta property="og:title" content="ZenDev — Abonelik Tuzağına Son. 20+ Siber Güç Tek Yazılımda.">
   <meta property="og:description" content="Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD 7-Pass Shredder ve Şifreli Kasa. Tek seferlik ödeme, %100 yerel ve offline-first.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://nexushub-production-4a5b.up.railway.app">
+  <meta property="og:url" content="https://zendev-production-4a5b.up.railway.app">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="NexusHub — 20+ Cyber Powers in One Suite">
+  <meta name="twitter:title" content="ZenDev — 20+ Cyber Powers in One Suite">
   <meta name="twitter:description" content="Stop SaaS subscription fatigue. Own 20+ developer & security desktop tools once forever.">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "NexusHub",
+    "name": "ZenDev",
     "operatingSystem": "Windows 10, Windows 11",
     "applicationCategory": "DeveloperApplication, SecurityApplication",
     "offers": {
@@ -169,11 +169,9 @@ export function renderLandingPage(): string {
       <!-- Brand Logo -->
       <a href="#" class="flex items-center gap-2.5 group shrink-0">
         <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-nexus-cyan via-nexus-accent to-purple-600 p-0.5 shadow-[0_0_15px_rgba(6,182,212,0.4)] group-hover:scale-105 transition-transform">
-          <div class="w-full h-full bg-nexus-bg rounded-full flex items-center justify-center font-mono font-black text-nexus-cyan text-xs">
-            N
-          </div>
+          <div class="w-full h-full bg-nexus-bg rounded-full flex items-center justify-center font-mono font-black text-nexus-cyan text-xs">Z</div>
         </div>
-        <span class="font-heading font-black text-sm tracking-wider text-white">NEXUS<span class="text-nexus-cyan">HUB</span></span>
+        <span class="font-heading font-black text-sm tracking-wider text-white">ZEN<span class="text-nexus-cyan">DEV</span></span>
       </a>
 
       <!-- 4 Core Navigation Anchors -->
@@ -286,10 +284,10 @@ export function renderLandingPage(): string {
       <div class="text-center max-w-3xl mx-auto mb-8">
         <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan" data-i18n="sim.tag">Canlı Arayüzü İncele</span>
         <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-2 mb-4" data-i18n="sim.title">
-          NexusHub Masaüstünüzde Nasıl Görünür?
+          ZenDev Masaüstünüzde Nasıl Görünür?
         </h2>
         <p class="text-nexus-muted font-sans text-sm sm:text-base" data-i18n="sim.desc">
-          İndirmeden önce aşağıdaki sekmelere tıklayarak NexusHub'ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.
+          İndirmeden önce aşağıdaki sekmelere tıklayarak ZenDev'ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.
         </p>
       </div>
 
@@ -330,7 +328,7 @@ export function renderLandingPage(): string {
             <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
             <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
             <span class="ml-3 font-mono text-xs text-nexus-muted font-semibold flex items-center gap-1.5">
-              <span class="hidden sm:inline">NexusHub v2.2.0 Pro Edition</span>
+              <span class="hidden sm:inline">ZenDev v2.2.0 Pro Edition</span>
               <span class="sm:hidden text-[11px]">v2.2 Pro</span>
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             </span>
@@ -349,7 +347,7 @@ export function renderLandingPage(): string {
         <div id="sim-pro-banner" class="hidden bg-emerald-500/15 border-b border-emerald-500/30 px-4 py-2 font-mono text-xs text-emerald-400 flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
           <div class="flex items-center gap-2 truncate">
             <span class="text-sm shrink-0">🎉</span>
-            <span class="truncate"><b>NEXUS PRO LIFETIME AKTİF:</b> 20+ Siber Araç ve Limitsiz Özellikler Çözüldü.</span>
+            <span class="truncate"><b>ZENDEV PRO LIFETIME AKTİF:</b> 20+ Siber Araç ve Limitsiz Özellikler Çözüldü.</span>
           </div>
           <a href="#pricing" class="px-2.5 py-1 rounded bg-emerald-500 text-black font-bold text-[10px] hover:brightness-110 shrink-0 ml-2">Gerçek Lisans Al →</a>
         </div>
@@ -407,7 +405,7 @@ export function renderLandingPage(): string {
               </div>
 
               <div class="p-3.5 rounded-xl bg-nexus-bg border border-nexus-border/80 flex items-center justify-between font-mono text-xs">
-                <span id="mock-email-addr" class="text-nexus-cyan font-bold truncate">quantum_shadow92@nexusmail.org</span>
+                <span id="mock-email-addr" class="text-nexus-cyan font-bold truncate">quantum_shadow92@zendevmail.org</span>
                 <span class="text-emerald-400 text-[11px]">✓ Aktif</span>
               </div>
 
@@ -451,7 +449,7 @@ export function renderLandingPage(): string {
                     <span>MARKDOWN GİRDİSİ</span>
                     <span id="sim-md-stats" class="text-nexus-cyan">42 kelime • 280 karakter</span>
                   </div>
-                  <textarea id="sim-md-input" oninput="updateSimMarkdown()" class="w-full h-40 bg-nexus-bg border border-nexus-border/80 rounded-xl p-3 font-mono text-xs text-nexus-text outline-none focus:border-nexus-cyan resize-none leading-relaxed"># 🚀 NexusHub v2.2.0
+                  <textarea id="sim-md-input" oninput="updateSimMarkdown()" class="w-full h-40 bg-nexus-bg border border-nexus-border/80 rounded-xl p-3 font-mono text-xs text-nexus-text outline-none focus:border-nexus-cyan resize-none leading-relaxed"># 🚀 ZenDev v2.2.0
 
 > Güvenli, yerel ve **sıfır gecikmeli** geliştirici notları.
 
@@ -462,7 +460,7 @@ export function renderLandingPage(): string {
 \`\`\`mermaid
 graph LR
   Client[Kullanıcı] --> Proxy[Ters Proxy]
-  Proxy --> Core((Nexus v2.2))
+  Proxy --> Core((ZenDev v2.3))
 \`\`\`</textarea>
                 </div>
 
@@ -472,7 +470,7 @@ graph LR
                     <span class="text-emerald-400 text-[10px]">✓ Anında Render</span>
                   </div>
                   <div id="sim-md-preview" class="w-full h-40 bg-nexus-surface/50 border border-nexus-border/80 rounded-xl p-3 text-xs overflow-y-auto space-y-2 font-sans">
-                    <h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">🚀 NexusHub v2.2.0</h4>
+                    <h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">🚀 ZenDev v2.2.0</h4>
                     <p class="text-[11px] text-nexus-muted italic border-l-2 border-nexus-cyan pl-2">Güvenli, yerel ve <b class="text-white">sıfır gecikmeli</b> geliştirici notları.</p>
                     <ul class="text-[11px] space-y-1 text-emerald-400 font-mono">
                       <li>✓ DoD 7-Pass Shredder</li>
@@ -484,7 +482,7 @@ graph LR
                       <span class="text-nexus-cyan">──▶</span>
                       <span class="px-2 py-1 rounded bg-nexus-surface border border-nexus-border text-white">Proxy</span>
                       <span class="text-nexus-cyan">──▶</span>
-                      <span class="px-2 py-1 rounded bg-nexus-cyan/20 border border-nexus-cyan text-nexus-cyan font-bold">Nexus v2.2</span>
+                      <span class="px-2 py-1 rounded bg-nexus-cyan/20 border border-nexus-cyan text-nexus-cyan font-bold">ZenDev v2.3</span>
                     </div>
                   </div>
                 </div>
@@ -730,7 +728,7 @@ graph LR
               </div>
               <div class="space-y-3">
                 <div class="relative">
-                  <input type="text" id="sim-pass-input" oninput="analyzePassword(this.value)" value="Nexus#2026!Fortress_Ultra" placeholder="Parolanızı yazın veya test edin..." class="w-full bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3 font-mono text-sm text-nexus-cyan outline-none focus:border-nexus-cyan">
+                  <input type="text" id="sim-pass-input" oninput="analyzePassword(this.value)" value="ZenDev#2026!Fortress_Ultra" placeholder="Parolanızı yazın veya test edin..." class="w-full bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3 font-mono text-sm text-nexus-cyan outline-none focus:border-nexus-cyan">
                   <button onclick="copyGeneratedPass()" id="sim-pass-copy-btn" class="absolute right-2 top-2 px-2.5 py-1.5 rounded-lg bg-nexus-surface hover:bg-nexus-border text-xs font-mono text-nexus-muted hover:text-white border border-nexus-border transition-all cursor-pointer">Kopyala</button>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs font-mono">
@@ -767,7 +765,7 @@ graph LR
                 </button>
               </div>
               <div class="space-y-3 font-mono text-xs">
-                <input type="text" id="sim-hash-input" oninput="computeSimHash(this.value)" value="NexusHub-Safe-Crypto-2026" placeholder="Şifrelenecek metni yazın..." class="w-full bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3 text-white outline-none focus:border-nexus-cyan">
+                <input type="text" id="sim-hash-input" oninput="computeSimHash(this.value)" value="ZenDev-Safe-Crypto-2026" placeholder="Şifrelenecek metni yazın..." class="w-full bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3 text-white outline-none focus:border-nexus-cyan">
                 
                 <div class="p-3.5 rounded-xl bg-nexus-bg border border-nexus-border/80 space-y-1.5">
                   <div class="flex items-center justify-between text-[10px] text-nexus-muted">
@@ -810,10 +808,10 @@ graph LR
           <span data-i18n="roi.tag">🔥 ABONELİK İSRAFI VS ÖMÜR BOYU LİSANS // ROI HESAPLAYICI</span>
         </div>
         <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-1 mb-4" data-i18n="roi.title">
-          NexusHub ile Ne Kadar Para Tasarruf Edersiniz?
+          ZenDev ile Ne Kadar Para Tasarruf Edersiniz?
         </h2>
         <p class="text-nexus-muted font-sans text-sm sm:text-base leading-relaxed" data-i18n="roi.desc">
-          Tek amaçlı küçük araçlara her ay düzenli para saçmayı bırakın. Aşağıdaki servislerden kullandıklarınızı işaretleyin; NexusHub’ın tek seferlik lisansı ile cebinizde kalan net meblağı canlı görün.
+          Tek amaçlı küçük araçlara her ay düzenli para saçmayı bırakın. Aşağıdaki servislerden kullandıklarınızı işaretleyin; ZenDev’ın tek seferlik lisansı ile cebinizde kalan net meblağı canlı görün.
         </p>
 
         <!-- Time Horizon & Quick Action Controls -->
@@ -1043,11 +1041,11 @@ graph LR
                   </div>
                 </div>
 
-                <!-- Green Bar: NexusHub Lifetime License -->
+                <!-- Green Bar: ZenDev Lifetime License -->
                 <div>
                   <div class="flex justify-between items-center text-xs font-mono mb-1.5">
                     <span class="text-emerald-400 flex items-center gap-1 font-bold">
-                      <span>🛡️</span> <span>NexusHub Ömür Boyu:</span>
+                      <span>🛡️</span> <span>ZenDev Ömür Boyu:</span>
                     </span>
                     <span id="roi-nexus-cost" class="text-emerald-400 font-black">$29 (₺349) TEK SEFERLİK</span>
                   </div>
@@ -1081,7 +1079,7 @@ graph LR
               <div class="p-3.5 rounded-xl bg-nexus-surface/60 border border-nexus-border/60 text-xs text-nexus-text space-y-1 font-sans">
                 <div class="flex items-center gap-2 font-bold text-white">
                   <span class="text-base">⚡</span>
-                  <span id="roi-payback-days">NexusHub 18 Günde Kendi Maliyetini Çıkartır!</span>
+                  <span id="roi-payback-days">ZenDev 18 Günde Kendi Maliyetini Çıkartır!</span>
                 </div>
                 <p id="roi-payback-desc" class="text-[11px] text-nexus-muted leading-relaxed">
                   Geriye kalan 1,077 gün boyunca 20+ aracı tek bir kuruş bile ödemeden tamamen ücretsiz kullanırsınız.
@@ -1112,12 +1110,12 @@ graph LR
   <section id="comparison" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-bg/50 scroll-mt-24">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan" data-i18n="comp.tag">Neden NexusHub?</span>
+        <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan" data-i18n="comp.tag">Neden ZenDev?</span>
         <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-2 mb-4" data-i18n="comp.title">
           SaaS Abonelik Yorgunluğunu Bitirin.
         </h2>
         <p class="text-nexus-muted font-sans text-base sm:text-lg" data-i18n="comp.desc">
-          İhtiyacınız olan her ufak araca aylık $10-$15 abonelik ödemek yerine, NexusHub'ı bir kez alın ve ömür boyu yerel olarak kullanın.
+          İhtiyacınız olan her ufak araca aylık $10-$15 abonelik ödemek yerine, ZenDev'ı bir kez alın ve ömür boyu yerel olarak kullanın.
         </p>
       </div>
 
@@ -1128,7 +1126,7 @@ graph LR
               <tr class="border-b border-nexus-border/60 bg-nexus-surface/50 text-xs font-mono uppercase text-nexus-muted">
                 <th class="p-5 font-bold">Özellik / Karşılaştırma</th>
                 <th class="p-5 font-bold text-red-400">Geleneksel Web SaaS Servisleri</th>
-                <th class="p-5 font-bold text-nexus-cyan bg-nexus-cyan/5">NexusHub Multi-Tool</th>
+                <th class="p-5 font-bold text-nexus-cyan bg-nexus-cyan/5">ZenDev Multi-Tool</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-nexus-border/40 font-sans">
@@ -1176,7 +1174,7 @@ graph LR
           Bilgisayarınızı Ağlatmayan Saf Güç.
         </h2>
         <p class="text-nexus-muted font-sans text-sm sm:text-base">
-          Aşağıdaki eşzamanlı araç yükü çubuğunu kaydırın; web tabanlı hantal araçların RAM ve işlemcinizi nasıl kilitlediğini, NexusHub'ın ise nasıl tüy gibi hafif kaldığını canlı test edin.
+          Aşağıdaki eşzamanlı araç yükü çubuğunu kaydırın; web tabanlı hantal araçların RAM ve işlemcinizi nasıl kilitlediğini, ZenDev'ın ise nasıl tüy gibi hafif kaldığını canlı test edin.
         </p>
       </div>
 
@@ -1242,11 +1240,11 @@ graph LR
             </div>
           </div>
 
-          <!-- Right: NexusHub Native Core -->
+          <!-- Right: ZenDev Native Core -->
           <div class="p-6 sm:p-7 rounded-2xl bg-nexus-cyan/5 border border-nexus-cyan/40 shadow-[0_0_30px_rgba(6,182,212,0.12)] flex flex-col justify-between transition-all">
             <div>
               <div class="flex items-center justify-between mb-4">
-                <span class="text-xs font-mono text-nexus-cyan uppercase tracking-wider font-bold">NexusHub Native Core</span>
+                <span class="text-xs font-mono text-nexus-cyan uppercase tracking-wider font-bold">ZenDev Native Core</span>
                 <span class="text-xl">⚡</span>
               </div>
               <h4 class="font-heading font-black text-xl text-white mb-6">C++ / Rust Hızlandırmalı Yerel Motor</h4>
@@ -1613,7 +1611,7 @@ graph LR
       <div class="text-center max-w-2xl mx-auto mb-8">
         <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan">Akıllı Çözüm Asistanı</span>
         <h2 class="font-heading font-black text-2xl sm:text-4xl text-white tracking-tight mt-2 mb-3">
-          Hangi Nexus Araçları İş Akışınızı Uçurur?
+          Hangi ZenDev Araçları İş Akışınızı Uçurur?
         </h2>
         <p class="text-nexus-muted font-sans text-xs sm:text-sm">
           2 basit soruyu yanıtlayın; size özel optimize edilmiş araç paketini ve verimlilik tahminini anında görün.
@@ -1688,7 +1686,7 @@ graph LR
         <div id="quiz-result" class="space-y-5 hidden">
           <div class="p-5 rounded-2xl bg-nexus-cyan/10 border border-nexus-cyan/30">
             <div class="flex items-center gap-2 text-xs font-mono text-nexus-cyan font-bold uppercase tracking-wider mb-1">
-              <span>🎯</span> Sizin İçin Optimize Edilmiş Nexus Paketi
+              <span>🎯</span> Sizin İçin Optimize Edilmiş ZenDev Paketi
             </div>
             <h4 id="quiz-recommend-title" class="text-xl font-black text-white">Full-Stack Geliştirici Güç Paketi</h4>
             <p id="quiz-recommend-desc" class="text-xs text-slate-300 mt-1">
@@ -1732,7 +1730,7 @@ graph LR
         <!-- Dynamic Coupon Code Bar -->
         <div class="mt-8 max-w-md mx-auto p-2.5 rounded-2xl card-glass border border-nexus-border/80 flex items-center gap-2.5 shadow-lg">
           <span class="text-base pl-2">🎟️</span>
-          <input type="text" id="pricing-coupon-input" placeholder="İndirim Kodu (Örn: NEXUS20, OGRENCI)" class="w-full bg-transparent text-xs font-mono text-nexus-cyan uppercase outline-none placeholder:text-nexus-muted/60">
+          <input type="text" id="pricing-coupon-input" placeholder="İndirim Kodu (Örn: ZENDEV20, OGRENCI)" class="w-full bg-transparent text-xs font-mono text-nexus-cyan uppercase outline-none placeholder:text-nexus-muted/60">
           <button onclick="applyPricingCoupon()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg text-xs font-mono font-bold hover:brightness-110 active:scale-95 transition-all cursor-pointer shrink-0">Uygula</button>
         </div>
         <div id="pricing-coupon-success" class="hidden mt-3 max-w-md mx-auto text-center text-xs font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 py-2 px-4 rounded-xl">
@@ -1800,14 +1798,14 @@ graph LR
           </button>
         </div>
 
-        <!-- Plan 2: Nexus Pro (HERO TIER) -->
+        <!-- Plan 2: ZenDev Pro (HERO TIER) -->
         <div class="p-8 rounded-3xl card-glass border-2 border-nexus-cyan flex flex-col justify-between relative shadow-[0_0_50px_rgba(6,182,212,0.25)] scale-105 bg-nexus-card">
           <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg font-heading font-black text-xs uppercase tracking-widest shadow-lg" data-i18n="plan2.badge">
             ⭐ EN ÇOK SATAN
           </div>
           <div>
             <div class="text-xs font-mono text-nexus-cyan uppercase tracking-wider mb-2">Bireysel Güç</div>
-            <h3 class="font-heading font-black text-2xl text-white mb-4">Nexus Pro Lifetime</h3>
+            <h3 class="font-heading font-black text-2xl text-white mb-4">ZenDev Pro Lifetime</h3>
             <div class="flex items-baseline gap-2 mb-2">
               <span class="font-heading font-black text-5xl text-white" id="price-pro">₺349</span>
               <span class="text-xs font-mono text-nexus-cyan font-semibold line-through" id="price-pro-old">₺699</span>
@@ -1835,7 +1833,7 @@ graph LR
         <div class="p-8 rounded-3xl card-glass border border-nexus-border/80 flex flex-col justify-between">
           <div>
             <div class="text-xs font-mono text-nexus-muted uppercase tracking-wider mb-2" data-i18n="plan3.badge">Çoklu Güç</div>
-            <h3 class="font-heading font-black text-2xl text-white mb-4">Nexus Studio (3 Cihaz)</h3>
+            <h3 class="font-heading font-black text-2xl text-white mb-4">ZenDev Studio (3 Cihaz)</h3>
             <div class="flex items-baseline gap-2 mb-6">
               <span class="font-heading font-black text-5xl text-white" id="price-studio">₺699</span>
               <span class="text-xs font-mono text-nexus-muted" data-i18n="plan.onetime">/ Tek Seferlik</span>
@@ -1873,8 +1871,8 @@ graph LR
                 <tr class="border-b border-nexus-border/60 text-nexus-muted uppercase">
                   <th class="py-3 px-4">Modül / Özellik</th>
                   <th class="py-3 px-4 text-center">Free Starter</th>
-                  <th class="py-3 px-4 text-center text-nexus-cyan font-bold">Nexus Pro (Ömür Boyu)</th>
-                  <th class="py-3 px-4 text-center text-emerald-400 font-bold">Nexus Studio</th>
+                  <th class="py-3 px-4 text-center text-nexus-cyan font-bold">ZenDev Pro (Ömür Boyu)</th>
+                  <th class="py-3 px-4 text-center text-emerald-400 font-bold">ZenDev Studio</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-nexus-border/40 text-nexus-text">
@@ -2020,7 +2018,7 @@ graph LR
       <div class="mt-4 p-4 rounded-2xl bg-nexus-surface/50 border border-nexus-border/80 flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-xs">
         <div class="flex items-center gap-2.5 truncate w-full">
           <span class="px-2 py-0.5 rounded bg-nexus-cyan/10 text-nexus-cyan font-bold shrink-0 text-[10px]">POWERSHELL</span>
-          <span class="text-nexus-muted truncate select-all" id="ps-verify-cmd">Get-FileHash -Algorithm SHA256 .\NexusHub-v2.2.0-Setup.exe</span>
+          <span class="text-nexus-muted truncate select-all" id="ps-verify-cmd">Get-FileHash -Algorithm SHA256 .\ZenDev-v2.2.0-Setup.exe</span>
         </div>
         <button onclick="copyPowerShellCmd()" id="copy-ps-btn" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-nexus-surface hover:bg-nexus-border text-xs text-nexus-cyan hover:text-white border border-nexus-border/80 transition-all shrink-0 cursor-pointer">
           Komutu Kopyala
@@ -2041,7 +2039,7 @@ graph LR
           Kullanıcılarımız Ne Diyor?
         </h2>
         <p class="text-nexus-muted font-sans text-base sm:text-lg">
-          Her gün binlerce profesyonel ve gizliliğine önem veren kullanıcı NexusHub ile zamandan ve paradan tasarruf ediyor.
+          Her gün binlerce profesyonel ve gizliliğine önem veren kullanıcı ZenDev ile zamandan ve paradan tasarruf ediyor.
         </p>
       </div>
 
@@ -2110,7 +2108,7 @@ graph LR
             <span class="text-white font-bold">412+ Geliştirici & Üye Çevrimiçi</span>
           </div>
           <h3 class="font-heading font-black text-2xl sm:text-3xl text-white">
-            NexusHub Discord Topluluğuna Katılın.
+            ZenDev Discord Topluluğuna Katılın.
           </h3>
           <p class="text-xs sm:text-sm text-nexus-muted leading-relaxed">
             Soru sorun, yeni araç önerin, beta güncellemelerine ilk siz erişin ve VIP lisans sahipleri için özel kanallarda diğer siber araştırmacılarla iletişim kurun.
@@ -2256,7 +2254,7 @@ graph LR
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
           </summary>
           <p class="mt-3 text-xs sm:text-sm text-nexus-muted leading-relaxed font-sans">
-            Evet, kesinlikle! Satın aldığınız tarihten itibaren 30 gün boyunca NexusHub'ı dilediğiniz gibi test edebilirsiniz. Herhangi bir nedenden dolayı memnun kalmazsanız Discord destek kanalımızdan veya e-posta ile bildirdiğiniz anda ödemeniz %100 koşulsuz olarak iade edilir.
+            Evet, kesinlikle! Satın aldığınız tarihten itibaren 30 gün boyunca ZenDev'ı dilediğiniz gibi test edebilirsiniz. Herhangi bir nedenden dolayı memnun kalmazsanız Discord destek kanalımızdan veya e-posta ile bildirdiğiniz anda ödemeniz %100 koşulsuz olarak iade edilir.
           </p>
         </details>
 
@@ -2266,7 +2264,7 @@ graph LR
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
           </summary>
           <p class="mt-3 text-xs sm:text-sm text-nexus-muted leading-relaxed font-sans">
-            Evet! NexusHub %100 offline-first mimariye sahiptir. Dosya imha (DoD shredder), AES-256 şifreleme kasası, donanım kaynak monitörü, RAM optimize edici ve parola analizörü gibi tüm kritik araçlar internet bağlantınız olmasa dahi tam performansla çalışır.
+            Evet! ZenDev %100 offline-first mimariye sahiptir. Dosya imha (DoD shredder), AES-256 şifreleme kasası, donanım kaynak monitörü, RAM optimize edici ve parola analizörü gibi tüm kritik araçlar internet bağlantınız olmasa dahi tam performansla çalışır.
           </p>
         </details>
 
@@ -2286,7 +2284,7 @@ graph LR
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
           </summary>
           <p class="mt-3 text-xs sm:text-sm text-nexus-muted leading-relaxed font-sans">
-            Hayır! NexusHub %100 yerel (offline-first) mimariyle çalışır. Dosya imha, şifreleme, görsel dönüştürme ve pano geçmişiniz sadece ve sadece sizin bilgisayarınızın RAM ve diskinde işlenir. Sunucumuz sadece lisans doğrulaması yapar.
+            Hayır! ZenDev %100 yerel (offline-first) mimariyle çalışır. Dosya imha, şifreleme, görsel dönüştürme ve pano geçmişiniz sadece ve sadece sizin bilgisayarınızın RAM ve diskinde işlenir. Sunucumuz sadece lisans doğrulaması yapar.
           </p>
         </details>
 
@@ -2296,7 +2294,7 @@ graph LR
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
           </summary>
           <p class="mt-3 text-xs sm:text-sm text-nexus-muted leading-relaxed font-sans">
-            Hayır! Nexus Pro Lifetime lisansı, çıkaracağımız tüm v2.x ve v3.x güncellemelerini, yeni eklenecek araçları ve performans yamalarını ömür boyu kapsar.
+            Hayır! ZenDev Pro Lifetime lisansı, çıkaracağımız tüm v2.x ve v3.x güncellemelerini, yeni eklenecek araçları ve performans yamalarını ömür boyu kapsar.
           </p>
         </details>
       </div>
@@ -2310,10 +2308,10 @@ graph LR
         <div class="w-8 h-8 rounded-lg bg-nexus-cyan/20 border border-nexus-cyan/40 flex items-center justify-center font-mono font-bold text-nexus-cyan text-sm">
           N
         </div>
-        <span class="text-xs font-mono text-nexus-muted">© 2026 NexusHub. Tüm Hakları Saklıdır.</span>
+        <span class="text-xs font-mono text-nexus-muted">© 2026 ZenDev. Tüm Hakları Saklıdır.</span>
       </div>
       <div class="flex items-center gap-6 text-xs font-mono text-nexus-muted">
-        <a href="https://github.com/zerviatr/NexusHub" target="_blank" class="hover:text-white transition-colors">GitHub Repository</a>
+        <a href="https://github.com/zerviatr/ZenDev" target="_blank" class="hover:text-white transition-colors">GitHub Repository</a>
         <a href="#faq" class="hover:text-nexus-cyan transition-colors">Destek & SSS</a>
         <a href="#pricing" class="text-nexus-cyan font-bold hover:underline">Pro Lisans Al</a>
       </div>
@@ -2325,7 +2323,7 @@ graph LR
     <div class="flex items-center gap-3 truncate">
       <div class="w-3 h-3 rounded-full bg-nexus-cyan animate-pulse shrink-0"></div>
       <div class="truncate">
-        <div class="text-xs font-bold text-white truncate">NexusHub v2.2.0 Suite</div>
+        <div class="text-xs font-bold text-white truncate">ZenDev v2.2.0 Suite</div>
         <div class="text-[10px] font-mono text-nexus-muted truncate">Ömür Boyu Tek Ödeme • Sıfır Abonelik</div>
       </div>
     </div>
@@ -2351,7 +2349,7 @@ graph LR
         <button onclick="dismissDownloadNotice()" class="text-nexus-muted hover:text-white cursor-pointer text-sm ml-2">✕</button>
       </div>
       <p class="text-[11px] text-nexus-muted mt-1 leading-relaxed" id="download-notice-msg">
-        NexusHub v2.2.0 yeni stabilite ve güvenlik yaması hazırlanmaktadır. Çok yakında indirmeye açılacaktır!
+        ZenDev v2.2.0 yeni stabilite ve güvenlik yaması hazırlanmaktadır. Çok yakında indirmeye açılacaktır!
       </p>
     </div>
   </div>
@@ -2365,7 +2363,7 @@ graph LR
       <div class="flex items-center justify-between border-b border-nexus-border/60 pb-2 text-[10px] text-nexus-muted">
         <span class="flex items-center gap-1.5 text-nexus-cyan font-bold">
           <span class="w-1.5 h-1.5 rounded-full bg-nexus-cyan animate-pulse"></span>
-          <span>NEXUS ORB HUD</span>
+          <span>ZENDEV ORB HUD</span>
         </span>
         <button onclick="toggleFloatingOrbMenu()" class="hover:text-white cursor-pointer px-1">✕</button>
       </div>
@@ -2385,7 +2383,7 @@ graph LR
     </div>
 
     <!-- The Interactive Floating Orb Bubble -->
-    <button onclick="toggleFloatingOrbMenu()" id="floating-orb-btn" class="relative group w-14 h-14 rounded-full bg-gradient-to-tr from-nexus-cyan via-nexus-accent to-purple-600 p-0.5 shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:shadow-[0_0_45px_rgba(6,182,212,0.9)] hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer animate-float" title="NexusHub Masaüstü Küresi (Tıkla & Keşfet)">
+    <button onclick="toggleFloatingOrbMenu()" id="floating-orb-btn" class="relative group w-14 h-14 rounded-full bg-gradient-to-tr from-nexus-cyan via-nexus-accent to-purple-600 p-0.5 shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:shadow-[0_0_45px_rgba(6,182,212,0.9)] hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer animate-float" title="ZenDev Masaüstü Küresi (Tıkla & Keşfet)">
       <div class="w-full h-full rounded-full bg-nexus-bg/85 backdrop-blur-md flex items-center justify-center font-mono font-bold text-white text-base group-hover:text-nexus-cyan transition-colors">
         ⚡
       </div>
@@ -2444,7 +2442,7 @@ graph LR
             <span class="p-2 rounded-lg bg-nexus-cyan/10 text-nexus-cyan group-hover:scale-110 transition-transform">🖥️</span>
             <div>
               <div class="font-bold text-white group-hover:text-nexus-cyan transition-colors">Canlı Uygulama Simülatörünü Aç</div>
-              <div class="text-[11px] text-nexus-muted">NexusHub v2.2.0 arayüzünü tarayıcı içinde interaktif deneyimleyin</div>
+              <div class="text-[11px] text-nexus-muted">ZenDev v2.2.0 arayüzünü tarayıcı içinde interaktif deneyimleyin</div>
             </div>
           </div>
           <span class="text-nexus-cyan opacity-0 group-hover:opacity-100 transition-opacity">Git ↵</span>
@@ -2568,7 +2566,7 @@ graph LR
           <span><kbd class="px-1.5 py-0.5 rounded bg-nexus-bg border border-nexus-border text-[9px]">↑↓</kbd> Gezin</span>
           <span><kbd class="px-1.5 py-0.5 rounded bg-nexus-bg border border-nexus-border text-[9px]">Enter</kbd> Seç</span>
         </div>
-        <span class="text-nexus-cyan">NexusHub Command Engine v2.2</span>
+        <span class="text-nexus-cyan">ZenDev Command Engine v2.2</span>
       </div>
     </div>
   </div>
@@ -2582,7 +2580,7 @@ graph LR
         <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-ping"></span>
         <span>SÜRÜM RADARI</span>
       </div>
-      <h3 class="font-heading font-black text-2xl text-white mb-4">NexusHub v2.2.0 Yenilikleri</h3>
+      <h3 class="font-heading font-black text-2xl text-white mb-4">ZenDev v2.2.0 Yenilikleri</h3>
 
       <div class="space-y-3.5 text-xs text-nexus-muted font-sans max-h-80 overflow-y-auto pr-2">
         <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
@@ -2645,7 +2643,7 @@ graph LR
       </div>
       <h3 class="font-heading font-black text-2xl text-white mb-2">Verileriniz Cihazınızdan Asla Çıkmaz</h3>
       <p class="text-xs text-nexus-muted mb-4 font-sans leading-relaxed">
-        NexusHub, modern yazılımlardaki gizli analitik ve telemetri casusluğuna tepki olarak geliştirilmiştir. Kodlarımız şeffaf, mimarimiz %100 yereldir.
+        ZenDev, modern yazılımlardaki gizli analitik ve telemetri casusluğuna tepki olarak geliştirilmiştir. Kodlarımız şeffaf, mimarimiz %100 yereldir.
       </p>
 
       <!-- Live Network Wireshark Audit Box -->
@@ -2678,7 +2676,7 @@ graph LR
       </div>
 
       <div class="pt-3 border-t border-nexus-border/60 flex items-center justify-between">
-        <span class="text-[11px] font-mono text-nexus-muted">NexusHub Security Core</span>
+        <span class="text-[11px] font-mono text-nexus-muted">ZenDev Security Core</span>
         <button onclick="closePrivacyModal()" class="px-5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 text-emerald-400 font-bold text-xs cursor-pointer transition-all">
           Kapat
         </button>
@@ -2692,7 +2690,7 @@ graph LR
       <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 text-nexus-muted hover:text-white p-1 rounded-lg hover:bg-nexus-border cursor-pointer">✕</button>
       
       <div class="text-xs font-mono text-nexus-cyan mb-1 uppercase tracking-wider" data-i18n="modal.tag">GÜVENLİ SİPARİŞ</div>
-      <h3 id="modal-plan-name" class="font-heading font-black text-2xl text-white mb-1">Nexus Pro Lifetime</h3>
+      <h3 id="modal-plan-name" class="font-heading font-black text-2xl text-white mb-1">ZenDev Pro Lifetime</h3>
       <div class="flex items-baseline gap-2 mb-5">
         <span id="modal-plan-price" class="text-3xl font-mono font-bold text-white">₺349</span>
         <span id="modal-discount-tag" class="hidden text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold">%20 İNDİRİM UYGULANDI</span>
@@ -2700,7 +2698,7 @@ graph LR
 
       <!-- Coupon Code Box -->
       <div class="mb-5 p-3 rounded-2xl bg-nexus-bg border border-nexus-border/80 flex items-center gap-2">
-        <input type="text" id="coupon-input" onkeydown="if(event.key==='Enter') applyCoupon()" placeholder="İndirim / Kupon Kodu (Örn: NEXUS20)" class="w-full bg-transparent text-xs font-mono text-nexus-cyan uppercase outline-none placeholder:text-nexus-muted/50">
+        <input type="text" id="coupon-input" onkeydown="if(event.key==='Enter') applyCoupon()" placeholder="İndirim / Kupon Kodu (Örn: ZENDEV20)" class="w-full bg-transparent text-xs font-mono text-nexus-cyan uppercase outline-none placeholder:text-nexus-muted/50">
         <button onclick="applyCoupon()" class="px-3 py-1.5 rounded-lg bg-nexus-cyan/20 border border-nexus-cyan/40 hover:bg-nexus-cyan/30 text-nexus-cyan text-xs font-mono font-bold transition-all cursor-pointer shrink-0">Uygula</button>
       </div>
 
@@ -2748,7 +2746,7 @@ graph LR
       <div class="text-xs font-mono text-nexus-cyan uppercase tracking-wider mb-1 font-bold">ERKEN ERİŞİM DAVETİYESİ</div>
       <h3 class="font-heading font-black text-2xl text-white mb-2">v2.2.0 Çıktığında İlk Siz İndirin</h3>
       <p class="text-xs text-nexus-muted mb-5 leading-relaxed">
-        NexusHub v2.2.0 yeni stabilite derlemesi hazırlanıyor. E-postanızı bırakın, indirmeler açıldığı an <b class="text-nexus-cyan">%20 lansman indirimi</b> kodunuzla birlikte e-posta alın.
+        ZenDev v2.2.0 yeni stabilite derlemesi hazırlanıyor. E-postanızı bırakın, indirmeler açıldığı an <b class="text-nexus-cyan">%20 lansman indirimi</b> kodunuzla birlikte e-posta alın.
       </p>
 
       <form id="waitlist-form" onsubmit="handleWaitlistSubmit(event)" class="space-y-3">
@@ -2762,7 +2760,7 @@ graph LR
 
       <div id="waitlist-success" class="hidden mt-4 p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs text-emerald-400 font-mono space-y-1">
         <div class="font-bold flex items-center gap-1.5">✓ Başarıyla Kaydedildiniz!</div>
-        <div class="text-[11px] text-emerald-300">Lansman indirim kuponunuz: <b class="text-white bg-emerald-500/30 px-2 py-0.5 rounded select-all font-mono">NEXUS20</b></div>
+        <div class="text-[11px] text-emerald-300">Lansman indirim kuponunuz: <b class="text-white bg-emerald-500/30 px-2 py-0.5 rounded select-all font-mono">ZENDEV20</b></div>
       </div>
       
       <div class="mt-5 pt-3 border-t border-nexus-border/50 flex items-center justify-between text-[11px] text-nexus-muted">
@@ -2863,8 +2861,8 @@ graph LR
         'hero.btnPro': 'Ömür Boyu Pro Lisans',
         'sim.tag': 'Canlı Arayüzü İncele',
         'sim.themeLabel': 'Siber Tema Seçici:',
-        'sim.title': 'NexusHub Masaüstünüzde Nasıl Görünür?',
-        'sim.desc': 'İndirmeden önce aşağıdaki sekmelere tıklayarak NexusHub’ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.',
+        'sim.title': 'ZenDev Masaüstünüzde Nasıl Görünür?',
+        'sim.desc': 'İndirmeden önce aşağıdaki sekmelere tıklayarak ZenDev’ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.',
         'sim.tools.tempmail': 'TempMail Posta',
         'sim.tools.scratchpad': 'Scratchpad & Flow',
         'sim.tools.color': 'Color & WCAG',
@@ -2876,11 +2874,11 @@ graph LR
         'sim.tools.orb': 'Floating Orb HUD',
         'sim.tools.hash': 'Hash & Base64',
         'roi.tag': 'ROI Tasarruf Simülatörü',
-        'roi.title': 'NexusHub ile Yılda Kaç Para Tasarruf Edersiniz?',
-        'roi.desc': 'Kullandığınız araçları işaretleyin, her ay SaaS platformlarına saçtığınız paranın NexusHub ile nasıl cebinizde kaldığını görün.',
-        'comp.tag': 'Neden NexusHub?',
+        'roi.title': 'ZenDev ile Yılda Kaç Para Tasarruf Edersiniz?',
+        'roi.desc': 'Kullandığınız araçları işaretleyin, her ay SaaS platformlarına saçtığınız paranın ZenDev ile nasıl cebinizde kaldığını görün.',
+        'comp.tag': 'Neden ZenDev?',
         'comp.title': 'SaaS Abonelik Yorgunluğunu Bitirin.',
-        'comp.desc': 'İhtiyacınız olan her ufak araca aylık $10-$15 abonelik ödemek yerine, NexusHub’ı bir kez alın ve ömür boyu yerel olarak kullanın.',
+        'comp.desc': 'İhtiyacınız olan her ufak araca aylık $10-$15 abonelik ödemek yerine, ZenDev’ı bir kez alın ve ömür boyu yerel olarak kullanın.',
         'price.tag': 'Şeffaf & Adil Fiyatlandırma',
         'price.title': 'Abonelik Yok. Bir Kez Al, Ömür Boyu Kullan.',
         'price.desc': 'Gizli yenileme ücreti yok. Kredi kartı, Kripto veya Discord üzerinden anında teslimat.',
@@ -2922,8 +2920,8 @@ graph LR
         'hero.btnPro': 'Lifetime Pro License',
         'sim.tag': 'Explore the Interface',
         'sim.themeLabel': 'Cyber Theme Engine:',
-        'sim.title': 'How NexusHub Looks on Your Desktop',
-        'sim.desc': 'Click the tabs below to test drive NexusHub’s cybernetic tools and smooth interface before downloading.',
+        'sim.title': 'How ZenDev Looks on Your Desktop',
+        'sim.desc': 'Click the tabs below to test drive ZenDev’s cybernetic tools and smooth interface before downloading.',
         'sim.tools.tempmail': 'TempMail Inbox',
         'sim.tools.scratchpad': 'Scratchpad & Flow',
         'sim.tools.color': 'Color & WCAG',
@@ -2935,11 +2933,11 @@ graph LR
         'sim.tools.orb': 'Floating Orb HUD',
         'sim.tools.hash': 'Hash & Base64',
         'roi.tag': 'ROI Savings Calculator',
-        'roi.title': 'How Much Money Do You Save with NexusHub?',
+        'roi.title': 'How Much Money Do You Save with ZenDev?',
         'roi.desc': 'Check the utilities you use and see how much money you stop wasting on recurring SaaS fees.',
-        'comp.tag': 'Why NexusHub?',
+        'comp.tag': 'Why ZenDev?',
         'comp.title': 'End SaaS Subscription Fatigue.',
-        'comp.desc': 'Instead of paying $10–$15/mo for every tiny utility, own NexusHub once and run everything locally forever.',
+        'comp.desc': 'Instead of paying $10–$15/mo for every tiny utility, own ZenDev once and run everything locally forever.',
         'price.tag': 'Transparent & Fair Pricing',
         'price.title': 'No Subscriptions. Buy Once, Own Forever.',
         'price.desc': 'No hidden renewals. Instant delivery via credit card, crypto, or Discord.',
@@ -3048,18 +3046,18 @@ graph LR
       const b3 = String.fromCharCode(96, 96, 96);
       if (type === 'arch') {
         input.value = '# 🏗️ Sistem Mimarisi Şeması\\n\\n' +
-          '> NexusHub v2.2.0 Yerel Güvenlik Kalkanı\\n\\n' +
+          '> ZenDev v2.2.0 Yerel Güvenlik Kalkanı\\n\\n' +
           '- [x] DoD 5220.22-M 7-Pass Shredder\\n' +
           '- [x] AES-256-GCM Kasa\\n' +
           '- [x] TCP/UDP Port Killer\\n\\n' +
           b3 + 'mermaid\\n' +
           'graph TD\\n' +
-          '  User([Kullanıcı]) --> App[NexusHub Core]\\n' +
+          '  User([Kullanıcı]) --> App[ZenDev Core]\\n' +
           '  App --> Vault[(Şifreli Kasa)]\\n' +
           '  App --> NetGuard[Port Killer]\\n' +
           b3;
         preview.innerHTML = '<h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">🏗️ Sistem Mimarisi Şeması</h4>' +
-          '<p class="text-[11px] text-nexus-muted italic border-l-2 border-nexus-cyan pl-2">NexusHub v2.2.0 Yerel Güvenlik Kalkanı</p>' +
+          '<p class="text-[11px] text-nexus-muted italic border-l-2 border-nexus-cyan pl-2">ZenDev v2.2.0 Yerel Güvenlik Kalkanı</p>' +
           '<ul class="text-[11px] space-y-1 text-emerald-400 font-mono">' +
             '<li>✓ DoD 5220.22-M 7-Pass Shredder</li>' +
             '<li>✓ AES-256-GCM Kasa</li>' +
@@ -3068,7 +3066,7 @@ graph LR
           '<div class="mt-2 p-2 rounded-lg bg-nexus-bg border border-nexus-cyan/30 flex items-center justify-center gap-2 font-mono text-[10px]">' +
             '<span class="px-2 py-1 rounded bg-nexus-surface border border-nexus-border text-white">User</span>' +
             '<span class="text-nexus-cyan">──▶</span>' +
-            '<span class="px-2 py-1 rounded bg-nexus-cyan/20 border border-nexus-cyan text-nexus-cyan font-bold">Nexus Core</span>' +
+            '<span class="px-2 py-1 rounded bg-nexus-cyan/20 border border-nexus-cyan text-nexus-cyan font-bold">ZenDev Core</span>' +
             '<span class="text-nexus-cyan">──▶</span>' +
             '<span class="px-2 py-1 rounded bg-nexus-surface border border-nexus-border text-white">Vault</span>' +
           '</div>';
@@ -3076,13 +3074,13 @@ graph LR
         input.value = '# ⚡ REST API Geliştirici Dokümantasyonu\\n\\n' +
           b3 + 'http\\n' +
           'GET /api/license/lookup\\n' +
-          'Host: auth.nexushub.org\\n' +
+          'Host: auth.zendev.org\\n' +
           'Authorization: Bearer <CLIENT_TOKEN>\\n' +
           b3 + '\\n\\n' +
           '- **Yanıt:** 200 OK\\n' +
           '- **Gecikme:** ~12ms (Yerel Edge)';
         preview.innerHTML = '<h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">⚡ REST API Dokümantasyonu</h4>' +
-          '<div class="p-2 rounded bg-nexus-bg font-mono text-[10px] text-purple-300">GET /api/license/lookup<br>Host: auth.nexushub.org</div>' +
+          '<div class="p-2 rounded bg-nexus-bg font-mono text-[10px] text-purple-300">GET /api/license/lookup<br>Host: auth.zendev.org</div>' +
           '<div class="text-[11px] text-emerald-400 font-mono">✓ 200 OK (Gecikme: ~12ms)</div>';
       }
       updateSimMarkdown();
@@ -3178,7 +3176,7 @@ graph LR
 
     function simulateNewMail() {
       const names = ['cyber_recon', 'phantom_user', 'shadow_matrix', 'delta_operator'];
-      const domains = ['nexusmail.org', 'tempdrop.io', 'ghostinbox.net'];
+      const domains = ['zendevmail.org', 'tempdrop.io', 'ghostinbox.net'];
       const randomEmail = names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 900 + 100) + '@' + domains[Math.floor(Math.random() * domains.length)];
       document.getElementById('mock-email-addr').innerText = randomEmail;
     }
@@ -3281,7 +3279,7 @@ graph LR
       const totalBleedUSD = monthlyUSD * months;
       const totalBleedTRY = monthlyTRY * months;
 
-      // NexusHub cost (Lifetime Pro)
+      // ZenDev cost (Lifetime Pro)
       const nexusUSD = 29;
       const nexusTRY = 349;
 
@@ -3351,8 +3349,8 @@ graph LR
       if (paybackDaysEl) {
         if (paybackDays <= 90) {
           paybackDaysEl.innerText = isTR
-            ? 'NexusHub ' + paybackDays + ' Günde Kendi Maliyetini Çıkartır!'
-            : 'NexusHub Pays For Itself in ' + paybackDays + ' Days!';
+            ? 'ZenDev ' + paybackDays + ' Günde Kendi Maliyetini Çıkartır!'
+            : 'ZenDev Pays For Itself in ' + paybackDays + ' Days!';
         } else {
           paybackDaysEl.innerText = isTR
             ? 'Abonelikleri İptal Ederek Dev Kazanç Sağlayın'
@@ -3416,10 +3414,10 @@ graph LR
 
       if (currentLang === 'tr') {
         if (title) title.innerText = 'İNDİRMELER GEÇİCİ OLARAK KAPALI';
-        if (msg) msg.innerText = 'NexusHub v2.2.0 yeni stabilite derlemesi hazırlanıyor. Erken erişim davetiyesi açılıyor...';
+        if (msg) msg.innerText = 'ZenDev v2.2.0 yeni stabilite derlemesi hazırlanıyor. Erken erişim davetiyesi açılıyor...';
       } else {
         if (title) title.innerText = 'DOWNLOADS TEMPORARILY PAUSED';
-        if (msg) msg.innerText = 'NexusHub v2.2.0 new build is preparing. Opening early access invite...';
+        if (msg) msg.innerText = 'ZenDev v2.2.0 new build is preparing. Opening early access invite...';
       }
 
       if (toast) {
@@ -3531,7 +3529,7 @@ graph LR
         ram: '~22 MB Heap',
         shortcut: 'Ctrl + Alt + N',
         privacy: 'Notlarınız hiçbir cloud sunucusuna gitmez. Tamamen yerel IndexedDB ve şifreli dosya formatında saklanır.',
-        code: 'graph LR\\n  User --> Proxy\\n  Proxy --> Core((NexusHub v2.2))'
+        code: 'graph LR\\n  User --> Proxy\\n  Proxy --> Core((ZenDev v2.2))'
       },
       color: {
         name: 'Color Studio & WCAG Contrast',
@@ -3571,7 +3569,7 @@ graph LR
       const code = document.getElementById('drawer-code');
 
       const spec = toolSpecsDb[toolKey] || {
-        name: fallbackTitle || 'NexusHub Modül Detayı',
+        name: fallbackTitle || 'ZenDev Modül Detayı',
         cat: fallbackCat || 'SİBER ARAÇ',
         icon: '⚡',
         desc: fallbackDesc || 'Tamamen yerel, sıfır telemetri ve yüksek performanslı masaüstü aracı.',
@@ -3579,7 +3577,7 @@ graph LR
         ram: '~15 MB Heap',
         shortcut: 'Ctrl + K -> Ara',
         privacy: '%100 Yerel İcra. Dış sunuculara sıfır paket gönderilir. Offline-First mimari.',
-        code: '// NexusHub IPC Çağrısı\\nawait window.api.' + toolKey + '.execute();'
+        code: '// ZenDev IPC Çağrısı\\nawait window.api.' + toolKey + '.execute();'
       };
 
       if (title) title.innerText = spec.name;
@@ -3819,9 +3817,9 @@ graph LR
       const planBase = plan === 'pro' ? curr.pro : curr.studio;
 
       if (plan === 'pro') {
-        modalName.innerText = currentLang === 'tr' ? 'Nexus Pro Lifetime' : 'Nexus Pro Lifetime License';
+        modalName.innerText = currentLang === 'tr' ? 'ZenDev Pro Lifetime' : 'ZenDev Pro Lifetime License';
       } else {
-        modalName.innerText = currentLang === 'tr' ? 'Nexus Studio (3 Cihaz)' : 'Nexus Studio (3 Devices)';
+        modalName.innerText = currentLang === 'tr' ? 'ZenDev Studio (3 Cihaz)' : 'ZenDev Studio (3 Devices)';
       }
 
       // Dynamic Provider Configuration based on Currency / Region
@@ -3831,7 +3829,7 @@ graph LR
         if (provDesc) provDesc.innerText = 'Kredi Kartı / Banka Kartı / 3D Secure';
         if (provCta) provCta.innerText = 'Satın Al →';
       } else {
-        if (primaryLink) primaryLink.href = 'https://nexushub.lemonsqueezy.com';
+        if (primaryLink) primaryLink.href = 'https://zendev.lemonsqueezy.com';
         if (provTitle) provTitle.innerText = 'Pay with LemonSqueezy (Global)';
         if (provDesc) provDesc.innerText = 'Credit Card, Apple Pay, Google Pay, PayPal';
         if (provCta) provCta.innerText = 'Buy Now →';
@@ -3852,7 +3850,7 @@ graph LR
       const tag = document.getElementById('modal-discount-tag');
       const priceEl = document.getElementById('modal-plan-price');
 
-      if (code === 'NEXUS20' || code === 'OGRENCI' || code === 'DISCORD' || code === 'SPECIAL') {
+      if (code === 'ZENDEV20' || code === 'OGRENCI' || code === 'DISCORD' || code === 'SPECIAL') {
         globalDiscountMultiplier = 0.8;
         appliedCouponCode = code;
         const curr = currencyData[activeCurrency] || currencyData.TRY;
@@ -3875,7 +3873,7 @@ graph LR
       const successBox = document.getElementById('pricing-coupon-success');
       const msgBox = document.getElementById('pricing-coupon-msg');
 
-      if (code === 'NEXUS20' || code === 'OGRENCI' || code === 'DISCORD' || code === 'SPECIAL') {
+      if (code === 'ZENDEV20' || code === 'OGRENCI' || code === 'DISCORD' || code === 'SPECIAL') {
         globalDiscountMultiplier = 0.8;
         appliedCouponCode = code;
         if (successBox) successBox.classList.remove('hidden');
@@ -3883,7 +3881,7 @@ graph LR
         setPricingCurrency(activeCurrency);
         playCyberSound('success');
       } else {
-        alert('Geçersiz kupon kodu. Deneyebileceğiniz kodlar: NEXUS20, OGRENCI');
+        alert('Geçersiz kupon kodu. Deneyebileceğiniz kodlar: ZENDEV20, OGRENCI');
       }
     }
 
@@ -4009,7 +4007,7 @@ graph LR
       if (saasCpuText) saasCpuText.innerText = '%' + saasCpu + ' CPU (Fan Sesleri Başlar)';
       if (saasCpuBar) saasCpuBar.style.width = saasCpuPercent + '%';
 
-      // NexusHub calculations (native, lightweight)
+      // ZenDev calculations (native, lightweight)
       const nexusRam = Math.round(18 + count * 4.2);
       const nexusCpu = (0.05 + count * 0.08).toFixed(1);
       const savings = (100 - (nexusRam / saasRam) * 100).toFixed(1);
@@ -4108,7 +4106,7 @@ graph LR
       } else if (action === 'privacy') {
         openPrivacyModal();
       } else if (action === 'tempmail') {
-        const fakeMail = 'temp_' + Math.random().toString(36).substring(2, 8) + '@nexushub.cloud';
+        const fakeMail = 'temp_' + Math.random().toString(36).substring(2, 8) + '@zendev.cloud';
         await safeCopyToClipboard(fakeMail);
         alert('⚡ Tek Kullanımlık Posta Üretildi ve Kopyalandı:\\n' + fakeMail);
       } else if (action === 'ram') {
@@ -4231,7 +4229,7 @@ graph LR
         h = canvas.height = canvas.offsetHeight;
       });
 
-      const letters = '010101019F8AB2NEXUSHUDDoDAES256CYBERRAMCOREλ§¥'.split('');
+      const letters = '010101019F8AB2ZENDEVHUDDoDAES256CYBERRAMCOREλ§¥'.split('');
       const fontSize = 14;
       const columns = Math.floor(w / fontSize) || 20;
       const drops = [];
@@ -4267,7 +4265,7 @@ graph LR
       if (!input || !cleanEl) return;
 
       const raw = input.value.trim();
-      let cleanUrl = 'https://drive.google.com/file/d/1A8zX_NexusSafeBuild.zip';
+      let cleanUrl = 'https://drive.google.com/file/d/1A8zX_ZenDevSafeBuild.zip';
       let strippedCount = 4;
 
       try {
@@ -4415,15 +4413,15 @@ graph LR
     function triggerQuickRamFlush() {
       toggleFloatingOrbMenu();
       playCyberSound('purge');
-      alert('⚡ [Nexus Orb] Sistem RAM Belleği Boşaltıldı!\\n1,840 MB geçici bellek önbelleği başarıyla temizlendi.');
+      alert('⚡ [ZenDev Orb] Sistem RAM Belleği Boşaltıldı!\\n1,840 MB geçici bellek önbelleği başarıyla temizlendi.');
     }
 
     async function triggerQuickTempMail() {
       toggleFloatingOrbMenu();
-      const fakeMail = 'orb_' + Math.random().toString(36).substring(2, 7) + '@nexusmail.org';
+      const fakeMail = 'orb_' + Math.random().toString(36).substring(2, 7) + '@zendevmail.org';
       await safeCopyToClipboard(fakeMail);
       playCyberSound('success');
-      alert('📬 [Nexus Orb] Tek Kullanımlık TempMail Panoya Kopyalandı:\\n' + fakeMail);
+      alert('📬 [ZenDev Orb] Tek Kullanımlık TempMail Panoya Kopyalandı:\\n' + fakeMail);
     }
 
     // ─── FAQ Accordion Controls ─────────────────────────────────────────────
@@ -4490,7 +4488,7 @@ graph LR
 
     function setSampleHashText() {
       const samples = [
-        'NexusHub-AES256-GCM-Encrypted-Payload',
+        'ZenDev-AES256-GCM-Encrypted-Payload',
         'Zervia-Military-DoD-7Pass-Clearance',
         'Cyber-Defense-Zero-Subscription-2026',
         'admin:super_secret_token_#9841'
@@ -4619,7 +4617,7 @@ graph LR
     // Initial calculations & canvas start
     calcRoi();
     initMatrixRain();
-    computeSimHash('NexusHub-Safe-Crypto-2026');
+    computeSimHash('ZenDev-Safe-Crypto-2026');
     initTelemetryHeartbeat();
   </script>
 </body>

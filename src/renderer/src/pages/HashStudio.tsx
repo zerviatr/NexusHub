@@ -185,7 +185,7 @@ export default function HashStudio() {
   const [activeTab, setActiveTab] = useState<HashTab>('text')
 
   // Text state
-  const [textInput, setTextInput] = useState('NexusHub Premium Multi-Tool Suite')
+  const [textInput, setTextInput] = useState('ZenDev Premium Multi-Tool Suite')
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
 
   // File state

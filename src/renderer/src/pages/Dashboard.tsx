@@ -301,9 +301,9 @@ export default function Dashboard() {
           className="text-4xl font-extrabold text-white mb-3"
         >
           {locale === 'tr' ? (
-            <>NexusHub <span className="gradient-text">Kullanıma Hazır</span>.</>
+            <>ZenDev <span className="gradient-text">Kullanıma Hazır</span>.</>
           ) : (
-            <>Your <span className="gradient-text">NexusHub</span> is ready.</>
+            <>Your <span className="gradient-text">ZenDev</span> is ready.</>
           )}
         </motion.h1>
 

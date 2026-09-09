@@ -1,4 +1,4 @@
-# NexusHub License Server
+# ZenDev License Server
 
 Node.js + Express + LibSQL (Turso) + LemonSqueezy Webhooks + Resend Email
 
@@ -23,14 +23,14 @@ npm run dev
 | Variable | Required | Description |
 |---|---|---|
 | `PORT` | No | Server port (Railway sets this automatically) |
-| `TURSO_URL` | Yes | LibSQL URL — `file:./nexushub.db` for local, `libsql://...` for Turso cloud |
+| `TURSO_URL` | Yes | LibSQL URL — `file:./zendev.db` for local, `libsql://...` for Turso cloud |
 | `TURSO_AUTH_TOKEN` | Prod only | Turso auth token |
 | `NEXUS_LICENSE_SECRET` | Yes | **Must match** the secret in Electron's `licenseStore.ts` |
 | `DEVICE_HMAC_SECRET` | Yes | Secret for hashing device IDs before storing |
 | `LEMONSQUEEZY_API_KEY` | Yes | From LemonSqueezy dashboard → API |
 | `LEMONSQUEEZY_WEBHOOK_SECRET` | Yes | From LemonSqueezy → Webhooks → Signing secret |
 | `RESEND_API_KEY` | Yes | From resend.com |
-| `EMAIL_FROM` | Yes | Sender address e.g. `NexusHub <license@yourdomain.com>` |
+| `EMAIL_FROM` | Yes | Sender address e.g. `ZenDev <license@yourdomain.com>` |
 
 ## LemonSqueezy Webhook Setup
 

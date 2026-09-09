@@ -1,6 +1,6 @@
 /**
  * vaultCrypto.ts
- * AES-GCM 256-bit client-side encryption for NexusHub Password Vault.
+ * AES-GCM 256-bit client-side encryption for ZenDev Password Vault.
  * Uses the Web Crypto API native in modern Chromium/Electron.
  */
 
@@ -37,7 +37,7 @@ async function getVaultKey(): Promise<CryptoKey> {
   const salt = getDeviceSalt()
   const baseKey = await crypto.subtle.importKey(
     'raw',
-    new TextEncoder().encode('NexusHub_Local_Vault_Master_Seed'),
+    new TextEncoder().encode('ZenDev_Local_Vault_Master_Seed'),
     { name: 'PBKDF2' },
     false,
     ['deriveKey']

@@ -88,7 +88,7 @@ export default function UpdateManager() {
               transition={{ delay: 0.1 }}
               className="font-mono text-2xl font-bold tracking-wider text-white mb-2"
             >
-              NexusHub Güncelleniyor...
+              ZenDev Güncelleniyor...
             </motion.h2>
 
             <motion.p
@@ -97,7 +97,7 @@ export default function UpdateManager() {
               transition={{ delay: 0.2 }}
               className="text-sm text-nexus-muted text-center max-w-md mb-6 leading-relaxed"
             >
-              Yeni sürüm uygulanıyor ve NexusHub otomatik olarak yeniden başlatılıyor.
+              Yeni sürüm uygulanıyor ve ZenDev otomatik olarak yeniden başlatılıyor.
               <br />
               <span className="text-xs text-nexus-cyan/80 font-mono">
                 Lütfen uygulamayı kapatmayın...
@@ -167,7 +167,7 @@ export default function UpdateManager() {
               </div>
               <div>
                 <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                  <span>NexusHub Güncellemesi Hazır</span>
+                  <span>ZenDev Güncellemesi Hazır</span>
                   <span className="px-1.5 py-0.5 rounded-md bg-nexus-cyan/15 text-nexus-cyan font-mono text-[10px] border border-nexus-cyan/30">
                     {downloadedVersion}
                   </span>

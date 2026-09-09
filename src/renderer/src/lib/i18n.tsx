@@ -1,6 +1,6 @@
 /**
  * lib/i18n.tsx
- * Lightweight, zero-dependency i18n for NexusHub.
+ * Lightweight, zero-dependency i18n for ZenDev.
  *
  * Usage:
  *   const { t, locale, setLocale } = useT()

@@ -32,7 +32,7 @@ export default function DevSandbox() {
   const [queryParams, setQueryParams] = useState<string>('')
   const [headersText, setHeadersText] = useState<string>('{\n  "Accept": "application/json"\n}')
   const [bearerToken, setBearerToken] = useState<string>('')
-  const [bodyText, setBodyText] = useState<string>('{\n  "title": "NexusHub Test",\n  "completed": false\n}')
+  const [bodyText, setBodyText] = useState<string>('{\n  "title": "ZenDev Test",\n  "completed": false\n}')
 
   // Response state
   const [isSending, setIsSending] = useState(false)

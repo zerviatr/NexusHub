@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!--
-  macOS Hardened Runtime entitlements for NexusHub.
+  macOS Hardened Runtime entitlements for ZenDev.
   Required for Apple notarization. Only grant what the app actually needs.
 -->
 <plist version="1.0">

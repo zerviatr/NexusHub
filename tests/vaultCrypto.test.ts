@@ -20,7 +20,7 @@ describe('CyberFortress Cryptographic Engine (vaultCrypto)', () => {
 
   it('should encrypt and decrypt a file with 100% byte fidelity using AES-256-GCM', async () => {
     const originalPath = path.join(tempDir, 'confidential.txt')
-    const secretContent = 'NEXUSHUB-CONFIDENTIAL-MILITARY-GRADE-PAYLOAD-2026'
+    const secretContent = 'ZENDEV-CONFIDENTIAL-MILITARY-GRADE-PAYLOAD-2026'
     await fs.writeFile(originalPath, secretContent, 'utf8')
 
     const passphrase = 'UltraSecurePassword123!'

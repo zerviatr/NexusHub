@@ -1,4 +1,4 @@
-# NexusHub — Proje Haritası
+# ZenDev — Proje Haritası
 
 > Premium multi-tool Electron desktop app. electron-vite + React 19 + TypeScript + Tailwind 3 + framer-motion.
 > Frameless window, context-isolated, custom titlebar.
@@ -28,7 +28,7 @@ Scripts: `npm run dev` (electron-vite dev), `npm run build` (electron-vite build
 ## Dosya Ağacı
 
 ```
-NexusHub/
+ZenDev/
 ├── package.json
 ├── tailwind.config.js          ← Design tokens (nexus-* renk sistemi)
 ├── electron.vite.config.ts

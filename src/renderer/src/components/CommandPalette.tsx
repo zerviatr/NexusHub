@@ -45,7 +45,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
   {
     id: 'dashboard',
     title: 'Dashboard',
-    subtitle: 'Overview and status of all NexusHub tools',
+    subtitle: 'Overview and status of all ZenDev tools',
     category: 'Tools',
     path: '/',
     icon: LayoutDashboard,
@@ -464,7 +464,7 @@ export default function CommandPalette() {
               </div>
               <div className="flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-nexus-cyan" />
-                <span>NexusHub Quick Switcher</span>
+                <span>ZenDev Quick Switcher</span>
               </div>
             </div>
           </motion.div>

@@ -26,7 +26,7 @@ interface LicenseEmailParams {
 
 export async function sendLicenseEmail(params: LicenseEmailParams): Promise<void> {
   const { to, key, tier, expiresAt } = params
-  const from = process.env['EMAIL_FROM'] ?? 'NexusHub <license@nexushub.app>'
+  const from = process.env['EMAIL_FROM'] ?? 'ZenDev <license@zendev.app>'
 
   const tierLabel: Record<string, string> = {
     free:     'Free',
@@ -63,9 +63,9 @@ export async function sendLicenseEmail(params: LicenseEmailParams): Promise<void
 </head>
 <body>
   <div class="card">
-    <div class="logo">Nexus<span>Hub</span></div>
+    <div class="logo">Zen<span>Dev</span></div>
     <h1>Your License Key 🎉</h1>
-    <p>Thank you for your purchase! Here is your NexusHub license key. Keep it safe — you'll need it to activate the application.</p>
+    <p>Thank you for your purchase! Here is your ZenDev license key. Keep it safe — you'll need it to activate the application.</p>
 
     <div class="key-box">${key}</div>
 
@@ -80,10 +80,10 @@ export async function sendLicenseEmail(params: LicenseEmailParams): Promise<void
       </div>
     </div>
 
-    <p>Open NexusHub, click <strong>License Check</strong>, and paste your key to activate. You can activate on up to 2 devices.</p>
+    <p>Open ZenDev, click <strong>License Check</strong>, and paste your key to activate. You can activate on up to 2 devices.</p>
 
     <div class="footer">
-      NexusHub · If you have any issues, reply to this email.<br/>
+      ZenDev · If you have any issues, reply to this email.<br/>
       Do not share your license key with others.
     </div>
   </div>
@@ -94,7 +94,7 @@ export async function sendLicenseEmail(params: LicenseEmailParams): Promise<void
   await getResend().emails.send({
     from,
     to,
-    subject: `Your NexusHub ${tierLabel[tier] ?? tier} License Key`,
+    subject: `Your ZenDev ${tierLabel[tier] ?? tier} License Key`,
     html,
   })
 }

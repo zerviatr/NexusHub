@@ -18,7 +18,7 @@ const PRESETS: RegexPreset[] = [
     pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$',
     flags: 'g',
     desc: 'Standart RFC uyumlu e-posta formatı kontrolü',
-    sample: 'test.user@example.com\ninvalid-email@\nadmin@nexushub.io'
+    sample: 'test.user@example.com\ninvalid-email@\nadmin@zendev.io'
   },
   {
     name: 'IPv4 Adresi',
@@ -32,7 +32,7 @@ const PRESETS: RegexPreset[] = [
     pattern: 'https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)',
     flags: 'g',
     desc: 'HTTP ve HTTPS protokolüne sahip web bağlantıları',
-    sample: 'https://nexushub.io/docs?ref=test\nhttp://google.com\nftp://invalid'
+    sample: 'https://zendev.io/docs?ref=test\nhttp://google.com\nftp://invalid'
   },
   {
     name: 'TR Telefon Numarası',
@@ -61,7 +61,7 @@ export default function RegexStudio() {
   const [pattern, setPattern] = useState('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}')
   const [flags, setFlags] = useState('gm')
   const [testString, setTestString] = useState(
-    'Bize info@nexushub.io üzerinden veya support@company.org adresinden ulaşabilirsiniz.\nGeçersiz: user@.com'
+    'Bize info@zendev.io üzerinden veya support@company.org adresinden ulaşabilirsiniz.\nGeçersiz: user@.com'
   )
   const [copied, setCopied] = useState(false)
 

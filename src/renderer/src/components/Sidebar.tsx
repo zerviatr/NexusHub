@@ -234,10 +234,10 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="p-5 flex items-center gap-3">
         <div className="w-9 h-9 rounded-xl overflow-hidden shadow-lg border border-white/10 flex-shrink-0">
-          <img src={logoImg} alt="NexusHub" className="w-full h-full object-cover" />
+          <img src={logoImg} alt="ZenDev" className="w-full h-full object-cover" />
         </div>
         <div>
-          <h1 className="text-base font-bold gradient-text">NexusHub</h1>
+          <h1 className="text-base font-bold gradient-text">ZenDev</h1>
           <p className="text-[9px] text-nexus-muted font-medium tracking-widest uppercase">
             {t('nav.subtitle') || 'Multi-Tool Suite'}
           </p>
@@ -322,7 +322,7 @@ export default function Sidebar() {
           <span className="truncate">{t('nav.account') || 'Account Settings'}</span>
         </button>
         <div className="glass-card p-2.5 text-center">
-          <p className="text-[10px] text-nexus-muted">NexusHub v{appVersion}</p>
+          <p className="text-[10px] text-nexus-muted">ZenDev v{appVersion}</p>
           <p className="text-[9px] text-nexus-muted/60 mt-0.5">Electron + React + TypeScript</p>
         </div>
       </div>

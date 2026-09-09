@@ -23,7 +23,7 @@ function validateKeyPure(rawKey: string, secret = TEST_SECRET) {
   return validateLicenseKey(rawKey, secret)
 }
 
-describe('NexusHub License Cryptography & Validation', () => {
+describe('ZenDev License Cryptography & Validation', () => {
   it('should successfully validate a valid Lifetime key', () => {
     const key = generateTestKey('L', 0)
     const res = validateKeyPure(key)

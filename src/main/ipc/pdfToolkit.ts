@@ -106,7 +106,7 @@ export function registerPdfToolkitIPC(): void {
         const mergedBytes = await mergedPdf.save()
 
         const saveRes = await dialog.showSaveDialog({
-          defaultPath: outputFileName || 'NexusHub_Birlestirilmis.pdf',
+          defaultPath: outputFileName || 'ZenDev_Birlestirilmis.pdf',
           filters: [{ name: 'PDF Document', extensions: ['pdf'] }],
           title: 'Birleştirilen PDF Dosyasını Kaydet',
         })

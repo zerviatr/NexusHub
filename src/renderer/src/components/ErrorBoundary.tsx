@@ -22,7 +22,7 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('[NexusHub ErrorBoundary caught]:', error, errorInfo)
+    console.error('[ZenDev ErrorBoundary caught]:', error, errorInfo)
   }
 
   private handleReset = () => {

@@ -509,7 +509,7 @@ export default function CyberFortress() {
                           }
 
                           if (len <= 0 || len > 50000) {
-                            setStegoResult('Bu görselde gizlenmiş geçerli bir NexusHub mesajı bulunamadı.')
+                            setStegoResult('Bu görselde gizlenmiş geçerli bir ZenDev mesajı bulunamadı.')
                             return
                           }
 

@@ -105,7 +105,7 @@ async function decryptNoteText(cipherB64: string, password: string): Promise<str
   return new TextDecoder().decode(decrypted)
 }
 
-const DEFAULT_NOTE_CONTENT = `# NexusHub Scratchpad Ultimate
+const DEFAULT_NOTE_CONTENT = `# ZenDev Scratchpad Ultimate
 
 Geliştiriciler, güvenlik uzmanları ve teknik ekipler için tasarlanmış ileri düzey çevrimdışı Markdown ve Kod stüdyosu.
 
@@ -121,7 +121,7 @@ Geliştiriciler, güvenlik uzmanları ve teknik ekipler için tasarlanmış iler
 
 ### 🛠️ Örnek Akış Şeması
 \`\`\`flow
-İstemci --> [NexusHub GUI] --> [IPC Watchdog] --> [Kritik Süreç]
+İstemci --> [ZenDev GUI] --> [IPC Watchdog] --> [Kritik Süreç]
 \`\`\`
 
 ### 📊 Örnek Tablo
@@ -132,7 +132,7 @@ Geliştiriciler, güvenlik uzmanları ve teknik ekipler için tasarlanmış iler
 | Redis | 6379 | In-Memory Veri Deposu | Dahili Ağ İzolasyonu |
 
 \`\`\`typescript
-// NexusHub Hızlı API Test Parçacığı
+// ZenDev Hızlı API Test Parçacığı
 async function verifyNetworkIntegrity(host: string): Promise<boolean> {
   const telemetry = await window.nexusAPI.port.scanActivePorts();
   return telemetry.length > 0;
@@ -174,7 +174,7 @@ const TEMPLATES: Record<string, { title: string; content: string }> = {
 
 **Öncelik:** 🔴 Yüksek / 🟡 Orta / 🟢 Düşük  
 **İlgili Modül:** Örn. NetworkTools / DevSandbox  
-**Sürüm:** NexusHub v2.1.9  
+**Sürüm:** ZenDev v2.1.9  
 
 ---
 
@@ -250,7 +250,7 @@ npm run dev
 - **Paketleme:** Electron Builder NSIS
 
 ## 📄 Lisans
-MIT © 2026 NexusHub
+MIT © 2026 ZenDev
 `,
   },
 }
@@ -811,7 +811,7 @@ export default function Scratchpad() {
 <html>
 <head>
 <meta charset="utf-8">
-<title>${activeNote.title} - NexusHub Export</title>
+<title>${activeNote.title} - ZenDev Export</title>
 <style>
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -1539,7 +1539,7 @@ export default function Scratchpad() {
               </button>
               <button
                 type="button"
-                onClick={() => wrapSelection('```flow\nİstemci --> [NexusHub] --> [Sonuç]\n```', '', '')}
+                onClick={() => wrapSelection('```flow\nİstemci --> [ZenDev] --> [Sonuç]\n```', '', '')}
                 className="p-2 rounded-lg bg-nexus-surface hover:bg-white/[0.08] text-nexus-muted hover:text-white transition-colors"
                 title="Akış Şeması (Flowchart)"
               >

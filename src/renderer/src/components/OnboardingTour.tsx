@@ -28,7 +28,7 @@ export default function OnboardingTour({ onComplete }: OnboardingTourProps) {
             <div className="w-16 h-16 mx-auto bg-nexus-accent/10 border border-nexus-accent/30 rounded-2xl flex items-center justify-center mb-6 glow-accent">
               <Sparkles className="w-8 h-8 text-nexus-accent" />
             </div>
-            <h2 className="text-2xl font-bold mb-3">{t('tour.welcome.title') || 'Welcome to NexusHub'}</h2>
+            <h2 className="text-2xl font-bold mb-3">{t('tour.welcome.title') || 'Welcome to ZenDev'}</h2>
             <p className="text-nexus-muted mb-8 leading-relaxed">
               {t('tour.welcome.desc') || 'Your premium multi-tool suite is ready. Let\'s do a quick setup before you get started.'}
             </p>

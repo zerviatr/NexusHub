@@ -4,7 +4,7 @@ export function getAdminDashboardHtml(): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NexusHub — Enterprise License Console</title>
+  <title>ZenDev — Enterprise License Console</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,7 +70,7 @@ export function getAdminDashboardHtml(): string {
         <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-nexus-cyan/20 to-nexus-accent/20 border border-nexus-cyan/30 flex items-center justify-center mb-4 shadow-lg shadow-nexus-cyan/10">
           <i data-lucide="shield-check" class="w-7 h-7 text-nexus-cyan"></i>
         </div>
-        <h1 class="text-xl font-extrabold text-white tracking-tight">NexusHub Master Console</h1>
+        <h1 class="text-xl font-extrabold text-white tracking-tight">ZenDev Master Console</h1>
         <p class="text-xs text-nexus-muted mt-1">Sıfır-Veri Lisans & Yetki Sistemi</p>
       </div>
 
@@ -118,7 +118,7 @@ export function getAdminDashboardHtml(): string {
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h2 class="text-sm font-bold text-white leading-none">NexusHub Key Controller</h2>
+            <h2 class="text-sm font-bold text-white leading-none">ZenDev Key Controller</h2>
             <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-nexus-cyan/10 text-nexus-cyan border border-nexus-cyan/30">Zero-PII Enterprise</span>
           </div>
           <p class="text-[11px] text-nexus-muted mt-0.5 flex items-center gap-2">
@@ -1206,7 +1206,7 @@ export function getAdminDashboardHtml(): string {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = \`nexushub_keys_\${Date.now()}.txt\`;
+      a.download = \`zendev_keys_\${Date.now()}.txt\`;
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -1236,7 +1236,7 @@ export function getAdminDashboardHtml(): string {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = \`nexushub_licenses_\${new Date().toISOString().slice(0,10)}.csv\`;
+      a.download = \`zendev_licenses_\${new Date().toISOString().slice(0,10)}.csv\`;
       a.click();
       URL.revokeObjectURL(url);
       showToast('CSV dosyası indirildi!');

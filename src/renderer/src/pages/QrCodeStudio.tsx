@@ -33,8 +33,8 @@ export default function QrCodeStudio() {
 
   // QR Type & Input state
   const [qrType, setQrType] = useState<QrType>('url')
-  const [url, setUrl] = useState('https://github.com/zerviatr/NexusHub')
-  const [text, setText] = useState('NexusHub Premium Suite')
+  const [url, setUrl] = useState('https://github.com/zerviatr/ZenDev')
+  const [text, setText] = useState('ZenDev Premium Suite')
   
   // WiFi state
   const [wifiSsid, setWifiSsid] = useState('')
@@ -146,7 +146,7 @@ export default function QrCodeStudio() {
     if (!qrDataUrl) return
     const a = document.createElement('a')
     a.href = qrDataUrl
-    a.download = `nexushub-qrcode-${qrType}-${Date.now()}.png`
+    a.download = `zendev-qrcode-${qrType}-${Date.now()}.png`
     a.click()
   }
 
@@ -167,7 +167,7 @@ export default function QrCodeStudio() {
       const blobUrl = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = blobUrl
-      a.download = `nexushub-qrcode-${qrType}-${Date.now()}.svg`
+      a.download = `zendev-qrcode-${qrType}-${Date.now()}.svg`
       a.click()
       URL.revokeObjectURL(blobUrl)
     } catch (err: any) {
@@ -404,7 +404,7 @@ export default function QrCodeStudio() {
                     type="text"
                     value={smsMessage}
                     onChange={(e) => setSmsMessage(e.target.value)}
-                    placeholder="Hello from NexusHub"
+                    placeholder="Hello from ZenDev"
                     className="w-full px-4 py-2.5 rounded-xl bg-nexus-surface/80 border border-nexus-border/40 text-sm text-white focus:outline-none focus:border-nexus-cyan/50"
                   />
                 </div>

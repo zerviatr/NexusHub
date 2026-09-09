@@ -1,4 +1,4 @@
-name: Build & Release NexusHub
+name: Build & Release ZenDev
 
 on:
   push:

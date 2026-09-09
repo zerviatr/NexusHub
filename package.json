@@ -1,11 +1,11 @@
 {
-  "name": "nexushub",
+  "name": "zendev",
   "version": "2.3.0",
-  "description": "NexusHub — Premium Multi-Tool Desktop Application",
+  "description": "ZenDev — Premium Multi-Tool Desktop Application",
   "main": "./out/main/index.js",
   "author": {
-    "name": "NexusHub",
-    "email": "support@nexushub.app"
+    "name": "ZenDev",
+    "email": "support@zendev.app"
   },
   "scripts": {
     "dev": "electron-vite dev",
@@ -19,9 +19,9 @@
     "dist:dir": "electron-vite build && electron-builder --dir"
   },
   "build": {
-    "appId": "app.nexushub.desktop",
-    "productName": "NexusHub",
-    "copyright": "Copyright © 2026 NexusHub",
+    "appId": "app.zendev.desktop",
+    "productName": "ZenDev",
+    "copyright": "Copyright © 2026 ZenDev",
     "directories": {
       "buildResources": "build",
       "output": "dist"
@@ -65,8 +65,8 @@
       "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "NexusHub",
-      "uninstallDisplayName": "NexusHub",
+      "shortcutName": "ZenDev",
+      "uninstallDisplayName": "ZenDev",
       "installerIcon": "build/icons/icon.ico",
       "uninstallerIcon": "build/icons/icon.ico",
       "installerHeaderIcon": "build/icons/icon.ico",
@@ -140,7 +140,7 @@
     "publish": {
       "provider": "github",
       "owner": "zerviatr",
-      "repo": "NexusHub",
+      "repo": "ZenDev",
       "releaseType": "release"
     }
   },

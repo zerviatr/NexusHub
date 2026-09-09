@@ -4,7 +4,7 @@ import * as os from 'os'
 import * as fs from 'fs/promises'
 import { CATEGORIES, getCategory, getUniquePath } from '../src/main/services/organizerCore'
 
-describe('NexusHub File Organizer Categorization', () => {
+describe('ZenDev File Organizer Categorization', () => {
   it('should categorize known image extensions', () => {
     expect(getCategory('.png')).toBe('Images')
     expect(getCategory('.JPG')).toBe('Images')

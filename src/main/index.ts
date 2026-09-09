@@ -43,8 +43,22 @@ function createWindow(): void {
       contextIsolation: true,
       nodeIntegration: false,
       allowRunningInsecureContent: false,
+      devTools: !app.isPackaged,
     },
   })
+
+  // Block Developer Tools shortcuts in production builds
+  if (app.isPackaged) {
+    mainWindow.webContents.on('before-input-event', (event, input) => {
+      if (
+        input.key === 'F12' ||
+        ((input.control || input.meta) && input.shift && input.key.toLowerCase() === 'i') ||
+        ((input.control || input.meta) && input.shift && input.key.toLowerCase() === 'r')
+      ) {
+        event.preventDefault()
+      }
+    })
+  }
 
   // Prevent full termination on close unless explicitly quitting -> minimize to tray
   mainWindow.on('close', (event) => {

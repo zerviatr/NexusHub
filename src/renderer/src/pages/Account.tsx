@@ -367,7 +367,7 @@ export default function Account() {
           <div className="pt-4 mt-4 border-t border-white/5 space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-semibold text-white">NexusHub {updateInfo.current || 'v1.0.0'}</span>
+                <span className="text-xs font-semibold text-white">ZenDev {updateInfo.current || 'v1.0.0'}</span>
                 <p className="text-[11px] text-nexus-muted">
                   {updateStatus === 'idle' && (t('account.desktop.autoUpdatesActive') || 'Otomatik güncellemeler devrede')}
                   {updateStatus === 'checking' && (t('account.desktop.checkingUpdate') || 'GitHub sürümleri taranıyor...')}
@@ -521,7 +521,7 @@ export default function Account() {
                 const url = URL.createObjectURL(blob)
                 const a = document.createElement('a')
                 a.href = url
-                a.download = `nexushub_config_backup_${Date.now()}.nexusbackup`
+                a.download = `zendev_config_backup_${Date.now()}.nexusbackup`
                 a.click()
                 URL.revokeObjectURL(url)
                 cyberAudio.copySuccess()
@@ -546,7 +546,7 @@ export default function Account() {
                       const data = JSON.parse(ev.target?.result as string)
                       Object.keys(data).forEach((k) => localStorage.setItem(k, data[k]))
                       cyberAudio.copySuccess()
-                      alert('NexusHub yapılandırması başarıyla geri yüklendi! Sayfa yenileniyor.')
+                      alert('ZenDev yapılandırması başarıyla geri yüklendi! Sayfa yenileniyor.')
                       window.location.reload()
                     } catch {
                       alert('Geçersiz yedekleme dosyası!')

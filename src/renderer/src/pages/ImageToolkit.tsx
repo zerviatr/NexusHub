@@ -92,7 +92,7 @@ export default function ImageToolkit() {
       if (paths[0]) {
         const parts = paths[0].replace(/\\/g, '/').split('/')
         parts.pop()
-        setOutputDir(parts.join('/') + '/nexushub_output')
+        setOutputDir(parts.join('/') + '/zendev_output')
       }
       showToastSuccess('Görseller Eklendi', `${metas.length} adet görsel başarıyla yüklendi.`)
     } finally {
@@ -117,7 +117,7 @@ export default function ImageToolkit() {
         if (validPaths[0]) {
           const parts = validPaths[0].replace(/\\/g, '/').split('/')
           parts.pop()
-          setOutputDir(parts.join('/') + '/nexushub_output')
+          setOutputDir(parts.join('/') + '/zendev_output')
         }
         showToastSuccess('Görseller Eklendi', `${metas.length} adet görsel başarıyla yüklendi.`)
       } catch {}
@@ -138,7 +138,7 @@ export default function ImageToolkit() {
     const presetDims = SIZE_PRESETS[preset]
     const jobs: ImageJob[] = files.map((f): ImageJob => ({
       inputPath: f.filePath,
-      outputDir: outputDir || 'C:/Users/Public/Pictures/nexushub_output',
+      outputDir: outputDir || 'C:/Users/Public/Pictures/zendev_output',
       format,
       width: preset === 'custom' ? (customW ? Number(customW) : undefined) : presetDims.width,
       height: preset === 'custom' ? (customH ? Number(customH) : undefined) : presetDims.height,

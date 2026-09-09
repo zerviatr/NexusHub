@@ -103,7 +103,7 @@ export default function KeyboardShortcutsModal() {
                     </span>
                   </h2>
                   <p className="text-xs text-nexus-muted mt-0.5">
-                    Hızlı erişim tuşlarıyla NexusHub'ı fareye dokunmadan kontrol edin
+                    Hızlı erişim tuşlarıyla ZenDev'ı fareye dokunmadan kontrol edin
                   </p>
                 </div>
               </div>

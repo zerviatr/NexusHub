@@ -63,7 +63,7 @@ export default function TitleBar() {
 
       {/* Center title */}
       <div className="flex items-center gap-2">
-        <span className="text-xs text-nexus-muted font-medium tracking-wide">NexusHub</span>
+        <span className="text-xs text-nexus-muted font-medium tracking-wide">ZenDev</span>
         {tier === 'trial' && (
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1 font-mono font-medium animate-pulse">
             ★ PRO TRIAL {trialHoursLeft !== null ? `(${trialHoursLeft}h)` : ''}

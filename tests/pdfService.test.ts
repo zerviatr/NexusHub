@@ -42,7 +42,7 @@ describe('PDF Service & Page Range Parsing (pdfService)', () => {
     it('should accurately inspect page count and metadata from PDF bytes', async () => {
       // Generate a small 2-page test PDF in memory
       const pdfDoc = await PDFDocument.create()
-      pdfDoc.setTitle('NexusHub Test Document')
+      pdfDoc.setTitle('ZenDev Test Document')
       pdfDoc.setAuthor('Antigravity')
       pdfDoc.addPage([200, 200])
       pdfDoc.addPage([200, 200])
@@ -50,7 +50,7 @@ describe('PDF Service & Page Range Parsing (pdfService)', () => {
 
       const info = await inspectPdfBuffer(pdfBytes)
       expect(info.pageCount).toBe(2)
-      expect(info.title).toBe('NexusHub Test Document')
+      expect(info.title).toBe('ZenDev Test Document')
       expect(info.author).toBe('Antigravity')
     })
   })

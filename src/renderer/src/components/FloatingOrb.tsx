@@ -230,7 +230,7 @@ export default function FloatingOrb() {
 
             {/* Quick Link Footer */}
             <div className="pt-2 border-t border-nexus-border/30 flex items-center justify-between text-[10px] text-nexus-muted">
-              <span className="font-mono">NexusHub v2.0.2</span>
+              <span className="font-mono">ZenDev v2.0.2</span>
               <button
                 onClick={() => {
                   navigate('/sentinel')
