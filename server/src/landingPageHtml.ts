@@ -2442,7 +2442,7 @@ graph LR
         'sim.tag': 'Canlı Arayüzü İncele',
         'sim.themeLabel': 'Siber Tema Seçici:',
         'sim.title': 'NexusHub Masaüstünüzde Nasıl Görünür?',
-        'sim.desc': 'İndirmeden önce aşağıdaki sekmelere tıklayarak NexusHub\'ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.',
+        'sim.desc': 'İndirmeden önce aşağıdaki sekmelere tıklayarak NexusHub’ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.',
         'sim.tools.tempmail': 'TempMail Posta',
         'sim.tools.scratchpad': 'Scratchpad & Flow',
         'sim.tools.color': 'Color & WCAG',
@@ -2458,7 +2458,7 @@ graph LR
         'roi.desc': 'Kullandığınız araçları işaretleyin, her ay SaaS platformlarına saçtığınız paranın NexusHub ile nasıl cebinizde kaldığını görün.',
         'comp.tag': 'Neden NexusHub?',
         'comp.title': 'SaaS Abonelik Yorgunluğunu Bitirin.',
-        'comp.desc': 'İhtiyacınız olan her ufak araca aylık $10-$15 abonelik ödemek yerine, NexusHub\'ı bir kez alın ve ömür boyu yerel olarak kullanın.',
+        'comp.desc': 'İhtiyacınız olan her ufak araca aylık $10-$15 abonelik ödemek yerine, NexusHub’ı bir kez alın ve ömür boyu yerel olarak kullanın.',
         'price.tag': 'Şeffaf & Adil Fiyatlandırma',
         'price.title': 'Abonelik Yok. Bir Kez Al, Ömür Boyu Kullan.',
         'price.desc': 'Gizli yenileme ücreti yok. Kredi kartı, Kripto veya Discord üzerinden anında teslimat.',
@@ -2501,7 +2501,7 @@ graph LR
         'sim.tag': 'Explore the Interface',
         'sim.themeLabel': 'Cyber Theme Engine:',
         'sim.title': 'How NexusHub Looks on Your Desktop',
-        'sim.desc': 'Click the tabs below to test drive NexusHub\'s cybernetic tools and smooth interface before downloading.',
+        'sim.desc': 'Click the tabs below to test drive NexusHub’s cybernetic tools and smooth interface before downloading.',
         'sim.tools.tempmail': 'TempMail Inbox',
         'sim.tools.scratchpad': 'Scratchpad & Flow',
         'sim.tools.color': 'Color & WCAG',
@@ -2624,7 +2624,7 @@ graph LR
       const stats = document.getElementById('sim-md-stats');
       if (!input || !stats) return;
       const text = input.value || '';
-      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      const words = text.trim() ? text.trim().split(/\\s+/).length : 0;
       const chars = text.length;
       stats.innerText = words + ' kelime • ' + chars + ' karakter';
     }
@@ -2636,16 +2636,16 @@ graph LR
 
       const b3 = String.fromCharCode(96, 96, 96);
       if (type === 'arch') {
-        input.value = '# 🏗️ Sistem Mimarisi Şeması\n\n' +
-          '> NexusHub v2.2.0 Yerel Güvenlik Kalkanı\n\n' +
-          '- [x] DoD 5220.22-M 7-Pass Shredder\n' +
-          '- [x] AES-256-GCM Kasa\n' +
-          '- [x] TCP/UDP Port Killer\n\n' +
-          b3 + 'mermaid\n' +
-          'graph TD\n' +
-          '  User([Kullanıcı]) --> App[NexusHub Core]\n' +
-          '  App --> Vault[(Şifreli Kasa)]\n' +
-          '  App --> NetGuard[Port Killer]\n' +
+        input.value = '# 🏗️ Sistem Mimarisi Şeması\\n\\n' +
+          '> NexusHub v2.2.0 Yerel Güvenlik Kalkanı\\n\\n' +
+          '- [x] DoD 5220.22-M 7-Pass Shredder\\n' +
+          '- [x] AES-256-GCM Kasa\\n' +
+          '- [x] TCP/UDP Port Killer\\n\\n' +
+          b3 + 'mermaid\\n' +
+          'graph TD\\n' +
+          '  User([Kullanıcı]) --> App[NexusHub Core]\\n' +
+          '  App --> Vault[(Şifreli Kasa)]\\n' +
+          '  App --> NetGuard[Port Killer]\\n' +
           b3;
         preview.innerHTML = '<h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">🏗️ Sistem Mimarisi Şeması</h4>' +
           '<p class="text-[11px] text-nexus-muted italic border-l-2 border-nexus-cyan pl-2">NexusHub v2.2.0 Yerel Güvenlik Kalkanı</p>' +
@@ -2662,13 +2662,13 @@ graph LR
             '<span class="px-2 py-1 rounded bg-nexus-surface border border-nexus-border text-white">Vault</span>' +
           '</div>';
       } else if (type === 'api') {
-        input.value = '# ⚡ REST API Geliştirici Dokümantasyonu\n\n' +
-          b3 + 'http\n' +
-          'GET /api/license/lookup\n' +
-          'Host: auth.nexushub.org\n' +
-          'Authorization: Bearer <CLIENT_TOKEN>\n' +
-          b3 + '\n\n' +
-          '- **Yanıt:** 200 OK\n' +
+        input.value = '# ⚡ REST API Geliştirici Dokümantasyonu\\n\\n' +
+          b3 + 'http\\n' +
+          'GET /api/license/lookup\\n' +
+          'Host: auth.nexushub.org\\n' +
+          'Authorization: Bearer <CLIENT_TOKEN>\\n' +
+          b3 + '\\n\\n' +
+          '- **Yanıt:** 200 OK\\n' +
           '- **Gecikme:** ~12ms (Yerel Edge)';
         preview.innerHTML = '<h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">⚡ REST API Dokümantasyonu</h4>' +
           '<div class="p-2 rounded bg-nexus-bg font-mono text-[10px] text-purple-300">GET /api/license/lookup<br>Host: auth.nexushub.org</div>' +
@@ -2929,7 +2929,7 @@ graph LR
         ram: '~14 MB Heap',
         shortcut: 'Ctrl + Alt + T',
         privacy: 'Kişisel veri veya kimlik loglanmaz. Oturum kapandığında tüm mailler bellekten silinir.',
-        code: '// TempMail API Entegrasyonu\nconst mail = await window.api.tempMail.generate();\nconsole.log(mail.address); // -> phantom912@tempdrop.io'
+        code: '// TempMail API Entegrasyonu\\nconst mail = await window.api.tempMail.generate();\\nconsole.log(mail.address); // -> phantom912@tempdrop.io'
       },
       decrypter: {
         name: 'Evrensel Link Decrypter',
@@ -2940,7 +2940,7 @@ graph LR
         ram: '~12 MB Heap',
         shortcut: 'Ctrl + Alt + L',
         privacy: 'Tüm yönlendirme ve parametre temizliği yerel regex mimarisiyle cihazınızda yapılır.',
-        code: 'const res = await window.api.decrypter.resolve(adUrl);\n// -> { cleanUrl: "https://clean-dest.org/file.zip" }'
+        code: 'const res = await window.api.decrypter.resolve(adUrl);\\n// -> { cleanUrl: "https://clean-dest.org/file.zip" }'
       },
       fortress: {
         name: 'Cyber Fortress Vault & Shredder',
@@ -2951,7 +2951,7 @@ graph LR
         ram: '~16 MB Heap',
         shortcut: 'Ctrl + Alt + S',
         privacy: 'Dosyalar silinirken sektör üzerine 7 kez rastgele bitler yazılır. Magneto-optik kurtarma imkansızdır.',
-        code: 'await window.api.shredder.wipeFile(targetPath, { passes: 7 });\n// Status: DOD_7_PASS_PURGED'
+        code: 'await window.api.shredder.wipeFile(targetPath, { passes: 7 });\\n// Status: DOD_7_PASS_PURGED'
       },
       scratchpad: {
         name: 'Scratchpad Ultimate & Flowchart',
@@ -2962,7 +2962,7 @@ graph LR
         ram: '~22 MB Heap',
         shortcut: 'Ctrl + Alt + N',
         privacy: 'Notlarınız hiçbir cloud sunucusuna gitmez. Tamamen yerel IndexedDB ve şifreli dosya formatında saklanır.',
-        code: 'graph LR\n  User --> Proxy\n  Proxy --> Core((NexusHub v2.2))'
+        code: 'graph LR\\n  User --> Proxy\\n  Proxy --> Core((NexusHub v2.2))'
       },
       color: {
         name: 'Color Studio & WCAG Contrast',
@@ -2973,7 +2973,7 @@ graph LR
         ram: '~11 MB Heap',
         shortcut: 'Ctrl + Alt + K',
         privacy: 'Tüm renk hesaplamaları yerel matematik motoruyla hesaplanır.',
-        code: 'calcContrastRatio("#06b6d4", "#08090d");\n// -> 14.8:1 (AAA Pass)'
+        code: 'calcContrastRatio("#06b6d4", "#08090d");\\n// -> 14.8:1 (AAA Pass)'
       },
       portkiller: {
         name: 'Port Killer (TCP/UDP Watchdog)',
@@ -2984,7 +2984,7 @@ graph LR
         ram: '~15 MB Heap',
         shortcut: 'Ctrl + Alt + P',
         privacy: 'Sadece yerel ağ port tablosunu okur. Dış ağa sıfır bağlantı.',
-        code: 'await window.api.portKiller.killPort(3000);\n// -> { killedPid: 14280, process: "node.exe" }'
+        code: 'await window.api.portKiller.killPort(3000);\\n// -> { killedPid: 14280, process: "node.exe" }'
       }
     };
 
@@ -3010,7 +3010,7 @@ graph LR
         ram: '~15 MB Heap',
         shortcut: 'Ctrl + K -> Ara',
         privacy: '%100 Yerel İcra. Dış sunuculara sıfır paket gönderilir. Offline-First mimari.',
-        code: '// NexusHub IPC Çağrısı\nawait window.api.' + toolKey + '.execute();'
+        code: '// NexusHub IPC Çağrısı\\nawait window.api.' + toolKey + '.execute();'
       };
 
       if (title) title.innerText = spec.name;
@@ -3488,10 +3488,10 @@ graph LR
       if (action === 'tempmail') {
         const fakeMail = 'temp_' + Math.random().toString(36).substring(2, 8) + '@nexushub.cloud';
         await safeCopyToClipboard(fakeMail);
-        alert('⚡ Tek Kullanımlık Posta Üretildi ve Kopyalandı:\n' + fakeMail);
+        alert('⚡ Tek Kullanımlık Posta Üretildi ve Kopyalandı:\\n' + fakeMail);
       } else if (action === 'ram') {
         playCyberSound('purge');
-        alert('🧹 Sistem Belleği Temizlendi!\n2,140 MB geçici bellek alanı boşaltıldı.');
+        alert('🧹 Sistem Belleği Temizlendi!\\n2,140 MB geçici bellek alanı boşaltıldı.');
       } else if (action === 'benchmark') {
         document.getElementById('benchmark')?.scrollIntoView({ behavior: 'smooth' });
       } else if (action === 'simulator') {
@@ -3587,7 +3587,7 @@ graph LR
     // ─── Hero Matrix Cyber Rain Backdrop ────────────────────────────────────
     function initMatrixRain() {
       const canvas = document.getElementById('hero-matrix-canvas');
-      if (!canvas) return;
+      if (!canvas || !canvas.getContext) return;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
@@ -3650,9 +3650,8 @@ graph LR
             count++;
           }
         });
-        strippedCount = count > 0 ? count : 3;
-        u.search = searchParams.toString();
-        cleanUrl = u.toString().replace(/(\?)$/, '');
+        cleanUrl = u.toString();
+        if (cleanUrl.endsWith('?')) cleanUrl = cleanUrl.slice(0, -1);
       } catch (e) {
         cleanUrl = 'https://clean-dest.org/direct_download';
       }
@@ -3785,7 +3784,7 @@ graph LR
     function triggerQuickRamFlush() {
       toggleFloatingOrbMenu();
       playCyberSound('purge');
-      alert('⚡ [Nexus Orb] Sistem RAM Belleği Boşaltıldı!\n1,840 MB geçici bellek önbelleği başarıyla temizlendi.');
+      alert('⚡ [Nexus Orb] Sistem RAM Belleği Boşaltıldı!\\n1,840 MB geçici bellek önbelleği başarıyla temizlendi.');
     }
 
     async function triggerQuickTempMail() {
@@ -3793,7 +3792,7 @@ graph LR
       const fakeMail = 'orb_' + Math.random().toString(36).substring(2, 7) + '@nexusmail.org';
       await safeCopyToClipboard(fakeMail);
       playCyberSound('success');
-      alert('📬 [Nexus Orb] Tek Kullanımlık TempMail Panoya Kopyalandı:\n' + fakeMail);
+      alert('📬 [Nexus Orb] Tek Kullanımlık TempMail Panoya Kopyalandı:\\n' + fakeMail);
     }
 
     // ─── FAQ Accordion Controls ─────────────────────────────────────────────
