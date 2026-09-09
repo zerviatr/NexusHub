@@ -23,8 +23,8 @@ export function renderLandingPage(): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="meta-title">NexusHub — Abonelik Tuzağına Son. 15+ Siber Güç Tek Yazılımda.</title>
-  <meta name="description" content="TempMail, Evrensel Reklam/Link Çözücü, DoD 7-Pass Dosya İmha Kalkanı, Canlı Donanım Teşhisi ve Şifreleme Kasası. Tek seferlik ödeme, sıfır abonelik.">
+  <title id="meta-title">NexusHub — Abonelik Tuzağına Son. 20+ Siber Güç Tek Yazılımda.</title>
+  <meta name="description" content="Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD 7-Pass Dosya İmha Kalkanı, Canlı Donanım Teşhisi ve Şifreleme Kasası. Tek seferlik ödeme, sıfır abonelik.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -39,8 +39,8 @@ export function renderLandingPage(): string {
               card: '#0f1118',
               surface: '#151822',
               border: '#1f2433',
-              cyan: '#06b6d4',
-              accent: '#3b82f6',
+              cyan: 'rgb(var(--c-cyan, 6 182 212) / <alpha-value>)',
+              accent: 'rgb(var(--c-accent, 59 130 246) / <alpha-value>)',
               purple: '#8b5cf6',
               emerald: '#10b981',
               text: '#f1f5f9',
@@ -57,13 +57,51 @@ export function renderLandingPage(): string {
     }
   </script>
   <style>
+    :root {
+      --c-cyan: 6 182 212;
+      --c-accent: 59 130 246;
+      --neon-glow: rgba(6, 182, 212, 0.35);
+      --bg-radial: radial-gradient(circle at 50% -10%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
+                   radial-gradient(circle at 10% 40%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                   radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.06) 0%, transparent 40%);
+    }
+    [data-theme="matrix"] {
+      --c-cyan: 16 185 129;
+      --c-accent: 5 150 105;
+      --neon-glow: rgba(16, 185, 129, 0.4);
+      --bg-radial: radial-gradient(circle at 50% -10%, rgba(16, 185, 129, 0.16) 0%, transparent 50%),
+                   radial-gradient(circle at 10% 40%, rgba(5, 150, 105, 0.12) 0%, transparent 40%),
+                   radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+    }
+    [data-theme="cyberpunk"] {
+      --c-cyan: 250 204 21;
+      --c-accent: 6 182 212;
+      --neon-glow: rgba(250, 204, 21, 0.4);
+      --bg-radial: radial-gradient(circle at 50% -10%, rgba(250, 204, 21, 0.15) 0%, transparent 50%),
+                   radial-gradient(circle at 10% 40%, rgba(6, 182, 212, 0.12) 0%, transparent 40%),
+                   radial-gradient(circle at 90% 80%, rgba(250, 204, 21, 0.08) 0%, transparent 40%);
+    }
+    [data-theme="synthwave"] {
+      --c-cyan: 236 72 153;
+      --c-accent: 139 92, 246;
+      --neon-glow: rgba(236, 72, 153, 0.4);
+      --bg-radial: radial-gradient(circle at 50% -10%, rgba(236, 72, 153, 0.16) 0%, transparent 50%),
+                   radial-gradient(circle at 10% 40%, rgba(139, 92, 246, 0.12) 0%, transparent 40%),
+                   radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.08) 0%, transparent 40%);
+    }
+    [data-theme="crimson"] {
+      --c-cyan: 239 68 68;
+      --c-accent: 249 115 22;
+      --neon-glow: rgba(239, 68, 68, 0.4);
+      --bg-radial: radial-gradient(circle at 50% -10%, rgba(239, 68, 68, 0.16) 0%, transparent 50%),
+                   radial-gradient(circle at 10% 40%, rgba(249, 115, 22, 0.12) 0%, transparent 40%),
+                   radial-gradient(circle at 90% 80%, rgba(239, 68, 68, 0.08) 0%, transparent 40%);
+    }
     body {
       background-color: #08090d;
       color: #f1f5f9;
-      background-image: 
-        radial-gradient(circle at 50% -10%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
-        radial-gradient(circle at 10% 40%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.06) 0%, transparent 40%);
+      background-image: var(--bg-radial);
+      transition: background-image 0.4s ease;
     }
     .grid-pattern {
       background-size: 40px 40px;
@@ -72,7 +110,7 @@ export function renderLandingPage(): string {
         linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
     }
     .neon-glow {
-      box-shadow: 0 0 50px -10px rgba(6, 182, 212, 0.35);
+      box-shadow: 0 0 50px -10px var(--neon-glow);
     }
     .card-glass {
       background: rgba(15, 17, 24, 0.75);
@@ -80,8 +118,8 @@ export function renderLandingPage(): string {
       border: 1px solid rgba(255, 255, 255, 0.07);
     }
     .card-glass:hover {
-      border-color: rgba(6, 182, 212, 0.35);
-      box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.2);
+      border-color: rgba(var(--c-cyan), 0.4);
+      box-shadow: 0 10px 30px -10px rgba(var(--c-cyan), 0.25);
     }
     @keyframes floatSlow {
       0%, 100% { transform: translateY(0); }
@@ -151,11 +189,11 @@ export function renderLandingPage(): string {
       
       <!-- Top Live Status Pill -->
       <div class="flex justify-center mb-8">
-        <div onclick="openChangelogModal()" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full card-glass border border-nexus-cyan/30 text-xs font-mono text-nexus-cyan shadow-[0_0_15px_rgba(6,182,212,0.15)] cursor-pointer hover:border-nexus-cyan transition-all">
+        <div onclick="openChangelogModal()" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full card-glass border border-nexus-cyan/30 text-xs font-mono text-nexus-cyan shadow-[0_0_15px_rgba(var(--c-cyan),0.2)] cursor-pointer hover:border-nexus-cyan transition-all">
           <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-ping"></span>
-          <span>v2.0.3 Yayında</span>
+          <span>v2.2.0 Yayında</span>
           <span class="text-nexus-border">|</span>
-          <span class="text-white" data-i18n="hero.pill.tools">15+ Siber Güç</span>
+          <span class="text-white" data-i18n="hero.pill.tools">20+ Siber Güç</span>
           <span class="text-nexus-border">|</span>
           <span class="text-emerald-400" data-i18n="hero.pill.noSub">Sıfır Abonelik Tuzağı</span>
           <span class="text-nexus-cyan text-[10px]">↗</span>
@@ -166,19 +204,19 @@ export function renderLandingPage(): string {
       <div class="text-center max-w-4xl mx-auto mb-8">
         <h1 class="font-heading font-black text-4xl sm:text-6xl md:text-7xl tracking-tight text-white leading-[1.08] mb-6">
           <span data-i18n="hero.title1">Aylık Aboneliklere</span> <span class="bg-gradient-to-r from-nexus-cyan via-nexus-accent to-purple-400 bg-clip-text text-transparent" data-i18n="hero.title2">Son.</span><br>
-          <span data-i18n="hero.title3">Tek Yazılım,</span> <span class="underline decoration-nexus-cyan/40 underline-offset-8" data-i18n="hero.title4">15+ Siber Güç.</span>
+          <span data-i18n="hero.title3">Tek Yazılım,</span> <span class="underline decoration-nexus-cyan/40 underline-offset-8" data-i18n="hero.title4">20+ Siber Güç.</span>
         </h1>
         <p class="text-base sm:text-lg md:text-xl text-nexus-muted leading-relaxed max-w-2xl mx-auto font-sans" data-i18n="hero.desc">
-          Tek kullanımlık geçici posta, reklam & link çözücü, DoD askeri veri imha kalkanı, donanım monitörü ve şifreli kasa. Her şeye ayrı ayrı para ödemeyi bırakın.
+          Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD askeri veri imha kalkanı, donanım monitörü ve şifreli kasa. Her araca ayrı para ödemeyi bırakın.
         </p>
       </div>
 
       <!-- Quick Command Bar Trigger in Hero -->
       <div class="max-w-xl mx-auto mb-10">
-        <div onclick="openCmdPalette()" class="group p-2 sm:p-2.5 rounded-2xl card-glass border border-nexus-border/80 hover:border-nexus-cyan/60 flex items-center justify-between gap-3 cursor-pointer shadow-[0_10px_35px_rgba(0,0,0,0.5)] hover:shadow-[0_0_35px_rgba(6,182,212,0.2)] transition-all">
+        <div onclick="openCmdPalette()" class="group p-2 sm:p-2.5 rounded-2xl card-glass border border-nexus-border/80 hover:border-nexus-cyan/60 flex items-center justify-between gap-3 cursor-pointer shadow-[0_10px_35px_rgba(0,0,0,0.5)] hover:shadow-[0_0_35px_rgba(var(--c-cyan),0.25)] transition-all">
           <div class="flex items-center gap-3 pl-2 truncate">
             <span class="text-nexus-cyan text-sm sm:text-base animate-pulse">⚡</span>
-            <span class="text-xs sm:text-sm text-nexus-muted group-hover:text-white transition-colors truncate">Bir araç arayın veya simüle edin... (Örn: tempmail, ram, wifi)</span>
+            <span class="text-xs sm:text-sm text-nexus-muted group-hover:text-white transition-colors truncate">Bir araç arayın veya simüle edin... (Örn: scratchpad, port, color, tempmail)</span>
           </div>
           <div class="flex items-center gap-1.5 pr-1 shrink-0">
             <kbd class="px-2 py-1 rounded-lg bg-nexus-surface border border-nexus-border text-[11px] font-mono text-nexus-cyan font-bold shadow-sm group-hover:border-nexus-cyan/50">Ctrl + K</kbd>
@@ -188,9 +226,9 @@ export function renderLandingPage(): string {
 
       <!-- Hero Action Buttons -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
-        <a href="https://github.com/zerviatr/NexusHub/releases/latest" target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-heading font-black text-base flex items-center justify-center gap-3 shadow-[0_0_35px_rgba(6,182,212,0.5)] transition-all">
+        <a href="https://github.com/zerviatr/NexusHub/releases/latest" target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-heading font-black text-base flex items-center justify-center gap-3 shadow-[0_0_35px_rgba(var(--c-cyan),0.5)] transition-all">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-          <span data-i18n="hero.btnDownload">Windows için İndir (v2.0.3)</span>
+          <span data-i18n="hero.btnDownload">Windows için İndir (v2.2.0)</span>
         </a>
         <a href="#pricing" class="w-full sm:w-auto px-8 py-4 rounded-2xl card-glass border border-nexus-border/80 hover:border-nexus-cyan/50 active:scale-95 text-white font-heading font-bold text-base flex items-center justify-center gap-2 transition-all">
           <span data-i18n="hero.btnPro">Ömür Boyu Pro Lisans</span>
@@ -212,7 +250,7 @@ export function renderLandingPage(): string {
   <!-- INTERACTIVE DESKTOP APP MOCKUP SIMULATOR (CANLI ARAYÜZ VİTRİNİ) -->
   <section id="simulator" class="relative z-10 py-16 border-t border-nexus-border/40 bg-nexus-surface/20 scroll-mt-24">
     <div class="max-w-6xl mx-auto px-6">
-      <div class="text-center max-w-3xl mx-auto mb-12">
+      <div class="text-center max-w-3xl mx-auto mb-8">
         <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan" data-i18n="sim.tag">Canlı Arayüzü İncele</span>
         <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-2 mb-4" data-i18n="sim.title">
           NexusHub Masaüstünüzde Nasıl Görünür?
@@ -220,6 +258,34 @@ export function renderLandingPage(): string {
         <p class="text-nexus-muted font-sans text-sm sm:text-base" data-i18n="sim.desc">
           İndirmeden önce aşağıdaki sekmelere tıklayarak NexusHub'ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.
         </p>
+      </div>
+
+      <!-- Live 5-Cyber Theme Switcher Bar -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-8">
+        <span class="text-xs font-mono text-nexus-muted flex items-center gap-1.5 mr-2">
+          <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-pulse"></span>
+          <span data-i18n="sim.themeLabel">Siber Tema Seçici:</span>
+        </span>
+        <button onclick="switchCyberTheme('default')" id="theme-btn-default" class="theme-btn px-3 py-1.5 rounded-xl border border-nexus-cyan/40 bg-nexus-cyan/20 text-nexus-cyan font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm">
+          <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+          <span>Cyber Violet</span>
+        </button>
+        <button onclick="switchCyberTheme('matrix')" id="theme-btn-matrix" class="theme-btn px-3 py-1.5 rounded-xl border border-nexus-border/60 hover:border-emerald-500/40 text-nexus-muted hover:text-white font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+          <span>Matrix Emerald</span>
+        </button>
+        <button onclick="switchCyberTheme('cyberpunk')" id="theme-btn-cyberpunk" class="theme-btn px-3 py-1.5 rounded-xl border border-nexus-border/60 hover:border-yellow-400/40 text-nexus-muted hover:text-white font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer">
+          <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+          <span>Cyberpunk 2077</span>
+        </button>
+        <button onclick="switchCyberTheme('synthwave')" id="theme-btn-synthwave" class="theme-btn px-3 py-1.5 rounded-xl border border-nexus-border/60 hover:border-pink-500/40 text-nexus-muted hover:text-white font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer">
+          <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
+          <span>Synthwave 80s</span>
+        </button>
+        <button onclick="switchCyberTheme('crimson')" id="theme-btn-crimson" class="theme-btn px-3 py-1.5 rounded-xl border border-nexus-border/60 hover:border-red-500/40 text-nexus-muted hover:text-white font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer">
+          <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+          <span>Crimson Ops</span>
+        </button>
       </div>
 
       <!-- Desktop Frame Mockup -->
@@ -231,7 +297,7 @@ export function renderLandingPage(): string {
             <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
             <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
             <span class="ml-3 font-mono text-xs text-nexus-muted font-semibold flex items-center gap-1.5">
-              <span>NexusHub v2.0.3 Pro Edition</span>
+              <span>NexusHub v2.2.0 Pro Edition</span>
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             </span>
           </div>
@@ -241,29 +307,38 @@ export function renderLandingPage(): string {
         </div>
 
         <!-- Main Body: Sidebar + Dynamic Workspace -->
-        <div class="grid grid-cols-1 md:grid-cols-4 min-h-[460px]">
+        <div class="grid grid-cols-1 md:grid-cols-4 min-h-[500px]">
           
           <!-- Mock Sidebar -->
-          <div class="border-b md:border-b-0 md:border-r border-nexus-border/60 bg-nexus-bg/60 p-4 flex md:flex-col gap-1.5 overflow-x-auto md:overflow-visible">
-            <button onclick="switchMockTool('tempmail')" id="mock-btn-tempmail" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 bg-nexus-cyan/15 text-nexus-cyan border border-nexus-cyan/30 transition-all cursor-pointer">
+          <div class="border-b md:border-b-0 md:border-r border-nexus-border/60 bg-nexus-bg/60 p-4 flex md:flex-col gap-1.5 overflow-x-auto md:overflow-y-auto max-h-[560px]">
+            <button onclick="switchMockTool('tempmail')" id="mock-btn-tempmail" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 bg-nexus-cyan/15 text-nexus-cyan border border-nexus-cyan/30 transition-all cursor-pointer shrink-0">
               <span>📬</span> <span data-i18n="sim.tools.tempmail">TempMail Posta</span>
             </button>
-            <button onclick="switchMockTool('decrypter')" id="mock-btn-decrypter" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer">
+            <button onclick="switchMockTool('scratchpad')" id="mock-btn-scratchpad" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0">
+              <span>📝</span> <span data-i18n="sim.tools.scratchpad">Scratchpad & Flow</span>
+            </button>
+            <button onclick="switchMockTool('color')" id="mock-btn-color" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0">
+              <span>🎨</span> <span data-i18n="sim.tools.color">Color & WCAG</span>
+            </button>
+            <button onclick="switchMockTool('portkiller')" id="mock-btn-portkiller" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0">
+              <span>⚡</span> <span data-i18n="sim.tools.portkiller">Port Killer</span>
+            </button>
+            <button onclick="switchMockTool('decrypter')" id="mock-btn-decrypter" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0">
               <span>🔗</span> <span data-i18n="sim.tools.decrypter">Link Decrypter</span>
             </button>
-            <button onclick="switchMockTool('password')" id="mock-btn-password" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer">
+            <button onclick="switchMockTool('password')" id="mock-btn-password" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0">
               <span>🔑</span> <span data-i18n="sim.tools.password">Parola Analizörü</span>
             </button>
-            <button onclick="switchMockTool('fortress')" id="mock-btn-fortress" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer">
+            <button onclick="switchMockTool('fortress')" id="mock-btn-fortress" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0">
               <span>🛡️</span> <span data-i18n="sim.tools.fortress">Cyber Fortress</span>
             </button>
-            <button onclick="switchMockTool('sentinel')" id="mock-btn-sentinel" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer">
+            <button onclick="switchMockTool('sentinel')" id="mock-btn-sentinel" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0">
               <span>⚡</span> <span data-i18n="sim.tools.sentinel">Resource Sentinel</span>
             </button>
-            <button onclick="switchMockTool('orb')" id="mock-btn-orb" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer">
+            <button onclick="switchMockTool('orb')" id="mock-btn-orb" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0">
               <span>🔮</span> <span data-i18n="sim.tools.orb">Floating Orb HUD</span>
             </button>
-            <button onclick="switchMockTool('hash')" id="mock-btn-hash" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer">
+            <button onclick="switchMockTool('hash')" id="mock-btn-hash" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0">
               <span>⚡</span> <span data-i18n="sim.tools.hash">Hash & Base64</span>
             </button>
           </div>
@@ -299,6 +374,196 @@ export function renderLandingPage(): string {
                     <div class="text-nexus-muted text-[11px]">Giriş kodunuz: <b class="text-nexus-cyan font-mono">729-410</b></div>
                   </div>
                   <span class="px-2 py-1 rounded bg-nexus-cyan/20 text-nexus-cyan text-[10px] font-mono font-bold">Kodu Kopyala</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel: Scratchpad Ultimate & Flowchart Preview (NEW) -->
+            <div id="mock-panel-scratchpad" class="space-y-4 hidden">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 class="font-heading font-black text-xl text-white flex items-center gap-2">
+                    Scratchpad Ultimate & Flowchart <span class="px-2 py-0.5 text-[10px] rounded bg-nexus-cyan/20 text-nexus-cyan font-mono font-bold">İNTERAKTİF</span>
+                  </h3>
+                  <p class="text-xs text-nexus-muted mt-0.5">Anlık Markdown düzenleme, canlı Mermaid akış diyagramı ve yerel otomatik kayıt.</p>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button onclick="loadSimMdTemplate('arch')" class="px-2.5 py-1.5 rounded-lg bg-nexus-surface hover:bg-nexus-border text-xs font-mono text-nexus-cyan border border-nexus-border/60 transition-all cursor-pointer">
+                    📐 Mimari
+                  </button>
+                  <button onclick="loadSimMdTemplate('api')" class="px-2.5 py-1.5 rounded-lg bg-nexus-surface hover:bg-nexus-border text-xs font-mono text-purple-400 border border-nexus-border/60 transition-all cursor-pointer">
+                    ⚡ API Notu
+                  </button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between text-[11px] font-mono text-nexus-muted">
+                    <span>MARKDOWN GİRDİSİ</span>
+                    <span id="sim-md-stats" class="text-nexus-cyan">42 kelime • 280 karakter</span>
+                  </div>
+                  <textarea id="sim-md-input" oninput="updateSimMarkdown()" class="w-full h-40 bg-nexus-bg border border-nexus-border/80 rounded-xl p-3 font-mono text-xs text-nexus-text outline-none focus:border-nexus-cyan resize-none leading-relaxed"># 🚀 NexusHub v2.2.0
+
+> Güvenli, yerel ve **sıfır gecikmeli** geliştirici notları.
+
+- [x] DoD 7-Pass Shredder
+- [x] Mermaid Akış Motoru
+- [x] Port Killer & Telemetry
+
+\`\`\`mermaid
+graph LR
+  Client[Kullanıcı] --> Proxy[Ters Proxy]
+  Proxy --> Core((Nexus v2.2))
+\`\`\`</textarea>
+                </div>
+
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between text-[11px] font-mono text-nexus-muted">
+                    <span>CANLI ÖNİZLEME & DİYAGRAM</span>
+                    <span class="text-emerald-400 text-[10px]">✓ Anında Render</span>
+                  </div>
+                  <div id="sim-md-preview" class="w-full h-40 bg-nexus-surface/50 border border-nexus-border/80 rounded-xl p-3 text-xs overflow-y-auto space-y-2 font-sans">
+                    <h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">🚀 NexusHub v2.2.0</h4>
+                    <p class="text-[11px] text-nexus-muted italic border-l-2 border-nexus-cyan pl-2">Güvenli, yerel ve <b class="text-white">sıfır gecikmeli</b> geliştirici notları.</p>
+                    <ul class="text-[11px] space-y-1 text-emerald-400 font-mono">
+                      <li>✓ DoD 7-Pass Shredder</li>
+                      <li>✓ Mermaid Akış Motoru</li>
+                      <li>✓ Port Killer & Telemetry</li>
+                    </ul>
+                    <div class="mt-2 p-2 rounded-lg bg-nexus-bg border border-nexus-cyan/30 flex items-center justify-center gap-2 font-mono text-[10px]">
+                      <span class="px-2 py-1 rounded bg-nexus-surface border border-nexus-border text-white">Client</span>
+                      <span class="text-nexus-cyan">──▶</span>
+                      <span class="px-2 py-1 rounded bg-nexus-surface border border-nexus-border text-white">Proxy</span>
+                      <span class="text-nexus-cyan">──▶</span>
+                      <span class="px-2 py-1 rounded bg-nexus-cyan/20 border border-nexus-cyan text-nexus-cyan font-bold">Nexus v2.2</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel: Color Studio & WCAG Contrast Preview (NEW) -->
+            <div id="mock-panel-color" class="space-y-4 hidden">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 class="font-heading font-black text-xl text-white flex items-center gap-2">
+                    Color Studio & WCAG Kontrast Analizörü <span class="px-2 py-0.5 text-[10px] rounded bg-nexus-cyan/20 text-nexus-cyan font-mono font-bold">CANLI PALET</span>
+                  </h3>
+                  <p class="text-xs text-nexus-muted mt-0.5">Geliştirici renk paletleri, HEX/RGB/HSL dönüşümleri ve WCAG erişilebilirlik puanı.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input type="color" id="sim-color-picker" onchange="updateSimColor(this.value)" value="#06b6d4" class="w-8 h-8 rounded-lg bg-transparent border border-nexus-border cursor-pointer">
+                  <button onclick="randomizeSimColor()" class="px-2.5 py-1.5 rounded-lg bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan font-mono text-xs hover:bg-nexus-cyan/30 cursor-pointer">🎲 Rastgele</button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div id="sim-color-swatch" class="p-4 rounded-2xl border border-nexus-border flex flex-col justify-between h-36 transition-colors shadow-lg" style="background-color: #06b6d4;">
+                  <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-black/60 text-white w-fit">SEÇİLEN RENK</span>
+                  <div>
+                    <div id="sim-color-hex" class="text-lg font-mono font-black text-white drop-shadow">#06b6d4</div>
+                    <div id="sim-color-rgb" class="text-[11px] font-mono text-white/90 drop-shadow">rgb(6, 182, 212)</div>
+                  </div>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-nexus-bg border border-nexus-border/80 flex flex-col justify-between">
+                  <div class="text-[11px] font-mono text-nexus-muted">WCAG 2.1 ERİŞİLEBİLİRLİK</div>
+                  <div class="my-2">
+                    <div class="flex items-baseline gap-2">
+                      <span id="sim-contrast-ratio" class="font-heading font-black text-2xl text-emerald-400">8.42 : 1</span>
+                      <span class="text-[10px] font-mono text-nexus-muted">Koyu Zemin</span>
+                    </div>
+                    <div class="flex items-center gap-2 mt-1">
+                      <span id="sim-wcag-aa" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono text-[10px] font-bold">✓ AA GEÇTİ</span>
+                      <span id="sim-wcag-aaa" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono text-[10px] font-bold">✓ AAA GEÇTİ</span>
+                    </div>
+                  </div>
+                  <div class="text-[10px] text-nexus-muted font-sans">Okunabilirlik standardına tam uyumlu.</div>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-nexus-bg border border-nexus-border/80 flex flex-col justify-between space-y-2">
+                  <div class="text-[11px] font-mono text-nexus-muted">1-TIK TOKEN KOPYALA</div>
+                  <div class="space-y-1.5 font-mono text-[11px]">
+                    <button onclick="copySimColorToken('hex')" class="w-full text-left px-2.5 py-1.5 rounded-lg bg-nexus-surface hover:bg-nexus-border text-nexus-cyan flex justify-between items-center transition-all cursor-pointer">
+                      <span id="sim-token-hex">#06b6d4</span>
+                      <span class="text-[10px] text-nexus-muted">HEX 📋</span>
+                    </button>
+                    <button onclick="copySimColorToken('tailwind')" class="w-full text-left px-2.5 py-1.5 rounded-lg bg-nexus-surface hover:bg-nexus-border text-purple-400 flex justify-between items-center transition-all cursor-pointer">
+                      <span id="sim-token-tw">text-[#06b6d4]</span>
+                      <span class="text-[10px] text-nexus-muted">TW 📋</span>
+                    </button>
+                  </div>
+                  <div id="sim-color-toast" class="text-[10px] text-emerald-400 font-mono h-4"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel: Port Killer Preview (NEW) -->
+            <div id="mock-panel-portkiller" class="space-y-4 hidden">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 class="font-heading font-black text-xl text-white flex items-center gap-2">
+                    Port Killer & TCP/UDP Watchdog <span class="px-2 py-0.5 text-[10px] rounded bg-red-500/20 text-red-400 font-mono font-bold">CANLI SONLANDIRICI</span>
+                  </h3>
+                  <p class="text-xs text-nexus-muted mt-0.5">Çakışan yerel portları ve asılı kalan geliştirici sunucularını anında yok edin.</p>
+                </div>
+                <button onclick="resetSimPorts()" class="px-3 py-1.5 rounded-lg bg-nexus-surface hover:bg-nexus-border border border-nexus-border text-xs font-mono text-nexus-muted hover:text-white transition-all cursor-pointer shrink-0">
+                  Yenile ↻
+                </button>
+              </div>
+
+              <div class="space-y-2 font-mono text-xs">
+                <div id="sim-port-row-3000" class="p-3 rounded-xl bg-nexus-bg border border-nexus-border/80 flex items-center justify-between transition-all">
+                  <div class="flex items-center gap-3">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                    <div>
+                      <div class="text-white font-bold flex items-center gap-2">
+                        <span>PORT 3000 (TCP)</span>
+                        <span class="px-1.5 py-0.5 rounded bg-red-500/20 text-red-400 text-[10px]">ÇAKIŞMA</span>
+                      </div>
+                      <div class="text-[11px] text-nexus-muted font-sans">node.exe &bull; PID: 14280 &bull; 127.0.0.1:3000 (Next.js)</div>
+                    </div>
+                  </div>
+                  <button onclick="killSimPort(3000)" class="px-3 py-1.5 rounded-lg bg-red-500/20 border border-red-500/40 hover:bg-red-500 text-red-400 hover:text-white font-bold transition-all cursor-pointer text-xs">
+                    Öldür ✕
+                  </button>
+                </div>
+
+                <div id="sim-port-row-8080" class="p-3 rounded-xl bg-nexus-bg border border-nexus-border/80 flex items-center justify-between transition-all">
+                  <div class="flex items-center gap-3">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                    <div>
+                      <div class="text-white font-bold flex items-center gap-2">
+                        <span>PORT 8080 (TCP)</span>
+                        <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[10px]">MEŞGUL</span>
+                      </div>
+                      <div class="text-[11px] text-nexus-muted font-sans">webpack.exe &bull; PID: 9124 &bull; 0.0.0.0:8080</div>
+                    </div>
+                  </div>
+                  <button onclick="killSimPort(8080)" class="px-3 py-1.5 rounded-lg bg-red-500/20 border border-red-500/40 hover:bg-red-500 text-red-400 hover:text-white font-bold transition-all cursor-pointer text-xs">
+                    Öldür ✕
+                  </button>
+                </div>
+
+                <div id="sim-port-row-5432" class="p-3 rounded-xl bg-nexus-bg border border-nexus-border/80 flex items-center justify-between transition-all">
+                  <div class="flex items-center gap-3">
+                    <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+                    <div>
+                      <div class="text-white font-bold flex items-center gap-2">
+                        <span>PORT 5432 (TCP)</span>
+                        <span class="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-400 text-[10px]">LİSTENİNG</span>
+                      </div>
+                      <div class="text-[11px] text-nexus-muted font-sans">postgres.exe &bull; PID: 4310 &bull; 127.0.0.1:5432</div>
+                    </div>
+                  </div>
+                  <button onclick="killSimPort(5432)" class="px-3 py-1.5 rounded-lg bg-red-500/20 border border-red-500/40 hover:bg-red-500 text-red-400 hover:text-white font-bold transition-all cursor-pointer text-xs">
+                    Öldür ✕
+                  </button>
+                </div>
+
+                <div id="sim-port-empty-msg" class="hidden p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-center text-emerald-400 font-mono text-xs">
+                  🎉 Tüm çakışan portlar temizlendi! Sistem portları serbest.
                 </div>
               </div>
             </div>
@@ -512,10 +777,32 @@ export function renderLandingPage(): string {
 
           <label class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/80 cursor-pointer hover:border-nexus-cyan/40 transition-all select-none">
             <div class="flex items-center gap-3">
+              <input type="checkbox" checked onchange="calcRoi()" class="w-4 h-4 accent-nexus-cyan rounded" id="roi-postman" data-price="14">
+              <div>
+                <div class="text-xs font-bold text-white">Postman & API Test Yazılımları</div>
+                <div class="text-[11px] text-nexus-muted">cURL Runner & Yerel REST API İstek Motoru</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono text-red-400 font-bold">$14 / ay</span>
+          </label>
+
+          <label class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/80 cursor-pointer hover:border-nexus-cyan/40 transition-all select-none">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" checked onchange="calcRoi()" class="w-4 h-4 accent-nexus-cyan rounded" id="roi-obsidian" data-price="10">
+              <div>
+                <div class="text-xs font-bold text-white">Bulut Not Alma & Akış Diyagramı Araçları</div>
+                <div class="text-[11px] text-nexus-muted">Scratchpad Ultimate & Canlı Mermaid Motoru</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono text-red-400 font-bold">$10 / ay</span>
+          </label>
+
+          <label class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/80 cursor-pointer hover:border-nexus-cyan/40 transition-all select-none">
+            <div class="flex items-center gap-3">
               <input type="checkbox" checked onchange="calcRoi()" class="w-4 h-4 accent-nexus-cyan rounded" id="roi-shredder" data-price="12">
               <div>
-                <div class="text-xs font-bold text-white">DoD Dosya İmha & Şifreli Kasa</div>
-                <div class="text-[11px] text-nexus-muted">Kalıcı silme ve dosya kasası yazılımları</div>
+                <div class="text-xs font-bold text-white">DoD 7-Pass Dosya İmha & Şifreli Kasa</div>
+                <div class="text-[11px] text-nexus-muted">Cyber Fortress kalıcı veri silme yazılımları</div>
               </div>
             </div>
             <span class="text-xs font-mono text-red-400 font-bold">$12 / ay</span>
@@ -526,7 +813,18 @@ export function renderLandingPage(): string {
               <input type="checkbox" checked onchange="calcRoi()" class="w-4 h-4 accent-nexus-cyan rounded" id="roi-sentinel" data-price="8">
               <div>
                 <div class="text-xs font-bold text-white">Donanım Monitörü & RAM Optimizatörü</div>
-                <div class="text-[11px] text-nexus-muted">Sistem hızlandırma araçları</div>
+                <div class="text-[11px] text-nexus-muted">Resource Sentinel sistem hızlandırma</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono text-red-400 font-bold">$8 / ay</span>
+          </label>
+
+          <label class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/80 cursor-pointer hover:border-nexus-cyan/40 transition-all select-none">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" checked onchange="calcRoi()" class="w-4 h-4 accent-nexus-cyan rounded" id="roi-color" data-price="8">
+              <div>
+                <div class="text-xs font-bold text-white">Tasarım & WCAG Kontrast Araçları</div>
+                <div class="text-[11px] text-nexus-muted">Color Studio & Canlı Kontrast Doğrulayıcı</div>
               </div>
             </div>
             <span class="text-xs font-mono text-red-400 font-bold">$8 / ay</span>
@@ -548,10 +846,10 @@ export function renderLandingPage(): string {
         <div class="p-6 rounded-2xl bg-gradient-to-b from-emerald-500/10 via-nexus-surface to-nexus-bg border border-emerald-500/40 text-center flex flex-col justify-between h-full">
           <div>
             <span class="text-[11px] font-mono uppercase tracking-widest text-emerald-400 font-bold">YILLIK KAZANCINIZ</span>
-            <div id="roi-annual-val" class="font-heading font-black text-4xl text-emerald-400 mt-2 mb-1">$420</div>
-            <div id="roi-try-val" class="text-xs font-mono text-nexus-muted mb-4">(Yaklaşık ₺15,500 TL Tasarruf)</div>
+            <div id="roi-annual-val" class="font-heading font-black text-4xl text-emerald-400 mt-2 mb-1">$804</div>
+            <div id="roi-try-val" class="text-xs font-mono text-nexus-muted mb-4">(Yaklaşık ₺29,750 TL Tasarruf)</div>
             <p class="text-xs text-nexus-text leading-relaxed">
-              NexusHub tek seferlik <b>₺349 ($29)</b> ödeme ile <span class="text-emerald-400 font-bold">8 günde</span> kendi maliyetini amorti eder!
+              NexusHub tek seferlik <b>₺349 ($29)</b> ödeme ile <span class="text-emerald-400 font-bold">13 günde</span> kendi maliyetini amorti eder!
             </p>
           </div>
           <a href="#pricing" class="mt-6 w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-nexus-bg font-heading font-black text-xs transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)]">
@@ -743,31 +1041,34 @@ export function renderLandingPage(): string {
     </div>
   </section>
 
-  <!-- ARSENAL 15+ TOOLS GRID -->
+  <!-- ARSENAL 20+ TOOLS GRID -->
   <section id="arsenal" class="relative z-10 py-24 border-t border-nexus-border/40 scroll-mt-24">
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto mb-10">
-        <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan">15+ Profesyonel Modül</span>
+        <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan">20+ Profesyonel Modül</span>
         <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-2 mb-4">
           Cebinizdeki Siber İsviçre Çakısı.
         </h2>
         <p class="text-nexus-muted font-sans text-base sm:text-lg mb-8">
-          Geliştiriciler, güvenlik araştırmacıları, freelancerlar ve gizliliğine önem verenler için hazırlandı.
+          Geliştiriciler, güvenlik araştırmacıları, freelancerlar ve dijital egemenliğine önem verenler için tek çatı altında.
         </p>
 
         <!-- Category Filter Pills -->
         <div class="inline-flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-2xl card-glass border border-nexus-border/80 text-xs font-mono">
           <button onclick="filterArsenal('all', this)" class="arsenal-tab-btn px-4 py-2 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan font-bold transition-all cursor-pointer">
-            Tüm Modüller (15+)
+            Tüm Modüller (20)
           </button>
           <button onclick="filterArsenal('privacy', this)" class="arsenal-tab-btn px-4 py-2 rounded-xl text-nexus-muted hover:text-white border border-transparent transition-all cursor-pointer">
-            🛡️ Gizlilik & İmha
+            🛡️ Gizlilik & Güvenlik
+          </button>
+          <button onclick="filterArsenal('dev', this)" class="arsenal-tab-btn px-4 py-2 rounded-xl text-nexus-muted hover:text-white border border-transparent transition-all cursor-pointer">
+            💻 Geliştirici & API
           </button>
           <button onclick="filterArsenal('system', this)" class="arsenal-tab-btn px-4 py-2 rounded-xl text-nexus-muted hover:text-white border border-transparent transition-all cursor-pointer">
-            ⚡ Donanım & Sistem
+            ⚡ Sistem & Ağ
           </button>
-          <button onclick="filterArsenal('tools', this)" class="arsenal-tab-btn px-4 py-2 rounded-xl text-nexus-muted hover:text-white border border-transparent transition-all cursor-pointer">
-            🔗 Ağ & Dosya Stüdyosu
+          <button onclick="filterArsenal('media', this)" class="arsenal-tab-btn px-4 py-2 rounded-xl text-nexus-muted hover:text-white border border-transparent transition-all cursor-pointer">
+            🎨 Tasarım & Medya
           </button>
         </div>
       </div>
@@ -789,14 +1090,14 @@ export function renderLandingPage(): string {
         </div>
 
         <!-- Tool 2: Universal Decrypter -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="tools">
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="privacy">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-nexus-accent/10 border border-nexus-accent/30 flex items-center justify-center text-nexus-accent mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
             </div>
             <h3 class="font-heading font-bold text-xl text-white mb-2">Evrensel Link Decrypter</h3>
             <p class="text-xs text-nexus-muted leading-relaxed">
-              Aylink, bc.vc ve para kazandıran yönlendirme tuzaklarını aşar. Tüm takip parametrelerini (UTM, fbclid) soyarak temiz hedefe uçurur.
+              Aylink, bc.vc ve para kazandıran yönlendirme tuzaklarını aşar. Tüm takip parametrelerini (UTM, fbclid) soyarak temiz hedefe ulaştırır.
             </p>
           </div>
           <span class="mt-6 text-[11px] font-mono text-nexus-accent flex items-center gap-1">Reklam & Tracker Temizleyici →</span>
@@ -816,7 +1117,133 @@ export function renderLandingPage(): string {
           <span class="mt-6 text-[11px] font-mono text-red-400 flex items-center gap-1">Adli Bilişim Kurtaramaz →</span>
         </div>
 
-        <!-- Tool 4: Resource Sentinel -->
+        <!-- Tool 4: Password Generator & Analyzer -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="privacy">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Askeri Parola Analizörü</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              Shannon entropi puanlaması, RTX 4090 süper bilgisayar kümesi kırılma süresi simülasyonu ve kriptografik rastgele parola üretimi.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-emerald-400 flex items-center gap-1">Entropi Denetimi →</span>
+        </div>
+
+        <!-- Tool 5: Hash Studio -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="privacy">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Hash & Base64 Studio</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              SHA-256, MD5, SHA-512 ve HMAC checksum doğrulama. Çift yönlü Base64 ve Hex kodlayıcı / çözücü.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-purple-400 flex items-center gap-1">Kripto Stüdyosu →</span>
+        </div>
+
+        <!-- Tool 6: Clipboard Manager -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="privacy">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Şifreli Pano Yöneticisi</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              Pano geçmişinizi yerel olarak güvene alın. Hassas parolaları ve token'ları otomatik gizleyin, anında arayın ve temizleyin.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-sky-400 flex items-center gap-1">Güvenli Pano Geçmişi →</span>
+        </div>
+
+        <!-- Tool 7: Scratchpad Ultimate -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="dev">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-nexus-cyan/10 border border-nexus-cyan/30 flex items-center justify-center text-nexus-cyan mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Scratchpad Ultimate & Flowchart</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              Canlı Markdown editörü, dahili Mermaid akış diyagramı render motoru, çoklu sekmeler, Zen modu ve şablon kütüphanesi.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-nexus-cyan flex items-center gap-1">Mermaid & Diyagram Motoru →</span>
+        </div>
+
+        <!-- Tool 8: cURL Runner & API Studio -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="dev">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">cURL Runner & API Studio</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              Postman'a hafif yerel alternatif. cURL komutlarını içe aktarın, GET/POST istekleri atın, header ve gövde yanıtlarını anında ayrıştırın.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-amber-400 flex items-center gap-1">Yerel REST API Testi →</span>
+        </div>
+
+        <!-- Tool 9: JSON Studio -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="dev">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">JSON Studio & Doğrulayıcı</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              Bozuk JSON verilerini anında bulun, renklendirin, formatlayın ve interaktif ağaç (tree) görünümünde derinlemesine inceleyin.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-emerald-400 flex items-center gap-1">Ağaç Görünümü & Onarım →</span>
+        </div>
+
+        <!-- Tool 10: Regex Studio -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="dev">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Regex Studio & Eşleştirici</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              Düzenli ifadeleri (RegEx) gerçek zamanlı olarak test edin. Bayrakları değiştirin, yakalama gruplarını ve sözdizim açıklamalarını görün.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-purple-400 flex items-center gap-1">Canlı RegEx Testi →</span>
+        </div>
+
+        <!-- Tool 11: Fake Data Studio -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="dev">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Fake Data & Mock Generator</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              Test ve veritabanı tohumlama için binlerce gerçekçi kullanıcı, telefon, adres, şirket ve kredi kartı verisini JSON/CSV üretin.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-blue-400 flex items-center gap-1">Mock Veri Üretici →</span>
+        </div>
+
+        <!-- Tool 12: Dev Sandbox -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="dev">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center text-yellow-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Dev Sandbox & Kod Alanı</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              İzole bir ortamda JavaScript ve mantık algoritmalarını anlık çalıştırın, konsol çıktılarını ve çalışma sürelerini ölçün.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-yellow-400 flex items-center gap-1">İzole Çalıştırma →</span>
+        </div>
+
+        <!-- Tool 13: Resource Sentinel -->
         <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="system">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-5 group-hover:scale-110 transition-transform">
@@ -830,32 +1257,102 @@ export function renderLandingPage(): string {
           <span class="mt-6 text-[11px] font-mono text-purple-400 flex items-center gap-1">Tek Tık RAM Temizleme →</span>
         </div>
 
-        <!-- Tool 5: Floating Orb Widget -->
+        <!-- Tool 14: Port Killer -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="system">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Port Killer (TCP/UDP Watchdog)</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              "Port 3000 already in use" kabusuna son! Dinlenen tüm yerel portları listeler, PID ve süreçleri tek tıkla zorla sonlandırır.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-red-400 flex items-center gap-1">Tek Tıkla Port Kurtarma →</span>
+        </div>
+
+        <!-- Tool 15: System Optimizer -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="system">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Sistem & Bloatware Temizleyici</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              Windows Temp dosyalarını, DNS önbelleğini ve diskte yer kaplayan gereksiz telemetri artıklarını güvenle süpürün.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-cyan-400 flex items-center gap-1">Disk & DNS Temizleyici →</span>
+        </div>
+
+        <!-- Tool 16: Network Tools -->
         <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="system">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Ağ Dedektörü & Port Tarayıcı</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              Dahili ve harici IP tespiti, DNS MX/TXT çözümleme, gecikme (Ping) analizi ve hedef sunucu açık port tarayıcısı.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-emerald-400 flex items-center gap-1">Ağ Teşhisi →</span>
+        </div>
+
+        <!-- Tool 17: Desktop Floating Orb -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="system">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-nexus-cyan/10 border border-nexus-cyan/30 flex items-center justify-center text-nexus-cyan mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-            <h3 class="font-heading font-bold text-xl text-white mb-2">Desktop Floating Orb</h3>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Desktop Floating Orb (HUD)</h3>
             <p class="text-xs text-nexus-muted leading-relaxed">
               Masaüstünüzde sessizce süzülen sibernetik mini widget. Tek tıkla TempMail kopyalayın, RAM boşaltın ve komut paletini çağırın.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-emerald-400 flex items-center gap-1">HUD Hızlı Erişim →</span>
+          <span class="mt-6 text-[11px] font-mono text-nexus-cyan flex items-center gap-1">HUD Hızlı Erişim →</span>
         </div>
 
-        <!-- Tool 6: Bulk File Organizer & Toolkit -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="tools">
+        <!-- Tool 18: Color Studio & WCAG -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="media">
           <div>
-            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-5 group-hover:scale-110 transition-transform">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            <div class="w-12 h-12 rounded-2xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4 5 5 0 015-5h4a5 5 0 015 5 4 4 0 01-4 4H7zM17 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
             </div>
-            <h3 class="font-heading font-bold text-xl text-white mb-2">Dosya, Ağ & Görsel Stüdyosu</h3>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Color Studio & WCAG Kontrast</h3>
             <p class="text-xs text-nexus-muted leading-relaxed">
-              Binlerce dağınık dosyayı tek tıkla kategorize edin, EXIF gizlilik verilerini silin, açık portları tarayın ve pano geçmişini yönetin.
+              Geliştirici renk paletleri, HEX/RGB/HSL dönüştürücü, CSS gradient üretici ve canlı WCAG 2.1 erişilebilirlik kontrast denetçisi.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-amber-400 flex items-center gap-1">Geri Alma (Undo) Destekli →</span>
+          <span class="mt-6 text-[11px] font-mono text-pink-400 flex items-center gap-1">WCAG 2.1 Doğrulayıcı →</span>
+        </div>
+
+        <!-- Tool 19: Image & EXIF Privacy Toolkit -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="media">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Image & EXIF Gizlilik Toolkit</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              Fotoğraflardaki GPS konum, kamera modeli ve gizli metadata'ları tek tıkla silin. WebP/PNG dönüştürün ve kayıpsız sıkıştırın.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-indigo-400 flex items-center gap-1">EXIF Temizleme & Sıkıştırma →</span>
+        </div>
+
+        <!-- Tool 20: QR Code Studio & Bulk Organizer -->
+        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="media">
+          <div>
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-5 group-hover:scale-110 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">QR Code Studio & Toplu Dosya</h3>
+            <p class="text-xs text-nexus-muted leading-relaxed">
+              Logolu özel vektörel QR kodlar tasarlayın. Binlerce dağınık dosya ve klasörü kural bazlı akıllı algoritmalarla düzenleyin.
+            </p>
+          </div>
+          <span class="mt-6 text-[11px] font-mono text-amber-400 flex items-center gap-1">Logo Destekli QR & Düzenleyici →</span>
         </div>
 
       </div>
@@ -1157,7 +1654,7 @@ export function renderLandingPage(): string {
       <div class="mt-4 p-4 rounded-2xl bg-nexus-surface/50 border border-nexus-border/80 flex flex-col sm:flex-row items-center justify-between gap-3 font-mono text-xs">
         <div class="flex items-center gap-2.5 truncate w-full">
           <span class="px-2 py-0.5 rounded bg-nexus-cyan/10 text-nexus-cyan font-bold shrink-0 text-[10px]">POWERSHELL</span>
-          <span class="text-nexus-muted truncate select-all" id="ps-verify-cmd">Get-FileHash -Algorithm SHA256 .\NexusHub-v2.0.3-Setup.exe</span>
+          <span class="text-nexus-muted truncate select-all" id="ps-verify-cmd">Get-FileHash -Algorithm SHA256 .\NexusHub-v2.2.0-Setup.exe</span>
         </div>
         <button onclick="copyPowerShellCmd()" id="copy-ps-btn" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-nexus-surface hover:bg-nexus-border text-xs text-nexus-cyan hover:text-white border border-nexus-border/80 transition-all shrink-0 cursor-pointer">
           Komutu Kopyala
@@ -1462,15 +1959,15 @@ export function renderLandingPage(): string {
     <div class="flex items-center gap-3 truncate">
       <div class="w-3 h-3 rounded-full bg-nexus-cyan animate-pulse shrink-0"></div>
       <div class="truncate">
-        <div class="text-xs font-bold text-white truncate">NexusHub v2.0.3 Suite</div>
+        <div class="text-xs font-bold text-white truncate">NexusHub v2.2.0 Suite</div>
         <div class="text-[10px] font-mono text-nexus-muted truncate">Ömür Boyu Tek Ödeme • Sıfır Abonelik</div>
       </div>
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <a href="https://github.com/zerviatr/NexusHub/releases/latest" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-nexus-border text-white font-mono text-xs transition-colors cursor-pointer">
-        İndir
+        İndir (v2.2.0)
       </a>
-      <a href="#pricing" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 text-nexus-bg font-heading font-black text-xs shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all cursor-pointer">
+      <a href="#pricing" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 text-nexus-bg font-heading font-black text-xs shadow-[0_0_15px_rgba(var(--c-cyan),0.4)] transition-all cursor-pointer">
         Lisans Al
       </a>
     </div>
@@ -1580,7 +2077,7 @@ export function renderLandingPage(): string {
             <span class="p-2 rounded-lg bg-nexus-cyan/10 text-nexus-cyan group-hover:scale-110 transition-transform">🖥️</span>
             <div>
               <div class="font-bold text-white group-hover:text-nexus-cyan transition-colors">Canlı Uygulama Simülatörünü Aç</div>
-              <div class="text-[11px] text-nexus-muted">NexusHub v2.0.3 arayüzünü tarayıcı içinde interaktif deneyimleyin</div>
+              <div class="text-[11px] text-nexus-muted">NexusHub v2.2.0 arayüzünü tarayıcı içinde interaktif deneyimleyin</div>
             </div>
           </div>
           <span class="text-nexus-cyan opacity-0 group-hover:opacity-100 transition-opacity">Git ↵</span>
@@ -1638,12 +2135,12 @@ export function renderLandingPage(): string {
           <span><kbd class="px-1.5 py-0.5 rounded bg-nexus-bg border border-nexus-border text-[9px]">↑↓</kbd> Gezin</span>
           <span><kbd class="px-1.5 py-0.5 rounded bg-nexus-bg border border-nexus-border text-[9px]">Enter</kbd> Seç</span>
         </div>
-        <span class="text-nexus-cyan">NexusHub Command Engine v2.0</span>
+        <span class="text-nexus-cyan">NexusHub Command Engine v2.2</span>
       </div>
     </div>
   </div>
 
-  <!-- CHANGELOG MODAL (v2.0.3 YENİLİKLER) -->
+  <!-- CHANGELOG MODAL (v2.2.0 YENİLİKLER) -->
   <div id="changelog-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 cursor-pointer" onclick="closeChangelogModal()">
     <div class="w-full max-w-lg rounded-3xl card-glass border border-nexus-cyan/50 p-6 sm:p-8 text-nexus-text relative shadow-2xl cursor-default" onclick="event.stopPropagation()">
       <button onclick="closeChangelogModal()" class="absolute top-5 right-5 text-nexus-muted hover:text-white p-1 rounded-lg hover:bg-nexus-border cursor-pointer">✕</button>
@@ -1652,39 +2149,47 @@ export function renderLandingPage(): string {
         <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-ping"></span>
         <span>SÜRÜM RADARI</span>
       </div>
-      <h3 class="font-heading font-black text-2xl text-white mb-4">NexusHub v2.0.3 Yenilikleri</h3>
+      <h3 class="font-heading font-black text-2xl text-white mb-4">NexusHub v2.2.0 Yenilikleri</h3>
 
       <div class="space-y-3.5 text-xs text-nexus-muted font-sans max-h-80 overflow-y-auto pr-2">
         <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
           <div class="text-white font-bold mb-1 flex items-center gap-2">
-            <span>🔮 Floating Orb Mini-Widget</span>
+            <span>📝 Scratchpad Ultimate & Mermaid Flowchart</span>
             <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-nexus-cyan/20 text-nexus-cyan">YENİ</span>
           </div>
-          <div>Masaüstünde yüzen canlı HUD: 1-Tık TempMail kopyalama, canlı CPU/RAM göstergesi ve anında bellek boşaltma.</div>
+          <div>Obsidian ve bulut notlara yerel alternatif! Canlı Mermaid akış diyagramı render motoru, çoklu sekmeler, şablonlar ve anında dışa aktarma.</div>
         </div>
 
         <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
           <div class="text-white font-bold mb-1 flex items-center gap-2">
-            <span>🔄 Discord-Grade Auto-Updater</span>
+            <span>⚡ Port Killer (TCP/UDP Watchdog)</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-red-500/20 text-red-400">YENİ</span>
+          </div>
+          <div>Yerel port çakışmalarına tek tıkla son! localhost portlarını dinleyen asılı Node/Python/Java süreçlerini PID üzerinden anında zorla öldürün.</div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
+          <div class="text-white font-bold mb-1 flex items-center gap-2">
+            <span>🎨 Color Studio & Canlı WCAG 2.1 Kontrast</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-pink-500/20 text-pink-400">YENİ</span>
+          </div>
+          <div>Geliştirici renk paletleri, HEX/RGB/HSL dönüştürücü, CSS gradient ve canlı erişilebilirlik (AA/AAA) kontrast denetimi.</div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
+          <div class="text-white font-bold mb-1 flex items-center gap-2">
+            <span>🌌 5 Siber Tema Motoru & CyberAudio</span>
             <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400">GÜÇLENDİRİLDİ</span>
           </div>
-          <div>Kapanıp açılmama sorunları çözüldü; self-healing watchdog süpervizörü ve animasyonlu geçiş ekranı eklendi.</div>
+          <div>Default Violet, Matrix Emerald, Cyberpunk 2077, Synthwave 80s ve Crimson Ops temaları ile Web Audio mekanik ses tasarımı.</div>
         </div>
 
         <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
           <div class="text-white font-bold mb-1 flex items-center gap-2">
-            <span>🔔 Telegram & Discord Webhook Motoru</span>
-            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">GÜVENLİK</span>
+            <span>🔮 Floating Orb Mini-Widget</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-400">HUD</span>
           </div>
-          <div>Aktivasyon, lisans iptali ve şüpheli isteklerde anında mobil bildirim dispatche'ı.</div>
-        </div>
-
-        <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
-          <div class="text-white font-bold mb-1 flex items-center gap-2">
-            <span>🎟️ Süre Uzatma Kuponları & Satış Kanalları</span>
-            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-400">TİCARİ</span>
-          </div>
-          <div>NEXUS-EXT-XXD kupon motoru ve Shopier/Discord/Kripto kanal takibi.</div>
+          <div>Masaüstünde yüzen canlı HUD: 1-Tık TempMail kopyalama, canlı CPU/RAM göstergesi ve anında Windows bellek önbelleği boşaltma.</div>
         </div>
       </div>
 
@@ -1754,25 +2259,29 @@ export function renderLandingPage(): string {
         'nav.preview': 'Arayüz',
         'nav.roi': 'Tasarruf Hesabı',
         'nav.comparison': 'SaaS Katili',
-        'nav.arsenal': '15+ Cephane',
+        'nav.arsenal': '20+ Cephane',
         'nav.pricing': 'Fiyatlandırma',
         'nav.reviews': 'Yorumlar',
         'nav.portal': 'Lisans Sorgula',
         'nav.faq': 'SSS',
         'nav.buy': 'Lisans Al',
-        'hero.pill.tools': '15+ Siber Güç',
+        'hero.pill.tools': '20+ Siber Güç',
         'hero.pill.noSub': 'Sıfır Abonelik Tuzağı',
         'hero.title1': 'Aylık Aboneliklere',
         'hero.title2': 'Son.',
         'hero.title3': 'Tek Yazılım,',
-        'hero.title4': '15+ Siber Güç.',
-        'hero.desc': 'Tek kullanımlık geçici posta, reklam & link çözücü, DoD askeri veri imha kalkanı, donanım monitörü ve şifreli kasa. Her şeye ayrı ayrı para ödemeyi bırakın.',
-        'hero.btnDownload': 'Windows için İndir (v2.0.3)',
+        'hero.title4': '20+ Siber Güç.',
+        'hero.desc': 'Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD askeri veri imha kalkanı, donanım monitörü ve şifreli kasa. Her araca ayrı para ödemeyi bırakın.',
+        'hero.btnDownload': 'Windows için İndir (v2.2.0)',
         'hero.btnPro': 'Ömür Boyu Pro Lisans',
         'sim.tag': 'Canlı Arayüzü İncele',
+        'sim.themeLabel': 'Siber Tema Seçici:',
         'sim.title': 'NexusHub Masaüstünüzde Nasıl Görünür?',
-        'sim.desc': 'İndirmeden önce aşağıdaki sekmelere tıklayarak NexusHub\\'ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.',
+        'sim.desc': 'İndirmeden önce aşağıdaki sekmelere tıklayarak NexusHub\'ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.',
         'sim.tools.tempmail': 'TempMail Posta',
+        'sim.tools.scratchpad': 'Scratchpad & Flow',
+        'sim.tools.color': 'Color & WCAG',
+        'sim.tools.portkiller': 'Port Killer',
         'sim.tools.decrypter': 'Link Decrypter',
         'sim.tools.password': 'Parola & Kırılma',
         'sim.tools.fortress': 'Cyber Fortress',
@@ -1784,7 +2293,7 @@ export function renderLandingPage(): string {
         'roi.desc': 'Kullandığınız araçları işaretleyin, her ay SaaS platformlarına saçtığınız paranın NexusHub ile nasıl cebinizde kaldığını görün.',
         'comp.tag': 'Neden NexusHub?',
         'comp.title': 'SaaS Abonelik Yorgunluğunu Bitirin.',
-        'comp.desc': 'İhtiyacınız olan her ufak araca aylık $10-$15 abonelik ödemek yerine, NexusHub\\'ı bir kez alın ve ömür boyu yerel olarak kullanın.',
+        'comp.desc': 'İhtiyacınız olan her ufak araca aylık $10-$15 abonelik ödemek yerine, NexusHub\'ı bir kez alın ve ömür boyu yerel olarak kullanın.',
         'price.tag': 'Şeffaf & Adil Fiyatlandırma',
         'price.title': 'Abonelik Yok. Bir Kez Al, Ömür Boyu Kullan.',
         'price.desc': 'Gizli yenileme ücreti yok. Kredi kartı, Kripto veya Discord üzerinden anında teslimat.',
@@ -1808,25 +2317,29 @@ export function renderLandingPage(): string {
         'nav.preview': 'Interface',
         'nav.roi': 'Savings Calc',
         'nav.comparison': 'SaaS Killer',
-        'nav.arsenal': '15+ Arsenal',
+        'nav.arsenal': '20+ Arsenal',
         'nav.pricing': 'Pricing',
         'nav.reviews': 'Reviews',
         'nav.portal': 'Lookup License',
         'nav.faq': 'FAQ',
         'nav.buy': 'Get License',
-        'hero.pill.tools': '15+ Cyber Powers',
+        'hero.pill.tools': '20+ Cyber Powers',
         'hero.pill.noSub': 'Zero Subscription Trap',
         'hero.title1': 'Stop Monthly',
         'hero.title2': 'Subscriptions.',
         'hero.title3': 'One Suite,',
-        'hero.title4': '15+ Cyber Tools.',
-        'hero.desc': 'Instant disposable email, link & ad decrypter, military DoD shredder, live hardware sentinel, and encrypted vault. Stop paying separate fees for simple utilities.',
-        'hero.btnDownload': 'Download for Windows (v2.0.3)',
+        'hero.title4': '20+ Cyber Tools.',
+        'hero.desc': 'Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD military shredder, live hardware sentinel, and encrypted vault. Stop paying separate fees for simple utilities.',
+        'hero.btnDownload': 'Download for Windows (v2.2.0)',
         'hero.btnPro': 'Lifetime Pro License',
         'sim.tag': 'Explore the Interface',
+        'sim.themeLabel': 'Cyber Theme Engine:',
         'sim.title': 'How NexusHub Looks on Your Desktop',
-        'sim.desc': 'Click the tabs below to test drive NexusHub\\'s cybernetic tools and smooth interface before downloading.',
+        'sim.desc': 'Click the tabs below to test drive NexusHub\'s cybernetic tools and smooth interface before downloading.',
         'sim.tools.tempmail': 'TempMail Inbox',
+        'sim.tools.scratchpad': 'Scratchpad & Flow',
+        'sim.tools.color': 'Color & WCAG',
+        'sim.tools.portkiller': 'Port Killer',
         'sim.tools.decrypter': 'Link Decrypter',
         'sim.tools.password': 'Password Analyzer',
         'sim.tools.fortress': 'Cyber Fortress',
@@ -1889,20 +2402,200 @@ export function renderLandingPage(): string {
       calcRoi();
     }
 
+    // ─── Live Cyber Theme Switcher Engine ──────────────────────────────────
+    let activeTheme = 'default';
+    function switchCyberTheme(theme) {
+      activeTheme = theme;
+      if (theme === 'default') {
+        document.documentElement.removeAttribute('data-theme');
+      } else {
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+      try { localStorage.setItem('nexus_web_theme', theme); } catch {}
+
+      // Update button highlights
+      ['default', 'matrix', 'cyberpunk', 'synthwave', 'crimson'].forEach(t => {
+        const btn = document.getElementById('theme-btn-' + t);
+        if (!btn) return;
+        if (t === theme) {
+          btn.className = 'theme-btn px-3 py-1.5 rounded-xl border border-nexus-cyan/40 bg-nexus-cyan/20 text-nexus-cyan font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm';
+        } else {
+          btn.className = 'theme-btn px-3 py-1.5 rounded-xl border border-nexus-border/60 hover:border-nexus-cyan/40 text-nexus-muted hover:text-white font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer';
+        }
+      });
+      playCyberSound('toggle');
+    }
+
+    // Initialize saved theme on boot
+    try {
+      const savedTheme = localStorage.getItem('nexus_web_theme') || 'default';
+      if (savedTheme !== 'default') {
+        setTimeout(() => switchCyberTheme(savedTheme), 10);
+      }
+    } catch {}
+
     // ─── Interactive Mockup Tool Switcher ──────────────────────────────────
-    const tools = ['tempmail', 'decrypter', 'password', 'fortress', 'sentinel', 'orb', 'hash'];
+    const tools = ['tempmail', 'scratchpad', 'color', 'portkiller', 'decrypter', 'password', 'fortress', 'sentinel', 'orb', 'hash'];
     function switchMockTool(toolId) {
       tools.forEach(t => {
         const p = document.getElementById('mock-panel-' + t);
         const b = document.getElementById('mock-btn-' + t);
-        if (t === toolId) {
-          p.classList.remove('hidden');
-          b.className = 'w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 bg-nexus-cyan/15 text-nexus-cyan border border-nexus-cyan/30 transition-all cursor-pointer';
-        } else {
-          p.classList.add('hidden');
-          b.className = 'w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer';
+        if (p && b) {
+          if (t === toolId) {
+            p.classList.remove('hidden');
+            b.className = 'w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 bg-nexus-cyan/15 text-nexus-cyan border border-nexus-cyan/30 transition-all cursor-pointer shrink-0';
+          } else {
+            p.classList.add('hidden');
+            b.className = 'w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0';
+          }
         }
       });
+    }
+
+    // ─── Scratchpad Ultimate Mockup Handlers ────────────────────────────────
+    function updateSimMarkdown() {
+      const input = document.getElementById('sim-md-input');
+      const stats = document.getElementById('sim-md-stats');
+      if (!input || !stats) return;
+      const text = input.value || '';
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      const chars = text.length;
+      stats.innerText = words + ' kelime • ' + chars + ' karakter';
+    }
+
+    function loadSimMdTemplate(type) {
+      const input = document.getElementById('sim-md-input');
+      const preview = document.getElementById('sim-md-preview');
+      if (!input || !preview) return;
+
+      const b3 = String.fromCharCode(96, 96, 96);
+      if (type === 'arch') {
+        input.value = '# 🏗️ Sistem Mimarisi Şeması\n\n' +
+          '> NexusHub v2.2.0 Yerel Güvenlik Kalkanı\n\n' +
+          '- [x] DoD 5220.22-M 7-Pass Shredder\n' +
+          '- [x] AES-256-GCM Kasa\n' +
+          '- [x] TCP/UDP Port Killer\n\n' +
+          b3 + 'mermaid\n' +
+          'graph TD\n' +
+          '  User([Kullanıcı]) --> App[NexusHub Core]\n' +
+          '  App --> Vault[(Şifreli Kasa)]\n' +
+          '  App --> NetGuard[Port Killer]\n' +
+          b3;
+        preview.innerHTML = '<h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">🏗️ Sistem Mimarisi Şeması</h4>' +
+          '<p class="text-[11px] text-nexus-muted italic border-l-2 border-nexus-cyan pl-2">NexusHub v2.2.0 Yerel Güvenlik Kalkanı</p>' +
+          '<ul class="text-[11px] space-y-1 text-emerald-400 font-mono">' +
+            '<li>✓ DoD 5220.22-M 7-Pass Shredder</li>' +
+            '<li>✓ AES-256-GCM Kasa</li>' +
+            '<li>✓ TCP/UDP Port Killer</li>' +
+          '</ul>' +
+          '<div class="mt-2 p-2 rounded-lg bg-nexus-bg border border-nexus-cyan/30 flex items-center justify-center gap-2 font-mono text-[10px]">' +
+            '<span class="px-2 py-1 rounded bg-nexus-surface border border-nexus-border text-white">User</span>' +
+            '<span class="text-nexus-cyan">──▶</span>' +
+            '<span class="px-2 py-1 rounded bg-nexus-cyan/20 border border-nexus-cyan text-nexus-cyan font-bold">Nexus Core</span>' +
+            '<span class="text-nexus-cyan">──▶</span>' +
+            '<span class="px-2 py-1 rounded bg-nexus-surface border border-nexus-border text-white">Vault</span>' +
+          '</div>';
+      } else if (type === 'api') {
+        input.value = '# ⚡ REST API Geliştirici Dokümantasyonu\n\n' +
+          b3 + 'http\n' +
+          'GET /api/license/lookup\n' +
+          'Host: auth.nexushub.org\n' +
+          'Authorization: Bearer <CLIENT_TOKEN>\n' +
+          b3 + '\n\n' +
+          '- **Yanıt:** 200 OK\n' +
+          '- **Gecikme:** ~12ms (Yerel Edge)';
+        preview.innerHTML = '<h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">⚡ REST API Dokümantasyonu</h4>' +
+          '<div class="p-2 rounded bg-nexus-bg font-mono text-[10px] text-purple-300">GET /api/license/lookup<br>Host: auth.nexushub.org</div>' +
+          '<div class="text-[11px] text-emerald-400 font-mono">✓ 200 OK (Gecikme: ~12ms)</div>';
+      }
+      updateSimMarkdown();
+      playCyberSound('success');
+    }
+
+    // ─── Color Studio Mockup Handlers ──────────────────────────────────────
+    function updateSimColor(hex) {
+      const swatch = document.getElementById('sim-color-swatch');
+      const hexEl = document.getElementById('sim-color-hex');
+      const rgbEl = document.getElementById('sim-color-rgb');
+      const tokenHex = document.getElementById('sim-token-hex');
+      const tokenTw = document.getElementById('sim-token-tw');
+
+      if (swatch) swatch.style.backgroundColor = hex;
+      if (hexEl) hexEl.innerText = hex.toLowerCase();
+      if (tokenHex) tokenHex.innerText = hex.toLowerCase();
+      if (tokenTw) tokenTw.innerText = 'text-[' + hex.toLowerCase() + ']';
+
+      const r = parseInt(hex.slice(1, 3), 16) || 0;
+      const g = parseInt(hex.slice(3, 5), 16) || 0;
+      const b = parseInt(hex.slice(5, 7), 16) || 0;
+      if (rgbEl) rgbEl.innerText = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+
+      const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      const ratio = Math.max(1, (lum + 0.05) / 0.05).toFixed(2);
+      const ratioEl = document.getElementById('sim-contrast-ratio');
+      if (ratioEl) ratioEl.innerText = ratio + ' : 1';
+    }
+
+    function randomizeSimColor() {
+      const palette = ['#06b6d4', '#10b981', '#facc15', '#ec4899', '#8b5cf6', '#3b82f6', '#f97316', '#14b8a6'];
+      const c = palette[Math.floor(Math.random() * palette.length)];
+      const picker = document.getElementById('sim-color-picker');
+      if (picker) picker.value = c;
+      updateSimColor(c);
+      playCyberSound('click');
+    }
+
+    async function copySimColorToken(type) {
+      const hex = document.getElementById('sim-color-hex')?.innerText.trim() || '#06b6d4';
+      const textToCopy = type === 'tailwind' ? 'text-[' + hex + ']' : hex;
+      await safeCopyToClipboard(textToCopy);
+      const toast = document.getElementById('sim-color-toast');
+      if (toast) {
+        toast.innerText = '✓ ' + textToCopy + ' kopyalandı!';
+        setTimeout(() => { if (toast) toast.innerText = ''; }, 2000);
+      }
+      playCyberSound('success');
+    }
+
+    // ─── Port Killer Mockup Handlers ───────────────────────────────────────
+    function killSimPort(port) {
+      const row = document.getElementById('sim-port-row-' + port);
+      if (row) {
+        row.style.opacity = '0';
+        row.style.transform = 'translateX(20px)';
+        setTimeout(() => {
+          row.classList.add('hidden');
+          checkSimPortsEmpty();
+        }, 300);
+      }
+      playCyberSound('purge');
+    }
+
+    function checkSimPortsEmpty() {
+      const rows = [3000, 8080, 5432];
+      const allHidden = rows.every(p => {
+        const el = document.getElementById('sim-port-row-' + p);
+        return !el || el.classList.contains('hidden');
+      });
+      const msg = document.getElementById('sim-port-empty-msg');
+      if (msg) {
+        if (allHidden) msg.classList.remove('hidden');
+        else msg.classList.add('hidden');
+      }
+    }
+
+    function resetSimPorts() {
+      [3000, 8080, 5432].forEach(p => {
+        const el = document.getElementById('sim-port-row-' + p);
+        if (el) {
+          el.classList.remove('hidden');
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        }
+      });
+      const msg = document.getElementById('sim-port-empty-msg');
+      if (msg) msg.classList.add('hidden');
+      playCyberSound('success');
     }
 
     function simulateNewMail() {
@@ -1933,7 +2626,7 @@ export function renderLandingPage(): string {
     // ─── ROI Calculator Logic ──────────────────────────────────────────────
     function calcRoi() {
       let monthly = 0;
-      ['roi-tempmail', 'roi-shredder', 'roi-sentinel', 'roi-decrypter'].forEach(id => {
+      ['roi-tempmail', 'roi-postman', 'roi-obsidian', 'roi-shredder', 'roi-sentinel', 'roi-color', 'roi-decrypter'].forEach(id => {
         const el = document.getElementById(id);
         if (el && el.checked) {
           monthly += parseInt(el.getAttribute('data-price') || '0');
