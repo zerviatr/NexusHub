@@ -81,6 +81,14 @@ export async function migrate(): Promise<void> {
     )
   `)
 
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS waitlist (
+      id         INTEGER PRIMARY KEY,
+      email      TEXT    NOT NULL UNIQUE,
+      created_at INTEGER NOT NULL
+    )
+  `)
+
   // Safe migrations for commercial metadata in existing DBs
   try {
     await db.execute(`ALTER TABLE licenses ADD COLUMN sales_channel TEXT`)

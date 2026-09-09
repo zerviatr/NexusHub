@@ -13,7 +13,7 @@
  */
 import 'dotenv/config'
 import express, { Request, Response, NextFunction } from 'express'
-import { migrate } from './db'
+import { getDb, migrate } from './db'
 import { webhookRouter } from './routes/webhook'
 import { licenseRouter } from './routes/license'
 import { adminRouter }   from './routes/admin'
@@ -58,6 +58,37 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
 app.get('/', (_req: Request, res: Response) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8')
   res.send(renderLandingPage())
+})
+
+// ── Waitlist Lead Capture ──────────────────────────────────────────────────
+app.post('/api/waitlist', async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body as { email?: string }
+    if (!email || !email.includes('@') || !email.includes('.')) {
+      res.status(400).json({ success: false, reason: 'Geçerli bir e-posta adresi girin.' })
+      return
+    }
+
+    const cleanEmail = email.trim().toLowerCase()
+    const db = getDb()
+    try {
+      await db.execute({
+        sql: 'INSERT INTO waitlist (email, created_at) VALUES (?, ?)',
+        args: [cleanEmail, Date.now()],
+      })
+    } catch {
+      // If already registered, still treat as friendly success
+    }
+
+    res.json({
+      success: true,
+      message: 'Erken erişim bekleme listesine başarıyla eklendiniz! Lansmanda %20 indirim kuponunuzla birlikte e-posta alacaksınız.',
+      coupon: 'NEXUS20',
+    })
+  } catch (err: any) {
+    console.error('[waitlist] error:', err)
+    res.status(500).json({ success: false, reason: 'Sunucu hatası' })
+  }
 })
 
 app.use('/webhook',      webhookRouter)

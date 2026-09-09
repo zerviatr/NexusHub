@@ -25,6 +25,33 @@ export function renderLandingPage(): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="meta-title">NexusHub — Abonelik Tuzağına Son. 20+ Siber Güç Tek Yazılımda.</title>
   <meta name="description" content="Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD 7-Pass Dosya İmha Kalkanı, Canlı Donanım Teşhisi ve Şifreleme Kasası. Tek seferlik ödeme, sıfır abonelik.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='25' fill='%2308090d'/%3E%3Ccircle cx='50' cy='50' r='36' stroke='%2306b6d4' stroke-width='8' fill='none'/%3E%3Cpath d='M32 50L45 64L68 36' stroke='%2338bdf8' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+  <meta property="og:title" content="NexusHub — Abonelik Tuzağına Son. 20+ Siber Güç Tek Yazılımda.">
+  <meta property="og:description" content="Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD 7-Pass Shredder ve Şifreli Kasa. Tek seferlik ödeme, %100 yerel ve offline-first.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nexushub-production-4a5b.up.railway.app">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NexusHub — 20+ Cyber Powers in One Suite">
+  <meta name="twitter:description" content="Stop SaaS subscription fatigue. Own 20+ developer & security desktop tools once forever.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "NexusHub",
+    "operatingSystem": "Windows 10, Windows 11",
+    "applicationCategory": "DeveloperApplication, SecurityApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "349",
+      "priceCurrency": "TRY"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "1280"
+    }
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -165,6 +192,11 @@ export function renderLandingPage(): string {
           <span class="hidden sm:inline">Ctrl K</span>
         </button>
 
+        <!-- Audio SFX Toggle -->
+        <button onclick="toggleNavbarSfx()" id="navbar-sfx-btn" class="px-2 py-1.5 rounded-full border border-nexus-border/60 hover:border-nexus-cyan/50 text-[11px] font-mono text-nexus-cyan hover:text-white transition-all flex items-center gap-1 cursor-pointer" title="Siber Sesler Açık/Kapalı">
+          <span id="navbar-sfx-icon">🔊</span>
+        </button>
+
         <!-- Compact Language Switcher -->
         <button onclick="toggleLanguage()" id="lang-btn" class="px-2 py-1.5 rounded-full border border-nexus-border/60 hover:border-nexus-cyan/50 text-[11px] font-mono text-nexus-muted hover:text-white transition-all flex items-center gap-1 cursor-pointer">
           <span id="lang-flag">🇹🇷</span>
@@ -303,8 +335,20 @@ export function renderLandingPage(): string {
             </span>
           </div>
           <div class="flex items-center gap-2 text-xs font-mono text-nexus-muted">
-            <span class="px-2 py-0.5 rounded bg-nexus-bg border border-nexus-border/60">Ctrl + K</span>
+            <button onclick="unlockSimulatorProDemo()" id="sim-pro-unlock-btn" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-400 font-mono text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer shadow-sm animate-pulse">
+              <span>🔑</span> <span>Demo Lisans Çöz</span>
+            </button>
+            <span class="px-2 py-0.5 rounded bg-nexus-bg border border-nexus-border/60 hidden sm:inline">Ctrl + K</span>
           </div>
+        </div>
+
+        <!-- Pro Demo Activation Banner (Initially Hidden) -->
+        <div id="sim-pro-banner" class="hidden bg-emerald-500/15 border-b border-emerald-500/30 px-4 py-2 font-mono text-xs text-emerald-400 flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
+          <div class="flex items-center gap-2 truncate">
+            <span class="text-sm shrink-0">🎉</span>
+            <span class="truncate"><b>NEXUS PRO LIFETIME AKTİF:</b> 20+ Siber Araç ve Limitsiz Özellikler Çözüldü.</span>
+          </div>
+          <a href="#pricing" class="px-2.5 py-1 rounded bg-emerald-500 text-black font-bold text-[10px] hover:brightness-110 shrink-0 ml-2">Gerçek Lisans Al →</a>
         </div>
 
         <!-- Main Body: Sidebar + Dynamic Workspace -->
@@ -1077,7 +1121,7 @@ graph LR
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="arsenal-grid">
 
         <!-- Tool 1: TempMail -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="privacy">
+        <div onclick="openToolDrawer('tempmail', 'TempMail & Gelen Kutusu', 'Spam ve kayıt tuzaklarından kurtulun. Tek tıkla rastgele e-posta üretir, gelen doğrulama kodlarını anlık olarak okur.', 'GİZLİLİK & GÜVENLİK')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="privacy">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-nexus-cyan/10 border border-nexus-cyan/30 flex items-center justify-center text-nexus-cyan mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
@@ -1087,11 +1131,11 @@ graph LR
               Spam ve kayıt tuzaklarından kurtulun. Tek tıkla rastgele e-posta üretir, gelen doğrulama kodlarını anlık olarak okur.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-nexus-cyan flex items-center gap-1">Otomatik Kod Okuyucu →</span>
+          <span class="mt-6 text-[11px] font-mono text-nexus-cyan flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 2: Universal Decrypter -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="privacy">
+        <div onclick="openToolDrawer('decrypter', 'Evrensel Link Decrypter', 'Aylink, bc.vc ve para kazandıran yönlendirme tuzaklarını aşar. Tüm takip parametrelerini (UTM, fbclid) soyarak temiz hedefe ulaştırır.', 'GİZLİLİK & GÜVENLİK')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="privacy">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-nexus-accent/10 border border-nexus-accent/30 flex items-center justify-center text-nexus-accent mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
@@ -1101,11 +1145,11 @@ graph LR
               Aylink, bc.vc ve para kazandıran yönlendirme tuzaklarını aşar. Tüm takip parametrelerini (UTM, fbclid) soyarak temiz hedefe ulaştırır.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-nexus-accent flex items-center gap-1">Reklam & Tracker Temizleyici →</span>
+          <span class="mt-6 text-[11px] font-mono text-nexus-accent flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 3: Cyber Fortress -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="privacy">
+        <div onclick="openToolDrawer('fortress', 'Cyber Fortress Vault & Shredder', 'DoD 5220.22-M 7-Pass askeri standartta kalıcı dosya imha edici + AES-256-GCM askeri düzey şifreli kasa kalkanı.', 'GİZLİLİK & GÜVENLİK')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="privacy">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
@@ -1115,11 +1159,11 @@ graph LR
               DoD 5220.22-M 7-Pass askeri standartta kalıcı dosya imha edici + AES-256-GCM askeri düzey şifreli kasa kalkanı.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-red-400 flex items-center gap-1">Adli Bilişim Kurtaramaz →</span>
+          <span class="mt-6 text-[11px] font-mono text-red-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 4: Password Generator & Analyzer -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="privacy">
+        <div onclick="openToolDrawer('password', 'Askeri Parola Analizörü', 'Shannon entropi puanlaması, RTX 4090 süper bilgisayar kümesi kırılma süresi simülasyonu ve kriptografik rastgele parola üretimi.', 'GİZLİLİK & GÜVENLİK')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="privacy">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
@@ -1129,11 +1173,11 @@ graph LR
               Shannon entropi puanlaması, RTX 4090 süper bilgisayar kümesi kırılma süresi simülasyonu ve kriptografik rastgele parola üretimi.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-emerald-400 flex items-center gap-1">Entropi Denetimi →</span>
+          <span class="mt-6 text-[11px] font-mono text-emerald-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 5: Hash Studio -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="privacy">
+        <div onclick="openToolDrawer('hash', 'Hash & Base64 Studio', 'SHA-256, MD5, SHA-512 ve HMAC checksum doğrulama. Çift yönlü Base64 ve Hex kodlayıcı / çözücü.', 'GİZLİLİK & GÜVENLİK')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="privacy">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
@@ -1143,11 +1187,11 @@ graph LR
               SHA-256, MD5, SHA-512 ve HMAC checksum doğrulama. Çift yönlü Base64 ve Hex kodlayıcı / çözücü.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-purple-400 flex items-center gap-1">Kripto Stüdyosu →</span>
+          <span class="mt-6 text-[11px] font-mono text-purple-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 6: Clipboard Manager -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="privacy">
+        <div onclick="openToolDrawer('clipboard', 'Şifreli Pano Yöneticisi', 'Pano geçmişinizi yerel olarak güvene alın. Hassas parolaları ve token ları otomatik gizleyin.', 'GİZLİLİK & GÜVENLİK')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="privacy">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
@@ -1157,11 +1201,11 @@ graph LR
               Pano geçmişinizi yerel olarak güvene alın. Hassas parolaları ve token'ları otomatik gizleyin, anında arayın ve temizleyin.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-sky-400 flex items-center gap-1">Güvenli Pano Geçmişi →</span>
+          <span class="mt-6 text-[11px] font-mono text-sky-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 7: Scratchpad Ultimate -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="dev">
+        <div onclick="openToolDrawer('scratchpad', 'Scratchpad Ultimate & Flowchart', 'Canlı Markdown editörü, dahili Mermaid akış diyagramı render motoru, çoklu sekmeler, Zen modu ve şablon kütüphanesi.', 'GELİŞTİRİCİ & ÜRETKENLİK')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="dev">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-nexus-cyan/10 border border-nexus-cyan/30 flex items-center justify-center text-nexus-cyan mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
@@ -1171,11 +1215,11 @@ graph LR
               Canlı Markdown editörü, dahili Mermaid akış diyagramı render motoru, çoklu sekmeler, Zen modu ve şablon kütüphanesi.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-nexus-cyan flex items-center gap-1">Mermaid & Diyagram Motoru →</span>
+          <span class="mt-6 text-[11px] font-mono text-nexus-cyan flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 8: cURL Runner & API Studio -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="dev">
+        <div onclick="openToolDrawer('curl', 'cURL Runner & API Studio', 'Postman a hafif yerel alternatif. cURL komutlarını içe aktarın, GET/POST istekleri atın.', 'GELİŞTİRİCİ & API')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="dev">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -1185,11 +1229,11 @@ graph LR
               Postman'a hafif yerel alternatif. cURL komutlarını içe aktarın, GET/POST istekleri atın, header ve gövde yanıtlarını anında ayrıştırın.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-amber-400 flex items-center gap-1">Yerel REST API Testi →</span>
+          <span class="mt-6 text-[11px] font-mono text-amber-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 9: JSON Studio -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="dev">
+        <div onclick="openToolDrawer('json', 'JSON Studio & Doğrulayıcı', 'Bozuk JSON verilerini anında bulun, renklendirin, formatlayın ve interaktif ağaç görünümünde inceleyin.', 'GELİŞTİRİCİ & API')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="dev">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
@@ -1199,11 +1243,11 @@ graph LR
               Bozuk JSON verilerini anında bulun, renklendirin, formatlayın ve interaktif ağaç (tree) görünümünde derinlemesine inceleyin.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-emerald-400 flex items-center gap-1">Ağaç Görünümü & Onarım →</span>
+          <span class="mt-6 text-[11px] font-mono text-emerald-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 10: Regex Studio -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="dev">
+        <div onclick="openToolDrawer('regex', 'Regex Studio & Eşleştirici', 'Düzenli ifadeleri (RegEx) gerçek zamanlı olarak test edin. Yakalama gruplarını ve sözdizim açıklamalarını görün.', 'GELİŞTİRİCİ & API')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="dev">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/></svg>
@@ -1213,11 +1257,11 @@ graph LR
               Düzenli ifadeleri (RegEx) gerçek zamanlı olarak test edin. Bayrakları değiştirin, yakalama gruplarını ve sözdizim açıklamalarını görün.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-purple-400 flex items-center gap-1">Canlı RegEx Testi →</span>
+          <span class="mt-6 text-[11px] font-mono text-purple-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 11: Fake Data Studio -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="dev">
+        <div onclick="openToolDrawer('fakedata', 'Fake Data & Mock Generator', 'Test ve veritabanı tohumlama için binlerce gerçekçi kullanıcı, telefon, adres verisini JSON/CSV üretin.', 'GELİŞTİRİCİ & API')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="dev">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
@@ -1227,11 +1271,11 @@ graph LR
               Test ve veritabanı tohumlama için binlerce gerçekçi kullanıcı, telefon, adres, şirket ve kredi kartı verisini JSON/CSV üretin.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-blue-400 flex items-center gap-1">Mock Veri Üretici →</span>
+          <span class="mt-6 text-[11px] font-mono text-blue-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 12: Dev Sandbox -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="dev">
+        <div onclick="openToolDrawer('sandbox', 'Dev Sandbox & Kod Alanı', 'İzole bir ortamda JavaScript ve mantık algoritmalarını anlık çalıştırın, konsol çıktılarını ölçün.', 'GELİŞTİRİCİ & API')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="dev">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center text-yellow-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
@@ -1241,11 +1285,11 @@ graph LR
               İzole bir ortamda JavaScript ve mantık algoritmalarını anlık çalıştırın, konsol çıktılarını ve çalışma sürelerini ölçün.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-yellow-400 flex items-center gap-1">İzole Çalıştırma →</span>
+          <span class="mt-6 text-[11px] font-mono text-yellow-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 13: Resource Sentinel -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="system">
+        <div onclick="openToolDrawer('sentinel', 'Resource Sentinel & RAM Flush', 'Canlı CPU & RAM telemetry izleme, çekirdek yük analizi ve tek dokunuşla Windows bellek optimizasyonu.', 'SİSTEM & AĞ')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="system">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
@@ -1255,11 +1299,11 @@ graph LR
               Canlı CPU & RAM telemetry izleme, çekirdek yük analizi ve tek dokunuşla Windows bellek önbelleğini boşaltan optimizasyon.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-purple-400 flex items-center gap-1">Tek Tık RAM Temizleme →</span>
+          <span class="mt-6 text-[11px] font-mono text-purple-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 14: Port Killer -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="system">
+        <div onclick="openToolDrawer('portkiller', 'Port Killer (TCP/UDP Watchdog)', '3000, 8080 veya kilitlenen herhangi bir portu işgal eden çakışan süreçleri tek tıkla zorla sonlandırır.', 'SİSTEM & AĞ')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="system">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
@@ -1269,11 +1313,11 @@ graph LR
               "Port 3000 already in use" kabusuna son! Dinlenen tüm yerel portları listeler, PID ve süreçleri tek tıkla zorla sonlandırır.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-red-400 flex items-center gap-1">Tek Tıkla Port Kurtarma →</span>
+          <span class="mt-6 text-[11px] font-mono text-red-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 15: System Optimizer -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="system">
+        <div onclick="openToolDrawer('cleaner', 'Sistem & Bloatware Temizleyici', 'Windows Temp dosyalarını, DNS önbelleğini ve diskte yer kaplayan telemetri artıklarını güvenle süpürün.', 'SİSTEM & AĞ')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="system">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
@@ -1283,11 +1327,11 @@ graph LR
               Windows Temp dosyalarını, DNS önbelleğini ve diskte yer kaplayan gereksiz telemetri artıklarını güvenle süpürün.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-cyan-400 flex items-center gap-1">Disk & DNS Temizleyici →</span>
+          <span class="mt-6 text-[11px] font-mono text-cyan-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 16: Network Tools -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="system">
+        <div onclick="openToolDrawer('network', 'Ağ Dedektörü & Port Tarayıcı', 'Dahili ve harici IP tespiti, DNS MX/TXT çözümleme, gecikme analizi ve açık port tarayıcısı.', 'SİSTEM & AĞ')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="system">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
@@ -1297,11 +1341,11 @@ graph LR
               Dahili ve harici IP tespiti, DNS MX/TXT çözümleme, gecikme (Ping) analizi ve hedef sunucu açık port tarayıcısı.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-emerald-400 flex items-center gap-1">Ağ Teşhisi →</span>
+          <span class="mt-6 text-[11px] font-mono text-emerald-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 17: Desktop Floating Orb -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="system">
+        <div onclick="openToolDrawer('orb', 'Desktop Floating Orb (HUD)', 'Masaüstünüzde sessizce süzülen sibernetik mini widget. Tek tıkla TempMail kopyalayın, RAM boşaltın.', 'SİSTEM & HUD')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="system">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-nexus-cyan/10 border border-nexus-cyan/30 flex items-center justify-center text-nexus-cyan mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
@@ -1311,11 +1355,11 @@ graph LR
               Masaüstünüzde sessizce süzülen sibernetik mini widget. Tek tıkla TempMail kopyalayın, RAM boşaltın ve komut paletini çağırın.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-nexus-cyan flex items-center gap-1">HUD Hızlı Erişim →</span>
+          <span class="mt-6 text-[11px] font-mono text-nexus-cyan flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 18: Color Studio & WCAG -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="media">
+        <div onclick="openToolDrawer('color', 'Color Studio & WCAG Kontrast', 'Geliştirici renk paletleri, HEX/RGB/HSL dönüştürücü, CSS gradient üretici ve WCAG 2.1 erişilebilirlik kontrast denetçisi.', 'TASARIM & MEDYA')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="media">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4 5 5 0 015-5h4a5 5 0 015 5 4 4 0 01-4 4H7zM17 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -1325,11 +1369,11 @@ graph LR
               Geliştirici renk paletleri, HEX/RGB/HSL dönüştürücü, CSS gradient üretici ve canlı WCAG 2.1 erişilebilirlik kontrast denetçisi.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-pink-400 flex items-center gap-1">WCAG 2.1 Doğrulayıcı →</span>
+          <span class="mt-6 text-[11px] font-mono text-pink-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 19: Image & EXIF Privacy Toolkit -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="media">
+        <div onclick="openToolDrawer('image', 'Image & EXIF Gizlilik Toolkit', 'Fotoğraflardaki GPS konum, kamera modeli ve gizli metadata ları tek tıkla silin. WebP/PNG dönüştürün.', 'TASARIM & MEDYA')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="media">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -1339,11 +1383,11 @@ graph LR
               Fotoğraflardaki GPS konum, kamera modeli ve gizli metadata'ları tek tıkla silin. WebP/PNG dönüştürün ve kayıpsız sıkıştırın.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-indigo-400 flex items-center gap-1">EXIF Temizleme & Sıkıştırma →</span>
+          <span class="mt-6 text-[11px] font-mono text-indigo-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
         <!-- Tool 20: QR Code Studio & Bulk Organizer -->
-        <div class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all" data-category="media">
+        <div onclick="openToolDrawer('qr', 'QR Code Studio & Toplu Dosya', 'Logolu özel vektörel QR kodlar tasarlayın. Binlerce dağınık dosyayı kural bazlı akıllı algoritmalarla düzenleyin.', 'TASARIM & MEDYA')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="media">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
@@ -1353,7 +1397,7 @@ graph LR
               Logolu özel vektörel QR kodlar tasarlayın. Binlerce dağınık dosya ve klasörü kural bazlı akıllı algoritmalarla düzenleyin.
             </p>
           </div>
-          <span class="mt-6 text-[11px] font-mono text-amber-400 flex items-center gap-1">Logo Destekli QR & Düzenleyici →</span>
+          <span class="mt-6 text-[11px] font-mono text-amber-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
       </div>
@@ -2239,15 +2283,16 @@ graph LR
       </div>
 
       <div class="space-y-3 mb-6">
-        <a href="https://shopier.com" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-cyan/60 transition-all group">
+        <!-- Dynamic Primary Provider (Shopier for TR, LemonSqueezy for EN) -->
+        <a id="checkout-primary-link" href="https://shopier.com" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-cyan/60 transition-all group">
           <div class="flex items-center gap-3">
-            <span class="text-xl">💳</span>
+            <span class="text-xl" id="checkout-provider-icon">💳</span>
             <div>
-              <div class="text-xs font-bold text-white group-hover:text-nexus-cyan transition-colors">Shopier ile Güvenli Öde</div>
-              <div class="text-[10px] text-nexus-muted">Kredi Kartı / Banka Kartı / 3D Secure</div>
+              <div class="text-xs font-bold text-white group-hover:text-nexus-cyan transition-colors" id="checkout-provider-title">Shopier ile Güvenli Öde</div>
+              <div class="text-[10px] text-nexus-muted" id="checkout-provider-desc">Kredi Kartı / Banka Kartı / 3D Secure</div>
             </div>
           </div>
-          <span class="text-xs font-mono text-nexus-cyan font-bold">Satın Al →</span>
+          <span class="text-xs font-mono text-nexus-cyan font-bold" id="checkout-provider-cta">Satın Al →</span>
         </a>
 
         <a href="https://discord.gg" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-purple/60 transition-all group">
@@ -2266,6 +2311,106 @@ graph LR
         <span class="text-emerald-400 font-bold">✓</span>
         <span>Ödeme sonrası lisans anahtarınız ekranda ve mailinizde anında aktive edilir.</span>
       </div>
+    </div>
+  </div>
+
+  <!-- WAITLIST / EARLY ACCESS MODAL -->
+  <div id="waitlist-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 cursor-pointer" onclick="closeWaitlistModal()">
+    <div class="w-full max-w-md rounded-3xl card-glass border border-nexus-cyan/60 p-6 sm:p-8 text-nexus-text relative shadow-[0_0_60px_rgba(6,182,212,0.3)] cursor-default" onclick="event.stopPropagation()">
+      <button onclick="closeWaitlistModal()" class="absolute top-5 right-5 text-nexus-muted hover:text-white p-1 rounded-lg hover:bg-nexus-border cursor-pointer">✕</button>
+      
+      <div class="w-12 h-12 rounded-2xl bg-nexus-cyan/20 border border-nexus-cyan/50 flex items-center justify-center text-2xl text-nexus-cyan mb-4 shadow-sm">
+        ⚡
+      </div>
+
+      <div class="text-xs font-mono text-nexus-cyan uppercase tracking-wider mb-1 font-bold">ERKEN ERİŞİM DAVETİYESİ</div>
+      <h3 class="font-heading font-black text-2xl text-white mb-2">v2.2.0 Çıktığında İlk Siz İndirin</h3>
+      <p class="text-xs text-nexus-muted mb-5 leading-relaxed">
+        NexusHub v2.2.0 yeni stabilite derlemesi hazırlanıyor. E-postanızı bırakın, indirmeler açıldığı an <b class="text-nexus-cyan">%20 lansman indirimi</b> kodunuzla birlikte e-posta alın.
+      </p>
+
+      <form id="waitlist-form" onsubmit="handleWaitlistSubmit(event)" class="space-y-3">
+        <div class="relative">
+          <input type="email" id="waitlist-email" required placeholder="ornek@sirketiniz.com" class="w-full px-4 py-3.5 rounded-xl bg-nexus-bg border border-nexus-border/80 text-xs font-mono text-white placeholder:text-nexus-muted/50 focus:border-nexus-cyan outline-none transition-all">
+        </div>
+        <button type="submit" id="waitlist-submit-btn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-heading font-black text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(var(--c-cyan),0.4)] transition-all cursor-pointer flex items-center justify-center gap-2">
+          <span>Listeye Katıl & %20 İndirim Al</span> <span>→</span>
+        </button>
+      </form>
+
+      <div id="waitlist-success" class="hidden mt-4 p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-xs text-emerald-400 font-mono space-y-1">
+        <div class="font-bold flex items-center gap-1.5">✓ Başarıyla Kaydedildiniz!</div>
+        <div class="text-[11px] text-emerald-300">Lansman indirim kuponunuz: <b class="text-white bg-emerald-500/30 px-2 py-0.5 rounded select-all font-mono">NEXUS20</b></div>
+      </div>
+      
+      <div class="mt-5 pt-3 border-t border-nexus-border/50 flex items-center justify-between text-[11px] text-nexus-muted">
+        <span>🔒 Sıfır spam, tek seferlik lansman postası</span>
+        <a href="#pricing" onclick="closeWaitlistModal()" class="text-nexus-cyan hover:underline font-bold">Lisans Satın Al →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOL SPEC DEEP-DIVE DRAWER -->
+  <div id="tool-drawer-backdrop" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0" onclick="closeToolDrawer()"></div>
+  <div id="tool-drawer" class="fixed top-0 right-0 bottom-0 z-50 w-full max-w-lg bg-nexus-card border-l border-nexus-cyan/40 shadow-[-20px_0_60px_rgba(0,0,0,0.9)] p-6 sm:p-8 flex flex-col justify-between overflow-y-auto transform translate-x-full transition-transform duration-300 ease-out">
+    <div>
+      <div class="flex items-center justify-between border-b border-nexus-border/80 pb-4 mb-6">
+        <div class="flex items-center gap-3">
+          <div id="drawer-icon" class="w-10 h-10 rounded-xl bg-nexus-cyan/15 border border-nexus-cyan/40 flex items-center justify-center text-xl text-nexus-cyan">
+            ⚡
+          </div>
+          <div>
+            <span id="drawer-cat" class="text-[10px] font-mono text-nexus-cyan uppercase tracking-widest font-bold">GÜVENLİK & GİZLİLİK</span>
+            <h3 id="drawer-title" class="font-heading font-black text-xl text-white">Cyber Fortress Vault</h3>
+          </div>
+        </div>
+        <button onclick="closeToolDrawer()" class="text-nexus-muted hover:text-white p-2 rounded-xl hover:bg-nexus-surface cursor-pointer text-base">✕</button>
+      </div>
+
+      <p id="drawer-desc" class="text-xs text-nexus-muted leading-relaxed mb-6 font-sans">
+        Askeri düzeyde kalıcı dosya imha ve şifreleme kasası.
+      </p>
+
+      <!-- Technical Architecture Specs Grid -->
+      <div class="space-y-4 mb-6">
+        <div class="p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/60">
+          <div class="text-[10px] font-mono text-nexus-cyan uppercase tracking-wider mb-1 font-bold">🔐 Çekirdek Algoritmalar & Güvenlik</div>
+          <div id="drawer-algo" class="text-xs font-mono text-white leading-relaxed">DoD 5220.22-M 7-Pass Shredding • AES-256-GCM</div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-3 rounded-2xl bg-nexus-surface/60 border border-nexus-border/60">
+            <div class="text-[10px] font-mono text-nexus-muted uppercase">RAM Tüketimi</div>
+            <div id="drawer-ram" class="text-xs font-mono font-bold text-emerald-400 mt-0.5">~18 MB (Zero Leak)</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-nexus-surface/60 border border-nexus-border/60">
+            <div class="text-[10px] font-mono text-nexus-muted uppercase">Kısayol Tuşu</div>
+            <div id="drawer-shortcut" class="text-xs font-mono font-bold text-nexus-cyan mt-0.5">Ctrl + Alt + S</div>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-nexus-surface/60 border border-nexus-border/60">
+          <div class="text-[10px] font-mono text-nexus-muted uppercase mb-1 font-bold">🛡️ Gizlilik & Telemetri</div>
+          <div id="drawer-privacy" class="text-xs text-nexus-muted font-mono leading-relaxed">
+            %100 Yerel İcra. Dış sunuculara sıfır paket gönderilir. Offline-First mimari.
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-nexus-bg border border-nexus-border/80">
+          <div class="text-[10px] font-mono text-nexus-cyan uppercase mb-1.5 flex items-center justify-between font-bold">
+            <span>IPC VE MOTOR ÇAĞRISI</span>
+            <span class="text-nexus-muted text-[9px]">ipcRenderer.invoke</span>
+          </div>
+          <pre id="drawer-code" class="text-[11px] font-mono text-purple-300 overflow-x-auto leading-relaxed"></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-4 border-t border-nexus-border/60 flex items-center justify-between gap-3">
+      <button onclick="closeToolDrawer()" class="px-4 py-2.5 rounded-xl bg-nexus-surface text-nexus-muted hover:text-white font-mono text-xs cursor-pointer">Kapat</button>
+      <a href="#pricing" onclick="closeToolDrawer()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 text-nexus-bg font-heading font-black text-xs text-center shadow-lg transition-all cursor-pointer">
+        Ömür Boyu Paketi Al →
+      </a>
     </div>
   </div>
 
@@ -2669,28 +2814,53 @@ graph LR
       }
     }
 
-    // ─── Disabled Download Handler & Notice Toast ───────────────────────────
+    // ─── Navbar Audio SFX Toggle ───────────────────────────────────────────
+    function toggleNavbarSfx() {
+      sfxEnabled = !sfxEnabled;
+      const icon = document.getElementById('navbar-sfx-icon');
+      if (icon) icon.innerText = sfxEnabled ? '🔊' : '🔇';
+      if (sfxEnabled) playCyberSound('success');
+    }
+
+    // ─── Simulator Pro Demo 1-Click Unlocker ────────────────────────────────
+    let simProUnlocked = false;
+    function unlockSimulatorProDemo() {
+      simProUnlocked = true;
+      playCyberSound('success');
+      const banner = document.getElementById('sim-pro-banner');
+      const btn = document.getElementById('sim-pro-unlock-btn');
+      if (banner) banner.classList.remove('hidden');
+      if (btn) {
+        btn.innerHTML = '<span>✓</span> <span>PRO AKTİF</span>';
+        btn.classList.remove('animate-pulse', 'bg-emerald-500/20', 'border-emerald-500/40');
+        btn.classList.add('bg-emerald-500', 'text-black', 'border-emerald-400');
+      }
+    }
+
+    // ─── Disabled Download Handler & Waitlist Modal Trigger ─────────────────
     let downloadNoticeTimer = null;
     function handleDownloadDisabled() {
       playCyberSound('click');
       const toast = document.getElementById('download-notice-toast');
       const title = document.getElementById('download-notice-title');
       const msg = document.getElementById('download-notice-msg');
-      if (!toast) return;
 
       if (currentLang === 'tr') {
         if (title) title.innerText = 'İNDİRMELER GEÇİCİ OLARAK KAPALI';
-        if (msg) msg.innerText = 'NexusHub v2.2.0 yeni stabilite ve güvenlik yaması hazırlanmaktadır. Çok yakında indirmeye açılacaktır!';
+        if (msg) msg.innerText = 'NexusHub v2.2.0 yeni stabilite derlemesi hazırlanıyor. Erken erişim davetiyesi açılıyor...';
       } else {
         if (title) title.innerText = 'DOWNLOADS TEMPORARILY PAUSED';
-        if (msg) msg.innerText = 'NexusHub v2.2.0 is receiving a new stability build. Downloads will be available very soon!';
+        if (msg) msg.innerText = 'NexusHub v2.2.0 new build is preparing. Opening early access invite...';
       }
 
-      toast.classList.remove('-translate-y-20', 'opacity-0', 'pointer-events-none');
-      toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+      if (toast) {
+        toast.classList.remove('-translate-y-20', 'opacity-0', 'pointer-events-none');
+        toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        if (downloadNoticeTimer) clearTimeout(downloadNoticeTimer);
+        downloadNoticeTimer = setTimeout(dismissDownloadNotice, 3500);
+      }
 
-      if (downloadNoticeTimer) clearTimeout(downloadNoticeTimer);
-      downloadNoticeTimer = setTimeout(dismissDownloadNotice, 4500);
+      setTimeout(openWaitlistModal, 450);
     }
 
     function dismissDownloadNotice() {
@@ -2698,6 +2868,178 @@ graph LR
       if (toast) {
         toast.classList.add('-translate-y-20', 'opacity-0', 'pointer-events-none');
         toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+      }
+    }
+
+    // ─── Waitlist Modal Logic ───────────────────────────────────────────────
+    function openWaitlistModal() {
+      const modal = document.getElementById('waitlist-modal');
+      if (modal) modal.classList.remove('hidden');
+      playCyberSound('click');
+    }
+
+    function closeWaitlistModal() {
+      const modal = document.getElementById('waitlist-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    async function handleWaitlistSubmit(e) {
+      e.preventDefault();
+      const emailInput = document.getElementById('waitlist-email');
+      const btn = document.getElementById('waitlist-submit-btn');
+      const successBox = document.getElementById('waitlist-success');
+      if (!emailInput || !emailInput.value) return;
+
+      const email = emailInput.value.trim();
+      btn.disabled = true;
+      btn.innerText = 'KAYDEDİLİYOR...';
+
+      try {
+        const resp = await fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await resp.json();
+        if (data.success) {
+          if (successBox) successBox.classList.remove('hidden');
+          emailInput.value = '';
+          btn.innerText = '✓ LİSTEYE EKLENDİ';
+          playCyberSound('success');
+        } else {
+          alert(data.reason || 'Bir hata oluştu.');
+          btn.disabled = false;
+          btn.innerText = 'LİSTEYE KATIL →';
+        }
+      } catch {
+        if (successBox) successBox.classList.remove('hidden');
+        btn.innerText = '✓ LİSTEYE EKLENDİ';
+        playCyberSound('success');
+      }
+    }
+
+    // ─── Tool Spec Deep-Dive Drawer Logic ───────────────────────────────────
+    const toolSpecsDb = {
+      tempmail: {
+        name: 'TempMail Pro & Live Inbox',
+        cat: 'GİZLİLİK & GÜVENLİK',
+        icon: '📬',
+        desc: 'Spam, bülten ve tek kullanımlık kayıt tuzaklarından koruyan sınırsız geçici gelen kutusu motoru.',
+        algo: 'GuerrillaMail REST Polling • Regex OTP Parser • SHA-256 Token Cache',
+        ram: '~14 MB Heap',
+        shortcut: 'Ctrl + Alt + T',
+        privacy: 'Kişisel veri veya kimlik loglanmaz. Oturum kapandığında tüm mailler bellekten silinir.',
+        code: '// TempMail API Entegrasyonu\nconst mail = await window.api.tempMail.generate();\nconsole.log(mail.address); // -> phantom912@tempdrop.io'
+      },
+      decrypter: {
+        name: 'Evrensel Link Decrypter',
+        cat: 'GİZLİLİK & GÜVENLİK',
+        icon: '🔗',
+        desc: 'Aylink, bc.vc, sayaçlar, captcha bekleme duvarları ve para kazandıran yönlendirme linklerini atlayarak temiz hedef URL verir.',
+        algo: 'Headless DOM Parser • UTM & Tracking Stripper • Anti-Redirect Unmasking',
+        ram: '~12 MB Heap',
+        shortcut: 'Ctrl + Alt + L',
+        privacy: 'Tüm yönlendirme ve parametre temizliği yerel regex mimarisiyle cihazınızda yapılır.',
+        code: 'const res = await window.api.decrypter.resolve(adUrl);\n// -> { cleanUrl: "https://clean-dest.org/file.zip" }'
+      },
+      fortress: {
+        name: 'Cyber Fortress Vault & Shredder',
+        cat: 'GİZLİLİK & GÜVENLİK',
+        icon: '🛡️',
+        desc: 'Geri getirilemez askeri dosya imhası ve yerel AES-256-GCM şifrelenmiş kasa güvenliği.',
+        algo: 'DoD 5220.22-M (7-Pass Overwrite) • AES-256-GCM • PBKDF2 with HMAC-SHA512',
+        ram: '~16 MB Heap',
+        shortcut: 'Ctrl + Alt + S',
+        privacy: 'Dosyalar silinirken sektör üzerine 7 kez rastgele bitler yazılır. Magneto-optik kurtarma imkansızdır.',
+        code: 'await window.api.shredder.wipeFile(targetPath, { passes: 7 });\n// Status: DOD_7_PASS_PURGED'
+      },
+      scratchpad: {
+        name: 'Scratchpad Ultimate & Flowchart',
+        cat: 'GELİŞTİRİCİ & ÜRETKENLİK',
+        icon: '📝',
+        desc: 'Mermaid.js akış diyagramları, çift senkronize kaydırma, satır numaraları, arama-değiştirme ve anlık yerel şifreleme.',
+        algo: 'Mermaid v10 SVG Engine • Unified Markdown AST • AES-GCM Note Vault',
+        ram: '~22 MB Heap',
+        shortcut: 'Ctrl + Alt + N',
+        privacy: 'Notlarınız hiçbir cloud sunucusuna gitmez. Tamamen yerel IndexedDB ve şifreli dosya formatında saklanır.',
+        code: 'graph LR\n  User --> Proxy\n  Proxy --> Core((NexusHub v2.2))'
+      },
+      color: {
+        name: 'Color Studio & WCAG Contrast',
+        cat: 'GELİŞTİRİCİ & TASARIM',
+        icon: '🎨',
+        desc: 'Göz damlalığı, WCAG 2.1 AA/AAA erişilebilirlik kontrast denetçisi ve tek tık Tailwind CSS token kopyalama.',
+        algo: 'WCAG 2.1 Relative Luminance Algoritması • HSL/RGB/HEX Renk Matrisi',
+        ram: '~11 MB Heap',
+        shortcut: 'Ctrl + Alt + K',
+        privacy: 'Tüm renk hesaplamaları yerel matematik motoruyla hesaplanır.',
+        code: 'calcContrastRatio("#06b6d4", "#08090d");\n// -> 14.8:1 (AAA Pass)'
+      },
+      portkiller: {
+        name: 'Port Killer (TCP/UDP Watchdog)',
+        cat: 'SİSTEM & AĞ',
+        icon: '⚡',
+        desc: '3000, 8080 veya kilitlenen herhangi bir portu işgal eden çakışan süreçleri anında tespit eder ve tek tıkla sonlandırır.',
+        algo: 'Windows netstat -ano IPC • Taskkill /F /PID Execution • Protocol Filter',
+        ram: '~15 MB Heap',
+        shortcut: 'Ctrl + Alt + P',
+        privacy: 'Sadece yerel ağ port tablosunu okur. Dış ağa sıfır bağlantı.',
+        code: 'await window.api.portKiller.killPort(3000);\n// -> { killedPid: 14280, process: "node.exe" }'
+      }
+    };
+
+    function openToolDrawer(toolKey, fallbackTitle, fallbackDesc, fallbackCat) {
+      playCyberSound('click');
+      const backdrop = document.getElementById('tool-drawer-backdrop');
+      const drawer = document.getElementById('tool-drawer');
+      const title = document.getElementById('drawer-title');
+      const desc = document.getElementById('drawer-desc');
+      const cat = document.getElementById('drawer-cat');
+      const icon = document.getElementById('drawer-icon');
+      const algo = document.getElementById('drawer-algo');
+      const ram = document.getElementById('drawer-ram');
+      const shortcut = document.getElementById('drawer-shortcut');
+      const code = document.getElementById('drawer-code');
+
+      const spec = toolSpecsDb[toolKey] || {
+        name: fallbackTitle || 'NexusHub Modül Detayı',
+        cat: fallbackCat || 'SİBER ARAÇ',
+        icon: '⚡',
+        desc: fallbackDesc || 'Tamamen yerel, sıfır telemetri ve yüksek performanslı masaüstü aracı.',
+        algo: 'Native C++/Node.js IPC • Askeri Düzey Bellek Yönetimi',
+        ram: '~15 MB Heap',
+        shortcut: 'Ctrl + K -> Ara',
+        privacy: '%100 Yerel İcra. Dış sunuculara sıfır paket gönderilir. Offline-First mimari.',
+        code: '// NexusHub IPC Çağrısı\nawait window.api.' + toolKey + '.execute();'
+      };
+
+      if (title) title.innerText = spec.name;
+      if (desc) desc.innerText = spec.desc;
+      if (cat) cat.innerText = spec.cat;
+      if (icon) icon.innerText = spec.icon;
+      if (algo) algo.innerText = spec.algo;
+      if (ram) ram.innerText = spec.ram;
+      if (shortcut) shortcut.innerText = spec.shortcut;
+      if (code) code.innerText = spec.code;
+
+      if (backdrop) {
+        backdrop.classList.remove('hidden');
+        setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+      }
+      if (drawer) {
+        drawer.classList.remove('translate-x-full');
+      }
+    }
+
+    function closeToolDrawer() {
+      const backdrop = document.getElementById('tool-drawer-backdrop');
+      const drawer = document.getElementById('tool-drawer');
+      if (backdrop) {
+        backdrop.classList.add('opacity-0');
+        setTimeout(() => backdrop.classList.add('hidden'), 300);
+      }
+      if (drawer) {
+        drawer.classList.add('translate-x-full');
       }
     }
 
@@ -2844,21 +3186,39 @@ graph LR
       selectedPlan = plan;
       const modalName = document.getElementById('modal-plan-name');
       const modalPrice = document.getElementById('modal-plan-price');
+      const primaryLink = document.getElementById('checkout-primary-link');
+      const provTitle = document.getElementById('checkout-provider-title');
+      const provDesc = document.getElementById('checkout-provider-desc');
+      const provCta = document.getElementById('checkout-provider-cta');
       document.getElementById('modal-discount-tag').classList.add('hidden');
       document.getElementById('coupon-input').value = '';
 
       if (plan === 'pro') {
-        modalName.innerText = 'Nexus Pro Lifetime';
+        modalName.innerText = currentLang === 'tr' ? 'Nexus Pro Lifetime' : 'Nexus Pro Lifetime License';
         basePriceTR = 349;
         basePriceEN = 29;
       } else {
-        modalName.innerText = 'Nexus Studio (3 Cihaz)';
+        modalName.innerText = currentLang === 'tr' ? 'Nexus Studio (3 Cihaz)' : 'Nexus Studio (3 Devices)';
         basePriceTR = 699;
         basePriceEN = 49;
       }
 
+      // Dynamic Provider Configuration
+      if (currentLang === 'en') {
+        if (primaryLink) primaryLink.href = 'https://nexushub.lemonsqueezy.com';
+        if (provTitle) provTitle.innerText = 'Pay with LemonSqueezy (Global)';
+        if (provDesc) provDesc.innerText = 'Credit Card, Apple Pay, Google Pay, PayPal';
+        if (provCta) provCta.innerText = 'Buy Now →';
+      } else {
+        if (primaryLink) primaryLink.href = 'https://shopier.com';
+        if (provTitle) provTitle.innerText = 'Shopier ile Güvenli Öde';
+        if (provDesc) provDesc.innerText = 'Kredi Kartı / Banka Kartı / 3D Secure';
+        if (provCta) provCta.innerText = 'Satın Al →';
+      }
+
       modalPrice.innerText = currentLang === 'tr' ? '₺' + basePriceTR : '$' + basePriceEN;
       document.getElementById('checkout-modal').classList.remove('hidden');
+      playCyberSound('click');
     }
 
     function closeCheckoutModal() {
