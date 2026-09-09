@@ -28,10 +28,17 @@ export default function MiniHud() {
       }
     }
 
+    const handleCustomToggle = () => {
+      setIsOpen((prev) => !prev)
+      cyberAudio.navigate()
+    }
+
     window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('nexus:toggle-hud', handleCustomToggle)
     return () => {
       unbind?.()
       window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('nexus:toggle-hud', handleCustomToggle)
     }
   }, [isOpen])
 

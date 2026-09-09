@@ -100,6 +100,43 @@ app.post('/api/waitlist', async (req: Request, res: Response) => {
   }
 })
 
+
+// ── Recent Social Proof Activations Feed ────────────────────────────────────
+app.get('/api/recent-activations', async (_req: Request, res: Response) => {
+  try {
+    const db = getDb()
+    const result = await db.execute(`
+      SELECT 
+        l.tier,
+        l.created_at,
+        l.sales_channel
+      FROM licenses l
+      WHERE l.is_revoked = 0
+      ORDER BY l.created_at DESC
+      LIMIT 12
+    `)
+
+    const cities = ['İstanbul', 'Ankara', 'İzmir', 'Antalya', 'Bursa', 'Berlin', 'London', 'San Francisco', 'Amsterdam', 'New York']
+    const names = ['Kerem A.', 'Ece T.', 'Caner M.', 'Mert S.', 'Alex R.', 'Zeynep K.', 'David H.', 'Burak D.', 'Sarah L.']
+
+    const feed = result.rows.map((r: any, idx: number) => {
+      const city = cities[idx % cities.length]
+      const name = names[idx % names.length]
+      const tierName = r.tier === 'team' || r.tier === 'studio' ? 'Studio Pack' : 'Lifetime Pro'
+      return {
+        customer: name,
+        location: city,
+        tier: tierName,
+        timeAgo: `${(idx + 1) * 7 + 2} dk önce`
+      }
+    })
+
+    res.json({ success: true, feed })
+  } catch (err: any) {
+    res.json({ success: false, feed: [] })
+  }
+})
+
 app.use('/webhook',      webhookRouter)
 app.use('/api/license',  licenseRouter)
 app.use('/admin',        adminRouter)

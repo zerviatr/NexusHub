@@ -171,6 +171,53 @@ export function getAdminDashboardHtml(): string {
     <!-- Main Content Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6 pb-24">
 
+      <!-- Revenue & Financial Summary Row -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+        <div class="glass-card p-4 rounded-2xl border border-nexus-cyan/20 bg-gradient-to-br from-nexus-cyan/5 to-transparent flex items-center justify-between">
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-pulse"></span>
+              <p class="text-[11px] font-bold uppercase tracking-wider text-nexus-cyan">Tahmini Brüt Hasılat</p>
+            </div>
+            <h3 id="stat-revenue" class="text-2xl font-black text-white mt-1">$0</h3>
+            <p id="stat-revenue-sub" class="text-[10px] text-slate-400 mt-0.5">0 Satış | Ortalama: $0</p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-nexus-cyan/10 border border-nexus-cyan/30 flex items-center justify-center text-nexus-cyan">
+            <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+        <div class="glass-card p-4 rounded-2xl border border-nexus-border flex items-center justify-between">
+          <div>
+            <p class="text-[11px] font-bold uppercase tracking-wider text-nexus-muted">Tier Dağılımı</p>
+            <div class="flex items-center gap-2 mt-2 text-xs font-semibold">
+              <span class="text-blue-400">Pro: <b id="stat-pro-count" class="text-white">0</b></span>
+              <span class="text-slate-600">|</span>
+              <span class="text-nexus-cyan">Lifetime: <b id="stat-life-count" class="text-white">0</b></span>
+              <span class="text-slate-600">|</span>
+              <span class="text-nexus-accent">Team: <b id="stat-team-count" class="text-white">0</b></span>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1">Stok & Dağıtım Dengesi</p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-nexus-accent/10 border border-nexus-accent/20 flex items-center justify-center text-nexus-accent">
+            <i data-lucide="pie-chart" class="w-5 h-5"></i>
+          </div>
+        </div>
+
+        <div class="glass-card p-4 rounded-2xl border border-nexus-border flex items-center justify-between">
+          <div>
+            <div class="flex items-center gap-1.5">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-nexus-muted">HWID Güvenlik & Risk Radarı</p>
+            </div>
+            <h3 id="stat-risk-count" class="text-2xl font-black text-nexus-emerald mt-1">0 Risk</h3>
+            <p id="stat-risk-sub" class="text-[10px] text-slate-400 mt-0.5">Tüm cihaz aktivasyonları normal</p>
+          </div>
+          <div id="stat-risk-icon-wrap" class="w-10 h-10 rounded-xl bg-nexus-emerald/10 border border-nexus-emerald/20 flex items-center justify-center text-nexus-emerald">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+        </div>
+      </div>
+
       <!-- Metrics Row -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="glass-card p-4 rounded-2xl flex items-center justify-between">
@@ -952,6 +999,7 @@ export function getAdminDashboardHtml(): string {
       document.getElementById('dashboard-view').classList.remove('hidden');
       refreshKeys();
       fetchTelemetry();
+          fetchRevenueStats();
     }
 
     async function handleLogin(e) {
@@ -1232,6 +1280,36 @@ export function getAdminDashboardHtml(): string {
       document.getElementById('stat-active').innerText = active;
       document.getElementById('stat-expiring').innerText = expiring;
       document.getElementById('stat-revoked').innerText = revoked;
+
+      // Tier breakdown
+      const proCount = allKeys.filter(k => k.tier === 'standard' || k.tier === 'pro').length;
+      const lifeCount = allKeys.filter(k => k.tier === 'lifetime').length;
+      const teamCount = allKeys.filter(k => k.tier === 'team').length;
+      const elPro = document.getElementById('stat-pro-count');
+      const elLife = document.getElementById('stat-life-count');
+      const elTeam = document.getElementById('stat-team-count');
+      if (elPro) elPro.innerText = proCount;
+      if (elLife) elLife.innerText = lifeCount;
+      if (elTeam) elTeam.innerText = teamCount;
+
+      // Risk radar
+      const riskKeys = allKeys.filter(k => (k.activation_count || 0) >= (k.max_activations || 2) && k.is_revoked === 0);
+      const riskEl = document.getElementById('stat-risk-count');
+      const riskSub = document.getElementById('stat-risk-sub');
+      const riskIcon = document.getElementById('stat-risk-icon-wrap');
+      if (riskEl) {
+        if (riskKeys.length > 0) {
+          riskEl.innerText = riskKeys.length + ' Dolu Slot';
+          riskEl.className = 'text-2xl font-black text-amber-400 mt-1';
+          if (riskSub) riskSub.innerText = riskKeys.length + ' anahtar max cihaz limitinde';
+          if (riskIcon) riskIcon.className = 'w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center text-amber-400';
+        } else {
+          riskEl.innerText = '0 Risk';
+          riskEl.className = 'text-2xl font-black text-nexus-emerald mt-1';
+          if (riskSub) riskSub.innerText = 'Tüm cihaz aktivasyonları normal';
+          if (riskIcon) riskIcon.className = 'w-10 h-10 rounded-xl bg-nexus-emerald/10 border border-nexus-emerald/20 flex items-center justify-center text-nexus-emerald';
+        }
+      }
     }
 
     function setFilter(f) {
@@ -1425,6 +1503,9 @@ export function getAdminDashboardHtml(): string {
                 <button onclick="toggleRevoke('\${k.key}', \${k.is_revoked ? 0 : 1})" class="px-2 py-1 rounded font-bold text-[11px] transition \${k.is_revoked ? 'bg-nexus-emerald/10 text-nexus-emerald border border-nexus-emerald/30 hover:bg-nexus-emerald/20' : 'bg-nexus-rose/10 text-nexus-rose border border-nexus-rose/30 hover:bg-nexus-rose/20'}">
                   \${k.is_revoked ? 'Aktifleştir' : 'İptal Et'}
                 </button>
+                <button onclick="resendEmailPrompt('\${k.key}')" class="p-1 rounded text-nexus-muted hover:text-nexus-cyan transition" title="Lisans Bilgisini E-posta ile Gönder">
+                  <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                </button>
                 <button onclick="deleteKey('\${k.key}')" class="p-1 rounded text-nexus-muted hover:text-nexus-rose transition" title="Sil">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 </button>
@@ -1555,6 +1636,50 @@ export function getAdminDashboardHtml(): string {
       }
     }
 
+    async function fetchRevenueStats() {
+      try {
+        const res = await fetch('/admin/api/revenue-stats', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.stats) {
+            const rev = data.stats;
+            const revEl = document.getElementById('stat-revenue');
+            const revSub = document.getElementById('stat-revenue-sub');
+            if (revEl) revEl.innerText = '$' + Number(rev.estimatedRevenueUSD || 0).toLocaleString();
+            if (revSub) revSub.innerText = rev.totalPaidLicenses + ' Satış | Pro: ' + rev.breakdown.pro + ' · Studio: ' + rev.breakdown.lifetime;
+          }
+        }
+      } catch (e) {
+        console.warn('Revenue stats error:', e);
+      }
+    }
+
+    async function resendEmailPrompt(key) {
+      const email = prompt('Lisans anahtarı ve indirme bağlantısını iletmek istediğiniz e-posta adresi:');
+      if (!email || !email.includes('@')) {
+        if (email) alert('Geçersiz e-posta formatı.');
+        return;
+      }
+
+      showToast('E-posta gönderiliyor...');
+      try {
+        const res = await fetch('/admin/api/keys/resend-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ key, email: email.trim() })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Lisans e-postası başarıyla iletildi: ' + email);
+        } else {
+          alert('E-posta iletilemedi: ' + (data.error || 'Bilinmeyen hata'));
+        }
+      } catch (err) {
+        alert('İstek hatası: ' + err.message);
+      }
+    }
     async function deleteKey(key) {
       const confirmed = await customConfirm('Lisansı Kalıcı Olarak Sil?', \`\${key} lisansı ve tüm kayıtları veritabanından yok edilecek.\`);
       if (!confirmed) return;

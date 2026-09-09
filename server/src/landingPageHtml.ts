@@ -1607,6 +1607,116 @@ graph LR
     </div>
   </section>
 
+  <!-- INTERACTIVE TOOL RECOMMENDER QUIZ -->
+  <section id="tool-quiz" class="relative z-10 py-16 border-t border-nexus-border/40 bg-nexus-surface/10 scroll-mt-24">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-8">
+        <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan">Akıllı Çözüm Asistanı</span>
+        <h2 class="font-heading font-black text-2xl sm:text-4xl text-white tracking-tight mt-2 mb-3">
+          Hangi Nexus Araçları İş Akışınızı Uçurur?
+        </h2>
+        <p class="text-nexus-muted font-sans text-xs sm:text-sm">
+          2 basit soruyu yanıtlayın; size özel optimize edilmiş araç paketini ve verimlilik tahminini anında görün.
+        </p>
+      </div>
+
+      <div class="card-glass border border-nexus-cyan/30 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <!-- Step 1: Role -->
+        <div id="quiz-step-1" class="space-y-4">
+          <div class="flex items-center justify-between text-xs font-mono text-nexus-muted mb-2">
+            <span class="text-nexus-cyan font-bold">ADIM 1 / 2</span>
+            <span>Profilinizi Seçin</span>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-white mb-4">Masaüstünüzde en çok hangi şapkayı takıyorsunuz?</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button onclick="selectQuizRole('dev')" class="p-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-cyan/60 hover:bg-nexus-cyan/5 text-left transition-all group cursor-pointer">
+              <div class="text-2xl mb-1">💻</div>
+              <div class="font-bold text-white group-hover:text-nexus-cyan text-sm">Yazılım Geliştirici & Mühendis</div>
+              <div class="text-xs text-nexus-muted mt-1">API testleri, regex, port çakışmaları, hash & base64.</div>
+            </button>
+            <button onclick="selectQuizRole('sec')" class="p-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-cyan/60 hover:bg-nexus-cyan/5 text-left transition-all group cursor-pointer">
+              <div class="text-2xl mb-1">🛡️</div>
+              <div class="font-bold text-white group-hover:text-nexus-cyan text-sm">Siber Güvenlik & SysAdmin</div>
+              <div class="text-xs text-nexus-muted mt-1">Askeri dosya imhası, link çözücü, sentinel & parola analizörü.</div>
+            </button>
+            <button onclick="selectQuizRole('creator')" class="p-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-cyan/60 hover:bg-nexus-cyan/5 text-left transition-all group cursor-pointer">
+              <div class="text-2xl mb-1">🎨</div>
+              <div class="font-bold text-white group-hover:text-nexus-cyan text-sm">Tasarımcı & İçerik Üretici</div>
+              <div class="text-xs text-nexus-muted mt-1">Renk & WCAG paleti, medya dönüştürücü, hızlı scratchpad.</div>
+            </button>
+            <button onclick="selectQuizRole('power')" class="p-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-cyan/60 hover:bg-nexus-cyan/5 text-left transition-all group cursor-pointer">
+              <div class="text-2xl mb-1">⚡</div>
+              <div class="font-bold text-white group-hover:text-nexus-cyan text-sm">Güç Kullanıcısı & Öğrenci</div>
+              <div class="text-xs text-nexus-muted mt-1">Toplu dosya düzenleme, tempmail, sistem optimizasyonu.</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Pain Point -->
+        <div id="quiz-step-2" class="space-y-4 hidden">
+          <div class="flex items-center justify-between text-xs font-mono text-nexus-muted mb-2">
+            <span class="text-nexus-cyan font-bold">ADIM 2 / 2</span>
+            <span>Zaman Kaybını Belirleyin</span>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-white mb-4">Gün içinde vaktinizi en çok hangi problem çalıyor?</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button onclick="selectQuizPain('ports')" class="p-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-cyan/60 hover:bg-nexus-cyan/5 text-left transition-all group cursor-pointer">
+              <div class="text-2xl mb-1">🚫</div>
+              <div class="font-bold text-white group-hover:text-nexus-cyan text-sm">Kilitlenen Portlar & Dağınık Dosyalar</div>
+              <div class="text-xs text-nexus-muted mt-1">EADDRINUSE hataları ve masaüstünde biriken dosyalar.</div>
+            </button>
+            <button onclick="selectQuizPain('spam')" class="p-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-cyan/60 hover:bg-nexus-cyan/5 text-left transition-all group cursor-pointer">
+              <div class="text-2xl mb-1">📬</div>
+              <div class="font-bold text-white group-hover:text-nexus-cyan text-sm">Spam Mailler & Şüpheli Linkler</div>
+              <div class="text-xs text-nexus-muted mt-1">Gizli yönlendirmeler ve tek kullanımlık posta ihtiyacı.</div>
+            </button>
+            <button onclick="selectQuizPain('privacy')" class="p-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-cyan/60 hover:bg-nexus-cyan/5 text-left transition-all group cursor-pointer">
+              <div class="text-2xl mb-1">🕵️</div>
+              <div class="font-bold text-white group-hover:text-nexus-cyan text-sm">Veri Gizliliği & Dosya İmhası</div>
+              <div class="text-xs text-nexus-muted mt-1">DoD 7-Pass shredder ve askeri entropi parola gereksinimi.</div>
+            </button>
+            <button onclick="selectQuizPain('tabs')" class="p-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-cyan/60 hover:bg-nexus-cyan/5 text-left transition-all group cursor-pointer">
+              <div class="text-2xl mb-1">🌐</div>
+              <div class="font-bold text-white group-hover:text-nexus-cyan text-sm">Tarayıcıda 40 Tane Web Tool Sekmesi</div>
+              <div class="text-xs text-nexus-muted mt-1">Base64, JSON, Regex ve notlar için RAM israfı.</div>
+            </button>
+          </div>
+          <button onclick="resetQuiz()" class="text-xs font-mono text-nexus-muted hover:text-white mt-2 transition">← İlk Adıma Dön</button>
+        </div>
+
+        <!-- Result Box -->
+        <div id="quiz-result" class="space-y-5 hidden">
+          <div class="p-5 rounded-2xl bg-nexus-cyan/10 border border-nexus-cyan/30">
+            <div class="flex items-center gap-2 text-xs font-mono text-nexus-cyan font-bold uppercase tracking-wider mb-1">
+              <span>🎯</span> Sizin İçin Optimize Edilmiş Nexus Paketi
+            </div>
+            <h4 id="quiz-recommend-title" class="text-xl font-black text-white">Full-Stack Geliştirici Güç Paketi</h4>
+            <p id="quiz-recommend-desc" class="text-xs text-slate-300 mt-1">
+              Günde ortalama 45 dakika zaman tasarrufu sağlar.
+            </p>
+          </div>
+
+          <div id="quiz-recommended-tools" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <!-- Dynamic Tool Badges -->
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-nexus-border/60">
+            <div class="text-xs text-nexus-muted font-mono">
+              Bu 3 araç ve diğer <b class="text-white">17 araç</b> tek bir lisansa dahildir.
+            </div>
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+              <button onclick="resetQuiz()" class="text-xs font-mono text-nexus-muted hover:text-white px-3 py-2">Yeniden Test Et</button>
+              <a href="#pricing" class="btn-primary text-xs font-bold py-2.5 px-5 rounded-xl flex items-center justify-center gap-1.5 w-full sm:w-auto">
+                <span>Ömür Boyu Lisans Al ($29)</span>
+                <span>→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- PRICING TIERS SECTION -->
   <section id="pricing" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-bg/70 scroll-mt-24">
     <div class="max-w-7xl mx-auto px-6">
@@ -4444,7 +4554,105 @@ graph LR
     let fomoIndex = 0;
     let fomoDismissed = false;
 
-    function cycleFomoToast() {
+    
+    // ─── Interactive Tool Recommender Quiz Logic ──────────────────────────
+    let quizState = { role: "", pain: "" };
+    const quizProfiles = {
+      dev: {
+        title: "Full-Stack & Cloud Geliştirici Paketi",
+        desc: "API ve derleme döngülerinizi hızlandıracak 3 temel silahınız:",
+        tools: [
+          { icon: "⚡", name: "Port Killer", tag: "EADDRINUSE Çözücü" },
+          { icon: "🔑", name: "Hash & Base64 Studio", tag: "Sıfır Gecikmeli Kripto" },
+          { icon: "📝", name: "Scratchpad Flow", tag: "Canlı Mermaid & Markdown" }
+        ]
+      },
+      sec: {
+        title: "Siber Güvenlik & Savunma Paketi",
+        desc: "Veri sızıntısını ve oltalama saldırılarını durduracak araçlar:",
+        tools: [
+          { icon: "🛡️", name: "Cyber Fortress Shredder", tag: "DoD 7-Pass Askeri İmha" },
+          { icon: "🔗", name: "Link Decrypter", tag: "Anti-Phishing Çözücü" },
+          { icon: "🔑", name: "Shannon Parola Entropisi", tag: "Kaba Kuvvet Kalkanı" }
+        ]
+      },
+      creator: {
+        title: "Tasarımcı & Yaratıcı Akış Paketi",
+        desc: "Görsel ve metinsel içeriklerinizi hızlandıracak modüller:",
+        tools: [
+          { icon: "🎨", name: "Color & WCAG Studio", tag: "Erişilebilir Paletler" },
+          { icon: "📁", name: "Bulk File Organizer", tag: "Tek Tıkla Akıllı Tasnif" },
+          { icon: "📝", name: "Scratchpad Live", tag: "Hızlı Taslak & Fikir Defteri" }
+        ]
+      },
+      power: {
+        title: "Maksimum Verimlilik Güç Paketi",
+        desc: "Masaüstünüzü hızlandıracak ve spamı engelleyecek araçlar:",
+        tools: [
+          { icon: "📬", name: "TempMail In-App Inbox", tag: "Spamsız Tek Kullanımlık" },
+          { icon: "⚡", name: "Resource Sentinel", tag: "RAM & CPU Koruması" },
+          { icon: "🔮", name: "Cyber Floating Orb", tag: "Masaüstü Mini HUD" }
+        ]
+      }
+    };
+
+    function selectQuizRole(role) {
+      quizState.role = role;
+      document.getElementById("quiz-step-1").classList.add("hidden");
+      document.getElementById("quiz-step-2").classList.remove("hidden");
+    }
+
+    function selectQuizPain(pain) {
+      quizState.pain = pain;
+      document.getElementById("quiz-step-2").classList.add("hidden");
+      const resBox = document.getElementById("quiz-result");
+      resBox.classList.remove("hidden");
+
+      const profile = quizProfiles[quizState.role] || quizProfiles.dev;
+      document.getElementById("quiz-recommend-title").innerText = profile.title;
+      document.getElementById("quiz-recommend-desc").innerText = profile.desc;
+
+      const toolsWrap = document.getElementById("quiz-recommended-tools");
+      toolsWrap.innerHTML = profile.tools.map(function(t) {
+        return '<div class="p-3.5 rounded-xl bg-nexus-surface/80 border border-nexus-border/80 flex items-center gap-3">' +
+          '<div class="text-2xl">' + t.icon + '</div>' +
+          '<div>' +
+            '<div class="font-bold text-white text-xs">' + t.name + '</div>' +
+            '<div class="text-[10px] text-nexus-cyan font-mono">' + t.tag + '</div>' +
+          '</div>' +
+        '</div>';
+      }).join("");
+    }
+
+    function resetQuiz() {
+      quizState = { role: "", pain: "" };
+      document.getElementById("quiz-step-1").classList.remove("hidden");
+      document.getElementById("quiz-step-2").classList.add("hidden");
+      document.getElementById("quiz-result").classList.add("hidden");
+    }
+
+    // ─── Real Live Activations Connect into FOMO Ticker ────────────────────
+    async function loadLiveActivationsFeed() {
+      try {
+        const res = await fetch("/api/recent-activations");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && Array.isArray(data.activations) && data.activations.length > 0) {
+            const realEvents = data.activations.map(a => ({
+              icon: "⚡",
+              user: a.country + " " + a.city + " (" + a.key + ")",
+              action: "Nexus " + (a.tier === "lifetime" ? "Studio Lifetime" : "Pro") + " lisansını aktive etti",
+              time: "az önce"
+            }));
+            fomoEvents.unshift(...realEvents);
+          }
+        }
+      } catch (e) {
+        // static fomoEvents fallback
+      }
+    }
+
+function cycleFomoToast() {
       if (fomoDismissed) return;
       const toast = document.getElementById('sales-fomo-toast');
       const icon = document.getElementById('fomo-icon');
@@ -4493,6 +4701,7 @@ graph LR
     // Initial calculations & canvas start
     calcRoi();
     initMatrixRain();
+    loadLiveActivationsFeed();
     computeSimHash('NexusHub-Safe-Crypto-2026');
     initTelemetryHeartbeat();
     setTimeout(cycleFomoToast, 3500);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Minus, Square, X, Copy, Pin, PinOff } from 'lucide-react'
+import { Minus, Square, X, Copy, Pin, PinOff, Zap } from 'lucide-react'
 import { cyberAudio } from '../lib/cyberAudio'
 
 export default function TitleBar() {
@@ -64,6 +64,18 @@ export default function TitleBar() {
 
       {/* Window controls */}
       <div className="flex items-center no-drag">
+        <motion.button
+          whileHover={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => {
+            cyberAudio.click()
+            window.dispatchEvent(new CustomEvent('nexus:toggle-hud'))
+          }}
+          className="w-10 h-10 flex items-center justify-center text-nexus-muted hover:text-nexus-cyan transition-colors"
+          title="Cyber Mini HUD & Quick Launcher (Ctrl+Shift+Space)"
+        >
+          <Zap className="w-3.5 h-3.5 text-nexus-cyan" />
+        </motion.button>
         <motion.button
           whileHover={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
           whileTap={{ scale: 0.9 }}

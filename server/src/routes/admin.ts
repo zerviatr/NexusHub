@@ -18,6 +18,7 @@ import { createHmac, timingSafeEqual, randomBytes, pbkdf2Sync } from 'crypto'
 import { getDb } from '../db'
 import { generateKey } from '../keyGen'
 import { getAdminDashboardHtml } from '../adminDashboardHtml'
+import { sendLicenseEmail } from '../email'
 import {
   getNotificationSettings,
   saveNotificationSettings,
@@ -983,5 +984,106 @@ adminRouter.post('/api/coupons/redeem', requireAdminAuth, async (req: Request, r
   } catch (err: any) {
     console.error('[admin] redeem coupon error:', err)
     res.status(500).json({ success: false, error: err.message || 'Kupon uygulanamadı' })
+  }
+})
+
+// ─── POST /admin/api/keys/resend-email ──────────────────────────────────────
+adminRouter.post('/api/keys/resend-email', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  const ip = req.ip || req.socket.remoteAddress || 'unknown'
+  try {
+    const { key, targetEmail } = req.body as { key?: string; targetEmail?: string }
+    if (!key) {
+      res.status(400).json({ success: false, error: 'Key parametresi zorunludur' })
+      return
+    }
+
+    const db = getDb()
+    const row = await db.execute({
+      sql: 'SELECT key, tier, expires_at, email, order_id FROM licenses WHERE key = ?',
+      args: [key.trim().toUpperCase()]
+    })
+
+    if (row.rows.length === 0) {
+      res.status(404).json({ success: false, error: 'Lisans anahtarı bulunamadı' })
+      return
+    }
+
+    const lic = row.rows[0] as any
+    const recipient = (targetEmail || lic.email || '').trim()
+
+    if (!recipient || !recipient.includes('@')) {
+      res.status(400).json({
+        success: false,
+        error: 'Geçerli bir alıcı e-posta adresi bulunamadı. Lütfen hedef e-posta adresini girin.'
+      })
+      return
+    }
+
+    await sendLicenseEmail({
+      to: recipient,
+      key: lic.key,
+      tier: lic.tier,
+      expiresAt: Number(lic.expires_at || 0)
+    })
+
+    await recordAudit('EMAIL_RESENT', `License key ${lic.key} resent to ${recipient}`, ip)
+    res.json({ success: true, message: `Lisans e-postası başarıyla ${recipient} adresine iletildi!` })
+  } catch (err: any) {
+    console.error('[admin] resend email error:', err)
+    res.status(500).json({ success: false, error: err.message || 'E-posta gönderilemedi (Resend API hatası)' })
+  }
+})
+
+// ─── GET /admin/api/revenue-stats ───────────────────────────────────────────
+adminRouter.get('/api/revenue-stats', requireAdminAuth, async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const db = getDb()
+    const result = await db.execute(`
+      SELECT 
+        tier,
+        sales_channel,
+        COUNT(*) as count,
+        SUM(CASE WHEN is_revoked = 0 THEN 1 ELSE 0 END) as active_count
+      FROM licenses
+      GROUP BY tier, sales_channel
+    `)
+
+    let totalEstimatedUSD = 0
+    let totalCount = 0
+    let proCount = 0
+    let studioCount = 0
+    let lifetimeCount = 0
+
+    result.rows.forEach((r: any) => {
+      const c = Number(r.count || 0)
+      totalCount += c
+      if (r.tier === 'pro') {
+        proCount += c
+        totalEstimatedUSD += c * 29
+      } else if (r.tier === 'team' || r.tier === 'studio') {
+        studioCount += c
+        totalEstimatedUSD += c * 49
+      } else if (r.tier === 'lifetime') {
+        lifetimeCount += c
+        totalEstimatedUSD += c * 29
+      }
+    })
+
+    const totalEstimatedTRY = totalEstimatedUSD * 37
+
+    res.json({
+      success: true,
+      stats: {
+        totalLicenses: totalCount,
+        proCount,
+        studioCount,
+        lifetimeCount,
+        grossRevenueUSD: totalEstimatedUSD,
+        grossRevenueTRY: totalEstimatedTRY,
+        breakdown: result.rows
+      }
+    })
+  } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message })
   }
 })
