@@ -51,5 +51,13 @@ export async function migrate(): Promise<void> {
     )
   `)
 
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS admin_settings (
+      key        TEXT PRIMARY KEY,
+      value      TEXT NOT NULL,
+      updated_at INTEGER NOT NULL
+    )
+  `)
+
   console.log('[db] Migration complete')
 }

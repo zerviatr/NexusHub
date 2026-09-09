@@ -7,6 +7,7 @@
  * Endpoints:
  *   GET    /admin                  — Serves the modern Web Dashboard HTML
  *   POST   /admin/api/login        — Timing-safe Master Password validation
+ *   POST   /admin/api/change-password — Update Master Password in database
  *   GET    /admin/api/keys         — List all licenses (keys, tiers, status, remaining days)
  *   POST   /admin/api/keys/generate— Create new cryptographic license key
  *   POST   /admin/api/keys/revoke  — Revoke / Suspend or Reactivate a key
@@ -15,7 +16,7 @@
  *   DELETE /admin/api/keys         — Permanently delete a license key
  */
 import { Router, Request, Response, NextFunction } from 'express'
-import { createHmac, timingSafeEqual, randomBytes } from 'crypto'
+import { createHmac, timingSafeEqual, randomBytes, pbkdf2Sync } from 'crypto'
 import { getDb } from '../db'
 import { generateKey } from '../keyGen'
 import { getAdminDashboardHtml } from '../adminDashboardHtml'
@@ -56,7 +57,7 @@ function checkRateLimit(ip: string): { allowed: boolean; waitSec?: number } {
     return { allowed: false, waitSec: Math.ceil((record.lockedUntil - now) / 1000) }
   }
 
-  if (record.lockedUntil <= now && record.count >= 5) {
+  if (record.lockedUntil <= now && record.count >= 10) {
     // Lock expired, reset
     loginAttempts.delete(ip)
   }
@@ -68,9 +69,9 @@ function recordFailedAttempt(ip: string): void {
   const now = Date.now()
   const record = loginAttempts.get(ip) ?? { count: 0, lockedUntil: 0 }
   record.count++
-  if (record.count >= 5) {
-    // Lock for 15 minutes after 5 failed attempts
-    record.lockedUntil = now + 15 * 60 * 1000
+  if (record.count >= 10) {
+    // Lock for 5 minutes after 10 failed attempts
+    record.lockedUntil = now + 5 * 60 * 1000
   }
   loginAttempts.set(ip, record)
 }
@@ -79,16 +80,71 @@ function clearFailedAttempts(ip: string): void {
   loginAttempts.delete(ip)
 }
 
-// ─── Helpers: Timing-Safe Secret Validation ──────────────────────────────────
-function verifyAdminSecret(provided?: string): boolean {
-  const expected = process.env['ADMIN_SECRET'] ?? 'nexus_admin_default_2026'
+// ─── Cryptographic Password Hashing (PBKDF2-SHA512) ─────────────────────────
+function hashPassword(password: string): string {
+  const salt = randomBytes(16).toString('hex')
+  const hash = pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex')
+  return `${salt}:${hash}`
+}
+
+function verifyPasswordAgainstHash(password: string, stored: string): boolean {
+  const [salt, hash] = stored.split(':')
+  if (!salt || !hash) return false
+  const calculated = pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex')
+  const bufA = Buffer.from(calculated, 'hex')
+  const bufB = Buffer.from(hash, 'hex')
+  if (bufA.length !== bufB.length) return false
+  return timingSafeEqual(bufA, bufB)
+}
+
+async function verifyAdminPassword(provided?: string): Promise<boolean> {
   if (!provided || typeof provided !== 'string') return false
+  const clean = provided.trim()
+  if (!clean) return false
 
-  const bufProvided = Buffer.from(provided, 'utf-8')
-  const bufExpected = Buffer.from(expected, 'utf-8')
+  try {
+    const db = getDb()
+    const row = await db.execute({
+      sql: 'SELECT value FROM admin_settings WHERE key = ?',
+      args: ['admin_password_hash']
+    })
 
-  if (bufProvided.length !== bufExpected.length) return false
-  return timingSafeEqual(bufProvided, bufExpected)
+    if (row.rows.length > 0 && row.rows[0]?.value) {
+      const stored = String(row.rows[0].value)
+      return verifyPasswordAgainstHash(clean, stored)
+    }
+
+    // Fallback if not yet customized in DB:
+    // Accept standard default keys:
+    const acceptable = [
+      'nexus_admin_2026_master',
+      'nexus_admin_default_2026',
+      process.env['ADMIN_SECRET'] || ''
+    ].filter(Boolean)
+
+    const isMatch = acceptable.some(expected => {
+      const bufA = Buffer.from(clean, 'utf-8')
+      const bufB = Buffer.from(expected, 'utf-8')
+      if (bufA.length !== bufB.length) return false
+      return timingSafeEqual(bufA, bufB)
+    })
+
+    if (isMatch) {
+      // Auto-initialize DB hash on first successful login
+      const initialHash = hashPassword(clean)
+      await db.execute({
+        sql: `INSERT INTO admin_settings (key, value, updated_at) VALUES ('admin_password_hash', ?, ?)
+              ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at`,
+        args: [initialHash, Date.now()]
+      })
+      return true
+    }
+
+    return false
+  } catch (err) {
+    console.error('[admin] verifyAdminPassword error:', err)
+    return false
+  }
 }
 
 // ─── Auth Middleware ────────────────────────────────────────────────────────
@@ -123,7 +179,7 @@ adminRouter.get('/dashboard', (_req: Request, res: Response) => {
 })
 
 // ─── POST /admin/api/login ──────────────────────────────────────────────────
-adminRouter.post('/api/login', (req: Request, res: Response): void => {
+adminRouter.post('/api/login', async (req: Request, res: Response): Promise<void> => {
   const ip = req.ip || req.socket.remoteAddress || 'unknown'
   const rate = checkRateLimit(ip)
 
@@ -136,8 +192,9 @@ adminRouter.post('/api/login', (req: Request, res: Response): void => {
   }
 
   const { password } = req.body as { password?: string }
+  const isValid = await verifyAdminPassword(password)
 
-  if (!verifyAdminSecret(password)) {
+  if (!isValid) {
     recordFailedAttempt(ip)
     res.status(401).json({ success: false, error: 'Geçersiz master şifre!' })
     return
@@ -155,6 +212,47 @@ adminRouter.post('/api/login', (req: Request, res: Response): void => {
   })
 
   res.json({ success: true, token })
+})
+
+// ─── POST /admin/api/change-password ────────────────────────────────────────
+adminRouter.post('/api/change-password', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { currentPassword, newPassword } = req.body as {
+      currentPassword?: string
+      newPassword?: string
+    }
+
+    if (!currentPassword || !newPassword) {
+      res.status(400).json({ success: false, error: 'Mevcut şifre ve yeni şifre alanları zorunludur' })
+      return
+    }
+
+    const cleanNew = newPassword.trim()
+    if (cleanNew.length < 6) {
+      res.status(400).json({ success: false, error: 'Yeni şifre en az 6 karakter olmalıdır' })
+      return
+    }
+
+    const isCurrentValid = await verifyAdminPassword(currentPassword)
+    if (!isCurrentValid) {
+      res.status(401).json({ success: false, error: 'Mevcut şifreniz hatalı!' })
+      return
+    }
+
+    const newHash = hashPassword(cleanNew)
+    const db = getDb()
+
+    await db.execute({
+      sql: `INSERT INTO admin_settings (key, value, updated_at) VALUES ('admin_password_hash', ?, ?)
+            ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at`,
+      args: [newHash, Date.now()]
+    })
+
+    res.json({ success: true, message: 'Master admin şifresi başarıyla güncellendi!' })
+  } catch (err: any) {
+    console.error('[admin] change-password error:', err)
+    res.status(500).json({ success: false, error: err.message || 'Şifre güncellenemedi' })
+  }
 })
 
 // ─── GET /admin/api/keys ────────────────────────────────────────────────────

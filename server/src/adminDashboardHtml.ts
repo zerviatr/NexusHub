@@ -39,7 +39,7 @@ export function getAdminDashboardHtml(): string {
   <style>
     body { background-color: #08090D; font-family: 'Plus Jakarta Sans', sans-serif; color: #F1F5F9; }
     .neon-border-cyan:focus { border-color: #00F0FF; box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); }
-    .glass-card { background: rgba(14, 17, 24, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.07); }
+    .glass-card { background: rgba(14, 17, 24, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.07); }
     .glass-card:hover { border-color: rgba(255, 255, 255, 0.12); }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #08090D; }
@@ -68,7 +68,7 @@ export function getAdminDashboardHtml(): string {
           <i data-lucide="shield-check" class="w-7 h-7 text-nexus-cyan"></i>
         </div>
         <h1 class="text-xl font-extrabold text-white tracking-tight">NexusHub Master Console</h1>
-        <p class="text-xs text-nexus-muted mt-1">Sıfır-Veri Lisans Yönetim Sistemi</p>
+        <p class="text-xs text-nexus-muted mt-1">Sıfır-Veri Lisans & Yetki Sistemi</p>
       </div>
 
       <form id="login-form" class="space-y-4" onsubmit="handleLogin(event)">
@@ -122,10 +122,14 @@ export function getAdminDashboardHtml(): string {
         </div>
       </div>
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 sm:gap-3">
         <button onclick="refreshKeys()" class="p-2 rounded-xl bg-nexus-card border border-nexus-border text-nexus-muted hover:text-white transition duration-200 text-xs flex items-center gap-1.5" title="Yenile">
           <i data-lucide="refresh-cw" id="refresh-icon" class="w-3.5 h-3.5"></i>
           <span class="hidden sm:inline">Yenile</span>
+        </button>
+        <button onclick="openChangePasswordModal()" class="p-2 px-3 rounded-xl bg-nexus-card border border-nexus-border text-slate-300 hover:text-white hover:border-nexus-cyan/40 transition duration-200 text-xs font-semibold flex items-center gap-1.5" title="Şifre Değiştir">
+          <i data-lucide="key-round" class="w-3.5 h-3.5 text-nexus-cyan"></i>
+          <span class="hidden sm:inline">Şifre Değiştir</span>
         </button>
         <button onclick="handleLogout()" class="p-2 px-3 rounded-xl bg-nexus-rose/10 border border-nexus-rose/30 text-nexus-rose hover:bg-nexus-rose/20 transition duration-200 text-xs font-semibold flex items-center gap-1.5">
           <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
@@ -225,7 +229,7 @@ export function getAdminDashboardHtml(): string {
 
           <div>
             <label class="block text-[11px] font-bold uppercase tracking-wider text-nexus-muted mb-1.5">Özel Not / Etiket</label>
-            <input type="text" id="gen-note" placeholder="Örn: Beta Tester 1, Çekiliş" class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none neon-border-cyan" />
+            <input type="text" id="gen-note" placeholder="Örn: VIP Client, Çekiliş" class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none neon-border-cyan" />
           </div>
 
           <div class="md:col-span-4 flex items-center justify-between pt-2">
@@ -312,6 +316,77 @@ export function getAdminDashboardHtml(): string {
     </main>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- 3. CHANGE PASSWORD MODAL -->
+  <!-- ========================================================================= -->
+  <div id="password-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="glass-card w-full max-w-md p-6 rounded-2xl shadow-2xl border border-nexus-border space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-nexus-border">
+        <div class="flex items-center gap-2 text-nexus-cyan">
+          <i data-lucide="key-round" class="w-5 h-5"></i>
+          <h3 class="font-bold text-white text-sm">Master Admin Şifresini Değiştir</h3>
+        </div>
+        <button onclick="closeChangePasswordModal()" class="p-1 rounded-lg text-nexus-muted hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="change-password-form" onsubmit="handleChangePassword(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-nexus-muted uppercase mb-1.5">Mevcut Şifre</label>
+          <input
+            type="password"
+            id="pwd-current"
+            required
+            placeholder="••••••••••••"
+            class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none neon-border-cyan"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-nexus-muted uppercase mb-1.5">Yeni Şifre (En az 6 karakter)</label>
+          <input
+            type="password"
+            id="pwd-new"
+            required
+            minlength="6"
+            placeholder="••••••••••••"
+            class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none neon-border-cyan"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-nexus-muted uppercase mb-1.5">Yeni Şifre (Tekrar)</label>
+          <input
+            type="password"
+            id="pwd-confirm"
+            required
+            minlength="6"
+            placeholder="••••••••••••"
+            class="w-full bg-nexus-surface border border-nexus-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none neon-border-cyan"
+          />
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button
+            type="button"
+            onclick="closeChangePasswordModal()"
+            class="px-4 py-2 rounded-xl text-xs font-semibold text-nexus-muted hover:text-white hover:bg-nexus-card transition"
+          >
+            Vazgeç
+          </button>
+          <button
+            type="submit"
+            id="pwd-submit-btn"
+            class="px-5 py-2 rounded-xl text-xs font-bold bg-nexus-cyan text-black hover:bg-nexus-cyan/90 transition shadow-lg shadow-nexus-cyan/20"
+          >
+            Şifreyi Güncelle
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- JavaScript App Logic -->
   <script>
     let token = localStorage.getItem('nexus_admin_token') || '';
@@ -344,7 +419,7 @@ export function getAdminDashboardHtml(): string {
       setTimeout(() => {
         toast.classList.add('opacity-0', 'translate-y-2');
         setTimeout(() => toast.remove(), 300);
-      }, 3000);
+      }, 3500);
     }
 
     function showLogin() {
@@ -360,7 +435,8 @@ export function getAdminDashboardHtml(): string {
 
     async function handleLogin(e) {
       e.preventDefault();
-      const password = document.getElementById('admin-password').value;
+      const rawPassword = document.getElementById('admin-password').value;
+      const password = (rawPassword || '').trim();
       const btn = document.getElementById('login-btn');
       btn.disabled = true;
       btn.innerHTML = 'Doğrulanıyor...';
@@ -394,6 +470,64 @@ export function getAdminDashboardHtml(): string {
       localStorage.removeItem('nexus_admin_token');
       showToast('Çıkış yapıldı.');
       showLogin();
+    }
+
+    // ── Password Modal Handlers ──────────────────────────────────────────────
+    function openChangePasswordModal() {
+      document.getElementById('password-modal').classList.remove('hidden');
+      document.getElementById('pwd-current').value = '';
+      document.getElementById('pwd-new').value = '';
+      document.getElementById('pwd-confirm').value = '';
+      document.getElementById('pwd-current').focus();
+    }
+
+    function closeChangePasswordModal() {
+      document.getElementById('password-modal').classList.add('hidden');
+    }
+
+    async function handleChangePassword(e) {
+      e.preventDefault();
+      const currentPassword = document.getElementById('pwd-current').value.trim();
+      const newPassword = document.getElementById('pwd-new').value.trim();
+      const confirmPassword = document.getElementById('pwd-confirm').value.trim();
+
+      if (newPassword !== confirmPassword) {
+        showToast('Yeni şifreler birbiriyle uyuşmuyor!', 'error');
+        return;
+      }
+
+      if (newPassword.length < 6) {
+        showToast('Yeni şifre en az 6 karakter olmalıdır!', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('pwd-submit-btn');
+      btn.disabled = true;
+      btn.innerText = 'Kaydediliyor...';
+
+      try {
+        const res = await fetch('/admin/api/change-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': \`Bearer \${token}\`
+          },
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message || 'Şifreniz başarıyla değiştirildi!');
+          closeChangePasswordModal();
+        } else {
+          showToast(data.error || 'Şifre değiştirilemedi!', 'error');
+        }
+      } catch {
+        showToast('Sunucu bağlantı hatası!', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Şifreyi Güncelle';
+      }
     }
 
     async function refreshKeys() {
