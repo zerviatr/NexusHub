@@ -66,6 +66,7 @@ const nexusAPI = {
   // PDF Toolkit
   pdf: {
     selectFiles: (allowMultiple?: boolean) => ipcRenderer.invoke('pdf:selectFiles', allowMultiple),
+    inspectFiles: (filePaths: string[]) => ipcRenderer.invoke('pdf:inspectFiles', filePaths),
     merge: (payload: { filePaths: string[]; outputFileName?: string }) =>
       ipcRenderer.invoke('pdf:merge', payload),
     split: (payload: { filePath: string; pageRange: string }) =>
@@ -93,28 +94,34 @@ const nexusAPI = {
   // ─── Auto-updater events (subscribe pattern → returns cleanup fn) ─────────
   updater: {
     onAvailable:  (cb: (info: unknown) => void) => {
-      ipcRenderer.on('updater:available', (_, i) => cb(i))
-      return () => ipcRenderer.removeAllListeners('updater:available')
+      const handler = (_: any, i: unknown) => cb(i)
+      ipcRenderer.on('updater:available', handler)
+      return () => ipcRenderer.removeListener('updater:available', handler)
     },
     onProgress:   (cb: (p: unknown) => void) => {
-      ipcRenderer.on('updater:progress', (_, p) => cb(p))
-      return () => ipcRenderer.removeAllListeners('updater:progress')
+      const handler = (_: any, p: unknown) => cb(p)
+      ipcRenderer.on('updater:progress', handler)
+      return () => ipcRenderer.removeListener('updater:progress', handler)
     },
     onDownloaded: (cb: (info: unknown) => void) => {
-      ipcRenderer.on('updater:downloaded', (_, i) => cb(i))
-      return () => ipcRenderer.removeAllListeners('updater:downloaded')
+      const handler = (_: any, i: unknown) => cb(i)
+      ipcRenderer.on('updater:downloaded', handler)
+      return () => ipcRenderer.removeListener('updater:downloaded', handler)
     },
     onNotAvailable: (cb: (info: unknown) => void) => {
-      ipcRenderer.on('updater:not-available', (_, i) => cb(i))
-      return () => ipcRenderer.removeAllListeners('updater:not-available')
+      const handler = (_: any, i: unknown) => cb(i)
+      ipcRenderer.on('updater:not-available', handler)
+      return () => ipcRenderer.removeListener('updater:not-available', handler)
     },
     onError: (cb: (err: string) => void) => {
-      ipcRenderer.on('updater:error', (_, msg) => cb(msg))
-      return () => ipcRenderer.removeAllListeners('updater:error')
+      const handler = (_: any, msg: string) => cb(msg)
+      ipcRenderer.on('updater:error', handler)
+      return () => ipcRenderer.removeListener('updater:error', handler)
     },
     onApplyingPatch: (cb: () => void) => {
-      ipcRenderer.on('updater:applying-patch', () => cb())
-      return () => ipcRenderer.removeAllListeners('updater:applying-patch')
+      const handler = () => cb()
+      ipcRenderer.on('updater:applying-patch', handler)
+      return () => ipcRenderer.removeListener('updater:applying-patch', handler)
     },
     installNow: () => ipcRenderer.send('updater:install-now'),
     checkNow:   () => ipcRenderer.invoke('updater:check-now'),

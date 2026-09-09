@@ -79,6 +79,15 @@ const PALETTE_ITEMS: PaletteItem[] = [
     keywords: ['markdown', 'scratchpad', 'notes', 'editor', 'preview', 'export', 'text']
   },
   {
+    id: 'pdf-studio',
+    title: 'PDF Studio Pro',
+    subtitle: 'Merge multiple PDFs, split by custom page ranges & inspect metadata locally',
+    category: 'Tools',
+    path: '/pdf-studio',
+    icon: FileText,
+    keywords: ['pdf', 'merge', 'split', 'pages', 'document', 'combine', 'extract', 'evrak']
+  },
+  {
     id: 'regex-studio',
     title: 'Regex Lab & Live Tester',
     subtitle: 'Test regular expressions live, view named groups, & cheat sheet',

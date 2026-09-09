@@ -262,6 +262,18 @@ export default function Dashboard() {
       glowColor: 'rgba(16, 185, 129, 0.3)',
       status: 'Yeni',
     },
+    {
+      id: 'pdf-studio',
+      path: '/pdf-studio',
+      title: t('nav.tools.pdfStudio') || 'PDF Studio & Documents',
+      description: locale === 'tr'
+        ? 'Çoklu PDF belgelerini tek tıkla birleştirin, sayfa aralığına göre bölün ve meta verileri tamamen yerel işleyin.'
+        : 'Merge multiple PDF documents, split by custom page ranges, and inspect metadata with zero cloud upload.',
+      icon: FileText,
+      gradient: 'from-amber-600 to-rose-600',
+      glowColor: 'rgba(245, 158, 11, 0.3)',
+      status: 'Yeni',
+    },
   ]
 
   return (
@@ -315,7 +327,7 @@ export default function Dashboard() {
         className="grid grid-cols-3 gap-4 mb-10"
       >
         {[
-          { icon: Zap, label: t('dashboard.stats.activeTools') || 'Active Tools', value: '10 Tools', color: 'text-nexus-cyan', spotColor: 'rgba(6, 182, 212, 0.15)' },
+          { icon: Zap, label: t('dashboard.stats.activeTools') || 'Active Tools', value: `${tools.length} ${locale === 'tr' ? 'Modül' : 'Tools'}`, color: 'text-nexus-cyan', spotColor: 'rgba(6, 182, 212, 0.15)' },
           { icon: Shield, label: t('dashboard.stats.security') || 'Security Guard', value: t('dashboard.stats.ipcIsolated') || 'IPC Isolated', color: 'text-emerald-400', spotColor: 'rgba(16, 185, 129, 0.15)' },
           {
             icon: Sparkles,

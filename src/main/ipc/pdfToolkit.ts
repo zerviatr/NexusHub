@@ -50,6 +50,39 @@ export function registerPdfToolkitIPC(): void {
     return files
   })
 
+  // 1b. Inspect PDF files by path (for drag-and-drop support)
+  ipcMain.handle('pdf:inspectFiles', async (_, filePaths: string[]) => {
+    if (!Array.isArray(filePaths) || !filePaths.length) return []
+    const files: PDFFileInfo[] = []
+    for (const filePath of filePaths) {
+      if (!fs.existsSync(filePath)) continue
+      try {
+        const stats = fs.statSync(filePath)
+        const bytes = fs.readFileSync(filePath)
+        const pdfDoc = await PDFDocument.load(bytes, { ignoreEncryption: true })
+        files.push({
+          path: filePath,
+          name: path.basename(filePath),
+          size: stats.size,
+          pageCount: pdfDoc.getPageCount(),
+          title: pdfDoc.getTitle() || undefined,
+          author: pdfDoc.getAuthor() || undefined,
+        })
+      } catch {
+        try {
+          const stats = fs.statSync(filePath)
+          files.push({
+            path: filePath,
+            name: path.basename(filePath),
+            size: stats.size,
+            pageCount: 0,
+          })
+        } catch {}
+      }
+    }
+    return files
+  })
+
   // 2. Merge PDF files
   ipcMain.handle(
     'pdf:merge',

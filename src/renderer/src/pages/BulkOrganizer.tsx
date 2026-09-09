@@ -32,6 +32,7 @@ export default function BulkOrganizer() {
 
   const [selectedDir, setSelectedDir] = useState<string | null>(null)
   const [isScanning, setIsScanning] = useState(false)
+  const [isDraggingDir, setIsDraggingDir] = useState(false)
   const [scannedFiles, setScannedFiles] = useState<ScannedFile[]>([])
 
   // Presets & Settings
@@ -119,6 +120,20 @@ export default function BulkOrganizer() {
       }
     } catch (err: any) {
       showToastError('Hata', err.message || 'Klasör seçilemedi.')
+    }
+  }
+
+  const handleDropDir = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDraggingDir(false)
+    if (e.dataTransfer.files.length > 0) {
+      const f = e.dataTransfer.files[0] as any
+      if (f.path) {
+        setSelectedDir(f.path)
+        setScannedFiles([])
+        setExecutionResult(null)
+        showToastSuccess('Klasör Seçildi', f.path)
+      }
     }
   }
 
@@ -236,10 +251,19 @@ export default function BulkOrganizer() {
         )}
 
         {/* Step 1: Select & Scan Card */}
-        <div className="glass-card p-6 flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div
+          onDragOver={(e) => { e.preventDefault(); setIsDraggingDir(true) }}
+          onDragLeave={() => setIsDraggingDir(false)}
+          onDrop={handleDropDir}
+          className={`glass-card p-6 flex flex-col md:flex-row gap-4 items-center justify-between transition-all ${
+            isDraggingDir
+              ? 'border-nexus-cyan bg-nexus-cyan/10 scale-[1.01] shadow-[0_0_25px_rgba(6,182,212,0.2)]'
+              : ''
+          }`}
+        >
           <div className="flex-1 min-w-0 w-full">
             <h3 className="text-sm font-semibold text-white mb-1">
-              {t('organizer.targetDir') || 'Hedef Çalışma Dizini'}
+              {t('organizer.targetDir') || 'Hedef Çalışma Dizini (Sürükleyip Bırakın)'}
             </h3>
             <p className="text-xs text-nexus-muted truncate font-mono bg-nexus-bg/50 p-2.5 rounded-xl border border-nexus-border/30 select-all">
               {selectedDir || t('organizer.noFolder') || 'Henüz bir klasör seçilmedi...'}

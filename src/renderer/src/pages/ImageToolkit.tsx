@@ -45,6 +45,7 @@ export default function ImageToolkit() {
 
   const [files, setFiles] = useState<ImageMeta[]>([])
   const [isSelecting, setIsSelecting] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [results, setResults] = useState<ImageProcessResult[]>([])
 
@@ -95,6 +96,31 @@ export default function ImageToolkit() {
       }
       showToastSuccess('Görseller Eklendi', `${metas.length} adet görsel başarıyla yüklendi.`)
     } finally {
+      setIsSelecting(false)
+    }
+  }
+
+  const handleDropImages = async (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+    const droppedFiles = Array.from(e.dataTransfer.files)
+    const validPaths = droppedFiles
+      .map((f) => (f as any).path)
+      .filter((p): p is string => Boolean(p))
+
+    if (validPaths.length > 0) {
+      setIsSelecting(true)
+      try {
+        const metas = await Promise.all(validPaths.map((p) => nexusAPI.image.getMetadata(p)))
+        setFiles((prev) => [...prev, ...metas])
+        setResults([])
+        if (validPaths[0]) {
+          const parts = validPaths[0].replace(/\\/g, '/').split('/')
+          parts.pop()
+          setOutputDir(parts.join('/') + '/nexushub_output')
+        }
+        showToastSuccess('Görseller Eklendi', `${metas.length} adet görsel başarıyla yüklendi.`)
+      } catch {}
       setIsSelecting(false)
     }
   }
@@ -157,8 +183,15 @@ export default function ImageToolkit() {
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
           onClick={handleSelectFiles}
+          onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={handleDropImages}
           disabled={isSelecting || isProcessing}
-          className="w-full py-8 rounded-2xl border-2 border-dashed border-nexus-border hover:border-pink-500/50 bg-nexus-card/30 transition-all flex flex-col items-center gap-3 group disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`w-full py-8 rounded-2xl border-2 border-dashed transition-all flex flex-col items-center gap-3 group disabled:opacity-50 disabled:cursor-not-allowed ${
+            isDragging
+              ? 'border-pink-500 bg-pink-500/10 scale-[1.01] shadow-[0_0_25px_rgba(236,72,153,0.2)]'
+              : 'border-nexus-border hover:border-pink-500/50 bg-nexus-card/30'
+          }`}
         >
           {isSelecting ? (
             <Loader2 className="w-8 h-8 text-nexus-muted animate-spin" />
@@ -167,7 +200,7 @@ export default function ImageToolkit() {
           )}
           <div className="text-center">
             <p className="text-sm font-semibold text-nexus-text group-hover:text-pink-300 transition-colors">
-              {files.length > 0 ? 'Daha Fazla Görsel Ekle' : t('image.selectImages') || 'Görselleri Seçin'}
+              {files.length > 0 ? 'Daha Fazla Görsel Ekle (veya Sürükleyin)' : t('image.selectImages') || 'Görselleri Seçin veya Sürükleyin'}
             </p>
             <p className="text-xs text-nexus-muted mt-0.5">
               JPG, PNG, WebP, AVIF, TIFF ve SVG formatları desteklenir (Yerel Sharp Motoru)

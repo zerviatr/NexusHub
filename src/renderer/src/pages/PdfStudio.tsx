@@ -32,12 +32,14 @@ export default function PdfStudio() {
   // Merge State
   const [mergeFiles, setMergeFiles] = useState<SelectedPDF[]>([])
   const [isMerging, setIsMerging] = useState(false)
+  const [isDraggingMerge, setIsDraggingMerge] = useState(false)
   const [mergeResult, setMergeResult] = useState<{ success: boolean; path?: string; pageCount?: number; size?: number; error?: string } | null>(null)
 
   // Split State
   const [splitFile, setSplitFile] = useState<SelectedPDF | null>(null)
   const [pageRange, setPageRange] = useState<string>('1-2')
   const [isSplitting, setIsSplitting] = useState(false)
+  const [isDraggingSplit, setIsDraggingSplit] = useState(false)
   const [splitResult, setSplitResult] = useState<{ success: boolean; path?: string; pageCount?: number; error?: string } | null>(null)
 
   // Format bytes
@@ -54,6 +56,26 @@ export default function PdfStudio() {
     if (files && files.length > 0) {
       setMergeFiles((prev) => [...prev, ...files])
       setMergeResult(null)
+    }
+  }
+
+  // Handle drag and drop for merge
+  const handleMergeDrop = async (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDraggingMerge(false)
+    const files = Array.from(e.dataTransfer.files)
+    const paths = files
+      .filter((f) => f.name.toLowerCase().endsWith('.pdf'))
+      .map((f) => (f as any).path)
+      .filter(Boolean)
+
+    if (paths.length > 0 && window.nexusAPI?.pdf?.inspectFiles) {
+      const inspected = await window.nexusAPI.pdf.inspectFiles(paths)
+      if (inspected && inspected.length > 0) {
+        setMergeFiles((prev) => [...prev, ...inspected])
+        setMergeResult(null)
+        cyberAudio.click()
+      }
     }
   }
 
@@ -110,6 +132,27 @@ export default function PdfStudio() {
         setPageRange(`1-${Math.min(3, files[0].pageCount)}`)
       } else {
         setPageRange('1')
+      }
+    }
+  }
+
+  // Handle drag and drop for split
+  const handleSplitDrop = async (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDraggingSplit(false)
+    const files = Array.from(e.dataTransfer.files)
+    const firstPdf = files.find((f) => f.name.toLowerCase().endsWith('.pdf'))
+    if (firstPdf && (firstPdf as any).path && window.nexusAPI?.pdf?.inspectFiles) {
+      const inspected = await window.nexusAPI.pdf.inspectFiles([(firstPdf as any).path])
+      if (inspected && inspected.length > 0) {
+        setSplitFile(inspected[0])
+        setSplitResult(null)
+        if (inspected[0].pageCount && inspected[0].pageCount > 1) {
+          setPageRange(`1-${Math.min(3, inspected[0].pageCount)}`)
+        } else {
+          setPageRange('1')
+        }
+        cyberAudio.click()
       }
     }
   }
@@ -224,14 +267,21 @@ export default function PdfStudio() {
             {mergeFiles.length === 0 ? (
               <div
                 onClick={handleSelectMergeFiles}
-                className="border-2 border-dashed border-nexus-border/50 hover:border-amber-500/50 rounded-2xl p-12 text-center cursor-pointer transition-colors space-y-3 bg-nexus-surface/20"
+                onDragOver={(e) => { e.preventDefault(); setIsDraggingMerge(true) }}
+                onDragLeave={() => setIsDraggingMerge(false)}
+                onDrop={handleMergeDrop}
+                className={`border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all space-y-3 bg-nexus-surface/20 ${
+                  isDraggingMerge
+                    ? 'border-amber-400 bg-amber-500/10 scale-[1.01] shadow-[0_0_25px_rgba(245,158,11,0.2)]'
+                    : 'border-nexus-border/50 hover:border-amber-500/50'
+                }`}
               >
                 <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center mx-auto">
                   <FileText className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white">PDF Dosyalarını Eklemek İçin Tıklayın</p>
-                  <p className="text-xs text-nexus-muted mt-1">İki veya daha fazla PDF seçerek tek bir dosyada toplayın.</p>
+                  <p className="text-sm font-medium text-white">PDF Dosyalarını Sürükleyin veya Tıklayın</p>
+                  <p className="text-xs text-nexus-muted mt-1">İki veya daha fazla PDF bırakarak tek bir belgede birleştirin.</p>
                 </div>
               </div>
             ) : (
@@ -359,13 +409,20 @@ export default function PdfStudio() {
             {!splitFile ? (
               <div
                 onClick={handleSelectSplitFile}
-                className="border-2 border-dashed border-nexus-border/50 hover:border-rose-500/50 rounded-2xl p-12 text-center cursor-pointer transition-colors space-y-3 bg-nexus-surface/20"
+                onDragOver={(e) => { e.preventDefault(); setIsDraggingSplit(true) }}
+                onDragLeave={() => setIsDraggingSplit(false)}
+                onDrop={handleSplitDrop}
+                className={`border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all space-y-3 bg-nexus-surface/20 ${
+                  isDraggingSplit
+                    ? 'border-rose-400 bg-rose-500/10 scale-[1.01] shadow-[0_0_25px_rgba(244,63,94,0.2)]'
+                    : 'border-nexus-border/50 hover:border-rose-500/50'
+                }`}
               >
                 <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto">
                   <Scissors className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white">Bölünecek PDF Dosyasını Seçin</p>
+                  <p className="text-sm font-medium text-white">Bölünecek PDF Dosyasını Sürükleyin veya Tıklayın</p>
                   <p className="text-xs text-nexus-muted mt-1">Sayfa aralığı veya tekil sayfaları ayıklamak için PDF yükleyin.</p>
                 </div>
               </div>

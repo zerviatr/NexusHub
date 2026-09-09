@@ -13,19 +13,25 @@ export default function TitleBar() {
   useEffect(() => {
     const checkStatus = async () => {
       if (window.nexusAPI) {
-        const maximized = await window.nexusAPI.isMaximized()
-        setIsMaximized(maximized)
-        if (window.nexusAPI.isAlwaysOnTop) {
-          const pinned = await window.nexusAPI.isAlwaysOnTop()
-          setIsPinned(pinned)
-        }
+        try {
+          const maximized = await window.nexusAPI.isMaximized()
+          setIsMaximized(maximized)
+          if (window.nexusAPI.isAlwaysOnTop) {
+            const pinned = await window.nexusAPI.isAlwaysOnTop()
+            setIsPinned(pinned)
+          }
+        } catch {}
       }
     }
     checkStatus()
 
-    // Re-check after potential resize events
-    const interval = setInterval(checkStatus, 1500)
-    return () => clearInterval(interval)
+    // Event-driven check on window resize and window focus (zero CPU polling)
+    window.addEventListener('resize', checkStatus)
+    window.addEventListener('focus', checkStatus)
+    return () => {
+      window.removeEventListener('resize', checkStatus)
+      window.removeEventListener('focus', checkStatus)
+    }
   }, [])
 
   const handleTogglePin = async () => {
