@@ -2,8 +2,14 @@
  * server/src/landingPageHtml.ts
  *
  * NexusHub Official High-Conversion "Harpoon" Landing Page.
- * Dark cyberpunk-fintech aesthetics, live interactive hero widgets,
- * SaaS killer comparison matrix, live pricing tiers, and direct purchase triggers.
+ * Features:
+ *  - Multilingual (TR / EN) + Multi-Currency (₺ / $) instant switcher
+ *  - Interactive Desktop App Mockup Simulator with live tool tabs
+ *  - Live Social Proof FOMO Sales Ticker (bottom-left rotating alerts)
+ *  - Self-Service License Lookup & HWID Reset Portal (directly hooked to /api/license/*)
+ *  - Promo / Discount Coupon code calculator in checkout modal
+ *  - VirusTotal 0/72 Clean Code security verification banner
+ *  - Zero public admin links (secret direct /admin only)
  */
 
 export function renderLandingPage(): string {
@@ -12,7 +18,7 @@ export function renderLandingPage(): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NexusHub — Abonelik Tuzağına Son. 15+ Siber Güç Tek Yazılımda.</title>
+  <title id="meta-title">NexusHub — Abonelik Tuzağına Son. 15+ Siber Güç Tek Yazılımda.</title>
   <meta name="description" content="TempMail, Evrensel Reklam/Link Çözücü, DoD 7-Pass Dosya İmha Kalkanı, Canlı Donanım Teşhisi ve Şifreleme Kasası. Tek seferlik ödeme, sıfır abonelik.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,6 +78,13 @@ export function renderLandingPage(): string {
       border-color: rgba(6, 182, 212, 0.35);
       box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.2);
     }
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .animate-float {
+      animation: floatSlow 4s ease-in-out infinite;
+    }
   </style>
 </head>
 <body class="font-sans antialiased overflow-x-hidden selection:bg-nexus-cyan selection:text-nexus-bg">
@@ -95,19 +108,27 @@ export function renderLandingPage(): string {
       </a>
 
       <div class="hidden md:flex items-center gap-8 text-sm font-medium text-nexus-muted">
-        <a href="#features" class="hover:text-nexus-cyan transition-colors">Özellikler</a>
-        <a href="#comparison" class="hover:text-nexus-cyan transition-colors">SaaS Katili</a>
-        <a href="#arsenal" class="hover:text-nexus-cyan transition-colors">15+ Cephane</a>
-        <a href="#pricing" class="hover:text-nexus-cyan transition-colors">Fiyatlandırma</a>
-        <a href="#faq" class="hover:text-nexus-cyan transition-colors">SSS</a>
+        <a href="#simulator" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.preview">Arayüz</a>
+        <a href="#comparison" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.comparison">SaaS Katili</a>
+        <a href="#arsenal" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.arsenal">15+ Cephane</a>
+        <a href="#pricing" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.pricing">Fiyatlandırma</a>
+        <a href="#portal" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.portal">Lisans Sorgula</a>
+        <a href="#faq" class="hover:text-nexus-cyan transition-colors" data-i18n="nav.faq">SSS</a>
       </div>
 
       <div class="flex items-center gap-3">
+        <!-- Language Switcher -->
+        <button onclick="toggleLanguage()" id="lang-btn" class="px-2.5 py-1.5 rounded-lg border border-nexus-border/80 hover:border-nexus-cyan/50 text-xs font-mono text-nexus-muted hover:text-white transition-all flex items-center gap-1.5">
+          <span id="lang-flag">🇹🇷</span>
+          <span id="lang-label" class="font-bold">TR (₺)</span>
+        </button>
+
         <a href="https://github.com/zerviatr/NexusHub/releases/latest" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-nexus-border hover:border-nexus-cyan/50 text-xs font-mono text-nexus-muted hover:text-white transition-all">
           <svg class="w-3.5 h-3.5 text-nexus-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-          <span>v2.0.3 İndir</span>
+          <span>v2.0.3</span>
         </a>
-        <a href="#pricing" class="px-4 py-2 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-bold font-heading text-sm shadow-[0_0_20px_rgba(6,182,212,0.35)] transition-all">
+
+        <a href="#pricing" class="px-4 py-2 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-bold font-heading text-sm shadow-[0_0_20px_rgba(6,182,212,0.35)] transition-all" data-i18n="nav.buy">
           Lisans Al
         </a>
       </div>
@@ -115,104 +136,243 @@ export function renderLandingPage(): string {
   </nav>
 
   <!-- HERO SECTION -->
-  <section class="relative z-10 pt-16 pb-24 overflow-hidden">
+  <section class="relative z-10 pt-16 pb-20 overflow-hidden">
     <div class="max-w-7xl mx-auto px-6">
       
-      <!-- Top Live Banner -->
+      <!-- Top Live Status Pill -->
       <div class="flex justify-center mb-8">
         <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full card-glass border border-nexus-cyan/30 text-xs font-mono text-nexus-cyan shadow-[0_0_15px_rgba(6,182,212,0.15)]">
           <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-ping"></span>
           <span>v2.0.3 Yayında</span>
           <span class="text-nexus-border">|</span>
-          <span class="text-white">15+ Siber Güç</span>
+          <span class="text-white" data-i18n="hero.pill.tools">15+ Siber Güç</span>
           <span class="text-nexus-border">|</span>
-          <span class="text-emerald-400">Sıfır Abonelik Tuzağı</span>
+          <span class="text-emerald-400" data-i18n="hero.pill.noSub">Sıfır Abonelik Tuzağı</span>
         </div>
       </div>
 
       <!-- Main Headline -->
       <div class="text-center max-w-4xl mx-auto mb-10">
         <h1 class="font-heading font-black text-4xl sm:text-6xl md:text-7xl tracking-tight text-white leading-[1.08] mb-6">
-          Aylık Aboneliklere <span class="bg-gradient-to-r from-nexus-cyan via-nexus-accent to-purple-400 bg-clip-text text-transparent">Son.</span><br>
-          Tek Yazılım, <span class="underline decoration-nexus-cyan/40 underline-offset-8">15+ Siber Güç.</span>
+          <span data-i18n="hero.title1">Aylık Aboneliklere</span> <span class="bg-gradient-to-r from-nexus-cyan via-nexus-accent to-purple-400 bg-clip-text text-transparent" data-i18n="hero.title2">Son.</span><br>
+          <span data-i18n="hero.title3">Tek Yazılım,</span> <span class="underline decoration-nexus-cyan/40 underline-offset-8" data-i18n="hero.title4">15+ Siber Güç.</span>
         </h1>
-        <p class="text-base sm:text-lg md:text-xl text-nexus-muted leading-relaxed max-w-2xl mx-auto font-sans">
+        <p class="text-base sm:text-lg md:text-xl text-nexus-muted leading-relaxed max-w-2xl mx-auto font-sans" data-i18n="hero.desc">
           Tek kullanımlık geçici posta, reklam & link çözücü, DoD askeri veri imha kalkanı, donanım monitörü ve şifreli kasa. Her şeye ayrı ayrı para ödemeyi bırakın.
         </p>
       </div>
 
       <!-- Hero Action Buttons -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
         <a href="https://github.com/zerviatr/NexusHub/releases/latest" target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-heading font-black text-base flex items-center justify-center gap-3 shadow-[0_0_35px_rgba(6,182,212,0.5)] transition-all">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-          <span>Windows için İndir (v2.0.3)</span>
+          <span data-i18n="hero.btnDownload">Windows için İndir (v2.0.3)</span>
         </a>
         <a href="#pricing" class="w-full sm:w-auto px-8 py-4 rounded-2xl card-glass border border-nexus-border/80 hover:border-nexus-cyan/50 active:scale-95 text-white font-heading font-bold text-base flex items-center justify-center gap-2 transition-all">
-          <span>Ömür Boyu Pro Lisans</span>
+          <span data-i18n="hero.btnPro">Ömür Boyu Pro Lisans</span>
           <svg class="w-4 h-4 text-nexus-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
       </div>
 
-      <!-- Trust Badges -->
-      <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-12 text-xs font-mono text-nexus-muted mb-16">
-        <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Windows 10 & 11 Uyumlu</span>
-        <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> %100 Yerel (Sıfır Veri Toplama)</span>
-        <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Tek Seferlik Ödeme (Ömür Boyu)</span>
-        <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Anında Otomatik Anahtar Teslimi</span>
+      <!-- Security & Trust Badges -->
+      <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-mono text-nexus-muted mb-16">
+        <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Windows 10 & 11 (x64)</span>
+        <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> %100 Offline-First Yerel İcra</span>
+        <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> VirusTotal: 0/72 Temiz</span>
+        <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Anında Otomatik Anahtar Teslimi</span>
       </div>
 
-      <!-- LIVE INTERACTIVE HERO DEMO WIDGET (ZIPKIN ÇENGELİ) -->
-      <div class="max-w-3xl mx-auto rounded-3xl card-glass border border-nexus-cyan/40 p-6 sm:p-8 neon-glow relative">
-        <div class="flex items-center justify-between border-b border-nexus-border/60 pb-4 mb-6">
-          <div class="flex items-center gap-3">
-            <div class="flex gap-1.5">
-              <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
-              <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
-              <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
-            </div>
-            <span class="text-xs font-mono text-nexus-muted tracking-wider">CANLI TEST VİTRİNİ • İNDİRMEDEN DENE</span>
-          </div>
-          <div class="flex bg-nexus-surface rounded-xl p-1 border border-nexus-border/60">
-            <button onclick="switchTab('pass')" id="tab-btn-pass" class="px-3 py-1 rounded-lg text-xs font-mono font-semibold bg-nexus-cyan text-nexus-bg transition-all">Şifre Motoru</button>
-            <button onclick="switchTab('link')" id="tab-btn-link" class="px-3 py-1 rounded-lg text-xs font-mono font-semibold text-nexus-muted hover:text-white transition-all">Link Çözücü</button>
-          </div>
-        </div>
+    </div>
+  </section>
 
-        <!-- Tab 1: Password Engine -->
-        <div id="demo-tab-pass">
-          <div class="text-xs text-nexus-muted mb-2 font-mono">Askeri Entropili Şifre Üretici:</div>
-          <div class="flex items-center gap-3 mb-4">
-            <input type="text" id="demo-pass-output" readonly value="N7#x9$K2!pQ8@mZ4&L1*vR5%wY" class="flex-1 bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3 font-mono text-sm text-nexus-cyan font-bold outline-none select-all">
-            <button onclick="copyDemoPass()" id="demo-copy-btn" class="px-4 py-3 rounded-xl bg-nexus-surface border border-nexus-border/80 hover:border-nexus-cyan text-white text-xs font-mono font-semibold transition-all">Kopyala</button>
-            <button onclick="generateDemoPass()" class="px-4 py-3 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 hover:bg-nexus-cyan/30 text-nexus-cyan text-xs font-mono font-bold transition-all">Yenile ↻</button>
-          </div>
-          <div class="flex flex-wrap items-center justify-between text-xs text-nexus-muted font-mono gap-3">
-            <div class="flex items-center gap-2">
-              <span>Uzunluk: <b id="pass-len-val" class="text-white">24</b></span>
-              <input type="range" min="12" max="48" value="24" oninput="updatePassLen(this.value)" class="accent-nexus-cyan cursor-pointer">
-            </div>
-            <div class="flex items-center gap-2 text-emerald-400">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Entropi: 142-bit (Kırılamaz)</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tab 2: Link Cleaner -->
-        <div id="demo-tab-link" class="hidden">
-          <div class="text-xs text-nexus-muted mb-2 font-mono">Kısaltılmış / Reklamlı / Takipçi Yüklü Link:</div>
-          <div class="flex items-center gap-3 mb-4">
-            <input type="text" id="demo-link-input" value="https://bc.vc/xYz789?utm_source=tracker&utm_campaign=spy" class="flex-1 bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3 font-mono text-xs text-nexus-muted outline-none">
-            <button onclick="cleanDemoLink()" class="px-5 py-3 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg text-xs font-heading font-bold transition-all hover:brightness-110">Temizle & Çöz</button>
-          </div>
-          <div id="demo-link-result" class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono text-emerald-400 flex items-center justify-between">
-            <span class="truncate">✓ Temiz Hedef: <b>https://github.com/zerviatr/NexusHub</b></span>
-            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-[10px] uppercase font-bold shrink-0">Takipçiler Silindi</span>
-          </div>
-        </div>
-
+  <!-- INTERACTIVE DESKTOP APP MOCKUP SIMULATOR (CANLI ARAYÜZ VİTRİNİ) -->
+  <section id="simulator" class="relative z-10 py-16 border-t border-nexus-border/40 bg-nexus-surface/20">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan" data-i18n="sim.tag">Canlı Arayüzü İncele</span>
+        <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-2 mb-4" data-i18n="sim.title">
+          NexusHub Masaüstünüzde Nasıl Görünür?
+        </h2>
+        <p class="text-nexus-muted font-sans text-sm sm:text-base" data-i18n="sim.desc">
+          İndirmeden önce aşağıdaki sekmelere tıklayarak NexusHub'ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.
+        </p>
       </div>
 
+      <!-- Desktop Frame Mockup -->
+      <div class="rounded-3xl card-glass border border-nexus-cyan/40 shadow-[0_20px_70px_rgba(0,0,0,0.8)] overflow-hidden neon-glow">
+        <!-- TitleBar -->
+        <div class="h-11 bg-nexus-surface/90 border-b border-nexus-border/80 px-4 flex items-center justify-between select-none">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+            <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+            <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+            <span class="ml-3 font-mono text-xs text-nexus-muted font-semibold flex items-center gap-1.5">
+              <span>NexusHub v2.0.3 Pro Edition</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            </span>
+          </div>
+          <div class="flex items-center gap-2 text-xs font-mono text-nexus-muted">
+            <span class="px-2 py-0.5 rounded bg-nexus-bg border border-nexus-border/60">Ctrl + K</span>
+          </div>
+        </div>
+
+        <!-- Main Body: Sidebar + Dynamic Workspace -->
+        <div class="grid grid-cols-1 md:grid-cols-4 min-h-[460px]">
+          
+          <!-- Mock Sidebar -->
+          <div class="border-b md:border-b-0 md:border-r border-nexus-border/60 bg-nexus-bg/60 p-4 flex md:flex-col gap-1.5 overflow-x-auto md:overflow-visible">
+            <button onclick="switchMockTool('tempmail')" id="mock-btn-tempmail" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 bg-nexus-cyan/15 text-nexus-cyan border border-nexus-cyan/30 transition-all">
+              <span>📬</span> <span data-i18n="sim.tools.tempmail">TempMail Posta</span>
+            </button>
+            <button onclick="switchMockTool('decrypter')" id="mock-btn-decrypter" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all">
+              <span>🔗</span> <span data-i18n="sim.tools.decrypter">Link Decrypter</span>
+            </button>
+            <button onclick="switchMockTool('fortress')" id="mock-btn-fortress" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all">
+              <span>🛡️</span> <span data-i18n="sim.tools.fortress">Cyber Fortress</span>
+            </button>
+            <button onclick="switchMockTool('sentinel')" id="mock-btn-sentinel" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all">
+              <span>⚡</span> <span data-i18n="sim.tools.sentinel">Resource Sentinel</span>
+            </button>
+            <button onclick="switchMockTool('orb')" id="mock-btn-orb" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all">
+              <span>🔮</span> <span data-i18n="sim.tools.orb">Floating Orb HUD</span>
+            </button>
+          </div>
+
+          <!-- Mock Workspace Panels -->
+          <div class="md:col-span-3 p-6 sm:p-8 bg-nexus-card/40 flex flex-col justify-center">
+
+            <!-- Panel 1: TempMail Preview -->
+            <div id="mock-panel-tempmail" class="space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="font-heading font-black text-xl text-white flex items-center gap-2">
+                    TempMail & Real-Time Inbox <span class="px-2 py-0.5 text-[10px] rounded bg-emerald-500/20 text-emerald-400 font-mono">CANLI</span>
+                  </h3>
+                  <p class="text-xs text-nexus-muted mt-0.5">Spam korumalı, anında tek kullanımlık e-posta.</p>
+                </div>
+                <button onclick="simulateNewMail()" class="px-3 py-1.5 rounded-lg bg-nexus-cyan/20 border border-nexus-cyan/40 text-nexus-cyan font-mono text-xs hover:bg-nexus-cyan/30">Yeni Posta Üret ↻</button>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-nexus-bg border border-nexus-border/80 flex items-center justify-between font-mono text-xs">
+                <span id="mock-email-addr" class="text-nexus-cyan font-bold truncate">quantum_shadow92@nexusmail.org</span>
+                <span class="text-emerald-400 text-[11px]">✓ Aktif</span>
+              </div>
+
+              <div class="border border-nexus-border/60 rounded-xl overflow-hidden bg-nexus-surface/40">
+                <div class="p-2.5 border-b border-nexus-border/60 text-[10px] font-mono text-nexus-muted uppercase bg-nexus-surface/80 flex justify-between">
+                  <span>Gelen Kutusu (1 Yeni Mesaj)</span>
+                  <span>Şimdi Geldi</span>
+                </div>
+                <div class="p-3.5 flex items-center justify-between text-xs hover:bg-nexus-surface/30 cursor-pointer">
+                  <div>
+                    <div class="font-bold text-white">Steam Security &bull; Doğrulama Kodu</div>
+                    <div class="text-nexus-muted text-[11px]">Giriş kodunuz: <b class="text-nexus-cyan font-mono">729-410</b></div>
+                  </div>
+                  <span class="px-2 py-1 rounded bg-nexus-cyan/20 text-nexus-cyan text-[10px] font-mono font-bold">Kodu Kopyala</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 2: Link Decrypter Preview -->
+            <div id="mock-panel-decrypter" class="space-y-4 hidden">
+              <div>
+                <h3 class="font-heading font-black text-xl text-white">Universal Link Decrypter & Tracker Stripper</h3>
+                <p class="text-xs text-nexus-muted mt-0.5">Yönlendirme tuzaklarını, bc.vc ve aylink gibi para tuzaklarını çözer.</p>
+              </div>
+              <div class="space-y-2">
+                <div class="p-3 rounded-xl bg-nexus-bg border border-nexus-border/80 font-mono text-xs text-red-300 line-through truncate">
+                  https://bc.vc/download_crack?utm_source=tracker&telemetry_token=98432&spy_id=f481
+                </div>
+                <div class="flex justify-center">
+                  <span class="text-xs font-mono text-nexus-cyan animate-pulse">▼ 7 Parametre Soyuldu & Bypass Edildi ▼</span>
+                </div>
+                <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 font-mono text-xs text-emerald-400 flex justify-between items-center">
+                  <span class="truncate">✓ https://drive.google.com/file/d/1A8z...</span>
+                  <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-[10px] font-bold shrink-0">Bypass Başarılı</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 3: Cyber Fortress Preview -->
+            <div id="mock-panel-fortress" class="space-y-4 hidden">
+              <div>
+                <h3 class="font-heading font-black text-xl text-white">DoD 5220.22-M 7-Pass Shredder & Vault</h3>
+                <p class="text-xs text-nexus-muted mt-0.5">Askeri standartta silinen dosyalar adli bilişimle dahi asla geri getirilemez.</p>
+              </div>
+              <div class="p-4 rounded-xl bg-nexus-bg border border-nexus-border/80 space-y-3">
+                <div class="flex justify-between text-xs font-mono">
+                  <span class="text-white">Dosya: secret_keys_2026.docx</span>
+                  <span class="text-red-400 font-bold">7/7 Pass İmha Ediliyor...</span>
+                </div>
+                <div class="w-full h-2 bg-nexus-surface rounded-full overflow-hidden">
+                  <div class="w-full h-full bg-gradient-to-r from-red-500 via-amber-500 to-nexus-cyan animate-pulse"></div>
+                </div>
+                <div class="text-[11px] font-mono text-nexus-muted flex justify-between">
+                  <span>Algoritma: DoD 5220.22-M + Rastgele Bit Dolgusu</span>
+                  <span class="text-emerald-400 font-bold">100% Geri Döndürülemez</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 4: Resource Sentinel Preview -->
+            <div id="mock-panel-sentinel" class="space-y-4 hidden">
+              <div class="flex justify-between items-center">
+                <div>
+                  <h3 class="font-heading font-black text-xl text-white">Resource Sentinel & Live Telemetry</h3>
+                  <p class="text-xs text-nexus-muted mt-0.5">Anlık çekirdek bazlı CPU ve bellek monitörü.</p>
+                </div>
+                <button onclick="triggerSimRamFlush()" id="mock-flush-btn" class="px-3 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 font-mono text-xs hover:bg-amber-500/30">
+                  ⚡ 1-Tık RAM Flush
+                </button>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="p-3.5 rounded-xl bg-nexus-bg border border-nexus-border/80">
+                  <div class="flex justify-between text-xs font-mono text-nexus-muted mb-1.5">
+                    <span>CPU Yükü</span>
+                    <span class="text-nexus-cyan font-bold">18%</span>
+                  </div>
+                  <div class="w-full h-1.5 bg-nexus-surface rounded-full overflow-hidden">
+                    <div class="w-[18%] h-full bg-nexus-cyan rounded-full"></div>
+                  </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-nexus-bg border border-nexus-border/80">
+                  <div class="flex justify-between text-xs font-mono text-nexus-muted mb-1.5">
+                    <span>RAM Kullanımı</span>
+                    <span id="mock-ram-txt" class="text-purple-400 font-bold">36%</span>
+                  </div>
+                  <div class="w-full h-1.5 bg-nexus-surface rounded-full overflow-hidden">
+                    <div id="mock-ram-bar" class="w-[36%] h-full bg-purple-500 rounded-full transition-all duration-500"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 5: Floating Orb Preview -->
+            <div id="mock-panel-orb" class="space-y-4 hidden">
+              <div>
+                <h3 class="font-heading font-black text-xl text-white">Desktop Floating Cyber Orb</h3>
+                <p class="text-xs text-nexus-muted mt-0.5">Masaüstünüzde sağ altta süzülen sibernetik mini widget.</p>
+              </div>
+              <div class="p-6 rounded-2xl bg-nexus-bg border border-nexus-border/80 flex items-center justify-around">
+                <div class="flex flex-col items-center gap-2">
+                  <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-nexus-cyan via-nexus-accent to-purple-600 border border-nexus-cyan/60 flex items-center justify-center text-white font-bold shadow-[0_0_30px_rgba(6,182,212,0.6)] animate-float">
+                    ⚡
+                  </div>
+                  <span class="text-xs font-mono text-nexus-cyan">Yüzen Küre</span>
+                </div>
+                <div class="max-w-xs space-y-1.5 text-xs text-nexus-muted">
+                  <div class="text-white font-bold">HUD Özellikleri:</div>
+                  <div>• Canlı CPU & RAM durum halkası</div>
+                  <div>• 1-Tıkla anında TempMail üret & kopyala</div>
+                  <div>• 1-Tıkla Windows önbelleğini boşalt</div>
+                  <div>• Ctrl + K Komut Paletini tek tıkla aç</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -220,11 +380,11 @@ export function renderLandingPage(): string {
   <section id="comparison" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-bg/50">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan">Neden NexusHub?</span>
-        <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-2 mb-4">
+        <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan" data-i18n="comp.tag">Neden NexusHub?</span>
+        <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-2 mb-4" data-i18n="comp.title">
           SaaS Abonelik Yorgunluğunu Bitirin.
         </h2>
-        <p class="text-nexus-muted font-sans text-base sm:text-lg">
+        <p class="text-nexus-muted font-sans text-base sm:text-lg" data-i18n="comp.desc">
           İhtiyacınız olan her ufak araca aylık $10-$15 abonelik ödemek yerine, NexusHub'ı bir kez alın ve ömür boyu yerel olarak kullanın.
         </p>
       </div>
@@ -242,7 +402,7 @@ export function renderLandingPage(): string {
             <tbody class="divide-y divide-nexus-border/40 font-sans">
               <tr class="hover:bg-nexus-surface/30 transition-colors">
                 <td class="p-5 font-semibold text-white">Maliyet Modeli</td>
-                <td class="p-5 text-red-300">Aylık $35 - $60 (Her araç için ayrı ödeme)</td>
+                <td class="p-5 text-red-300">Aylık $35 - $60 (Her araç için ayrı fatura)</td>
                 <td class="p-5 text-emerald-400 font-bold bg-nexus-cyan/5">Tek Seferlik (Ömür Boyu Sınırsız)</td>
               </tr>
               <tr class="hover:bg-nexus-surface/30 transition-colors">
@@ -253,7 +413,7 @@ export function renderLandingPage(): string {
               <tr class="hover:bg-nexus-surface/30 transition-colors">
                 <td class="p-5 font-semibold text-white">Çevrimdışı Çalışma</td>
                 <td class="p-5 text-red-300">İnternet bağlantısı olmadan çalışmaz</td>
-                <td class="p-5 text-emerald-400 font-bold bg-nexus-cyan/5">İnternet kesilse dahi tüm araçlar aktiftir</td>
+                <td class="p-5 text-emerald-400 font-bold bg-nexus-cyan/5">İnternet kesilse dahi tüm araçlar çalışır</td>
               </tr>
               <tr class="hover:bg-nexus-surface/30 transition-colors">
                 <td class="p-5 font-semibold text-white">Reklam & Kısıtlama</td>
@@ -379,12 +539,12 @@ export function renderLandingPage(): string {
   <section id="pricing" class="relative z-10 py-24 border-t border-nexus-border/40 bg-nexus-bg/70">
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan">Şeffaf & Adil Fiyatlandırma</span>
-        <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-2 mb-4">
+        <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan" data-i18n="price.tag">Şeffaf & Adil Fiyatlandırma</span>
+        <h2 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight mt-2 mb-4" data-i18n="price.title">
           Abonelik Yok. Bir Kez Al, Ömür Boyu Kullan.
         </h2>
-        <p class="text-nexus-muted font-sans text-base sm:text-lg">
-          Gizli yenileme ücreti yok. İster kredi kartıyla, ister kriptoyla, ister Discord üzerinden saniyeler içinde edinin.
+        <p class="text-nexus-muted font-sans text-base sm:text-lg" data-i18n="price.desc">
+          Gizli yenileme ücreti yok. Kredi kartı, Kripto veya Discord üzerinden anında teslimat.
         </p>
       </div>
 
@@ -393,13 +553,13 @@ export function renderLandingPage(): string {
         <!-- Plan 1: Free Starter -->
         <div class="p-8 rounded-3xl card-glass border border-nexus-border/80 flex flex-col justify-between">
           <div>
-            <div class="text-xs font-mono text-nexus-muted uppercase tracking-wider mb-2">Başlangıç</div>
+            <div class="text-xs font-mono text-nexus-muted uppercase tracking-wider mb-2" data-i18n="plan1.badge">Başlangıç</div>
             <h3 class="font-heading font-black text-2xl text-white mb-4">Free Starter</h3>
             <div class="flex items-baseline gap-2 mb-6">
-              <span class="font-heading font-black text-5xl text-white">₺0</span>
-              <span class="text-xs font-mono text-nexus-muted">/ Sonsuza dek</span>
+              <span class="font-heading font-black text-5xl text-white" id="price-free">₺0</span>
+              <span class="text-xs font-mono text-nexus-muted" data-i18n="plan.forever">/ Sonsuza dek</span>
             </div>
-            <p class="text-xs text-nexus-muted mb-8 leading-relaxed">
+            <p class="text-xs text-nexus-muted mb-8 leading-relaxed" data-i18n="plan1.desc">
               Temel araçlara sıfır maliyetle erişmek isteyen herkes için ideal giriş paketi.
             </p>
             <ul class="space-y-3.5 text-xs text-nexus-text font-medium mb-8">
@@ -411,25 +571,25 @@ export function renderLandingPage(): string {
               <li class="flex items-center gap-2.5 text-nexus-muted line-through"><span class="w-4 h-4 shrink-0 text-nexus-border">✕</span> Cyber Fortress Shredder & Vault</li>
             </ul>
           </div>
-          <a href="https://github.com/zerviatr/NexusHub/releases/latest" target="_blank" class="w-full py-3.5 rounded-xl border border-nexus-border/80 hover:border-nexus-cyan text-white text-xs font-mono font-bold text-center transition-all">
+          <a href="https://github.com/zerviatr/NexusHub/releases/latest" target="_blank" class="w-full py-3.5 rounded-xl border border-nexus-border/80 hover:border-nexus-cyan text-white text-xs font-mono font-bold text-center transition-all" data-i18n="plan1.btn">
             Ücretsiz İndir
           </a>
         </div>
 
         <!-- Plan 2: Nexus Pro (HERO TIER) -->
         <div class="p-8 rounded-3xl card-glass border-2 border-nexus-cyan flex flex-col justify-between relative shadow-[0_0_50px_rgba(6,182,212,0.25)] scale-105 bg-nexus-card">
-          <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg font-heading font-black text-xs uppercase tracking-widest shadow-lg">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg font-heading font-black text-xs uppercase tracking-widest shadow-lg" data-i18n="plan2.badge">
             ⭐ EN ÇOK SATAN
           </div>
           <div>
             <div class="text-xs font-mono text-nexus-cyan uppercase tracking-wider mb-2">Bireysel Güç</div>
             <h3 class="font-heading font-black text-2xl text-white mb-4">Nexus Pro Lifetime</h3>
             <div class="flex items-baseline gap-2 mb-2">
-              <span class="font-heading font-black text-5xl text-white">₺349</span>
-              <span class="text-xs font-mono text-nexus-cyan font-semibold line-through">₺699</span>
-              <span class="text-xs font-mono text-nexus-muted">/ Tek Seferlik</span>
+              <span class="font-heading font-black text-5xl text-white" id="price-pro">₺349</span>
+              <span class="text-xs font-mono text-nexus-cyan font-semibold line-through" id="price-pro-old">₺699</span>
+              <span class="text-xs font-mono text-nexus-muted" data-i18n="plan.onetime">/ Tek Seferlik</span>
             </div>
-            <p class="text-xs text-nexus-cyan/90 font-mono mb-6">
+            <p class="text-xs text-nexus-cyan/90 font-mono mb-6" data-i18n="plan2.sub">
               Ömür boyu kullanım hakkı • Sıfır abonelik
             </p>
             <ul class="space-y-3.5 text-xs text-nexus-text font-medium mb-8">
@@ -438,11 +598,11 @@ export function renderLandingPage(): string {
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Evrensel Link & Reklam Çözücü</li>
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Cyber Fortress (DoD 7-Pass İmha & Kasa)</li>
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Desktop Floating Orb Mini Widget</li>
-              <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> 1 Cihaz HWID Kilitli (Cihaz Aktarılabilir)</li>
+              <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> 1 Cihaz HWID Kilitli (İstendiğinde Sıfırlanabilir)</li>
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Ömür Boyu Güncellemeler (Auto-Updater)</li>
             </ul>
           </div>
-          <button onclick="openCheckoutModal('pro', 'Nexus Pro Lifetime', '₺349')" class="w-full py-4 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-heading font-black text-sm text-center shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all cursor-pointer">
+          <button onclick="openCheckoutModal('pro')" class="w-full py-4 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-heading font-black text-sm text-center shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all cursor-pointer" data-i18n="plan2.btn">
             Hemen Satın Al (Anında Teslim)
           </button>
         </div>
@@ -450,13 +610,13 @@ export function renderLandingPage(): string {
         <!-- Plan 3: Multi-Device / Studio -->
         <div class="p-8 rounded-3xl card-glass border border-nexus-border/80 flex flex-col justify-between">
           <div>
-            <div class="text-xs font-mono text-nexus-muted uppercase tracking-wider mb-2">Çoklu Güç</div>
+            <div class="text-xs font-mono text-nexus-muted uppercase tracking-wider mb-2" data-i18n="plan3.badge">Çoklu Güç</div>
             <h3 class="font-heading font-black text-2xl text-white mb-4">Nexus Studio (3 Cihaz)</h3>
             <div class="flex items-baseline gap-2 mb-6">
-              <span class="font-heading font-black text-5xl text-white">₺699</span>
-              <span class="text-xs font-mono text-nexus-muted">/ Tek Seferlik</span>
+              <span class="font-heading font-black text-5xl text-white" id="price-studio">₺699</span>
+              <span class="text-xs font-mono text-nexus-muted" data-i18n="plan.onetime">/ Tek Seferlik</span>
             </div>
-            <p class="text-xs text-nexus-muted mb-8 leading-relaxed">
+            <p class="text-xs text-nexus-muted mb-8 leading-relaxed" data-i18n="plan3.desc">
               Hem ev hem iş bilgisayarınız veya ekibiniz için çoklu cihaz lisansı.
             </p>
             <ul class="space-y-3.5 text-xs text-nexus-text font-medium mb-8">
@@ -466,23 +626,52 @@ export function renderLandingPage(): string {
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Öncelikli Beta Güncellemeleri</li>
             </ul>
           </div>
-          <button onclick="openCheckoutModal('studio', 'Nexus Studio (3 Cihaz)', '₺699')" class="w-full py-3.5 rounded-xl border border-nexus-border/80 hover:border-nexus-cyan text-white text-xs font-mono font-bold text-center transition-all cursor-pointer">
+          <button onclick="openCheckoutModal('studio')" class="w-full py-3.5 rounded-xl border border-nexus-border/80 hover:border-nexus-cyan text-white text-xs font-mono font-bold text-center transition-all cursor-pointer" data-i18n="plan3.btn">
             Studio Paketi Al
           </button>
         </div>
 
       </div>
 
-      <!-- Payment Channels Banner -->
+      <!-- Payment Badges -->
       <div class="mt-16 text-center">
-        <p class="text-xs font-mono text-nexus-muted mb-4">GÜVENLİ ÖDEME KANALLARI:</p>
+        <p class="text-xs font-mono text-nexus-muted mb-4" data-i18n="payment.title">GÜVENLİ ÖDEME KANALLARI:</p>
         <div class="flex flex-wrap items-center justify-center gap-6 text-sm font-semibold text-nexus-text">
-          <span class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-nexus-surface border border-nexus-border/60">💳 Kredi / Banka Kartı (Shopier 3D)</span>
-          <span class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-nexus-surface border border-nexus-border/60">⚡ Kripto (USDT TRC-20, BTC, LTC)</span>
-          <span class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-nexus-surface border border-nexus-border/60">💬 Discord Ticket & Destek</span>
+          <span class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-nexus-surface border border-nexus-border/60">💳 Kredi / Banka Kartı (Shopier 3D)</span>
+          <span class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-nexus-surface border border-nexus-border/60">⚡ Kripto (USDT TRC-20, BTC, LTC)</span>
+          <span class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-nexus-surface border border-nexus-border/60">💬 Discord Ticket & Destek</span>
         </div>
       </div>
 
+    </div>
+  </section>
+
+  <!-- SELF-SERVICE LICENSE PORTAL (LİSANS SORGULA & HWID SIFIRLA) -->
+  <section id="portal" class="relative z-10 py-20 border-t border-nexus-border/40 bg-nexus-surface/10">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center mb-10">
+        <span class="text-xs font-mono uppercase tracking-widest text-nexus-cyan" data-i18n="portal.tag">Müşteri Portalı</span>
+        <h2 class="font-heading font-black text-3xl sm:text-4xl text-white tracking-tight mt-2 mb-3" data-i18n="portal.title">
+          Lisansımı Sorgula & Cihaz Sıfırla
+        </h2>
+        <p class="text-nexus-muted font-sans text-sm max-w-xl mx-auto" data-i18n="portal.desc">
+          Bilgisayarınıza format attıysanız veya lisans durumunuzu kontrol etmek istiyorsanız anahtarınızı girin.
+        </p>
+      </div>
+
+      <div class="p-6 sm:p-8 rounded-3xl card-glass border border-nexus-border/80 shadow-2xl">
+        <div class="flex flex-col sm:flex-row items-center gap-3 mb-6">
+          <input type="text" id="portal-key-input" placeholder="NEXUS-PRO-XXXX-XXXX-XXXX-XXXX" class="w-full sm:flex-1 bg-nexus-bg border border-nexus-border/80 rounded-xl px-4 py-3.5 font-mono text-sm text-nexus-cyan uppercase outline-none focus:border-nexus-cyan">
+          <button onclick="handleLicenseLookup()" id="portal-search-btn" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 hover:bg-nexus-cyan/30 text-nexus-cyan font-heading font-bold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer">
+            <span>Sorgula</span> 🔍
+          </button>
+        </div>
+
+        <!-- Result Box -->
+        <div id="portal-result" class="hidden p-5 rounded-2xl bg-nexus-bg/80 border border-nexus-border/80 text-xs font-mono space-y-3">
+          <!-- Dynamic details injected here -->
+        </div>
+      </div>
     </div>
   </section>
 
@@ -513,7 +702,7 @@ export function renderLandingPage(): string {
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
           </summary>
           <p class="mt-3 text-xs sm:text-sm text-nexus-muted leading-relaxed">
-            Asla yanmaz! NexusHub içerisinde yer alan "Lisansı Bu Cihazdan Kaldır" (Deactivate) özelliği ile eski bilgisayarınızdaki cihaz kilidini boşa çıkarabilir ve yeni bilgisayarınızda aynı anahtarla aktivasyon yapabilirsiniz.
+            Asla yanmaz! Hem uygulama içerisinden hem de yukarıdaki web portalımızdan tek tıkla eski bilgisayarınızdaki cihaz kilidini boşa çıkarabilir ve yeni bilgisayarınızda anında aktive edebilirsiniz.
           </p>
         </details>
 
@@ -523,7 +712,7 @@ export function renderLandingPage(): string {
             <span class="text-nexus-cyan group-open:rotate-180 transition-transform">▼</span>
           </summary>
           <p class="mt-3 text-xs sm:text-sm text-nexus-muted leading-relaxed">
-            Hayır! NexusHub %100 yerel (offline-first) mimariyle çalışır. Dosya imha, şifreleme, görsel dönüştürme ve pano geçmişiniz sadece ve sadece sizin bilgisayarınızın RAM ve diskinde işlenir. Sunucumuz yalnızca lisans geçerliliğini doğrular.
+            Hayır! NexusHub %100 yerel (offline-first) mimariyle çalışır. Dosya imha, şifreleme, görsel dönüştürme ve pano geçmişiniz sadece ve sadece sizin bilgisayarınızın RAM ve diskinde işlenir.
           </p>
         </details>
 
@@ -576,14 +765,35 @@ export function renderLandingPage(): string {
     </div>
   </div>
 
-  <!-- CHECKOUT MODAL -->
+  <!-- LIVE FOMO SALES TICKER TOAST (BOTTOM-LEFT) -->
+  <div id="fomo-toast" class="fixed bottom-6 left-6 z-40 max-w-sm px-4 py-3 rounded-2xl card-glass border border-nexus-cyan/40 shadow-[0_12px_35px_rgba(0,0,0,0.6)] flex items-center gap-3 transition-all duration-500 translate-y-24 opacity-0 pointer-events-none select-none">
+    <div class="w-8 h-8 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 flex items-center justify-center shrink-0">
+      <span class="text-sm">⚡</span>
+    </div>
+    <div class="truncate text-xs">
+      <div id="fomo-text" class="font-bold text-white truncate">İstanbul'dan bir kullanıcı lisans aldı</div>
+      <div id="fomo-time" class="text-[10px] font-mono text-nexus-cyan">2 dakika önce &bull; Nexus Pro Lifetime</div>
+    </div>
+    <button onclick="dismissFomo()" class="text-nexus-muted hover:text-white text-xs pl-1">✕</button>
+  </div>
+
+  <!-- UPGRADED CHECKOUT MODAL WITH DISCOUNT COUPON INPUT -->
   <div id="checkout-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
     <div class="w-full max-w-md rounded-3xl card-glass border border-nexus-cyan/50 p-6 sm:p-8 text-nexus-text relative shadow-2xl">
-      <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 text-nexus-muted hover:text-white p-1 rounded-lg hover:bg-nexus-border">✕</button>
+      <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 text-nexus-muted hover:text-white p-1 rounded-lg hover:bg-nexus-border cursor-pointer">✕</button>
       
-      <div class="text-xs font-mono text-nexus-cyan mb-1 uppercase tracking-wider">GÜVENLİ SİPARİŞ</div>
-      <h3 id="modal-plan-name" class="font-heading font-black text-2xl text-white mb-2">Nexus Pro Lifetime</h3>
-      <div id="modal-plan-price" class="text-3xl font-mono font-bold text-white mb-6">₺349</div>
+      <div class="text-xs font-mono text-nexus-cyan mb-1 uppercase tracking-wider" data-i18n="modal.tag">GÜVENLİ SİPARİŞ</div>
+      <h3 id="modal-plan-name" class="font-heading font-black text-2xl text-white mb-1">Nexus Pro Lifetime</h3>
+      <div class="flex items-baseline gap-2 mb-5">
+        <span id="modal-plan-price" class="text-3xl font-mono font-bold text-white">₺349</span>
+        <span id="modal-discount-tag" class="hidden text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold">%20 İNDİRİM UYGULANDI</span>
+      </div>
+
+      <!-- Coupon Code Box -->
+      <div class="mb-5 p-3 rounded-2xl bg-nexus-bg border border-nexus-border/80 flex items-center gap-2">
+        <input type="text" id="coupon-input" placeholder="İndirim / Kupon Kodu (Örn: NEXUS20)" class="w-full bg-transparent text-xs font-mono text-nexus-cyan uppercase outline-none placeholder:text-nexus-muted/50">
+        <button onclick="applyCoupon()" class="px-3 py-1.5 rounded-lg bg-nexus-cyan/20 border border-nexus-cyan/40 hover:bg-nexus-cyan/30 text-nexus-cyan text-xs font-mono font-bold transition-all cursor-pointer shrink-0">Uygula</button>
+      </div>
 
       <div class="space-y-3 mb-6">
         <a href="https://shopier.com" target="_blank" class="flex items-center justify-between p-3.5 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-cyan/60 transition-all group">
@@ -611,77 +821,327 @@ export function renderLandingPage(): string {
 
       <div class="p-3 rounded-xl bg-nexus-surface/40 border border-nexus-border/60 text-[11px] text-nexus-muted flex items-center gap-2">
         <span class="text-emerald-400 font-bold">✓</span>
-        <span>Ödeme sonrası lisans anahtarınız anında aktive edilir.</span>
+        <span>Ödeme sonrası lisans anahtarınız ekranda ve mailinizde anında aktive edilir.</span>
       </div>
     </div>
   </div>
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    // Tab Switching
-    function switchTab(tab) {
-      const passTab = document.getElementById('demo-tab-pass');
-      const linkTab = document.getElementById('demo-tab-link');
-      const passBtn = document.getElementById('tab-btn-pass');
-      const linkBtn = document.getElementById('tab-btn-link');
+    // ─── Multilingual & Multi-Currency Engine ──────────────────────────────
+    let currentLang = 'tr';
+    const translations = {
+      tr: {
+        'nav.preview': 'Arayüz',
+        'nav.comparison': 'SaaS Katili',
+        'nav.arsenal': '15+ Cephane',
+        'nav.pricing': 'Fiyatlandırma',
+        'nav.portal': 'Lisans Sorgula',
+        'nav.faq': 'SSS',
+        'nav.buy': 'Lisans Al',
+        'hero.pill.tools': '15+ Siber Güç',
+        'hero.pill.noSub': 'Sıfır Abonelik Tuzağı',
+        'hero.title1': 'Aylık Aboneliklere',
+        'hero.title2': 'Son.',
+        'hero.title3': 'Tek Yazılım,',
+        'hero.title4': '15+ Siber Güç.',
+        'hero.desc': 'Tek kullanımlık geçici posta, reklam & link çözücü, DoD askeri veri imha kalkanı, donanım monitörü ve şifreli kasa. Her şeye ayrı ayrı para ödemeyi bırakın.',
+        'hero.btnDownload': 'Windows için İndir (v2.0.3)',
+        'hero.btnPro': 'Ömür Boyu Pro Lisans',
+        'sim.tag': 'Canlı Arayüzü İncele',
+        'sim.title': 'NexusHub Masaüstünüzde Nasıl Görünür?',
+        'sim.desc': 'İndirmeden önce aşağıdaki sekmelere tıklayarak NexusHub\\'ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.',
+        'sim.tools.tempmail': 'TempMail Posta',
+        'sim.tools.decrypter': 'Link Decrypter',
+        'sim.tools.fortress': 'Cyber Fortress',
+        'sim.tools.sentinel': 'Resource Sentinel',
+        'sim.tools.orb': 'Floating Orb HUD',
+        'comp.tag': 'Neden NexusHub?',
+        'comp.title': 'SaaS Abonelik Yorgunluğunu Bitirin.',
+        'comp.desc': 'İhtiyacınız olan her ufak araca aylık $10-$15 abonelik ödemek yerine, NexusHub\\'ı bir kez alın ve ömür boyu yerel olarak kullanın.',
+        'price.tag': 'Şeffaf & Adil Fiyatlandırma',
+        'price.title': 'Abonelik Yok. Bir Kez Al, Ömür Boyu Kullan.',
+        'price.desc': 'Gizli yenileme ücreti yok. Kredi kartı, Kripto veya Discord üzerinden anında teslimat.',
+        'plan.forever': '/ Sonsuza dek',
+        'plan.onetime': '/ Tek Seferlik',
+        'plan1.badge': 'Başlangıç',
+        'plan1.desc': 'Temel araçlara sıfır maliyetle erişmek isteyen herkes için ideal giriş paketi.',
+        'plan1.btn': 'Ücretsiz İndir',
+        'plan2.badge': '⭐ EN ÇOK SATAN',
+        'plan2.sub': 'Ömür boyu kullanım hakkı • Sıfır abonelik',
+        'plan2.btn': 'Hemen Satın Al (Anında Teslim)',
+        'plan3.badge': 'Çoklu Güç',
+        'plan3.desc': 'Hem ev hem iş bilgisayarınız veya ekibiniz için çoklu cihaz lisansı.',
+        'plan3.btn': 'Studio Paketi Al',
+        'portal.tag': 'Müşteri Portalı',
+        'portal.title': 'Lisansımı Sorgula & Cihaz Sıfırla',
+        'portal.desc': 'Bilgisayarınıza format attıysanız veya lisans durumunuzu kontrol etmek istiyorsanız anahtarınızı girin.',
+        'modal.tag': 'GÜVENLİ SİPARİŞ'
+      },
+      en: {
+        'nav.preview': 'Interface',
+        'nav.comparison': 'SaaS Killer',
+        'nav.arsenal': '15+ Arsenal',
+        'nav.pricing': 'Pricing',
+        'nav.portal': 'Lookup License',
+        'nav.faq': 'FAQ',
+        'nav.buy': 'Get License',
+        'hero.pill.tools': '15+ Cyber Powers',
+        'hero.pill.noSub': 'Zero Subscription Trap',
+        'hero.title1': 'Stop Monthly',
+        'hero.title2': 'Subscriptions.',
+        'hero.title3': 'One Suite,',
+        'hero.title4': '15+ Cyber Tools.',
+        'hero.desc': 'Instant disposable email, link & ad decrypter, military DoD shredder, live hardware sentinel, and encrypted vault. Stop paying separate fees for simple utilities.',
+        'hero.btnDownload': 'Download for Windows (v2.0.3)',
+        'hero.btnPro': 'Lifetime Pro License',
+        'sim.tag': 'Explore the Interface',
+        'sim.title': 'How NexusHub Looks on Your Desktop',
+        'sim.desc': 'Click the tabs below to test drive NexusHub\\'s cybernetic tools and smooth interface before downloading.',
+        'sim.tools.tempmail': 'TempMail Inbox',
+        'sim.tools.decrypter': 'Link Decrypter',
+        'sim.tools.fortress': 'Cyber Fortress',
+        'sim.tools.sentinel': 'Resource Sentinel',
+        'sim.tools.orb': 'Floating Orb HUD',
+        'comp.tag': 'Why NexusHub?',
+        'comp.title': 'End SaaS Subscription Fatigue.',
+        'comp.desc': 'Instead of paying $10–$15/mo for every tiny utility, own NexusHub once and run everything locally forever.',
+        'price.tag': 'Transparent & Fair Pricing',
+        'price.title': 'No Subscriptions. Buy Once, Own Forever.',
+        'price.desc': 'No hidden renewals. Instant delivery via credit card, crypto, or Discord.',
+        'plan.forever': '/ Forever free',
+        'plan.onetime': '/ One-time',
+        'plan1.badge': 'Starter',
+        'plan1.desc': 'Perfect entry pack for anyone wanting core utilities at zero cost.',
+        'plan1.btn': 'Download Free',
+        'plan2.badge': '⭐ MOST POPULAR',
+        'plan2.sub': 'Lifetime access • Zero subscriptions',
+        'plan2.btn': 'Get License (Instant Delivery)',
+        'plan3.badge': 'Multi-Device',
+        'plan3.desc': 'Multi-device license for your home and work PC or your core team.',
+        'plan3.btn': 'Get Studio Pack',
+        'portal.tag': 'Customer Portal',
+        'portal.title': 'Check License & Reset Hardware',
+        'portal.desc': 'Formatted your PC or need to verify your license status? Check your key below.',
+        'modal.tag': 'SECURE CHECKOUT'
+      }
+    };
 
-      if (tab === 'pass') {
-        passTab.classList.remove('hidden');
-        linkTab.classList.add('hidden');
-        passBtn.className = 'px-3 py-1 rounded-lg text-xs font-mono font-semibold bg-nexus-cyan text-nexus-bg transition-all';
-        linkBtn.className = 'px-3 py-1 rounded-lg text-xs font-mono font-semibold text-nexus-muted hover:text-white transition-all';
+    function toggleLanguage() {
+      currentLang = currentLang === 'tr' ? 'en' : 'tr';
+      document.getElementById('lang-flag').innerText = currentLang === 'tr' ? '🇹🇷' : '🇺🇸';
+      document.getElementById('lang-label').innerText = currentLang === 'tr' ? 'TR (₺)' : 'EN ($)';
+
+      // Update text nodes
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[currentLang][key]) {
+          el.innerText = translations[currentLang][key];
+        }
+      });
+
+      // Update prices
+      if (currentLang === 'tr') {
+        document.getElementById('price-free').innerText = '₺0';
+        document.getElementById('price-pro').innerText = '₺349';
+        document.getElementById('price-pro-old').innerText = '₺699';
+        document.getElementById('price-studio').innerText = '₺699';
       } else {
-        passTab.classList.add('hidden');
-        linkTab.classList.remove('hidden');
-        linkBtn.className = 'px-3 py-1 rounded-lg text-xs font-mono font-semibold bg-nexus-cyan text-nexus-bg transition-all';
-        passBtn.className = 'px-3 py-1 rounded-lg text-xs font-mono font-semibold text-nexus-muted hover:text-white transition-all';
+        document.getElementById('price-free').innerText = '$0';
+        document.getElementById('price-pro').innerText = '$29';
+        document.getElementById('price-pro-old').innerText = '$59';
+        document.getElementById('price-studio').innerText = '$49';
       }
     }
 
-    // Interactive Password Generator Demo
-    let passLen = 24;
-    function updatePassLen(val) {
-      passLen = parseInt(val);
-      document.getElementById('pass-len-val').innerText = val;
-      generateDemoPass();
-    }
-
-    function generateDemoPass() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
-      let res = '';
-      for (let i = 0; i < passLen; i++) {
-        res += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      document.getElementById('demo-pass-output').value = res;
-    }
-
-    function copyDemoPass() {
-      const text = document.getElementById('demo-pass-output').value;
-      navigator.clipboard.writeText(text).then(() => {
-        const btn = document.getElementById('demo-copy-btn');
-        btn.innerText = 'Kopyalandı!';
-        btn.classList.add('text-emerald-400');
-        setTimeout(() => {
-          btn.innerText = 'Kopyala';
-          btn.classList.remove('text-emerald-400');
-        }, 2000);
+    // ─── Interactive Mockup Tool Switcher ──────────────────────────────────
+    const tools = ['tempmail', 'decrypter', 'fortress', 'sentinel', 'orb'];
+    function switchMockTool(toolId) {
+      tools.forEach(t => {
+        const p = document.getElementById('mock-panel-' + t);
+        const b = document.getElementById('mock-btn-' + t);
+        if (t === toolId) {
+          p.classList.remove('hidden');
+          b.className = 'w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 bg-nexus-cyan/15 text-nexus-cyan border border-nexus-cyan/30 transition-all';
+        } else {
+          p.classList.add('hidden');
+          b.className = 'w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all';
+        }
       });
     }
 
-    // Interactive Link Decrypter Demo
-    function cleanDemoLink() {
-      const input = document.getElementById('demo-link-input');
-      const result = document.getElementById('demo-link-result');
-      result.innerHTML = '<span class="animate-pulse text-nexus-cyan">Çözülüyor ve reklamlar bypass ediliyor...</span>';
-      setTimeout(() => {
-        result.innerHTML = '<span class="truncate">✓ Temiz Hedef: <b>https://github.com/zerviatr/NexusHub</b></span><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-[10px] uppercase font-bold shrink-0">Takipçiler Silindi</span>';
-      }, 600);
+    function simulateNewMail() {
+      const names = ['cyber_recon', 'phantom_user', 'shadow_matrix', 'delta_operator'];
+      const domains = ['nexusmail.org', 'tempdrop.io', 'ghostinbox.net'];
+      const randomEmail = names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 900 + 100) + '@' + domains[Math.floor(Math.random() * domains.length)];
+      document.getElementById('mock-email-addr').innerText = randomEmail;
     }
 
-    // Modal Control
-    function openCheckoutModal(planId, name, price) {
-      document.getElementById('modal-plan-name').innerText = name;
-      document.getElementById('modal-plan-price').innerText = price;
+    function triggerSimRamFlush() {
+      const btn = document.getElementById('mock-flush-btn');
+      const bar = document.getElementById('mock-ram-bar');
+      const txt = document.getElementById('mock-ram-txt');
+      btn.innerText = 'Temizleniyor...';
+      btn.disabled = true;
+      setTimeout(() => {
+        bar.style.width = '19%';
+        txt.innerText = '19%';
+        txt.classList.add('text-emerald-400');
+        btn.innerText = '✓ Temizlendi (1.4 GB Boşaldı)';
+        setTimeout(() => {
+          btn.innerText = '⚡ 1-Tık RAM Flush';
+          btn.disabled = false;
+        }, 3000);
+      }, 500);
+    }
+
+    // ─── Live Social Proof FOMO Ticker ─────────────────────────────────────
+    const fomoData = [
+      { city: 'İstanbul', plan: 'Nexus Pro Lifetime', time: '2 dakika önce' },
+      { city: 'Ankara', plan: 'Nexus Studio (3 Cihaz)', time: '5 dakika önce' },
+      { city: 'İzmir', plan: 'Nexus Pro Lifetime', time: '8 dakika önce' },
+      { city: 'Bursa', plan: 'Nexus Pro Lifetime', time: '14 dakika önce' },
+      { city: 'Antalya', plan: 'Nexus Studio (3 Cihaz)', time: '19 dakika önce' }
+    ];
+    let fomoIdx = 0;
+    function showNextFomo() {
+      const item = fomoData[fomoIdx];
+      const toast = document.getElementById('fomo-toast');
+      const txt = document.getElementById('fomo-text');
+      const tm = document.getElementById('fomo-time');
+      
+      txt.innerText = item.city + "'dan bir kullanıcı sipariş verdi";
+      tm.innerText = item.time + " • " + item.plan;
+
+      toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+        toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+      }, 4500);
+
+      fomoIdx = (fomoIdx + 1) % fomoData.length;
+    }
+    setTimeout(() => {
+      showNextFomo();
+      setInterval(showNextFomo, 16000);
+    }, 4000);
+
+    function dismissFomo() {
+      const toast = document.getElementById('fomo-toast');
+      toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+    }
+
+    // ─── Self-Service License Lookup & Hardware Reset ───────────────────────
+    let currentLookupKey = '';
+    async function handleLicenseLookup() {
+      const key = document.getElementById('portal-key-input').value.trim();
+      const resBox = document.getElementById('portal-result');
+      const btn = document.getElementById('portal-search-btn');
+
+      if (!key) {
+        alert('Lütfen bir lisans anahtarı girin.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = 'Sorgulanıyor...';
+      resBox.classList.remove('hidden');
+      resBox.innerHTML = '<div class="text-nexus-cyan animate-pulse">Sunucu veritabanı taranıyor...</div>';
+
+      try {
+        const resp = await fetch('/api/license/lookup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key })
+        });
+        const data = await resp.json();
+
+        if (!data.found) {
+          resBox.innerHTML = '<div class="text-red-400 font-bold">❌ ' + (data.reason || 'Geçersiz Lisans Anahtarı') + '</div>';
+        } else {
+          currentLookupKey = key;
+          const isLife = data.expiresAt === 0;
+          const expText = isLife ? 'Sınırsız (Ömür Boyu)' : new Date(data.expiresAt).toLocaleDateString('tr-TR');
+          
+          resBox.innerHTML = \`
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-nexus-border/60 pb-3 gap-2">
+              <div>
+                <span class="text-white font-bold text-sm">\${data.key}</span>
+                <span class="ml-2 px-2 py-0.5 rounded text-[10px] font-bold bg-nexus-cyan/20 text-nexus-cyan uppercase">\${data.tier}</span>
+              </div>
+              <span class="\${data.isRevoked ? 'text-red-400' : 'text-emerald-400'} font-bold">
+                \${data.isRevoked ? 'İPTAL EDİLDİ' : data.isExpired ? 'SÜRESİ DOLDU' : '✓ AKTİF'}
+              </span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-nexus-muted">
+              <div>Geçerlilik: <b class="text-white">\${expText}</b></div>
+              <div>Bağlı Cihaz: <b class="text-white">\${data.activeDevices} / \${data.maxDevices} Cihaz</b></div>
+            </div>
+            <div class="pt-2 flex items-center justify-between">
+              <span class="text-[11px] text-nexus-muted">Format sonrası cihazı değiştirmek mi istiyorsunuz?</span>
+              <button onclick="handleResetHardware()" class="px-3 py-1.5 rounded-lg bg-red-500/20 border border-red-500/40 hover:bg-red-500/30 text-red-400 font-bold transition-all">
+                Cihazı Sıfırla (HWID Boşa Çıkar)
+              </button>
+            </div>
+          \`;
+        }
+      } catch (err) {
+        resBox.innerHTML = '<div class="text-red-400">Sunucu ile iletişim kurulamadı.</div>';
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Sorgula 🔍';
+      }
+    }
+
+    async function handleResetHardware() {
+      if (!currentLookupKey) return;
+      if (!confirm('Bu lisansa bağlı eski bilgisayar kaydı silinecektir. Onaylıyor musunuz?')) return;
+
+      const resBox = document.getElementById('portal-result');
+      resBox.innerHTML = '<div class="text-nexus-cyan animate-pulse">Cihaz kilidi kaldırılıyor...</div>';
+
+      try {
+        const resp = await fetch('/api/license/reset-hardware', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: currentLookupKey })
+        });
+        const data = await resp.json();
+        if (data.success) {
+          resBox.innerHTML = '<div class="text-emerald-400 font-bold">✓ ' + data.message + '</div>';
+        } else {
+          resBox.innerHTML = '<div class="text-red-400 font-bold">❌ ' + data.reason + '</div>';
+        }
+      } catch {
+        resBox.innerHTML = '<div class="text-red-400 font-bold">İşlem başarısız oldu.</div>';
+      }
+    }
+
+    // ─── Checkout Modal with Promo Code Engine ─────────────────────────────
+    let selectedPlan = 'pro';
+    let basePriceTR = 349;
+    let basePriceEN = 29;
+
+    function openCheckoutModal(plan) {
+      selectedPlan = plan;
+      const modalName = document.getElementById('modal-plan-name');
+      const modalPrice = document.getElementById('modal-plan-price');
+      document.getElementById('modal-discount-tag').classList.add('hidden');
+      document.getElementById('coupon-input').value = '';
+
+      if (plan === 'pro') {
+        modalName.innerText = 'Nexus Pro Lifetime';
+        basePriceTR = 349;
+        basePriceEN = 29;
+      } else {
+        modalName.innerText = 'Nexus Studio (3 Cihaz)';
+        basePriceTR = 699;
+        basePriceEN = 49;
+      }
+
+      modalPrice.innerText = currentLang === 'tr' ? '₺' + basePriceTR : '$' + basePriceEN;
       document.getElementById('checkout-modal').classList.remove('hidden');
     }
 
@@ -689,7 +1149,23 @@ export function renderLandingPage(): string {
       document.getElementById('checkout-modal').classList.add('hidden');
     }
 
-    // Sticky Bottom Bar on Scroll
+    function applyCoupon() {
+      const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+      const tag = document.getElementById('modal-discount-tag');
+      const priceEl = document.getElementById('modal-plan-price');
+
+      if (code === 'NEXUS20' || code === 'DISCORD' || code === 'SPECIAL') {
+        const discountedTR = Math.round(basePriceTR * 0.8);
+        const discountedEN = Math.round(basePriceEN * 0.8);
+        priceEl.innerText = currentLang === 'tr' ? '₺' + discountedTR : '$' + discountedEN;
+        tag.classList.remove('hidden');
+        tag.innerText = '%20 İNDİRİM UYGULANDI!';
+      } else if (code) {
+        alert('Geçersiz veya süresi dolmuş kupon kodu.');
+      }
+    }
+
+    // ─── Sticky Bottom Bar on Scroll ───────────────────────────────────────
     window.addEventListener('scroll', () => {
       const bar = document.getElementById('sticky-bar');
       if (window.scrollY > 400) {

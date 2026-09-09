@@ -200,3 +200,77 @@ licenseRouter.post('/deactivate', async (req: Request, res: Response): Promise<v
     res.status(500).json({ ok: false, reason: 'Internal server error' })
   }
 })
+
+// ─── POST /api/license/lookup (Public Self-Service Portal) ───────────────────
+licenseRouter.post('/lookup', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { key } = req.body as { key?: string }
+    if (!key) {
+      res.status(400).json({ found: false, reason: 'Lisans anahtarı gerekli' })
+      return
+    }
+
+    const cleanKey = key.trim().toUpperCase()
+    const license = await getLicense(cleanKey)
+    if (!license) {
+      res.json({ found: false, reason: 'Geçersiz veya bulunamayan lisans anahtarı' })
+      return
+    }
+
+    const activeDevices = await getActivationCount(cleanKey)
+    const expiresAt = Number(license.expires_at)
+    const isExpired = expiresAt !== 0 && Date.now() > expiresAt
+
+    res.json({
+      found: true,
+      key: cleanKey.slice(0, 10) + '****-****-' + cleanKey.slice(-4),
+      tier: license.tier,
+      isRevoked: Boolean(license.is_revoked),
+      isExpired,
+      expiresAt,
+      activeDevices,
+      maxDevices: Number(license.max_devices ?? 1),
+      createdAt: Number(license.created_at ?? 0),
+    })
+  } catch (err: any) {
+    console.error('[license] lookup error:', err)
+    res.status(500).json({ found: false, reason: 'Sunucu hatası' })
+  }
+})
+
+// ─── POST /api/license/reset-hardware (Self-Service HWID Clear) ──────────────
+licenseRouter.post('/reset-hardware', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { key } = req.body as { key?: string }
+    if (!key) {
+      res.status(400).json({ success: false, reason: 'Lisans anahtarı gerekli' })
+      return
+    }
+
+    const cleanKey = key.trim().toUpperCase()
+    const license = await getLicense(cleanKey)
+    if (!license) {
+      res.json({ success: false, reason: 'Lisans anahtarı bulunamadı' })
+      return
+    }
+
+    if (license.is_revoked) {
+      res.json({ success: false, reason: 'İptal edilmiş lisans için cihaz sıfırlanamaz' })
+      return
+    }
+
+    await getDb().execute({
+      sql: 'DELETE FROM activations WHERE license_key = ?',
+      args: [cleanKey],
+    })
+
+    console.log(`[license] Self-service hardware reset completed for key=${cleanKey.slice(0, 8)}...`)
+    res.json({
+      success: true,
+      message: 'Cihaz kilidi başarıyla sıfırlandı! Artık yeni bilgisayarınızda lisansınızı hemen aktive edebilirsiniz.',
+    })
+  } catch (err: any) {
+    console.error('[license] reset-hardware error:', err)
+    res.status(500).json({ success: false, reason: 'Sunucu hatası' })
+  }
+})
