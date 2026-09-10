@@ -150,6 +150,11 @@ export default function Account() {
     }
   }
 
+  const [autoLaunch, setAutoLaunch] = useState(false)
+  useEffect(() => {
+    window.nexusAPI?.settings?.getAutoLaunch?.().then((val: boolean) => setAutoLaunch(!!val)).catch(() => {})
+  }, [])
+
   const [sfxVolume, setSfxVolume] = useState<number>(() => {
     try {
       return Math.round(cyberAudio.getVolume() * 100)
@@ -338,8 +343,10 @@ export default function Account() {
                 <input
                   type="checkbox"
                   id="autoLaunchToggle"
+                  checked={autoLaunch}
                   onChange={async (e) => {
                     const checked = e.target.checked
+                    setAutoLaunch(checked)
                     await window.nexusAPI?.settings?.setAutoLaunch?.(checked)
                   }}
                   className="w-4 h-4 rounded border-nexus-border/40 text-nexus-cyan focus:ring-0 cursor-pointer"

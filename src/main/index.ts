@@ -69,7 +69,14 @@ function createWindow(): void {
   })
 
   mainWindow.once('ready-to-show', () => {
-    mainWindow?.show()
+    const isStartupLaunch =
+      app.getLoginItemSettings().wasOpenedAsHidden ||
+      process.argv.includes('--hidden') ||
+      process.argv.includes('--minimized')
+
+    if (!isStartupLaunch) {
+      mainWindow?.show()
+    }
     // Setup tray, global hotkeys and updater once window is ready
     if (mainWindow) {
       setupSystemTray(mainWindow)
@@ -174,7 +181,11 @@ if (!gotTheLock) {
     }
   })
 
-  app.whenReady().then(() => {
+  if (process.platform === 'win32') {
+  app.setAppUserModelId('app.zendev.desktop')
+}
+
+app.whenReady().then(() => {
     // Enforce Content-Security-Policy
     session.defaultSession.webRequest.onHeadersReceived((details: any, callback: any) => {
       callback({

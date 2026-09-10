@@ -108,7 +108,11 @@ export function setupSystemTray(mainWindow: BrowserWindow): Tray | null {
 
   // Double-click or click toggles window visibility
   tray.on('click', () => {
-    if (mainWindow.isVisible()) {
+    if (!mainWindow) return
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore()
+      mainWindow.focus()
+    } else if (mainWindow.isVisible()) {
       mainWindow.hide()
     } else {
       mainWindow.show()

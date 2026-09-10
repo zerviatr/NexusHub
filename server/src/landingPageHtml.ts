@@ -2328,10 +2328,9 @@ graph LR
       </div>
     </div>
     <div class="flex items-center gap-2 shrink-0">
-      <button onclick="handleDownloadDisabled()" class="px-3.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-nexus-border text-nexus-muted hover:text-white font-mono text-xs transition-colors cursor-pointer flex items-center gap-1.5">
-        <span>İndir</span>
-        <span class="text-[9px] text-nexus-cyan font-bold">(Yakında)</span>
-      </button>
+      <a href="https://github.com/zerviatr/NexusHub/releases/latest" class="px-3.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-nexus-border text-nexus-cyan hover:text-white font-mono text-xs transition-colors cursor-pointer flex items-center gap-1.5 border border-nexus-cyan/30">
+        <span>İndir (v2.3.0)</span>
+      </a>
       <a href="#pricing" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 text-nexus-bg font-heading font-black text-xs shadow-[0_0_15px_rgba(var(--c-cyan),0.4)] transition-all cursor-pointer">
         Lisans Al
       </a>

@@ -211,6 +211,16 @@ export function setupAutoUpdater(win: BrowserWindow): void {
     }
   })
 
+  // ─── Periodic background check: every 4 hours ────────────────────────────
+  const CHECK_INTERVAL_MS = 4 * 60 * 60 * 1000
+  setInterval(() => {
+    if (app.isPackaged) {
+      autoUpdater.checkForUpdates().catch((err) => {
+        console.warn('[updater] Periodic check error:', err?.message)
+      })
+    }
+  }, CHECK_INTERVAL_MS)
+
   // ─── Initial check: 3 seconds after window is ready ──────────────────────
   // Delayed to not slow down perceived startup time
   setTimeout(() => {

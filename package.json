@@ -42,7 +42,9 @@
     },
     "asar": true,
     "asarUnpack": [
-      "**/*.node"
+      "**/*.node",
+      "**/node_modules/@img/**",
+      "**/node_modules/sharp/**"
     ],
     "compression": "normal",
     "win": {
