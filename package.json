@@ -1,6 +1,6 @@
 {
   "name": "zendev",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "ZenDev — Premium Multi-Tool Desktop Application",
   "main": "./out/main/index.js",
   "author": {
