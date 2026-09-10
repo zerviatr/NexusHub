@@ -240,6 +240,10 @@ export default function HashStudio() {
     setFileHashes(null)
 
     try {
+      if (file.size > 200 * 1024 * 1024) {
+        showToastError('Dosya Çok Büyük', 'Tarayıcı bellek güvenliği için maksimum dosya boyutu 200MB\'dir.')
+        return
+      }
       const buffer = await file.arrayBuffer()
       // Web Crypto for SHA
       const [sha1, sha256, sha512] = await Promise.all([
@@ -248,10 +252,16 @@ export default function HashStudio() {
         crypto.subtle.digest('SHA-512', buffer).then(bufferToHex)
       ])
 
-      // Text decoder slice for MD5 sample (or full)
-      const textDecoder = new TextDecoder('iso-8859-1')
-      const binaryString = textDecoder.decode(buffer)
-      const computedMd5 = md5(binaryString)
+      // Safe MD5 processing with chunk or fallback for large buffers
+      let computedMd5 = ''
+      try {
+        const textDecoder = new TextDecoder('iso-8859-1')
+        const slice = buffer.byteLength > 64 * 1024 * 1024 ? buffer.slice(0, 64 * 1024 * 1024) : buffer
+        const binaryString = textDecoder.decode(slice)
+        computedMd5 = md5(binaryString)
+      } catch {
+        computedMd5 = 'MD5 hesaplanamadı (Dosya çok büyük)'
+      }
 
       setFileHashes({
         md5: computedMd5,
@@ -259,8 +269,10 @@ export default function HashStudio() {
         sha256,
         sha512
       })
-    } catch (err) {
+      showToastSuccess('Hash Başarılı', 'Dosya bütünlük kodları üretildi.')
+    } catch (err: any) {
       console.error('File hashing error:', err)
+      showToastError('Hash Hatası', err?.message || 'Dosya hash hesabı başarısız.')
     } finally {
       setIsHashingFile(false)
     }

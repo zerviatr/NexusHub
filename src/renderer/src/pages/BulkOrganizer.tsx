@@ -38,6 +38,7 @@ export default function BulkOrganizer() {
   // Presets & Settings
   const [preset, setPreset] = useState<PresetMode>('custom')
   const [organizeByCategory, setOrganizeByCategory] = useState(true)
+  const [groupByTimeline, setGroupByTimeline] = useState(false)
   const [prefix, setPrefix] = useState('')
   const [suffix, setSuffix] = useState('')
   const [excludedIndices, setExcludedIndices] = useState<Set<number>>(new Set())

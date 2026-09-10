@@ -57,7 +57,7 @@ export default function TitleBar() {
   }
 
   return (
-    <div className="h-10 flex items-center justify-between bg-nexus-surface/80 backdrop-blur-xl border-b border-nexus-border/20 drag select-none shrink-0">
+    <div onDoubleClick={handleMaximize} className="h-10 flex items-center justify-between bg-nexus-surface/80 backdrop-blur-xl border-b border-nexus-border/20 drag select-none shrink-0 cursor-default">
       {/* Left spacer */}
       <div className="w-4" />
 

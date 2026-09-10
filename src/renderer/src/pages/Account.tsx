@@ -373,7 +373,7 @@ export default function Account() {
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-nexus-text">Command Palette:</span>
                   <kbd className="px-2 py-0.5 rounded bg-black/50 border border-white/10 font-mono text-nexus-cyan text-[11px]">
-                    Ctrl + Shift + K
+                    Ctrl + K
                   </kbd>
                 </div>
               </div>
@@ -608,8 +608,7 @@ export default function Account() {
                       const data = JSON.parse(ev.target?.result as string)
                       Object.keys(data).forEach((k) => localStorage.setItem(k, data[k]))
                       cyberAudio.copySuccess()
-                      showToastSuccess('Yapılandırma Geri Yüklendi', 'Ayarlar başarıyla güncellendi.'); setTimeout(() => window.location.reload(), 1000)
-                      window.location.reload()
+                      showToastSuccess('Yapılandırma Geri Yüklendi', 'Ayarlar başarıyla güncellendi.'); setTimeout(() => window.location.reload(), 1200)
                     } catch {
                       showToastError('Hata', 'Geçersiz yedekleme dosyası!')
                     }

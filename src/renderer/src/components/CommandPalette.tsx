@@ -340,7 +340,8 @@ export default function CommandPalette() {
       e.preventDefault()
       if (smartPasteResult && smartPasteResult.type === 'math') {
         navigator.clipboard.writeText(smartPasteResult.result)
-        setQuery(smartPasteResult.result)
+        try { cyberAudio.copySuccess() } catch {}
+        setIsOpen(false)
         return
       }
       if (filteredItems[selectedIndex]) {
