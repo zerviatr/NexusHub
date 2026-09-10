@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import {
   Braces,
   KeyRound,
@@ -14,14 +14,17 @@ import {
   FileCode,
   Bot,
   Loader2,
-  X
+  X,
+  Database,
+  Table
 } from 'lucide-react'
 import BaseToolTemplate from '../components/BaseToolTemplate'
 import { useT } from '../lib/i18n'
 import { askAI } from '../lib/aiClient'
 import { cyberAudio } from '../lib/cyberAudio'
+import SqliteViewer from '../components/SqliteViewer'
 
-type StudioTab = 'json' | 'jwt'
+type StudioTab = 'json' | 'jwt' | 'sqlite'
 
 const SAMPLE_JSON = JSON.stringify(
   {
@@ -74,6 +77,29 @@ export default function JsonStudio() {
   // JWT Studio state
   const [rawJwt, setRawJwt] = useState<string>(SAMPLE_JWT)
   const [copiedJwtPayload, setCopiedJwtPayload] = useState<boolean>(false)
+
+  // Listen to incoming data from Smart Paste (CommandPalette / MiniHud)
+  useEffect(() => {
+    try {
+      const incomingJson = localStorage.getItem('nexus_json_input')
+      if (incomingJson) {
+        setRawJson(incomingJson)
+        setActiveTab('json')
+        localStorage.removeItem('nexus_json_input')
+      }
+      const incomingJwt = localStorage.getItem('nexus_jwt_input')
+      if (incomingJwt) {
+        setRawJwt(incomingJwt)
+        setActiveTab('jwt')
+        localStorage.removeItem('nexus_jwt_input')
+      }
+      const requestedTab = localStorage.getItem('nexus_json_tab') as StudioTab | null
+      if (requestedTab) {
+        setActiveTab(requestedTab)
+        localStorage.removeItem('nexus_json_tab')
+      }
+    } catch {}
+  }, [])
 
   // AI Schema Generator state
   const [showAiModal, setShowAiModal] = useState<boolean>(false)
@@ -262,6 +288,18 @@ export default function JsonStudio() {
             >
               <KeyRound className="w-3.5 h-3.5" />
               JWT Token Inspector
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('sqlite')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+                activeTab === 'sqlite'
+                  ? 'bg-nexus-cyan/20 text-nexus-cyan border border-nexus-cyan/40 shadow-sm'
+                  : 'text-nexus-muted hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Database className="w-3.5 h-3.5" />
+              SQLite & Table Viewer
             </button>
           </div>
 
@@ -530,6 +568,17 @@ export default function JsonStudio() {
             )}
           </div>
         )}
+
+        {/* ─── TAB 3: SQLITE & TABLE VIEWER ──────────────────────────────── */}
+        {activeTab === 'sqlite' && (
+          <SqliteViewer
+            onExportToJsonTab={(jsonString) => {
+              setRawJson(jsonString)
+              setActiveTab('json')
+            }}
+          />
+        )}
+
       {/* AI Schema Generator Modal */}
       {showAiModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">

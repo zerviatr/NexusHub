@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Zap, Mail, Hash, Shield, Terminal, ArrowRight, X, Cpu, Globe } from 'lucide-react'
+import { Search, Zap, Mail, Hash, Shield, Terminal, ArrowRight, X, Cpu, Globe, Braces } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { cyberAudio } from '../lib/cyberAudio'
+import { detectSmartPaste } from '../lib/smartPasteDetector'
+import SmartPasteCard from './SmartPasteCard'
 
 export default function MiniHud() {
   const [isOpen, setIsOpen] = useState(false)
@@ -10,6 +12,8 @@ export default function MiniHud() {
   const [quickHash, setQuickHash] = useState('')
   const [quickResult, setQuickResult] = useState('')
   const navigate = useNavigate()
+
+  const smartPasteResult = useMemo(() => detectSmartPaste(query), [query])
 
   useEffect(() => {
     // Listen to global IPC shortcut or window custom event
@@ -67,6 +71,7 @@ export default function MiniHud() {
   }
 
   const quickActions = [
+    { name: 'JSON & SQLite Studio', path: '/json-studio', icon: Braces, desc: 'JSON format, JWT decode & SQLite tablo inceleme' },
     { name: 'Regex Lab', path: '/regex-studio', icon: Terminal, desc: 'Canlı Regex test ve grup analizi' },
     { name: 'Fake Data', path: '/fake-data', icon: Zap, desc: 'Sahte kimlik & Mock test verisi' },
     { name: 'System Optimizer', path: '/system-optimizer', icon: Cpu, desc: 'DNS temizleme & Temp disk alanı' },
@@ -143,10 +148,31 @@ export default function MiniHud() {
               autoFocus
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  if (smartPasteResult && smartPasteResult.type === 'math') {
+                    e.preventDefault()
+                    navigator.clipboard.writeText(smartPasteResult.result)
+                    setQuery(smartPasteResult.result)
+                  } else if (filtered.length > 0) {
+                    e.preventDefault()
+                    handleGo(filtered[0].path)
+                  }
+                }
+              }}
               placeholder="Araç veya işlem ara (örn: regex, optimizer, mock, mail)..."
               className="flex-1 bg-transparent border-none text-sm text-nexus-text placeholder-nexus-muted focus:outline-none font-sans"
             />
           </div>
+
+          {/* Context-Aware Smart Paste Detector Result */}
+          {smartPasteResult && (
+            <SmartPasteCard
+              result={smartPasteResult}
+              onApplyResult={(val) => setQuery(val)}
+              onClose={() => setIsOpen(false)}
+            />
+          )}
 
           {/* Tool Grid */}
           <div className="p-3 max-h-72 overflow-y-auto space-y-1">

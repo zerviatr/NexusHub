@@ -1,6 +1,6 @@
 {
   "name": "zendev",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "ZenDev — Premium Multi-Tool Desktop Application",
   "main": "./out/main/index.js",
   "author": {
@@ -53,7 +53,8 @@
         {
           "target": "nsis",
           "arch": [
-            "x64"
+            "x64",
+            "arm64"
           ]
         }
       ],
@@ -95,9 +96,10 @@
           ]
         }
       ],
-      "hardenedRuntime": false,
+      "hardenedRuntime": true,
       "notarize": false,
-      "artifactName": "${productName}-${version}-${arch}.${ext}"
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "gatekeeperAssess": false
     },
     "dmg": {
       "icon": "build/icons/icon.icns",
@@ -149,6 +151,7 @@
   "dependencies": {
     "@types/dompurify": "^3.0.5",
     "@types/qrcode": "^1.5.6",
+    "@types/sql.js": "^1.4.11",
     "axios": "^1.7.9",
     "cheerio": "^1.0.0",
     "dompurify": "^3.4.15",
@@ -162,6 +165,7 @@
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0",
     "sharp": "^0.35.4",
+    "sql.js": "^1.14.2",
     "validator": "^13.12.0"
   },
   "devDependencies": {

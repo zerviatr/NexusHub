@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { Settings, Key, Shield, LogOut, Clock, Infinity, RefreshCw, Check, Download, AlertCircle, Sparkles, Bot } from 'lucide-react'
 import { useLicense } from '../lib/LicenseContext'
 import { useT } from '../lib/i18n'
-import { cyberAudio } from '../lib/cyberAudio'
+import { cyberAudio, AudioProfile } from '../lib/cyberAudio'
 import { getAIConfig, saveAIConfig, type AIConfig, type AIProvider } from '../lib/aiClient'
 
 export default function Account() {
@@ -17,6 +17,14 @@ export default function Account() {
       return cyberAudio.isEnabled()
     } catch {
       return true
+    }
+  })
+
+  const [audioProfile, setAudioProfileState] = useState<AudioProfile>(() => {
+    try {
+      return cyberAudio.getAudioProfile()
+    } catch {
+      return 'cyber'
     }
   })
 
@@ -491,24 +499,57 @@ export default function Account() {
           </div>
 
           {audioEnabled && (
-            <div className="flex items-center gap-4 pt-2">
-              <span className="text-xs font-mono text-nexus-muted whitespace-nowrap">Ses Seviyesi:</span>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={sfxVolume}
-                onChange={(e) => {
-                  const val = parseInt(e.target.value, 10)
-                  setSfxVolume(val)
-                  cyberAudio.setVolume(val / 100)
-                }}
-                onMouseUp={() => cyberAudio.click()}
-                className="w-full accent-nexus-accent cursor-pointer"
-              />
-              <span className="text-xs font-mono text-nexus-cyan font-bold min-w-[3rem] text-right">
-                %{sfxVolume}
-              </span>
+            <div className="space-y-4 pt-2">
+              <div className="flex flex-col gap-2">
+                <span className="text-xs font-mono text-nexus-muted">Haptik & Ses Profili:</span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {(
+                    [
+                      { id: 'cyber', label: 'Cyber', badge: 'Neon Synth' },
+                      { id: 'mechanical', label: 'Mechanical', badge: 'Thock Switch' },
+                      { id: 'linear', label: 'Linear', badge: 'Soft Hi-Fi' },
+                      { id: 'stealth', label: 'Stealth', badge: 'Sessiz' }
+                    ] as const
+                  ).map((p) => (
+                    <button
+                      key={p.id}
+                      onClick={() => {
+                        cyberAudio.setAudioProfile(p.id)
+                        setAudioProfileState(p.id)
+                        cyberAudio.click()
+                      }}
+                      className={`px-3 py-2 rounded-xl text-left border transition-all ${
+                        audioProfile === p.id
+                          ? 'bg-nexus-cyan/15 border-nexus-cyan/60 text-nexus-cyan shadow-sm'
+                          : 'bg-nexus-bg/70 border-nexus-border/40 text-nexus-muted hover:text-nexus-text hover:border-nexus-border'
+                      }`}
+                    >
+                      <div className="text-xs font-semibold">{p.label}</div>
+                      <div className="text-[10px] text-nexus-muted font-mono mt-0.5">{p.badge}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 pt-1">
+                <span className="text-xs font-mono text-nexus-muted whitespace-nowrap">Ses Seviyesi:</span>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={sfxVolume}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value, 10)
+                    setSfxVolume(val)
+                    cyberAudio.setVolume(val / 100)
+                  }}
+                  onMouseUp={() => cyberAudio.click()}
+                  className="w-full accent-nexus-accent cursor-pointer"
+                />
+                <span className="text-xs font-mono text-nexus-cyan font-bold min-w-[3rem] text-right">
+                  %{sfxVolume}
+                </span>
+              </div>
             </div>
           )}
         </div>

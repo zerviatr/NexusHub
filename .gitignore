@@ -50,3 +50,6 @@ electron-builder-cache/
 .ag-kit-backups/
 .agents/.ag-kit/
 
+
+# ECDSA Private Key
+keys/*private*.pem

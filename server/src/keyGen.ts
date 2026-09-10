@@ -1,15 +1,28 @@
 /**
  * server/src/keyGen.ts
  *
- * License key generation — mirrors the validation logic in
- * Electron's licenseStore.ts so both sides share the same format.
- *
- * KEY FORMAT: NEXUS-TEEEH-HHHHH-HHHHH-HHHHH   (25 base chars + 4 dashes)
- *   T    [1 char]  Tier: F=Free  P=Pro  T=Team  L=Lifetime
- *   EEE  [3 chars] Hex months-since-2024-01-01 (000 = never expires)
- *   H×16 [16 chars] HMAC-SHA256(T+EEE, SECRET)[0..16].hex().upper()
+ * ZenDev License Key Generation Engine:
+ * 1. Asymmetric ECDSA (NIST P-256) offline-verifiable licenses (ZENDEV-BASE32)
+ * 2. Legacy Symmetric HMAC-SHA256 licenses (NEXUS-TEEEH-...) for 100% backward compatibility
  */
 import { createHmac, randomBytes } from 'crypto'
+import {
+  generateEcdsaLicense,
+  loadOrGenerateKeyPair,
+  getEcdsaPrivateKey,
+  getEcdsaPublicKey,
+  type EcdsaLicensePayload,
+  type LicenseTier,
+} from './services/licenseSigner'
+
+export {
+  generateEcdsaLicense,
+  loadOrGenerateKeyPair,
+  getEcdsaPrivateKey,
+  getEcdsaPublicKey,
+  type EcdsaLicensePayload,
+  type LicenseTier,
+}
 
 const JAN_2024_MS = new Date('2024-01-01T00:00:00Z').getTime()
 const MONTH_MS    = 30.44 * 24 * 3600 * 1000
@@ -22,7 +35,31 @@ const TIER_CHAR: Record<string, string> = {
 }
 
 /**
- * Generate a license key.
+ * Generate an asymmetric ECDSA (NIST P-256) license key with optional HWID lock and features.
+ * Format: ZENDEV-XXXXX-XXXXX-XXXXX-...
+ */
+export function generateEcdsaKey(
+  tier: LicenseTier,
+  expiresAt: number,
+  hwid?: string,
+  features?: string[],
+  privateKeyPem?: string
+): string {
+  return generateEcdsaLicense(
+    {
+      tier,
+      expiresAt,
+      hwid,
+      features: features ?? (tier === 'lifetime' || tier === 'team' || tier === 'pro'
+        ? ['offline', 'cloud_sync', 'api_access', 'all']
+        : ['offline']),
+    },
+    privateKeyPem
+  )
+}
+
+/**
+ * Legacy HMAC Key Generator.
  *
  * KEY FORMAT: NEXUS-TEEE[S]-[SSS][HH]-[HHHHH]-[HHHHH] (25 chars + 4 dashes)
  *   T     [1 char]  Tier: F=Free  P=Pro  T=Team  L=Lifetime

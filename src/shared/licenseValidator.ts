@@ -11,6 +11,7 @@
  */
 
 import { createHmac, timingSafeEqual } from 'crypto'
+import { verifyEcdsaLicense } from './ecdsaLicense'
 
 function safeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false
@@ -48,10 +49,9 @@ export const DEFAULT_LICENSE_SECRET =
   'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
 
 /**
- * Validates a ZenDev license key against the HMAC secret.
- * Decoupled from filesystem, Electron APIs, and UI state.
+ * Validates a legacy HMAC ZenDev license key against the HMAC secret.
  */
-export function validateLicenseKey(rawKey: string, secret: string = DEFAULT_LICENSE_SECRET): ValidationResult {
+export function validateHmacLicenseKey(rawKey: string, secret: string = DEFAULT_LICENSE_SECRET): ValidationResult {
   if (!rawKey || typeof rawKey !== 'string') {
     return { valid: false, reason: 'License key is missing or empty' }
   }
@@ -114,6 +114,33 @@ export function validateLicenseKey(rawKey: string, secret: string = DEFAULT_LICE
 
   return { valid: true, tier, expiresAt }
 }
+
+/**
+ * Universal ZenDev license key validator.
+ * Automatically detects whether the key is an Asymmetric ECDSA key (ZENDEV-...)
+ * or a legacy Symmetric HMAC key (NEXUS-...).
+ */
+export function validateLicenseKey(
+  rawKey: string,
+  secret: string = DEFAULT_LICENSE_SECRET,
+  hwid?: string
+): ValidationResult {
+  if (!rawKey || typeof rawKey !== 'string') {
+    return { valid: false, reason: 'License key is missing or empty' }
+  }
+
+  const clean = rawKey.trim().toUpperCase().replace(/\s+/g, '')
+  if (clean.startsWith('ZENDEV')) {
+    const ecdsaRes = verifyEcdsaLicense(rawKey, hwid)
+    if (ecdsaRes.valid) {
+      return { valid: true, tier: ecdsaRes.tier, expiresAt: ecdsaRes.expiresAt }
+    }
+    return { valid: false, reason: ecdsaRes.reason }
+  }
+
+  return validateHmacLicenseKey(rawKey, secret)
+}
+
 
 /**
  * Formats a 25-character normalized key into standard 5-part dash format:

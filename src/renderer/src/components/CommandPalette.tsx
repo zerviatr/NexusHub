@@ -1,6 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { detectSmartPaste } from '../lib/smartPasteDetector'
+import SmartPasteCard from './SmartPasteCard'
 import {
   Search,
   LayoutDashboard,
@@ -143,12 +145,12 @@ const PALETTE_ITEMS: PaletteItem[] = [
   },
   {
     id: 'json-studio',
-    title: 'JSON & JWT Studio',
-    subtitle: 'Format, validate, minify JSON & inspect JWT tokens',
+    title: 'JSON, JWT & SQLite Studio',
+    subtitle: 'Format/minify JSON, decode JWT & inspect SQLite (.db/.sqlite/.sql) tables locally',
     category: 'Tools',
     path: '/json-studio',
     icon: Braces,
-    keywords: ['json', 'jwt', 'token', 'format', 'minify', 'beautify', 'decode']
+    keywords: ['json', 'jwt', 'token', 'format', 'minify', 'beautify', 'decode', 'sqlite', 'sql', 'db', 'table', 'database']
   },
   {
     id: 'temp-mail',
@@ -259,6 +261,9 @@ export default function CommandPalette() {
   const navigate = useNavigate()
   const inputRef = useRef<HTMLInputElement>(null)
 
+  // Context-aware Smart Paste / Input detector
+  const smartPasteResult = useMemo(() => detectSmartPaste(query), [query])
+
   // Load recent items
   useEffect(() => {
     try {
@@ -333,6 +338,11 @@ export default function CommandPalette() {
       setSelectedIndex((prev) => (prev - 1 + filteredItems.length) % (filteredItems.length || 1))
     } else if (e.key === 'Enter') {
       e.preventDefault()
+      if (smartPasteResult && smartPasteResult.type === 'math') {
+        navigator.clipboard.writeText(smartPasteResult.result)
+        setQuery(smartPasteResult.result)
+        return
+      }
       if (filteredItems[selectedIndex]) {
         handleSelectItem(filteredItems[selectedIndex].id, filteredItems[selectedIndex].path)
       }
@@ -390,6 +400,15 @@ export default function CommandPalette() {
                 <span>ESC</span>
               </div>
             </div>
+
+            {/* Context-Aware Smart Paste Detector Result */}
+            {smartPasteResult && (
+              <SmartPasteCard
+                result={smartPasteResult}
+                onApplyResult={(val) => setQuery(val)}
+                onClose={() => setIsOpen(false)}
+              />
+            )}
 
             {/* Results List */}
             <div className="max-h-80 overflow-y-auto p-2 space-y-1">

@@ -221,7 +221,7 @@ export function renderLandingPage(): string {
       <div class="flex justify-center mb-8">
         <div onclick="openChangelogModal()" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full card-glass border border-nexus-cyan/30 text-xs font-mono text-nexus-cyan shadow-[0_0_15px_rgba(var(--c-cyan),0.2)] cursor-pointer hover:border-nexus-cyan transition-all">
           <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-ping"></span>
-          <span>v2.3.1 Yayında</span>
+          <span>v2.4.0 Yayında</span>
           <span class="text-nexus-border">|</span>
           <span class="text-white" data-i18n="hero.pill.tools">20+ Siber Güç</span>
           <span class="text-nexus-border">|</span>
@@ -2329,7 +2329,7 @@ graph LR
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <a href="https://github.com/zerviatr/NexusHub/releases/latest" class="px-3.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-nexus-border text-nexus-cyan hover:text-white font-mono text-xs transition-colors cursor-pointer flex items-center gap-1.5 border border-nexus-cyan/30">
-        <span>İndir (v2.3.1)</span>
+        <span>İndir (v2.4.0)</span>
       </a>
       <a href="#pricing" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 text-nexus-bg font-heading font-black text-xs shadow-[0_0_15px_rgba(var(--c-cyan),0.4)] transition-all cursor-pointer">
         Lisans Al

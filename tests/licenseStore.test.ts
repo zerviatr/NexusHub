@@ -75,4 +75,18 @@ describe('ZenDev License Cryptography & Validation', () => {
     expect(res.valid).toBe(false)
     expect(res.reason).toBe('License key has expired')
   })
+
+  it('should seamlessly validate ZENDEV ECDSA keys via validateLicenseKey', async () => {
+    const { generateEcdsaLicense } = await import('../server/src/services/licenseSigner')
+    const ecdsaKey = generateEcdsaLicense({
+      tier: 'pro',
+      expiresAt: Date.now() + 1000000,
+    })
+    const res = validateLicenseKey(ecdsaKey)
+    expect(res.valid).toBe(true)
+    if (res.valid) {
+      expect(res.tier).toBe('pro')
+      expect(res.expiresAt).toBeGreaterThan(Date.now())
+    }
+  })
 })
