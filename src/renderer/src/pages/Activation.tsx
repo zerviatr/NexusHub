@@ -33,7 +33,7 @@ export default function Activation({ onContinueFree }: ActivationProps) {
   }
 
   const handlePurchase = () => {
-    const storeUrl = (import.meta as any).env?.VITE_STORE_URL || 'https://github.com/zerviatr/ZenDev#get-license'
+    const storeUrl = (import.meta as any).env?.VITE_STORE_URL || 'https://zendev-production-4a5b.up.railway.app#pricing'
     window.nexusAPI.openExternal(storeUrl)
   }
 

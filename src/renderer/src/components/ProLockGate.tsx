@@ -13,7 +13,7 @@ export default function ProLockGate({ toolName, toolDesc }: ProLockGateProps) {
   const { t } = useT()
 
   const handleBuy = () => {
-    const storeUrl = (import.meta as any).env?.VITE_STORE_URL || 'https://github.com/zerviatr/ZenDev#pricing'
+    const storeUrl = (import.meta as any).env?.VITE_STORE_URL || 'https://zendev-production-4a5b.up.railway.app#pricing'
     window.nexusAPI?.openExternal(storeUrl)
   }
 

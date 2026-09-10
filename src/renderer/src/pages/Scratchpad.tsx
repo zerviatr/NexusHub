@@ -568,7 +568,7 @@ export default function Scratchpad() {
       showToastError('Uyarı', 'En az bir not sekmesi bulunmalıdır.')
       return
     }
-    if (window.confirm('Bu notu silmek istediğinize emin misiniz?')) {
+    if (true) {
       try {
         cyberAudio.shred()
       } catch {}
