@@ -93,6 +93,46 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
 })
 
 // ── Routes ─────────────────────────────────────────────────────────────────
+// ── SEO: robots.txt ────────────────────────────────────────────────────────
+app.get('/robots.txt', (_req: Request, res: Response) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+  res.send(`User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /webhook/
+
+Sitemap: https://zendev-production-4a5b.up.railway.app/sitemap.xml
+`.trim())
+})
+
+// ── SEO: sitemap.xml ───────────────────────────────────────────────────────
+app.get('/sitemap.xml', (_req: Request, res: Response) => {
+  const baseUrl = 'https://zendev-production-4a5b.up.railway.app'
+  const currentDate = new Date().toISOString().split('T')[0]
+
+  const urls = [
+    { path: '', priority: '1.0', changefreq: 'weekly' },
+    { path: '/#simulator', priority: '0.9', changefreq: 'monthly' },
+    { path: '/#arsenal', priority: '0.9', changefreq: 'monthly' },
+    { path: '/#pricing', priority: '0.9', changefreq: 'weekly' },
+    { path: '/#faq', priority: '0.7', changefreq: 'monthly' }
+  ]
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map(u => `  <url>
+    <loc>${baseUrl}${u.path}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`.trim()
+
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8')
+  res.send(xml)
+})
+
 app.get('/', (_req: Request, res: Response) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8')
   res.send(renderLandingPage())

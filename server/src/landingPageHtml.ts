@@ -26,6 +26,11 @@ export function renderLandingPage(): string {
   <title id="meta-title">ZenDev — Abonelik Tuzağına Son. 20+ Siber Güç Tek Yazılımda.</title>
   <meta name="description" content="Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD 7-Pass Dosya İmha Kalkanı, Canlı Donanım Teşhisi ve Şifreleme Kasası. Tek seferlik ödeme, sıfır abonelik.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='25' fill='%2308090d'/%3E%3Ccircle cx='50' cy='50' r='36' stroke='%2306b6d4' stroke-width='8' fill='none'/%3E%3Cpath d='M32 50L45 64L68 36' stroke='%2338bdf8' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+  <link rel="canonical" href="https://zendev-production-4a5b.up.railway.app/">
+  <meta property="og:image" content="https://zendev-production-4a5b.up.railway.app/og-banner.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://zendev-production-4a5b.up.railway.app/og-banner.png">
   <meta property="og:title" content="ZenDev — Abonelik Tuzağına Son. 20+ Siber Güç Tek Yazılımda.">
   <meta property="og:description" content="Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD 7-Pass Shredder ve Şifreli Kasa. Tek seferlik ödeme, %100 yerel ve offline-first.">
   <meta property="og:type" content="website">
@@ -33,23 +38,58 @@ export function renderLandingPage(): string {
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ZenDev — 20+ Cyber Powers in One Suite">
   <meta name="twitter:description" content="Stop SaaS subscription fatigue. Own 20+ developer & security desktop tools once forever.">
-  <script type="application/ld+json">
+    <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "ZenDev",
-    "operatingSystem": "Windows 10, Windows 11",
-    "applicationCategory": "DeveloperApplication, SecurityApplication",
-    "offers": {
-      "@type": "Offer",
-      "price": "349",
-      "priceCurrency": "TRY"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "ratingCount": "1280"
-    }
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "ZenDev",
+        "operatingSystem": "Windows 10, Windows 11 (x64 & ARM64)",
+        "applicationCategory": "DeveloperApplication, SecurityApplication",
+        "softwareVersion": "2.4.0",
+        "description": "25+ siber güvenlik ve yazılım geliştirici aracı tek masaüstü uygulamasında. Sıfır bulut, sıfır telemetri.",
+        "offers": {
+          "@type": "Offer",
+          "price": "349",
+          "priceCurrency": "TRY",
+          "availability": "https://schema.org/InStock"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "reviewCount": "1280",
+          "bestRating": "5"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "ZenDev gerçekten ömür boyu mu, abonelik var mı?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Evet, ZenDev tek seferlik bir lisans modeline sahiptir. Aylık veya yıllık yinelenen gizli ücretler yoktur."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "İnternetsiz (çevrimdışı) çalışır mı?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "%100 yerel (offline-first) çalışır. Dosya imha, şifreleme ve araçlar internete veri sızdırmaz."
+            }
+          }
+        ]
+      },
+      {
+        "@type": "Organization",
+        "name": "ZenDev",
+        "url": "https://zendev-production-4a5b.up.railway.app",
+        "email": "support@zendev.app"
+      }
+    ]
   }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -256,7 +296,7 @@ export function renderLandingPage(): string {
 
       <!-- Hero Action Buttons -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
-        <button onclick="handleDownloadDisabled()" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border/80 hover:border-nexus-cyan/50 text-white font-heading font-bold text-base flex items-center justify-center gap-3 transition-all cursor-pointer shadow-lg group">
+        <button onclick="window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.0.exe', '_blank')" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border/80 hover:border-nexus-cyan/50 text-white font-heading font-bold text-base flex items-center justify-center gap-3 transition-all cursor-pointer shadow-lg group">
           <svg class="w-5 h-5 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
           <span data-i18n="hero.btnDownload">Windows için İndir</span>
           <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-nexus-cyan/20 text-nexus-cyan border border-nexus-cyan/30 uppercase tracking-wider" data-i18n="hero.btnSoon">Çok Yakında</span>
@@ -328,7 +368,7 @@ export function renderLandingPage(): string {
             <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
             <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
             <span class="ml-3 font-mono text-xs text-nexus-muted font-semibold flex items-center gap-1.5">
-              <span class="hidden sm:inline">ZenDev v2.2.0 Pro Edition</span>
+              <span class="hidden sm:inline">ZenDev v2.4.0 Pro Edition</span>
               <span class="sm:hidden text-[11px]">v2.2 Pro</span>
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             </span>
@@ -449,7 +489,7 @@ export function renderLandingPage(): string {
                     <span>MARKDOWN GİRDİSİ</span>
                     <span id="sim-md-stats" class="text-nexus-cyan">42 kelime • 280 karakter</span>
                   </div>
-                  <textarea id="sim-md-input" oninput="updateSimMarkdown()" class="w-full h-40 bg-nexus-bg border border-nexus-border/80 rounded-xl p-3 font-mono text-xs text-nexus-text outline-none focus:border-nexus-cyan resize-none leading-relaxed"># 🚀 ZenDev v2.2.0
+                  <textarea id="sim-md-input" oninput="updateSimMarkdown()" class="w-full h-40 bg-nexus-bg border border-nexus-border/80 rounded-xl p-3 font-mono text-xs text-nexus-text outline-none focus:border-nexus-cyan resize-none leading-relaxed"># 🚀 ZenDev v2.4.0
 
 > Güvenli, yerel ve **sıfır gecikmeli** geliştirici notları.
 
@@ -470,7 +510,7 @@ graph LR
                     <span class="text-emerald-400 text-[10px]">✓ Anında Render</span>
                   </div>
                   <div id="sim-md-preview" class="w-full h-40 bg-nexus-surface/50 border border-nexus-border/80 rounded-xl p-3 text-xs overflow-y-auto space-y-2 font-sans">
-                    <h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">🚀 ZenDev v2.2.0</h4>
+                    <h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">🚀 ZenDev v2.4.0</h4>
                     <p class="text-[11px] text-nexus-muted italic border-l-2 border-nexus-cyan pl-2">Güvenli, yerel ve <b class="text-white">sıfır gecikmeli</b> geliştirici notları.</p>
                     <ul class="text-[11px] space-y-1 text-emerald-400 font-mono">
                       <li>✓ DoD 7-Pass Shredder</li>
@@ -1792,7 +1832,7 @@ graph LR
               <li class="flex items-center gap-2.5 text-nexus-muted line-through"><span class="w-4 h-4 shrink-0 text-nexus-border">✕</span> Cyber Fortress Shredder & Vault</li>
             </ul>
           </div>
-          <button onclick="handleDownloadDisabled()" class="w-full py-3.5 rounded-xl border border-nexus-border/80 bg-nexus-surface/50 hover:border-nexus-cyan/40 text-nexus-muted hover:text-white text-xs font-mono font-bold text-center transition-all cursor-pointer flex items-center justify-center gap-2" data-i18n="plan1.btn">
+          <button onclick="window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.0.exe', '_blank')" class="w-full py-3.5 rounded-xl border border-nexus-border/80 bg-nexus-surface/50 hover:border-nexus-cyan/40 text-nexus-muted hover:text-white text-xs font-mono font-bold text-center transition-all cursor-pointer flex items-center justify-center gap-2" data-i18n="plan1.btn">
             <span>Ücretsiz İndir</span>
             <span class="px-1.5 py-0.5 rounded text-[9px] bg-nexus-cyan/15 text-nexus-cyan border border-nexus-cyan/30 uppercase font-bold">Çok Yakında</span>
           </button>
@@ -2323,7 +2363,7 @@ graph LR
     <div class="flex items-center gap-3 truncate">
       <div class="w-3 h-3 rounded-full bg-nexus-cyan animate-pulse shrink-0"></div>
       <div class="truncate">
-        <div class="text-xs font-bold text-white truncate">ZenDev v2.2.0 Suite</div>
+        <div class="text-xs font-bold text-white truncate">ZenDev v2.4.0 Suite</div>
         <div class="text-[10px] font-mono text-nexus-muted truncate">Ömür Boyu Tek Ödeme • Sıfır Abonelik</div>
       </div>
     </div>
@@ -2348,7 +2388,7 @@ graph LR
         <button onclick="dismissDownloadNotice()" class="text-nexus-muted hover:text-white cursor-pointer text-sm ml-2">✕</button>
       </div>
       <p class="text-[11px] text-nexus-muted mt-1 leading-relaxed" id="download-notice-msg">
-        ZenDev v2.2.0 yeni stabilite ve güvenlik yaması hazırlanmaktadır. Çok yakında indirmeye açılacaktır!
+        ZenDev v2.4.0 yeni stabilite ve güvenlik yaması hazırlanmaktadır. Çok yakında indirmeye açılacaktır!
       </p>
     </div>
   </div>
@@ -2441,7 +2481,7 @@ graph LR
             <span class="p-2 rounded-lg bg-nexus-cyan/10 text-nexus-cyan group-hover:scale-110 transition-transform">🖥️</span>
             <div>
               <div class="font-bold text-white group-hover:text-nexus-cyan transition-colors">Canlı Uygulama Simülatörünü Aç</div>
-              <div class="text-[11px] text-nexus-muted">ZenDev v2.2.0 arayüzünü tarayıcı içinde interaktif deneyimleyin</div>
+              <div class="text-[11px] text-nexus-muted">ZenDev v2.4.0 arayüzünü tarayıcı içinde interaktif deneyimleyin</div>
             </div>
           </div>
           <span class="text-nexus-cyan opacity-0 group-hover:opacity-100 transition-opacity">Git ↵</span>
@@ -2579,7 +2619,7 @@ graph LR
         <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-ping"></span>
         <span>SÜRÜM RADARI</span>
       </div>
-      <h3 class="font-heading font-black text-2xl text-white mb-4">ZenDev v2.2.0 Yenilikleri</h3>
+      <h3 class="font-heading font-black text-2xl text-white mb-4">ZenDev v2.4.0 Yenilikleri</h3>
 
       <div class="space-y-3.5 text-xs text-nexus-muted font-sans max-h-80 overflow-y-auto pr-2">
         <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
@@ -2745,7 +2785,7 @@ graph LR
       <div class="text-xs font-mono text-nexus-cyan uppercase tracking-wider mb-1 font-bold">ERKEN ERİŞİM DAVETİYESİ</div>
       <h3 class="font-heading font-black text-2xl text-white mb-2">v2.2.0 Çıktığında İlk Siz İndirin</h3>
       <p class="text-xs text-nexus-muted mb-5 leading-relaxed">
-        ZenDev v2.2.0 yeni stabilite derlemesi hazırlanıyor. E-postanızı bırakın, indirmeler açıldığı an <b class="text-nexus-cyan">%20 lansman indirimi</b> kodunuzla birlikte e-posta alın.
+        ZenDev v2.4.0 yeni stabilite derlemesi hazırlanıyor. E-postanızı bırakın, indirmeler açıldığı an <b class="text-nexus-cyan">%20 lansman indirimi</b> kodunuzla birlikte e-posta alın.
       </p>
 
       <form id="waitlist-form" onsubmit="handleWaitlistSubmit(event)" class="space-y-3">
@@ -3045,7 +3085,7 @@ graph LR
       const b3 = String.fromCharCode(96, 96, 96);
       if (type === 'arch') {
         input.value = '# 🏗️ Sistem Mimarisi Şeması\\n\\n' +
-          '> ZenDev v2.2.0 Yerel Güvenlik Kalkanı\\n\\n' +
+          '> ZenDev v2.4.0 Yerel Güvenlik Kalkanı\\n\\n' +
           '- [x] DoD 5220.22-M 7-Pass Shredder\\n' +
           '- [x] AES-256-GCM Kasa\\n' +
           '- [x] TCP/UDP Port Killer\\n\\n' +
@@ -3056,7 +3096,7 @@ graph LR
           '  App --> NetGuard[Port Killer]\\n' +
           b3;
         preview.innerHTML = '<h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">🏗️ Sistem Mimarisi Şeması</h4>' +
-          '<p class="text-[11px] text-nexus-muted italic border-l-2 border-nexus-cyan pl-2">ZenDev v2.2.0 Yerel Güvenlik Kalkanı</p>' +
+          '<p class="text-[11px] text-nexus-muted italic border-l-2 border-nexus-cyan pl-2">ZenDev v2.4.0 Yerel Güvenlik Kalkanı</p>' +
           '<ul class="text-[11px] space-y-1 text-emerald-400 font-mono">' +
             '<li>✓ DoD 5220.22-M 7-Pass Shredder</li>' +
             '<li>✓ AES-256-GCM Kasa</li>' +
@@ -3405,7 +3445,7 @@ graph LR
 
     // ─── Disabled Download Handler & Waitlist Modal Trigger ─────────────────
     let downloadNoticeTimer = null;
-    function handleDownloadDisabled() {
+    function window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.0.exe', '_blank') {
       playCyberSound('click');
       const toast = document.getElementById('download-notice-toast');
       const title = document.getElementById('download-notice-title');
@@ -3413,10 +3453,10 @@ graph LR
 
       if (currentLang === 'tr') {
         if (title) title.innerText = 'İNDİRMELER GEÇİCİ OLARAK KAPALI';
-        if (msg) msg.innerText = 'ZenDev v2.2.0 yeni stabilite derlemesi hazırlanıyor. Erken erişim davetiyesi açılıyor...';
+        if (msg) msg.innerText = 'ZenDev v2.4.0 yeni stabilite derlemesi hazırlanıyor. Erken erişim davetiyesi açılıyor...';
       } else {
         if (title) title.innerText = 'DOWNLOADS TEMPORARILY PAUSED';
-        if (msg) msg.innerText = 'ZenDev v2.2.0 new build is preparing. Opening early access invite...';
+        if (msg) msg.innerText = 'ZenDev v2.4.0 new build is preparing. Opening early access invite...';
       }
 
       if (toast) {
@@ -3885,7 +3925,7 @@ graph LR
     }
 
     // ─── Web Audio API Cyber SFX Engine ─────────────────────────────────────
-    let sfxEnabled = true; // Default ON as requested
+    let sfxEnabled = false; // Default ON as requested
     let audioCtx = null;
 
     function initAudio() {
@@ -4619,6 +4659,79 @@ graph LR
     computeSimHash('ZenDev-Safe-Crypto-2026');
     initTelemetryHeartbeat();
   </script>
+<!-- Mobile Navigation Drawer -->
+<div id="mobile-nav-drawer" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex flex-col justify-between p-6">
+  <div>
+    <div class="flex items-center justify-between pb-6 border-b border-nexus-border/40">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-nexus-cyan to-nexus-accent flex items-center justify-center font-heading font-black text-lg text-nexus-bg">Z</div>
+        <span class="font-heading font-black text-xl text-white">Zen<span class="text-nexus-cyan">Dev</span></span>
+      </div>
+      <button onclick="toggleMobileDrawer()" class="p-2 rounded-xl border border-nexus-border text-nexus-muted hover:text-white">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-4 mt-6 text-base font-medium text-nexus-muted">
+      <a href="#simulator" onclick="toggleMobileDrawer()" class="hover:text-white py-2 border-b border-nexus-border/20 flex items-center justify-between">
+        <span>Arayüz Simülatörü</span>
+        <span class="text-xs text-nexus-cyan font-mono">01</span>
+      </a>
+      <a href="#arsenal" onclick="toggleMobileDrawer()" class="hover:text-white py-2 border-b border-nexus-border/20 flex items-center justify-between">
+        <span>20+ Siber Araç</span>
+        <span class="text-xs text-nexus-cyan font-mono">02</span>
+      </a>
+      <a href="#pricing" onclick="toggleMobileDrawer()" class="hover:text-white py-2 border-b border-nexus-border/20 flex items-center justify-between">
+        <span>Fiyatlandırma & Lisans</span>
+        <span class="text-xs text-nexus-cyan font-mono">03</span>
+      </a>
+      <a href="#faq" onclick="toggleMobileDrawer()" class="hover:text-white py-2 border-b border-nexus-border/20 flex items-center justify-between">
+        <span>Sıkça Sorulan Sorular</span>
+        <span class="text-xs text-nexus-cyan font-mono">04</span>
+      </a>
+    </nav>
+  </div>
+  <div class="flex flex-col gap-3">
+    <a href="https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.0.exe" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg font-heading font-black text-center shadow-lg">
+      Windows İçin İndir (v2.4.0)
+    </a>
+    <a href="#pricing" onclick="toggleMobileDrawer()" class="w-full py-3 rounded-xl border border-nexus-cyan/40 bg-nexus-surface text-white font-bold text-center">
+      Pro Lisans Al (₺349)
+    </a>
+  </div>
+</div>
+
+<!-- Exit-Intent Special Offer Modal -->
+<div id="exit-intent-modal" class="hidden fixed inset-0 z-[110] bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+  <div class="relative w-full max-w-md bg-nexus-surface/95 border border-nexus-cyan/60 rounded-3xl p-6 sm:p-8 shadow-2xl text-center">
+    <button onclick="closeExitIntent()" class="absolute right-4 top-4 p-1.5 rounded-xl text-nexus-muted hover:text-white hover:bg-nexus-bg">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+    <div class="w-14 h-14 mx-auto rounded-2xl bg-nexus-cyan/15 border border-nexus-cyan/40 flex items-center justify-center text-nexus-cyan mb-4 text-2xl">
+      🎁
+    </div>
+    <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-nexus-cyan/20 text-nexus-cyan border border-nexus-cyan/30">
+      AYRILMADAN ÖNCE ÖZEL TEKLİF
+    </span>
+    <h3 class="font-heading font-black text-2xl text-white mt-3">Aboneliklere Veda Edin.</h3>
+    <p class="text-xs text-nexus-muted mt-2 leading-relaxed">
+      ZenDev'i hemen deneyimlemeniz için ilk 100 geliştiriciye özel <span class="text-nexus-cyan font-bold">%20 indirim kuponunuz</span> hazırlandı:
+    </p>
+    <div class="my-4 p-3 rounded-xl bg-nexus-bg border border-nexus-cyan/40 flex items-center justify-between">
+      <span class="font-mono text-sm font-bold text-white tracking-widest">ZENDEV20</span>
+      <button onclick="navigator.clipboard.writeText('ZENDEV20'); alert('Kupon kopyalandı!')" class="px-3 py-1 rounded-lg bg-nexus-cyan/20 hover:bg-nexus-cyan/30 text-nexus-cyan text-xs font-bold font-mono cursor-pointer">
+        Kopyala
+      </button>
+    </div>
+    <div class="flex flex-col gap-2">
+      <a href="#pricing" onclick="closeExitIntent()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg font-heading font-black text-sm shadow-lg hover:brightness-110 transition-all">
+        İndirimi Kullan & Lisans Al →
+      </a>
+      <a href="https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.0.exe" class="w-full py-2.5 rounded-xl text-xs text-nexus-muted hover:text-white transition-colors">
+        Veya doğrudan ücretsiz indir (v2.4.0)
+      </a>
+    </div>
+  </div>
+</div>
 </body>
 </html>`;
 }

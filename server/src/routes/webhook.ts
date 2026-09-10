@@ -75,10 +75,10 @@ webhookRouter.post(
         attrs?.first_order_item?.variant_name as string ?? ''
       ).toLowerCase()
 
-      let tier = 'pro'
-      if (variantName.includes('lifetime')) tier = 'lifetime'
-      else if (variantName.includes('team')) tier = 'team'
+      let tier = 'lifetime'
+      if (variantName.includes('team') || variantName.includes('studio')) tier = 'team'
       else if (variantName.includes('free')) tier = 'free'
+      else if (variantName.includes('annual') || variantName.includes('year') || variantName.includes('sub')) tier = 'pro'
 
       const secret   = process.env['NEXUS_LICENSE_SECRET'] ?? 'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
       const expiresAt = tierToExpiry(tier)
@@ -106,7 +106,7 @@ webhookRouter.post(
           INSERT INTO licenses (key, tier, expires_at, order_id, email, customer_name, customer_country, max_activations, created_at)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `,
-        args: [key, tier, expiresAt, orderId, email, userName || null, userCountry || null, tier === 'team' ? 5 : 2, Date.now()],
+        args: [key, tier, expiresAt, orderId, email, userName || null, userCountry || null, (tier === 'team' || variantName.includes('studio')) ? 3 : (tier === 'lifetime' ? 2 : 2), Date.now()],
       })
 
       // Send email with the key
