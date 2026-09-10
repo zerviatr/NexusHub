@@ -142,7 +142,7 @@
     "publish": {
       "provider": "github",
       "owner": "zerviatr",
-      "repo": "ZenDev",
+      "repo": "NexusHub",
       "releaseType": "release"
     }
   },
