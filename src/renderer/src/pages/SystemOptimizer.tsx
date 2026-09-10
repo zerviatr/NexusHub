@@ -137,7 +137,7 @@ export default function SystemOptimizer() {
         <button
           onClick={handleTurboBoost}
           disabled={turboBoosting}
-          className="px-5 py-3 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-mono font-black text-xs flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(var(--c-cyan),0.4)] transition-all cursor-pointer shrink-0 disabled:opacity-50"
+          className="px-5 py-3 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-mono font-black text-xs flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(6,182,212,0.4)] transition-all cursor-pointer shrink-0 disabled:opacity-50"
         >
           <Sparkles className={`w-4 h-4 ${turboBoosting ? 'animate-spin' : ''}`} />
           <span>{turboBoosting ? 'SİBER HIZLANDIRILIYOR...' : '⚡ TEK TIKLA TURBO BOOST'}</span>

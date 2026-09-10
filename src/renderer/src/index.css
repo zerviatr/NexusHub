@@ -79,6 +79,11 @@
 
 @layer components {
   /* Glassmorphism card */
+  .glass-panel {
+    @apply bg-nexus-surface/70 backdrop-blur-xl border border-white/5 rounded-2xl;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
   .glass-card {
     @apply bg-nexus-card/60 backdrop-blur-xl border border-nexus-border/50 rounded-2xl;
     box-shadow:

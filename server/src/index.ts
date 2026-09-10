@@ -26,12 +26,26 @@ const PORT = Number(process.env['PORT'] ?? 3000)
 
 // ── Raw body capture for webhook signature verification ────────────────────
 // Must run BEFORE express.json() for the /webhook/* routes
-app.use('/webhook', (req: Request, _res: Response, next: NextFunction) => {
+app.use('/webhook', (req: Request, res: Response, next: NextFunction) => {
   const chunks: Buffer[] = []
-  req.on('data', (chunk: Buffer) => chunks.push(chunk))
+  let totalBytes = 0
+  const MAX_WEBHOOK_SIZE = 1024 * 1024 // 1MB limit
+
+  req.on('data', (chunk: Buffer) => {
+    totalBytes += chunk.length
+    if (totalBytes > MAX_WEBHOOK_SIZE) {
+      res.status(413).json({ error: 'Payload too large' })
+      req.destroy()
+      return
+    }
+    chunks.push(chunk)
+  })
+
   req.on('end', () => {
-    ;(req as any).rawBody = Buffer.concat(chunks)
-    next()
+    if (totalBytes <= MAX_WEBHOOK_SIZE) {
+      ;(req as any).rawBody = Buffer.concat(chunks)
+      next()
+    }
   })
 })
 

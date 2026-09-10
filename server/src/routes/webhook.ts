@@ -123,7 +123,21 @@ webhookRouter.post(
     }
 
     // ── 4. Handle subscription_cancelled → revoke ─────────────────────────
-    if (event === 'subscription_cancelled') {
+    // Handle refund / chargeback -> instantly revoke license
+    if (event === 'order_refunded' || event === 'subscription_cancelled' || event === 'subscription_expired') {
+      const orderId = String(attrs?.order_id ?? data?.id ?? '')
+      if (orderId) {
+        await getDb().execute({
+          sql:  'UPDATE licenses SET is_revoked = 1 WHERE order_id = ?',
+          args: [orderId],
+        })
+        console.log(`[webhook] Revoked license due to ${event} for order ${orderId}`)
+      }
+      res.json({ ok: true, revoked: true })
+      return
+    }
+
+    if (false && event === 'subscription_cancelled') {
       const orderId = String(attrs?.order_id ?? data?.attributes?.order_id ?? '')
       if (orderId) {
         await getDb().execute({

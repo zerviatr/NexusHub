@@ -78,9 +78,22 @@ function createWindow(): void {
     }
   })
 
+  // Whitelist safe protocols for external URLs
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
+    try {
+      const parsed = new URL(details.url)
+      if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+        shell.openExternal(details.url)
+      }
+    } catch {}
     return { action: 'deny' }
+  })
+
+  // Prevent unexpected top-level navigation
+  mainWindow.webContents.on('will-navigate', (event, navUrl) => {
+    if (navUrl !== mainWindow.webContents.getURL()) {
+      event.preventDefault()
+    }
   })
 
   // Dev: load from Vite dev server. Prod: load built file.
@@ -114,7 +127,18 @@ ipcMain.handle('window:toggleAlwaysOnTop', () => {
 ipcMain.handle('window:isAlwaysOnTop', () => mainWindow?.isAlwaysOnTop() ?? false)
 
 // Open external URLs in system browser
-ipcMain.handle('shell:openExternal', (_, url: string) => shell.openExternal(url))
+// Validate openExternal protocol
+ipcMain.handle('shell:openExternal', (_, url: string) => {
+  if (typeof url === 'string') {
+    try {
+      const parsed = new URL(url)
+      if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+        return shell.openExternal(url)
+      }
+    } catch {}
+  }
+  return Promise.reject(new Error('Invalid URL protocol'))
+})
 ipcMain.handle('app:getVersion', () => app.getVersion())
 
 // Register license IPC first — renderer gate depends on it being ready

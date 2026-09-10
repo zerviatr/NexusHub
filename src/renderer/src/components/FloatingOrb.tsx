@@ -49,9 +49,10 @@ export default function FloatingOrb() {
     }
 
     fetchTelemetry()
-    intervalRef.current = setInterval(fetchTelemetry, 3000)
+    const pollInterval = isOpen ? 3000 : 30000
+    intervalRef.current = setInterval(fetchTelemetry, pollInterval)
     return () => clearInterval(intervalRef.current)
-  }, [])
+  }, [isOpen])
 
   // 1-Click Fast TempMail
   const handleQuickMail = async () => {
@@ -115,7 +116,7 @@ export default function FloatingOrb() {
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-nexus-cyan animate-ping" />
                 <span className="font-mono font-bold text-xs uppercase tracking-wider text-nexus-cyan">
-                  Nexus Orb HUD
+                  ZenDev Orb HUD
                 </span>
               </div>
               <button

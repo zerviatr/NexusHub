@@ -5,7 +5,16 @@ const API_BASE = 'https://api.guerrillamail.com/ajax.php'
 
 // GuerrillaMail requires a session token to fetch emails for an address.
 // We map the generated email to its token here so the frontend doesn't need to care.
+const MAX_SESSIONS = 200
 const sessions: Record<string, string> = {}
+
+function storeSession(email: string, token: string) {
+  const keys = Object.keys(sessions)
+  if (keys.length >= MAX_SESSIONS) {
+    delete sessions[keys[0]]
+  }
+  sessions[email] = token
+}
 
 export interface TempMailMessage {
   id: string
@@ -25,7 +34,7 @@ async function generateEmail(): Promise<{ success: boolean; email?: string; erro
   try {
     const response = await axios.get(`${API_BASE}?f=get_email_address`)
     if (response.data && response.data.email_addr) {
-      sessions[response.data.email_addr] = response.data.sid_token
+      storeSession(response.data.email_addr, response.data.sid_token)
       return { success: true, email: response.data.email_addr }
     }
     return { success: false, error: 'Failed to generate email' }

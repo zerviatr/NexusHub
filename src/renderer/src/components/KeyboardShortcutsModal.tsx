@@ -11,7 +11,7 @@ interface ShortcutItem {
 
 const SHORTCUTS: ShortcutItem[] = [
   { keys: ['Ctrl', 'K'], desc: 'Evrensel Komut Paleti & Hızlı Arama', category: 'global' },
-  { keys: ['Ctrl', 'Shift', 'Space'], desc: 'Nexus Mini-HUD Spotlight Penceresi', category: 'global' },
+  { keys: ['Ctrl', 'Shift', 'Space'], desc: 'ZenDev Mini-HUD Spotlight Penceresi', category: 'global' },
   { keys: ['Ctrl', 'Shift', 'T'], desc: 'Pencereyi Ekranda Üstte Sabitle (Pin to Top)', category: 'global' },
   { keys: ['Ctrl', 'Shift', 'S'], desc: 'Siber Mekanik Ses Efektlerini Aç / Kapat', category: 'global' },
   { keys: ['?'], desc: 'Klavye Kısayolları Kılavuzunu Göster / Gizle', category: 'global' },

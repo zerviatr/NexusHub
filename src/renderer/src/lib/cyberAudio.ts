@@ -104,6 +104,31 @@ class CyberAudioEngine {
   }
 
   // Shred / Purge / Delete swoosh
+  // Turbo purge / optimization sonic rumble
+  public purge() {
+    try {
+      const ctx = this.initContext()
+      if (!ctx) return
+
+      const now = ctx.currentTime
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+
+      osc.type = 'sawtooth'
+      osc.frequency.setValueAtTime(160, now)
+      osc.frequency.exponentialRampToValueAtTime(40, now + 0.35)
+
+      gain.gain.setValueAtTime(0.08 * this.volume, now)
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35)
+
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+
+      osc.start(now)
+      osc.stop(now + 0.35)
+    } catch {}
+  }
+
   public shred() {
     try {
       const ctx = this.initContext()

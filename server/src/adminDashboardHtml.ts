@@ -1882,10 +1882,10 @@ export function getAdminDashboardHtml(): string {
               <div class="p-3 rounded-xl bg-nexus-surface border border-nexus-border flex items-center justify-between gap-3 text-xs">
                 <div>
                   <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase border \${actionColor}">\${log.action}</span>
-                    <span class="text-white font-medium">\${log.details}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase border \${actionColor}">\${escapeHtml(log.action)}</span>
+                    <span class="text-white font-medium">\${escapeHtml(log.details)}</span>
                   </div>
-                  <p class="text-[10px] text-nexus-muted mt-1">IP: \${log.ip}</p>
+                  <p class="text-[10px] text-nexus-muted mt-1">IP: \${escapeHtml(log.ip)}</p>
                 </div>
                 <span class="text-[11px] font-mono text-nexus-muted whitespace-nowrap">\${date}</span>
               </div>

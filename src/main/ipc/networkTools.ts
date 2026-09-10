@@ -249,7 +249,14 @@ export function registerNetworkToolsIPC(): void {
   // IP Lookup
   ipcMain.handle('network:ipLookup', async (_, host: string): Promise<IpLookupResult> => {
     try {
-      const sanitized = host.trim()
+      let sanitized = host.trim()
+      // Disallow flags or leading hyphens to prevent argument injection
+      while (sanitized.startsWith('-')) {
+        sanitized = sanitized.slice(1).trim()
+      }
+      if (!sanitized) {
+        throw new Error('Invalid host provided')
+      }
       if (!sanitized) throw new Error('Host cannot be empty')
       const result = await dnsLookup(sanitized)
       return {

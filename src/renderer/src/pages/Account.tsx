@@ -1,3 +1,4 @@
+import { useToast } from '../lib/ToastContext'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Settings, Key, Shield, LogOut, Clock, Infinity, RefreshCw, Check, Download, AlertCircle, Sparkles, Bot } from 'lucide-react'
@@ -7,6 +8,7 @@ import { cyberAudio } from '../lib/cyberAudio'
 import { getAIConfig, saveAIConfig, type AIConfig, type AIProvider } from '../lib/aiClient'
 
 export default function Account() {
+  const { success: showToastSuccess, error: showToastError } = useToast()
   const { tier, key, expiresAt, deactivate } = useLicense()
   const { t, locale, setLocale } = useT()
 
@@ -546,10 +548,10 @@ export default function Account() {
                       const data = JSON.parse(ev.target?.result as string)
                       Object.keys(data).forEach((k) => localStorage.setItem(k, data[k]))
                       cyberAudio.copySuccess()
-                      alert('ZenDev yapılandırması başarıyla geri yüklendi! Sayfa yenileniyor.')
+                      showToastSuccess('Yapılandırma Geri Yüklendi', 'Ayarlar başarıyla güncellendi.'); setTimeout(() => window.location.reload(), 1000)
                       window.location.reload()
                     } catch {
-                      alert('Geçersiz yedekleme dosyası!')
+                      showToastError('Hata', 'Geçersiz yedekleme dosyası!')
                     }
                   }
                   reader.readAsText(file)

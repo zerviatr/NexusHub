@@ -60,7 +60,21 @@ export function I18nProvider({
   children: ReactNode
   defaultLocale?: Locale
 }) {
-  const [locale, setLocale] = useState<Locale>(defaultLocale)
+  const [locale, setLocaleState] = useState<Locale>(() => {
+    try {
+      const saved = localStorage.getItem('nexus_locale') as Locale
+      return saved === 'en' || saved === 'tr' ? saved : defaultLocale
+    } catch {
+      return defaultLocale
+    }
+  })
+
+  const setLocale = (l: Locale) => {
+    try {
+      localStorage.setItem('nexus_locale', l)
+    } catch {}
+    setLocaleState(l)
+  }
 
   const t = (key: string, vars?: Vars): string => {
     const primary = resolve(locales[locale], key)

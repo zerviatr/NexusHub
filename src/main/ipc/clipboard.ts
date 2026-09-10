@@ -10,7 +10,7 @@
  *   clipboard:write       → (text: string) → void
  */
 
-import { ipcMain, clipboard } from 'electron'
+import { ipcMain, clipboard, app } from 'electron'
 
 export interface ClipboardEntry {
   id: string
@@ -30,7 +30,12 @@ function generateId(): string {
   return `clip_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`
 }
 
+const MAX_TEXT_LENGTH = 50000 // 50KB per entry max
+
 function addEntry(text: string): void {
+  if (text.length > MAX_TEXT_LENGTH) {
+    text = text.slice(0, MAX_TEXT_LENGTH)
+  }
   if (!text.trim() || text === lastText) return
   lastText = text
 
@@ -69,6 +74,12 @@ function startPoller(): void {
 }
 
 export function registerClipboardIPC(): void {
+  app.on('will-quit', () => {
+    if (pollerInterval) {
+      clearInterval(pollerInterval)
+      pollerInterval = null
+    }
+  })
   startPoller()
 
   ipcMain.handle('clipboard:getHistory', (): ClipboardEntry[] => {

@@ -350,10 +350,10 @@ export default function PasswordGenerator() {
           const uniqueItems = Array.from(map.values())
           setVaultItems(uniqueItems)
           await saveEncryptedVault(uniqueItems)
-          alert('✓ Yedek başarıyla içe aktarıldı!')
+          toast({ title: 'Yedek İçe Aktarıldı', message: 'Tüm kayıtlı parolalar başarıyla geri yüklendi.', type: 'success' })
         }
       } catch {
-        alert('Geçersiz JSON yedek dosyası!')
+        toast({ title: 'İçe Aktarma Başarısız', message: 'Geçersiz JSON yedek dosyası yapısı.', type: 'error' })
       }
     }
     reader.readAsText(file)

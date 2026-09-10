@@ -64,11 +64,13 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     info: 'border-nexus-cyan/30 bg-nexus-surface/80 shadow-nexus-cyan/10',
   }
 
+  const value = React.useMemo(() => ({ toast, success, error, warning, info, dismiss }), [toast, success, error, warning, info, dismiss])
+
   return (
-    <ToastContext.Provider value={{ toast, success, error, warning, info, dismiss }}>
+    <ToastContext.Provider value={value}>
       {children}
       {/* Toast HUD Overlay */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none">
+      <div className="fixed top-12 right-6 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none">
         <AnimatePresence mode="popLayout">
           {toasts.map((t) => (
             <motion.div

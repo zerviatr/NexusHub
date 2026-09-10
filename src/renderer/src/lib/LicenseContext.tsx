@@ -58,7 +58,7 @@ export function LicenseProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  const activate = async (newKey: string) => {
+  const activate = useCallback(async (newKey: string) => {
     const res: any = await window.nexusAPI.license.activate(newKey)
     if (res.success) {
       setStatus('active')
@@ -136,8 +136,10 @@ export function LicenseProvider({ children }: { children: React.ReactNode }) {
     }
   }, [status])
 
+  const value = React.useMemo(() => ({ status, tier, expiresAt, key, trialHoursLeft, activate, deactivate }), [status, tier, expiresAt, key, trialHoursLeft, activate, deactivate])
+
   return (
-    <LicenseContext.Provider value={{ status, tier, expiresAt, key, trialHoursLeft, activate, deactivate }}>
+    <LicenseContext.Provider value={value}>
       {children}
     </LicenseContext.Provider>
   )

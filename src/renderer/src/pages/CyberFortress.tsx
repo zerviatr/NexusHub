@@ -402,7 +402,7 @@ export default function CyberFortress() {
                       const input = document.getElementById('stego-encode-input') as HTMLInputElement
                       const file = input?.files?.[0]
                       if (!file || !stegoSecretText.trim()) {
-                        alert('Lütfen bir PNG görseli ve gizlenecek bir mesaj girin.')
+                        showToastError('Görsel ve Mesaj Gerekli', 'Lütfen bir PNG görseli ve gizlenecek bir mesaj girin.')
                         return
                       }
                       const reader = new FileReader()
@@ -422,7 +422,7 @@ export default function CyberFortress() {
                           const textBytes = new TextEncoder().encode(stegoSecretText)
                           const totalBits = textBytes.length * 8
                           if (totalBits + 32 > data.length / 4) {
-                            alert('Görsel bu mesajı barındırmak için çok küçük!')
+                            showToastError('Kapasite Yetersiz', 'Görsel bu mesajı barındırmak için çok küçük!')
                             return
                           }
 
@@ -454,7 +454,7 @@ export default function CyberFortress() {
                             a.download = `stego_secret_${Date.now()}.png`
                             a.click()
                             URL.revokeObjectURL(url)
-                            alert('Gizli mesaj başarıyla PNG görseline gömüldü ve indirildi!')
+                            showToastSuccess('Steganografi Başarılı', 'Gizli mesaj başarıyla PNG görseline gömüldü ve indirildi!')
                           }, 'image/png')
                         }
                         img.src = e.target?.result as string
@@ -486,7 +486,7 @@ export default function CyberFortress() {
                       const input = document.getElementById('stego-decode-input') as HTMLInputElement
                       const file = input?.files?.[0]
                       if (!file) {
-                        alert('Lütfen şifreli PNG görselini seçin.')
+                        showToastError('Görsel Eksik', 'Lütfen şifreli PNG görselini seçin.')
                         return
                       }
                       const reader = new FileReader()

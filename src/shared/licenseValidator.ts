@@ -10,7 +10,12 @@
  *   H×16  [16 chars] Cryptographic HMAC signature (Dual mode: 4-char salt + 12-char HMAC, or legacy 16-char HMAC)
  */
 
-import { createHmac } from 'crypto'
+import { createHmac, timingSafeEqual } from 'crypto'
+
+function safeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  return timingSafeEqual(Buffer.from(a, 'utf-8'), Buffer.from(b, 'utf-8'))
+}
 
 export type LicenseTier = 'free' | 'pro' | 'team' | 'lifetime'
 
@@ -88,8 +93,8 @@ export function validateLicenseKey(rawKey: string, secret: string = DEFAULT_LICE
     .slice(0, 16)
     .toUpperCase()
 
-  const isValidEntropy = H12 === expectedH12
-  const isValidLegacy = H === expectedLegacy
+  const isValidEntropy = safeEqual(H12, expectedH12)
+  const isValidLegacy = safeEqual(H, expectedLegacy)
 
   if (!isValidEntropy && !isValidLegacy) {
     return { valid: false, reason: 'Cryptographic signature mismatch' }

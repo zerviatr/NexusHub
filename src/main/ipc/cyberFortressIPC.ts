@@ -1,3 +1,15 @@
+
+function isSystemProtectedPath(targetPath: string): boolean {
+  const normalized = path.resolve(targetPath).toLowerCase()
+  const rootWindows = process.env.SystemRoot?.toLowerCase() || 'c:\\windows'
+  const programFiles = process.env.ProgramFiles?.toLowerCase() || 'c:\\program files'
+  const systemDrive = (process.env.SystemDrive?.toLowerCase() || 'c:') + '\\'
+  
+  if (normalized === systemDrive || normalized === systemDrive.slice(0, 2)) return true
+  if (normalized.startsWith(rootWindows)) return true
+  if (normalized.startsWith(programFiles)) return true
+  return false
+}
 import { ipcMain, dialog } from 'electron'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -22,6 +34,9 @@ export function registerCyberFortressIPC(): void {
 
   // DoD 5220.22-M 7-Pass Shredder
   ipcMain.handle('fortress:shredFile', async (_, filePath: string) => {
+    if (isSystemProtectedPath(filePath)) {
+      return { success: false, error: 'Sistem güvenliği nedeniyle korumalı Windows dizinleri imha edilemez.' }
+    }
     return shredFile(filePath)
   })
 
