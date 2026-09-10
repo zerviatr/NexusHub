@@ -1,8 +1,8 @@
-# 💎 ZenDev v2.3.0 - Production Derleme ve Dağıtım Raporu
+# 💎 ZenDev v2.3.1 - Production Derleme ve Dağıtım Raporu
 
 **Oluşturulma Tarihi:** 10 Eylül 2026  
 **Proje Adı:** ZenDev (Premium Multi-Tool Desktop Suite)  
-**Sürüm:** 2.3.0  
+**Sürüm:** 2.3.1  
 **Hedef Platform:** Windows 10/11 (x64)  
 **Paketleme Türü:** NSIS One-Click Installer & Portable Directory  
 
@@ -12,9 +12,9 @@
 
 | Dosya | Tam Dizin Yolu | Boyut | Açıklama |
 | :--- | :--- | :--- | :--- |
-| **Windows Setup (.exe)** | `C:\Users\futbo\Desktop\AI Projeleri\NexusHub\dist\ZenDev-Setup-2.3.0.exe` | **~96.3 MB** (101,028,054 bayt) | Son kullanıcı için NSIS tabanlı tek tıkla kurulum paketi. Masaüstü & Başlat menüsü kısayolu oluşturur. |
+| **Windows Setup (.exe)** | `C:\Users\futbo\Desktop\AI Projeleri\NexusHub\dist\ZenDev-Setup-2.3.1.exe` | **~96.5 MB** (101,161,135 bayt) | Son kullanıcı için NSIS tabanlı tek tıkla kurulum paketi. Masaüstü & Başlat menüsü kısayolu oluşturur. |
 | **Taşınabilir / Bağımsız (.exe)** | `C:\Users\futbo\Desktop\AI Projeleri\NexusHub\dist\win-unpacked\ZenDev.exe` | **~192 MB** (201,341,952 bayt) | Kurulum gerektirmeyen, doğrudan çalıştırılabilir ham Windows binary paketi. |
-| **Blockmap Dosyası** | `C:\Users\futbo\Desktop\AI Projeleri\NexusHub\dist\ZenDev-Setup-2.3.0.exe.blockmap` | 103 KB | Electron-updater diferansiyel güncelleme haritası. |
+| **Blockmap Dosyası** | `C:\Users\futbo\Desktop\AI Projeleri\NexusHub\dist\ZenDev-Setup-2.3.1.exe.blockmap` | 103 KB | Electron-updater diferansiyel güncelleme haritası. |
 | **Sürüm Metadata** | `C:\Users\futbo\Desktop\AI Projeleri\NexusHub\dist\latest.yml` | 341 bayt | Otomatik güncelleme manifesti (SHA-512 sağlama toplamı dahil). |
 
 > **SHA-512 Doğrulama Özeti:**  
@@ -57,6 +57,6 @@ Uygulamanın ticari olarak son kullanıcıya satılabilmesi için tüm test ve g
 
 ## 4. 🚀 Son Kullanıcı Dağıtım Adımları
 
-1. `C:\Users\futbo\Desktop\AI Projeleri\NexusHub\dist\ZenDev-Setup-2.3.0.exe` dosyasını test amaçlı sanal makinede veya kendi bilgisayarınızda çalıştırarak kurulumu deneyimleyebilirsiniz.
+1. `C:\Users\futbo\Desktop\AI Projeleri\NexusHub\dist\ZenDev-Setup-2.3.1.exe` dosyasını test amaçlı sanal makinede veya kendi bilgisayarınızda çalıştırarak kurulumu deneyimleyebilirsiniz.
 2. Web sitesi veya LemonSqueezy indirme bağlantısı olarak bu kurulum dosyasını veya GitHub Releases üzerindeki linki sunabilirsiniz.
 3. GitHub Releases üzerinden dağıtım yapmak için `git push origin main` sonrası `release.yml` GitHub Action workflow'u otomatik olarak Windows, macOS ve Linux derlemelerini yapıp yayına alacaktır.

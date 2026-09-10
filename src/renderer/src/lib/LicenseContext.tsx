@@ -68,7 +68,7 @@ export function LicenseProvider({ children }: { children: React.ReactNode }) {
       return { success: true }
     }
     return { success: false, reason: res.reason }
-  }
+  }, [])
 
   const deactivate = useCallback(async () => {
     await window.nexusAPI.license.deactivate()
