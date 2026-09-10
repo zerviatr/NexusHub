@@ -13,6 +13,7 @@ import KeyboardShortcutsModal from './components/KeyboardShortcutsModal'
 import ProLockGate from './components/ProLockGate'
 import FloatingOrb from './components/FloatingOrb'
 import UpdateManager from './components/UpdateManager'
+import { cyberAudio } from './lib/cyberAudio'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useLicense } from './lib/LicenseContext'
 
@@ -81,6 +82,48 @@ export default function App() {
       }
     } catch {}
   }, [])
+
+    // Universal Keyboard Shortcuts Listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement
+      const isInput = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+      if (isInput) return
+
+      // Alt Navigation Shortcuts
+      if (e.altKey && !e.ctrlKey && !e.shiftKey) {
+        const k = e.key.toLowerCase()
+        if (k === 'd') {
+          e.preventDefault()
+          navigate('/')
+        } else if (k === 'o') {
+          e.preventDefault()
+          navigate('/system-optimizer')
+        } else if (k === 'p') {
+          e.preventDefault()
+          navigate('/port-killer')
+        } else if (k === 'f') {
+          e.preventDefault()
+          navigate('/fortress')
+        }
+      }
+
+      // Ctrl+Shift Shortcuts
+      if (e.ctrlKey && e.shiftKey) {
+        const k = e.key.toLowerCase()
+        if (k === 't') {
+          e.preventDefault()
+          window.nexusAPI?.toggleAlwaysOnTop?.()
+        } else if (k === 's') {
+          e.preventDefault()
+          cyberAudio.toggleMute()
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [navigate])
 
   const [hasAcceptedEula, setHasAcceptedEula] = useState<boolean>(
     localStorage.getItem('nexus_eula_accepted') === 'true'
