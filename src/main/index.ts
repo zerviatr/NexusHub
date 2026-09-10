@@ -176,7 +176,10 @@ if (!gotTheLock) {
     // Someone tried to run a second instance, focus our main window
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore()
-      if (!mainWindow.isVisible()) mainWindow.show()
+      if (!mainWindow.isVisible()) {
+        mainWindow.webContents.send('app:visibility-change', true)
+        mainWindow.show()
+      }
       mainWindow.focus()
     }
   })

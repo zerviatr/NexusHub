@@ -92,8 +92,8 @@ export function registerPortWatchdogIPC(): void {
   // 2. Safely terminate a process by PID
   ipcMain.handle('port:killProcess', async (_, pid: number): Promise<{ success: boolean; message?: string; error?: string }> => {
     try {
-      if (typeof pid !== 'number' || isNaN(pid) || !Number.isInteger(pid) || pid <= 4 || pid > 2147483647) {
-        return { success: false, error: 'Sistem kritik işlemleri (PID 0 veya 4) veya geçersiz PID sonlandırılamaz.' }
+      if (typeof pid !== 'number' || isNaN(pid) || !Number.isInteger(pid) || pid <= 4 || pid === process.pid || pid > 2147483647) {
+        return { success: false, error: 'Sistem kritik işlemleri, çekirdek (PID 0/4) veya ZenDev ana süreci sonlandırılamaz.' }
       }
 
       if (process.platform === 'win32') {

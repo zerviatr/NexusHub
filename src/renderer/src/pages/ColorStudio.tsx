@@ -244,7 +244,7 @@ export default function ColorStudio() {
       gradient="from-purple-600 to-pink-500"
     >
       {/* Navigation tabs */}
-      <div className="flex items-center gap-2 p-1 rounded-2xl bg-white/[0.03] border border-white/10 w-fit mb-6">
+      <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-white/[0.03] border border-white/10 w-full md:w-fit mb-6">
         {[
           { id: 'converter', label: 'Renk Dönüştürücü & Damlalık' },
           { id: 'palette', label: 'Görsel Paleti Çıkarıcı' },

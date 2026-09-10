@@ -17,6 +17,8 @@ import {
 } from 'lucide-react'
 import BaseToolTemplate from '../components/BaseToolTemplate'
 import { useT } from '../lib/i18n'
+import { cyberAudio } from '../lib/cyberAudio'
+import { useToast } from '../lib/ToastContext'
 
 type QrType = 'url' | 'text' | 'wifi' | 'vcard' | 'email' | 'sms'
 
@@ -30,6 +32,7 @@ const PRESET_COLORS = [
 
 export default function QrCodeStudio() {
   const { t } = useT()
+  const { success: showToastSuccess, error: showToastError } = useToast()
 
   // QR Type & Input state
   const [qrType, setQrType] = useState<QrType>('url')
@@ -148,6 +151,8 @@ export default function QrCodeStudio() {
     a.href = qrDataUrl
     a.download = `zendev-qrcode-${qrType}-${Date.now()}.png`
     a.click()
+    try { cyberAudio.copySuccess() } catch {}
+    showToastSuccess('PNG İndirildi', 'QR kod görseli cihazınıza kaydedildi.')
   }
 
   // Download SVG
@@ -184,11 +189,15 @@ export default function QrCodeStudio() {
       await navigator.clipboard.write([
         new ClipboardItem({ 'image/png': blob })
       ])
+      try { cyberAudio.copySuccess() } catch {}
+      showToastSuccess('Görsel Kopyalandı', 'QR kod görseli panoya kopyalandı.')
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
       // Fallback to text copy
       navigator.clipboard.writeText(getRawPayload())
+      try { cyberAudio.copySuccess() } catch {}
+      showToastSuccess('Metin Kopyalandı', 'QR verisi metin olarak kopyalandı.')
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     }

@@ -202,7 +202,7 @@ export default function DevSandbox() {
 
         {/* Request Configuration Tabs */}
         <div className="glass-card p-5 space-y-4">
-          <div className="flex gap-2 border-b border-white/5 pb-2">
+          <div className="flex flex-wrap gap-2 border-b border-white/5 pb-2">
             {[
               { id: 'params', label: 'Query Parametreleri' },
               { id: 'headers', label: 'Headers (JSON)' },

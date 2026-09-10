@@ -14,6 +14,8 @@ import {
 } from 'lucide-react'
 import BaseToolTemplate from '../components/BaseToolTemplate'
 import { useT } from '../lib/i18n'
+import { cyberAudio } from '../lib/cyberAudio'
+import { useToast } from '../lib/ToastContext'
 
 type HashTab = 'text' | 'file'
 
@@ -181,6 +183,7 @@ async function bufferToHex(buffer: ArrayBuffer): Promise<string> {
 }
 
 export default function HashStudio() {
+  const { success: showToastSuccess } = useToast()
   const { t } = useT()
   const [activeTab, setActiveTab] = useState<HashTab>('text')
 
@@ -265,6 +268,8 @@ export default function HashStudio() {
 
   const handleCopy = (text: string, key: string) => {
     navigator.clipboard.writeText(text)
+    try { cyberAudio.copySuccess() } catch {}
+    showToastSuccess('Kopyalandı', `${key.toUpperCase()} hash değeri panoya kopyalandı.`)
     setCopiedKey(key)
     setTimeout(() => setCopiedKey(null), 2000)
   }
