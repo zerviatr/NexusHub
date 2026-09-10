@@ -200,6 +200,9 @@ export default function RegexStudio() {
           index: m.index,
           groups: m.groups
         })
+        if (m[0].length === 0) {
+          re.lastIndex++
+        }
         if (!flags.includes('g')) break
       }
 

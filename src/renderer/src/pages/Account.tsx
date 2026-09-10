@@ -102,7 +102,7 @@ export default function Account() {
     setDownloadPercent(0)
     try {
       const res = await window.nexusAPI?.updater?.checkNow?.()
-      const cur = res?.currentVersion ? (res.currentVersion.startsWith('v') ? res.currentVersion : `v${res.currentVersion}`) : 'v1.0.2'
+      const cur = res?.currentVersion ? (res.currentVersion.startsWith('v') ? res.currentVersion : `v${res.currentVersion}`) : (updateInfo.current || 'v2.4.0')
       const upd = res?.updateVersion ? (res.updateVersion.startsWith('v') ? res.updateVersion : `v${res.updateVersion}`) : undefined
 
       if (res?.error) {
@@ -115,7 +115,7 @@ export default function Account() {
         setUpdateInfo({ message: friendly, current: cur })
       } else if (res?.hasUpdate) {
         setUpdateStatus('available')
-        setUpdateInfo({ version: upd, current: cur })
+        setUpdateInfo({ version: upd, current: cur, downloadUrl: res?.downloadUrl, htmlUrl: res?.htmlUrl, notes: res?.releaseNotes })
       } else if (res?.isLatest) {
         setUpdateStatus('latest')
         setUpdateInfo({ current: cur })
@@ -125,7 +125,7 @@ export default function Account() {
       }
     } catch (err: any) {
       setUpdateStatus('error')
-      setUpdateInfo({ message: 'Sunucuya bağlantı kurulamadı veya yeni sürüm şu anda derleniyor. En kısa sürede çözülecektir.', current: 'v1.0.2' })
+      setUpdateInfo({ message: 'Sunucuya bağlantı kurulamadı veya yeni sürüm şu anda derleniyor. En kısa sürede çözülecektir.', current: (updateInfo.current || 'v2.4.0') })
     }
   }
 
@@ -407,6 +407,18 @@ export default function Account() {
             </div>
 
             {/* Status Badges */}
+            {updateInfo.htmlUrl && (
+              <div className="flex items-center justify-between p-2.5 rounded-xl bg-nexus-surface/80 border border-nexus-border/50 text-xs">
+                <span className="text-nexus-muted">GitHub Sürüm Notları:</span>
+                <button
+                  type="button"
+                  onClick={() => window.open(updateInfo.htmlUrl, '_blank')}
+                  className="text-nexus-cyan hover:underline font-mono"
+                >
+                  GitHub Sürümünü İncele ↗
+                </button>
+              </div>
+            )}
             {updateStatus === 'latest' && (
               <div className="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
                 <Check className="w-4 h-4 text-emerald-400 shrink-0" />

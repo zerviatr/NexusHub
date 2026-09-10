@@ -96,7 +96,8 @@ export function registerSystemOptimizerIPC(): void {
 
   // 4. Fast Ping Benchmark
   ipcMain.handle('system:pingHost', async (_, host: string) => {
-    const target = host.replace(/[^a-zA-Z0-9.-]/g, '') || '1.1.1.1'
+    const clean = typeof host === 'string' ? host : ''
+    const target = clean.replace(/[^a-zA-Z0-9.-]/g, '') || '1.1.1.1'
     return new Promise((resolve) => {
       const start = Date.now()
       const isWin = process.platform === 'win32'

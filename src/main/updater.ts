@@ -1,83 +1,112 @@
 /**
  * src/main/updater.ts
- * Auto-updater integration using electron-updater + GitHub Releases.
- *
- * Behavior:
- *  - Silently checks for updates on launch (configurable interval)
- *  - Downloads in background without blocking the user
- *  - Sends progress / available / downloaded events to renderer via IPC
- *  - Renderer shows a non-blocking banner when update is ready
- *
- * Renderer listens on:
- *   ipcRenderer.on('updater:available',    (_, info) => ...)
- *   ipcRenderer.on('updater:progress',     (_, progress) => ...)
- *   ipcRenderer.on('updater:downloaded',   (_, info) => ...)
- *   ipcRenderer.on('updater:error',        (_, msg) => ...)
- *
- * Renderer triggers install via:
- *   ipcRenderer.send('updater:install-now')
+ * Auto-updater integration using electron-updater + GitHub Releases fallback.
  */
-import { ipcMain, app, BrowserWindow, globalShortcut } from 'electron'
-import { autoUpdater } from 'electron-updater'
-import { destroySystemTray } from './tray'
-import { spawn } from 'child_process'
+import { ipcMain, app, BrowserWindow, globalShortcut, shell } from 'electron';
+import { autoUpdater } from 'electron-updater';
+import { destroySystemTray } from './tray';
+import axios from 'axios';
 
 // ─── Config ──────────────────────────────────────────────────────────────────
-autoUpdater.autoDownload = true          // Download silently in background
-autoUpdater.autoInstallOnAppQuit = true  // Install when the user quits naturally
-autoUpdater.allowDowngrade = false       // Never roll back without explicit action
-autoUpdater.logger = console
+autoUpdater.autoDownload = true;          // Download silently in background
+autoUpdater.autoInstallOnAppQuit = true;  // Install when user quits naturally
+autoUpdater.allowDowngrade = false;       // Never roll back without explicit action
+autoUpdater.logger = console;
 
 try {
   autoUpdater.setFeedURL({
     provider: 'github',
     owner: 'zerviatr',
-    repo: 'ZenDev',
+    repo: 'NexusHub',
     releaseType: 'release'
-  })
+  });
 } catch (err) {
-  console.warn('[updater] setFeedURL warning:', err)
+  console.warn('[updater] setFeedURL warning:', err);
 }
 
-let isAutoUpdaterInitialized = false
-let activeWindow: BrowserWindow | null = null
+let isAutoUpdaterInitialized = false;
+let activeWindow: BrowserWindow | null = null;
+
+function parseSemver(v: string): [number, number, number] {
+  const clean = v.replace(/^v/, '').trim();
+  const parts = clean.split('.').map((p) => parseInt(p, 10) || 0);
+  return [parts[0] || 0, parts[1] || 0, parts[2] || 0];
+}
+
+function isNewerVersion(remote: string, current: string): boolean {
+  const r = parseSemver(remote);
+  const c = parseSemver(current);
+  if (r[0] !== c[0]) return r[0] > c[0];
+  if (r[1] !== c[1]) return r[1] > c[1];
+  return r[2] > c[2];
+}
+
+async function fetchLatestGitHubRelease(): Promise<{
+  version: string;
+  notes: string;
+  downloadUrl: string;
+  htmlUrl: string;
+} | null> {
+  try {
+    const res = await axios.get('https://api.github.com/repos/zerviatr/NexusHub/releases/latest', {
+      headers: { 'User-Agent': 'ZenDev-Desktop-Client' },
+      timeout: 8000
+    });
+    if (!res.data || !res.data.tag_name) return null;
+    const version = res.data.tag_name.replace(/^v/, '');
+    const notes = res.data.body || 'ZenDev yeni sürüm yayınlandı.';
+    const htmlUrl = res.data.html_url || 'https://github.com/zerviatr/NexusHub/releases';
+    let downloadUrl = htmlUrl;
+    if (Array.isArray(res.data.assets)) {
+      const exeAsset = res.data.assets.find(
+        (a: any) => a.name && (a.name.endsWith('.exe') || a.name.endsWith('.Setup.exe'))
+      );
+      if (exeAsset && exeAsset.browser_download_url) {
+        downloadUrl = exeAsset.browser_download_url;
+      }
+    }
+    return { version, notes, downloadUrl, htmlUrl };
+  } catch (err: any) {
+    console.warn('[Updater] Direct GitHub API check warning:', err?.message || err);
+    return null;
+  }
+}
 
 export function setupAutoUpdater(win: BrowserWindow): void {
-  activeWindow = win
+  activeWindow = win;
 
   if (isAutoUpdaterInitialized) {
-    return
+    return;
   }
-  isAutoUpdaterInitialized = true
+  isAutoUpdaterInitialized = true;
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
   const send = (channel: string, payload?: unknown) => {
     if (activeWindow && !activeWindow.isDestroyed()) {
-      activeWindow.webContents.send(channel, payload)
+      activeWindow.webContents.send(channel, payload);
     }
-  }
+  };
 
   // ─── Events ───────────────────────────────────────────────────────────────
   autoUpdater.on('checking-for-update', () => {
-    console.log('[updater] Checking for update...')
-  })
+    console.log('[updater] Checking for update...');
+  });
 
   autoUpdater.on('update-available', (info) => {
-    console.log('[updater] Update available:', info.version)
-    // Renderer can show "Downloading update vX.Y.Z..." notification
+    console.log('[updater] Update available:', info.version);
     send('updater:available', {
       version: info.version,
       releaseDate: info.releaseDate,
       releaseNotes: info.releaseNotes,
-    })
-  })
+    });
+  });
 
   autoUpdater.on('update-not-available', (info) => {
-    console.log('[updater] Update not available. Current is latest:', info.version)
+    console.log('[updater] Update not available. Current is latest:', info.version);
     send('updater:not-available', {
       version: info.version,
-    })
-  })
+    });
+  });
 
   autoUpdater.on('download-progress', (progress) => {
     send('updater:progress', {
@@ -85,149 +114,179 @@ export function setupAutoUpdater(win: BrowserWindow): void {
       transferred: progress.transferred,
       total: progress.total,
       bytesPerSecond: progress.bytesPerSecond,
-    })
-  })
+    });
+  });
 
   autoUpdater.on('update-downloaded', (info) => {
-    console.log('[updater] Update downloaded successfully:', info.version)
-    // Renderer shows "Restart to install v1.2.0" banner
+    console.log('[updater] Update downloaded successfully:', info.version);
     send('updater:downloaded', {
       version: info.version,
       releaseNotes: info.releaseNotes,
-    })
-  })
+    });
+  });
 
   autoUpdater.on('error', (err) => {
-    console.error('[updater] error:', err?.message || err)
-    const raw = (err?.message || String(err || '')).toLowerCase()
+    console.error('[updater] autoUpdater error:', err?.message || err);
+    const raw = (err?.message || String(err || '')).toLowerCase();
     const friendlyMsg =
-      raw.includes('latest.yml') || raw.includes('404') || raw.includes('httperror') || raw.includes('enotfound') || raw.includes('econnrefused')
+      raw.includes('latest.yml') ||
+      raw.includes('404') ||
+      raw.includes('httperror') ||
+      raw.includes('enotfound') ||
+      raw.includes('econnrefused')
         ? 'Sunucuya bağlantı kurulamadı veya yeni sürüm şu anda GitHub üzerinde derleniyor. En kısa sürede çözülecektir.'
-        : 'Güncelleme sunucusuna şu anda erişilemiyor. Lütfen birkaç dakika sonra tekrar deneyin.'
-    send('updater:error', friendlyMsg)
-  })
+        : 'Güncelleme sunucusuna şu anda erişilemiyor. Lütfen birkaç dakika sonra tekrar deneyin.';
+    send('updater:error', friendlyMsg);
+  });
 
   // ─── IPC: renderer can trigger install ────────────────────────────────────
-  ipcMain.removeAllListeners('updater:install-now')
+  ipcMain.removeAllListeners('updater:install-now');
   ipcMain.on('updater:install-now', () => {
-    console.log('[updater] Discord-grade update sequence initiated...')
-    ;(app as any).isQuitting = true
+    console.log('[updater] Update sequence initiated...');
+    (app as any).isQuitting = true;
 
-    // 1. Inform renderer to trigger the fullscreen patching splash immediately
-    send('updater:applying-patch')
+    send('updater:applying-patch');
 
-    // 2. Remove all close prevention listeners so app.quit() is never blocked
     BrowserWindow.getAllWindows().forEach((w) => {
       try {
-        w.removeAllListeners('close')
-        // DO NOT hide the window! Keep it open displaying the futuristic cyber patch splash!
+        w.removeAllListeners('close');
       } catch {}
-    })
+    });
 
-    // 3. Safely release OS hooks, global hotkeys and tray
     try {
-      globalShortcut.unregisterAll()
+      globalShortcut.unregisterAll();
     } catch {}
     try {
-      destroySystemTray()
+      destroySystemTray();
     } catch {}
 
-    // 4. Robust Watchdog: If Windows NSIS fails to auto-launch the newly updated binary,
-    // this detached PowerShell supervisor will start ZenDev after 5 seconds
-    try {
-      const exePath = app.getPath('exe')
-      if (app.isPackaged && process.platform === 'win32' && exePath) {
-        const psScript = `
-          Start-Sleep -Seconds 5;
-          $p = Get-Process -Name "ZenDev" -ErrorAction SilentlyContinue;
-          if (-not $p) {
-            Start-Process -FilePath "${exePath.replace(/\\/g, '\\\\')}"
-          }
-        `
-        const watchdog = spawn('powershell.exe', ['-NoProfile', '-WindowStyle', 'Hidden', '-Command', psScript], {
-          detached: true,
-          stdio: 'ignore',
-          windowsHide: true,
-        })
-        watchdog.unref()
-      }
-    } catch (err) {
-      console.warn('[updater] Watchdog spawn warning:', err)
-    }
-
-    // 5. Allow user to see the sleek cyber patch transition for 1200ms before quitAndInstall
     setTimeout(() => {
       try {
-        console.log('[updater] Executing autoUpdater.quitAndInstall(true, true)...')
-        autoUpdater.quitAndInstall(true, true)
+        console.log('[updater] Executing autoUpdater.quitAndInstall(false, true)...');
+        autoUpdater.quitAndInstall(false, true);
       } catch (err) {
-        console.error('[updater] quitAndInstall failed, attempting fallback app.quit():', err)
-        app.quit()
+        console.error('[updater] quitAndInstall error, calling app.quit():', err);
+        app.quit();
       }
-    }, 1200)
-  })
+    }, 1000);
+  });
 
   // ─── IPC: renderer can trigger manual check ───────────────────────────────
-  ipcMain.removeHandler('updater:check-now')
+  ipcMain.removeHandler('updater:check-now');
   ipcMain.handle('updater:check-now', async () => {
-    try {
-      const currentVersion = app.getVersion()
-      console.log(`[updater] Manual check triggered. Current version: ${currentVersion}, isPackaged: ${app.isPackaged}`)
+    const currentVersion = app.getVersion();
+    console.log('[updater] Check triggered. Current version:', currentVersion, 'isPackaged:', app.isPackaged);
 
-      if (!app.isPackaged) {
+    // If running in development, query GitHub REST API directly
+    if (!app.isPackaged) {
+      console.log('[updater] Dev mode: checking GitHub REST API...');
+      const ghRelease = await fetchLatestGitHubRelease();
+      if (ghRelease && isNewerVersion(ghRelease.version, currentVersion)) {
         return {
-          hasUpdate: false,
+          hasUpdate: true,
+          status: 'available',
           currentVersion,
-          isLatest: true,
-          devMode: true,
-        }
+          updateVersion: ghRelease.version,
+          version: ghRelease.version,
+          releaseNotes: ghRelease.notes,
+          downloadUrl: ghRelease.downloadUrl,
+          htmlUrl: ghRelease.htmlUrl,
+          isLatest: false
+        };
       }
-
-      const result = await autoUpdater.checkForUpdates()
-      const updateVersion = result?.updateInfo?.version
-      const hasUpdate = Boolean(updateVersion && updateVersion !== currentVersion)
-
-      console.log(`[updater] Check completed: updateVersion=${updateVersion}, hasUpdate=${hasUpdate}`)
-
-      return {
-        hasUpdate,
-        currentVersion,
-        updateVersion: updateVersion || currentVersion,
-        isLatest: !hasUpdate,
-      }
-    } catch (err: any) {
-      console.error('[updater] check error:', err?.message || err)
-      const raw = (err?.message || String(err || '')).toLowerCase()
-      const friendlyMsg =
-        raw.includes('latest.yml') || raw.includes('404') || raw.includes('httperror') || raw.includes('enotfound') || raw.includes('econnrefused')
-          ? 'Sunucuya bağlantı kurulamadı veya yeni sürüm şu anda GitHub üzerinde derleniyor. En kısa sürede çözülecektir.'
-          : 'Güncelleme sunucusuna şu anda erişilemiyor. Lütfen birkaç dakika sonra tekrar deneyin.'
       return {
         hasUpdate: false,
-        currentVersion: app.getVersion(),
-        isLatest: false,
-        error: friendlyMsg,
-      }
+        status: 'latest',
+        currentVersion,
+        updateVersion: currentVersion,
+        version: currentVersion,
+        isLatest: true
+      };
     }
-  })
+
+    // Production mode: try electron-updater first
+    try {
+      const result = await autoUpdater.checkForUpdates();
+      const updateVersion = result?.updateInfo?.version;
+      const hasUpdate = Boolean(updateVersion && isNewerVersion(updateVersion, currentVersion));
+
+      if (hasUpdate) {
+        return {
+          hasUpdate: true,
+          status: 'available',
+          currentVersion,
+          updateVersion,
+          version: updateVersion,
+          isLatest: false,
+          releaseNotes: (result?.updateInfo as any)?.releaseNotes || 'ZenDev yeni güncelleme hazır.'
+        };
+      }
+
+      return {
+        hasUpdate: false,
+        status: 'latest',
+        currentVersion,
+        updateVersion: currentVersion,
+        version: currentVersion,
+        isLatest: true
+      };
+    } catch (autoErr: any) {
+      console.warn('[updater] electron-updater failed, trying GitHub REST API fallback:', autoErr?.message);
+    }
+
+    // Fallback directly to GitHub releases API in case latest.yml is 404 or CDN is lagging
+    const fallback = await fetchLatestGitHubRelease();
+    if (fallback && isNewerVersion(fallback.version, currentVersion)) {
+      return {
+        hasUpdate: true,
+        status: 'available',
+        currentVersion,
+        updateVersion: fallback.version,
+        version: fallback.version,
+        releaseNotes: fallback.notes,
+        downloadUrl: fallback.downloadUrl,
+        htmlUrl: fallback.htmlUrl,
+        isLatest: false
+      };
+    }
+
+    if (fallback) {
+      return {
+        hasUpdate: false,
+        status: 'latest',
+        currentVersion,
+        updateVersion: currentVersion,
+        version: currentVersion,
+        isLatest: true
+      };
+    }
+
+    return {
+      hasUpdate: false,
+      status: 'error',
+      currentVersion,
+      updateVersion: currentVersion,
+      isLatest: false,
+      error: 'GitHub güncelleme sunucusuna erişilemedi. Lütfen internet bağlantınızı kontrol edin.'
+    };
+  });
 
   // ─── Periodic background check: every 4 hours ────────────────────────────
-  const CHECK_INTERVAL_MS = 4 * 60 * 60 * 1000
+  const CHECK_INTERVAL_MS = 4 * 60 * 60 * 1000;
   setInterval(() => {
     if (app.isPackaged) {
       autoUpdater.checkForUpdates().catch((err) => {
-        console.warn('[updater] Periodic check error:', err?.message)
-      })
+        console.warn('[updater] Periodic check error:', err?.message);
+      });
     }
-  }, CHECK_INTERVAL_MS)
+  }, CHECK_INTERVAL_MS);
 
-  // ─── Initial check: 3 seconds after window is ready ──────────────────────
-  // Delayed to not slow down perceived startup time
+  // ─── Initial check: 5 seconds after launch ──────────────────────────────
   setTimeout(() => {
     if (app.isPackaged) {
       autoUpdater.checkForUpdatesAndNotify().catch((e) => {
-        console.warn('[updater] Initial background check failed silently:', e?.message || e)
-      })
+        console.warn('[updater] Initial check notice:', e?.message || e);
+      });
     }
-  }, 3_000)
+  }, 5_000);
 }

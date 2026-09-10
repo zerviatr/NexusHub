@@ -39,11 +39,14 @@ export function registerPdfToolkitIPC(): void {
           author: pdfDoc.getAuthor() || undefined,
         })
       } catch (err: any) {
-        const stats = fs.statSync(filePath)
+        let size = 0
+        try {
+          size = fs.statSync(filePath).size
+        } catch {}
         files.push({
           path: filePath,
           name: path.basename(filePath),
-          size: stats.size,
+          size,
           pageCount: 0,
         })
       }

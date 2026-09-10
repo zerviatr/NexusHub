@@ -25,8 +25,7 @@ export default function MiniHud() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.shiftKey && e.code === 'Space') {
         e.preventDefault()
-        setIsOpen((prev) => !prev)
-        cyberAudio.navigate()
+        // Handled via window event / global IPC to prevent double toggle
       } else if (e.key === 'Escape' && isOpen) {
         setIsOpen(false)
       }
@@ -85,10 +84,9 @@ export default function MiniHud() {
     a.desc.toLowerCase().includes(query.toLowerCase())
   )
 
-  if (!isOpen) return null
-
   return (
     <AnimatePresence>
+      {isOpen && (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.92, y: -20 }}
@@ -208,6 +206,7 @@ export default function MiniHud() {
           </div>
         </motion.div>
       </div>
+      )}
     </AnimatePresence>
   )
 }

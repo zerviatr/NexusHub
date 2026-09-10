@@ -45,64 +45,84 @@ export function setupSystemTray(mainWindow: BrowserWindow): Tray | null {
     tray = new Tray(resizedIcon)
     tray.setToolTip('ZenDev — Multi-Tool Suite')
 
+  const restoreAndFocus = () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return;
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.show();
+    mainWindow.focus();
+  };
+
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Open ZenDev',
       click: () => {
-        mainWindow.show()
-        mainWindow.focus()
+        restoreAndFocus();
+      }
+    },
+    {
+      label: 'Pencereyi Gizle / Göster',
+      click: () => {
+        if (!mainWindow || mainWindow.isDestroyed()) return;
+        if (mainWindow.isVisible()) {
+          mainWindow.hide();
+        } else {
+          restoreAndFocus();
+        }
+      }
+    },
+    { type: 'separator' },
+    {
+      label: 'Güncellemeleri Denetle...',
+      click: () => {
+        restoreAndFocus();
+        mainWindow.webContents.send('navigate:to', '/account');
       }
     },
     { type: 'separator' },
     {
       label: 'Clipboard Manager (Ctrl+Shift+V)',
       click: () => {
-        mainWindow.show()
-        mainWindow.focus()
-        mainWindow.webContents.send('navigate:to', '/clipboard')
+        restoreAndFocus();
+        mainWindow.webContents.send('navigate:to', '/clipboard');
       }
     },
     {
       label: 'Quick Password Generator',
       click: () => {
-        mainWindow.show()
-        mainWindow.focus()
-        mainWindow.webContents.send('navigate:to', '/password')
+        restoreAndFocus();
+        mainWindow.webContents.send('navigate:to', '/password');
       }
     },
     {
       label: 'QR Code Studio',
       click: () => {
-        mainWindow.show()
-        mainWindow.focus()
-        mainWindow.webContents.send('navigate:to', '/qr-code')
+        restoreAndFocus();
+        mainWindow.webContents.send('navigate:to', '/qr-code');
       }
     },
     {
       label: 'Resource Sentinel',
       click: () => {
-        mainWindow.show()
-        mainWindow.focus()
-        mainWindow.webContents.send('navigate:to', '/sentinel')
+        restoreAndFocus();
+        mainWindow.webContents.send('navigate:to', '/sentinel');
       }
     },
     {
       label: 'Cyber Fortress (Vault & Shredder)',
       click: () => {
-        mainWindow.show()
-        mainWindow.focus()
-        mainWindow.webContents.send('navigate:to', '/fortress')
+        restoreAndFocus();
+        mainWindow.webContents.send('navigate:to', '/fortress');
       }
     },
     { type: 'separator' },
     {
       label: 'Quit ZenDev',
       click: () => {
-        ;(app as any).isQuitting = true
-        app.quit()
+        ;(app as any).isQuitting = true;
+        app.quit();
       }
     }
-  ])
+  ]);
 
   tray.setContextMenu(contextMenu)
 
