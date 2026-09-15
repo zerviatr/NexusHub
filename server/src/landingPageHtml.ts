@@ -25,7 +25,7 @@ export function renderLandingPage(): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="meta-title">ZenDev — Abonelik Tuzağına Son. 20+ Siber Güç Tek Yazılımda.</title>
   <meta name="description" content="Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD 7-Pass Dosya İmha Kalkanı, Canlı Donanım Teşhisi ve Şifreleme Kasası. Tek seferlik ödeme, sıfır abonelik.">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='25' fill='%2308090d'/%3E%3Ccircle cx='50' cy='50' r='36' stroke='%2306b6d4' stroke-width='8' fill='none'/%3E%3Cpath d='M32 50L45 64L68 36' stroke='%2338bdf8' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2307080f'/%3E%3Crect x='2' y='2' width='60' height='60' rx='14' fill='none' stroke='%2306b6d4' stroke-width='1.5' stroke-opacity='0.4'/%3E%3Cpath d='M14 16 L48 16 C50 16 51 17 50 19 L40 30 L48 44 C49 46 48 48 46 48 L14 48 C12 48 11 47 12 45 L22 34 L14 20 C13 18 14 16 16 16 Z' fill='url(%23g)' stroke='%2300f2fe' stroke-width='3' stroke-linejoin='round'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2300f2fe'/%3E%3Cstop offset='60%25' stop-color='%2306b6d4'/%3E%3Cstop offset='100%25' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='3.5' fill='%23ffffff'/%3E%3C/svg%3E">
   <link rel="canonical" href="https://zendev-production-4a5b.up.railway.app/">
   <meta property="og:image" content="https://zendev-production-4a5b.up.railway.app/og-banner.png">
   <meta property="og:image:width" content="1200">
@@ -47,7 +47,7 @@ export function renderLandingPage(): string {
         "name": "ZenDev",
         "operatingSystem": "Windows 10, Windows 11 (x64 & ARM64)",
         "applicationCategory": "DeveloperApplication, SecurityApplication",
-        "softwareVersion": "2.4.0",
+        "softwareVersion": "2.4.2",
         "description": "25+ siber güvenlik ve yazılım geliştirici aracı tek masaüstü uygulamasında. Sıfır bulut, sıfır telemetri.",
         "offers": {
           "@type": "Offer",
@@ -208,8 +208,20 @@ export function renderLandingPage(): string {
       
       <!-- Brand Logo -->
       <a href="#" class="flex items-center gap-2.5 group shrink-0">
-        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-nexus-cyan via-nexus-accent to-purple-600 p-0.5 shadow-[0_0_15px_rgba(6,182,212,0.4)] group-hover:scale-105 transition-transform">
-          <div class="w-full h-full bg-nexus-bg rounded-full flex items-center justify-center font-mono font-black text-nexus-cyan text-xs">Z</div>
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-nexus-cyan via-nexus-accent to-purple-600 p-0.5 shadow-[0_0_15px_rgba(6,182,212,0.4)] group-hover:scale-105 transition-transform overflow-hidden">
+          <div class="w-full h-full bg-[#07080f] rounded-[10px] flex items-center justify-center p-1">
+            <svg viewBox="0 0 64 64" class="w-full h-full" fill="none">
+              <path d="M14 16 L48 16 C50 16 51 17 50 19 L40 30 L48 44 C49 46 48 48 46 48 L14 48 C12 48 11 47 12 45 L22 34 L14 20 C13 18 14 16 16 16 Z" fill="url(#navZGrad)" stroke="#00f2fe" stroke-width="2" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="navZGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#00f2fe"/>
+                  <stop offset="60%" stop-color="#06b6d4"/>
+                  <stop offset="100%" stop-color="#8b5cf6"/>
+                </linearGradient>
+              </defs>
+              <circle cx="32" cy="32" r="3" fill="#ffffff"/>
+            </svg>
+          </div>
         </div>
         <span class="font-heading font-black text-sm tracking-wider text-white">ZEN<span class="text-nexus-cyan">DEV</span></span>
       </a>
@@ -261,7 +273,7 @@ export function renderLandingPage(): string {
       <div class="flex justify-center mb-8">
         <div onclick="openChangelogModal()" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full card-glass border border-nexus-cyan/30 text-xs font-mono text-nexus-cyan shadow-[0_0_15px_rgba(var(--c-cyan),0.2)] cursor-pointer hover:border-nexus-cyan transition-all">
           <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-ping"></span>
-          <span>v2.4.0 Yayında</span>
+          <span>v2.4.2 Yayında</span>
           <span class="text-nexus-border">|</span>
           <span class="text-white" data-i18n="hero.pill.tools">20+ Siber Güç</span>
           <span class="text-nexus-border">|</span>
@@ -296,10 +308,10 @@ export function renderLandingPage(): string {
 
       <!-- Hero Action Buttons -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
-        <button onclick="window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.0.exe', '_blank')" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border/80 hover:border-nexus-cyan/50 text-white font-heading font-bold text-base flex items-center justify-center gap-3 transition-all cursor-pointer shadow-lg group">
+        <button onclick="window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.2.exe', '_blank')" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border/80 hover:border-nexus-cyan/50 text-white font-heading font-bold text-base flex items-center justify-center gap-3 transition-all cursor-pointer shadow-lg group">
           <svg class="w-5 h-5 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
           <span data-i18n="hero.btnDownload">Windows için İndir</span>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-nexus-cyan/20 text-nexus-cyan border border-nexus-cyan/30 uppercase tracking-wider" data-i18n="hero.btnSoon">Çok Yakında</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider" data-i18n="hero.btnSoon">v2.4.2 Yayında</span>
         </button>
         <a href="#pricing" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-heading font-black text-base flex items-center justify-center gap-2 shadow-[0_0_35px_rgba(var(--c-cyan),0.5)] transition-all">
           <span data-i18n="hero.btnPro">Ömür Boyu Pro Lisans</span>
@@ -1832,9 +1844,9 @@ graph LR
               <li class="flex items-center gap-2.5 text-nexus-muted line-through"><span class="w-4 h-4 shrink-0 text-nexus-border">✕</span> Cyber Fortress Shredder & Vault</li>
             </ul>
           </div>
-          <button onclick="window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.0.exe', '_blank')" class="w-full py-3.5 rounded-xl border border-nexus-border/80 bg-nexus-surface/50 hover:border-nexus-cyan/40 text-nexus-muted hover:text-white text-xs font-mono font-bold text-center transition-all cursor-pointer flex items-center justify-center gap-2" data-i18n="plan1.btn">
+          <button onclick="window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.2.exe', '_blank')" class="w-full py-3.5 rounded-xl border border-nexus-border/80 bg-nexus-surface/50 hover:border-nexus-cyan/40 text-nexus-muted hover:text-white text-xs font-mono font-bold text-center transition-all cursor-pointer flex items-center justify-center gap-2" data-i18n="plan1.btn">
             <span>Ücretsiz İndir</span>
-            <span class="px-1.5 py-0.5 rounded text-[9px] bg-nexus-cyan/15 text-nexus-cyan border border-nexus-cyan/30 uppercase font-bold">Çok Yakında</span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase font-bold">v2.4.2</span>
           </button>
         </div>
 
@@ -2345,13 +2357,23 @@ graph LR
   <footer class="relative z-10 py-12 border-t border-nexus-border/60 bg-nexus-surface/30">
     <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-nexus-cyan/20 border border-nexus-cyan/40 flex items-center justify-center font-mono font-bold text-nexus-cyan text-sm">
-          N
+        <div class="w-8 h-8 rounded-xl bg-nexus-cyan/20 border border-nexus-cyan/40 flex items-center justify-center p-1 overflow-hidden">
+          <svg viewBox="0 0 64 64" class="w-full h-full" fill="none">
+            <path d="M14 16 L48 16 C50 16 51 17 50 19 L40 30 L48 44 C49 46 48 48 46 48 L14 48 C12 48 11 47 12 45 L22 34 L14 20 C13 18 14 16 16 16 Z" fill="url(#footZGrad)" stroke="#00f2fe" stroke-width="2" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="footZGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00f2fe"/>
+                <stop offset="60%" stop-color="#06b6d4"/>
+                <stop offset="100%" stop-color="#8b5cf6"/>
+              </linearGradient>
+            </defs>
+            <circle cx="32" cy="32" r="3" fill="#ffffff"/>
+          </svg>
         </div>
         <span class="text-xs font-mono text-nexus-muted">© 2026 ZenDev. Tüm Hakları Saklıdır.</span>
       </div>
       <div class="flex items-center gap-6 text-xs font-mono text-nexus-muted">
-        <a href="https://github.com/zerviatr/ZenDev" target="_blank" class="hover:text-white transition-colors">GitHub Repository</a>
+        <a href="https://github.com/zerviatr/NexusHub" target="_blank" class="hover:text-white transition-colors">GitHub Repository</a>
         <a href="#faq" class="hover:text-nexus-cyan transition-colors">Destek & SSS</a>
         <a href="#pricing" class="text-nexus-cyan font-bold hover:underline">Pro Lisans Al</a>
       </div>
@@ -2363,13 +2385,13 @@ graph LR
     <div class="flex items-center gap-3 truncate">
       <div class="w-3 h-3 rounded-full bg-nexus-cyan animate-pulse shrink-0"></div>
       <div class="truncate">
-        <div class="text-xs font-bold text-white truncate">ZenDev v2.4.0 Suite</div>
+        <div class="text-xs font-bold text-white truncate">ZenDev v2.4.2 Suite</div>
         <div class="text-[10px] font-mono text-nexus-muted truncate">Ömür Boyu Tek Ödeme • Sıfır Abonelik</div>
       </div>
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <a href="https://github.com/zerviatr/NexusHub/releases/latest" class="px-3.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-nexus-border text-nexus-cyan hover:text-white font-mono text-xs transition-colors cursor-pointer flex items-center gap-1.5 border border-nexus-cyan/30">
-        <span>İndir (v2.4.0)</span>
+        <span>İndir (v2.4.2)</span>
       </a>
       <a href="#pricing" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 text-nexus-bg font-heading font-black text-xs shadow-[0_0_15px_rgba(var(--c-cyan),0.4)] transition-all cursor-pointer">
         Lisans Al
@@ -2619,9 +2641,32 @@ graph LR
         <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-ping"></span>
         <span>SÜRÜM RADARI</span>
       </div>
-      <h3 class="font-heading font-black text-2xl text-white mb-4">ZenDev v2.4.0 Yenilikleri</h3>
+      <h3 class="font-heading font-black text-2xl text-white mb-4">ZenDev v2.4.2 Yenilikleri</h3>
 
       <div class="space-y-3.5 text-xs text-nexus-muted font-sans max-h-80 overflow-y-auto pr-2">
+        <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-cyan/40 shadow-sm">
+          <div class="text-white font-bold mb-1 flex items-center gap-2">
+            <span>✨ Yeni ZenDev Sibernetik İkon & Marka Kimliği</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-nexus-cyan/20 text-nexus-cyan font-bold">v2.4.2</span>
+          </div>
+          <div>Fütüristik "Z" monogramı, çoklu çözünürlük desteği (16px'ten 512px'e kristal netlik) ve yenilenen web sitesi estetiği.</div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
+          <div class="text-white font-bold mb-1 flex items-center gap-2">
+            <span>🧹 Tray Memory Sweep & V8 Compaction</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold">YENİ</span>
+          </div>
+          <div>Sistem tepsisine küçültüldüğünde otomatik RAM temizliği, V8 çöp toplama ve oturum önbelleği boşaltımı.</div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
+          <div class="text-white font-bold mb-1 flex items-center gap-2">
+            <span>⚡ Arka Plan Uyku Modu & Sıfır CPU Tüketimi</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-nexus-cyan/20 text-nexus-cyan font-bold">YENİ</span>
+          </div>
+          <div>Pencere gizlendiğinde FloatingOrb, TempMail ve Clipboard periyodik sorguları durdurularak batarya ve işlemci korunur.</div>
+        </div>
         <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
           <div class="text-white font-bold mb-1 flex items-center gap-2">
             <span>📝 Scratchpad Ultimate & Mermaid Flowchart</span>
@@ -3445,28 +3490,9 @@ graph LR
 
     // ─── Disabled Download Handler & Waitlist Modal Trigger ─────────────────
     let downloadNoticeTimer = null;
-    function window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.0.exe', '_blank') {
+    function handleDownloadClick() {
       playCyberSound('click');
-      const toast = document.getElementById('download-notice-toast');
-      const title = document.getElementById('download-notice-title');
-      const msg = document.getElementById('download-notice-msg');
-
-      if (currentLang === 'tr') {
-        if (title) title.innerText = 'İNDİRMELER GEÇİCİ OLARAK KAPALI';
-        if (msg) msg.innerText = 'ZenDev v2.4.0 yeni stabilite derlemesi hazırlanıyor. Erken erişim davetiyesi açılıyor...';
-      } else {
-        if (title) title.innerText = 'DOWNLOADS TEMPORARILY PAUSED';
-        if (msg) msg.innerText = 'ZenDev v2.4.0 new build is preparing. Opening early access invite...';
-      }
-
-      if (toast) {
-        toast.classList.remove('-translate-y-20', 'opacity-0', 'pointer-events-none');
-        toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
-        if (downloadNoticeTimer) clearTimeout(downloadNoticeTimer);
-        downloadNoticeTimer = setTimeout(dismissDownloadNotice, 3500);
-      }
-
-      setTimeout(openWaitlistModal, 450);
+      window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.2.exe', '_blank');
     }
 
     function dismissDownloadNotice() {
@@ -4691,8 +4717,8 @@ graph LR
     </nav>
   </div>
   <div class="flex flex-col gap-3">
-    <a href="https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.0.exe" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg font-heading font-black text-center shadow-lg">
-      Windows İçin İndir (v2.4.0)
+    <a href="https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.2.exe" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg font-heading font-black text-center shadow-lg">
+      Windows İçin İndir (v2.4.2)
     </a>
     <a href="#pricing" onclick="toggleMobileDrawer()" class="w-full py-3 rounded-xl border border-nexus-cyan/40 bg-nexus-surface text-white font-bold text-center">
       Pro Lisans Al (₺349)
@@ -4726,8 +4752,8 @@ graph LR
       <a href="#pricing" onclick="closeExitIntent()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg font-heading font-black text-sm shadow-lg hover:brightness-110 transition-all">
         İndirimi Kullan & Lisans Al →
       </a>
-      <a href="https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.0.exe" class="w-full py-2.5 rounded-xl text-xs text-nexus-muted hover:text-white transition-colors">
-        Veya doğrudan ücretsiz indir (v2.4.0)
+      <a href="https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.2.exe" class="w-full py-2.5 rounded-xl text-xs text-nexus-muted hover:text-white transition-colors">
+        Veya doğrudan ücretsiz indir (v2.4.2)
       </a>
     </div>
   </div>
