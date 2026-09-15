@@ -15,7 +15,17 @@ import { registerCyberFortressIPC } from './ipc/cyberFortressIPC'
 import { registerSystemOptimizerIPC } from './ipc/systemOptimizer'
 import { registerPortWatchdogIPC } from './ipc/portWatchdog'
 import { registerPdfToolkitIPC } from './ipc/pdfToolkit'
+import { registerPubSubIPC } from './ipc/pubsub'
+import { registerSafeStorageIPC } from './ipc/safeStorage'
+import { registerNetDispatcherHandlers } from './ipc/netDispatcher'
+import { registerActivityJournalIPC } from './ipc/activityJournal'
 import { setupGlobalShortcuts, registerSettingsIPC } from './shortcuts'
+import { performMemorySweep } from './services/memorySweep'
+
+// Expose V8 garbage collection switch to enable actual GC invocation during memory sweeps
+app.commandLine.appendSwitch('js-flags', '--expose-gc')
+
+export { performMemorySweep }
 
 let mainWindow: BrowserWindow | null = null
 
@@ -68,6 +78,33 @@ function createWindow(): void {
     }
   })
 
+  // Tray memory sweep & sleep when window is hidden or minimized
+  mainWindow.on('hide', () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('app:visibility-change', false)
+      performMemorySweep(mainWindow)
+    }
+  })
+
+  mainWindow.on('show', () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('app:visibility-change', true)
+    }
+  })
+
+  mainWindow.on('minimize', () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('app:visibility-change', false)
+      performMemorySweep(mainWindow)
+    }
+  })
+
+  mainWindow.on('restore', () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('app:visibility-change', true)
+    }
+  })
+
   mainWindow.once('ready-to-show', () => {
     const isStartupLaunch =
       app.getLoginItemSettings().wasOpenedAsHidden ||
@@ -97,8 +134,8 @@ function createWindow(): void {
   })
 
   // Prevent unexpected top-level navigation
-  mainWindow.webContents.on('will-navigate', (event, navUrl) => {
-    if (navUrl !== mainWindow.webContents.getURL()) {
+  mainWindow?.webContents.on('will-navigate', (event, navUrl) => {
+    if (navUrl !== mainWindow?.webContents.getURL()) {
       event.preventDefault()
     }
   })
@@ -147,6 +184,7 @@ ipcMain.handle('shell:openExternal', (_, url: string) => {
   return Promise.reject(new Error('Invalid URL protocol'))
 })
 ipcMain.handle('app:getVersion', () => app.getVersion())
+ipcMain.handle('app:memorySweep', () => performMemorySweep(mainWindow))
 
 // Register license IPC first — renderer gate depends on it being ready
 registerLicenseIPC()
@@ -165,6 +203,10 @@ registerCyberFortressIPC()
 registerSystemOptimizerIPC()
 registerPortWatchdogIPC()
 registerPdfToolkitIPC()
+registerPubSubIPC()
+registerSafeStorageIPC()
+registerNetDispatcherHandlers()
+registerActivityJournalIPC()
 
 // ===== App Lifecycle & Single Instance Lock =====
 const gotTheLock = app.requestSingleInstanceLock()
@@ -196,8 +238,8 @@ app.whenReady().then(() => {
           ...details.responseHeaders,
           'Content-Security-Policy': [
             app.isPackaged
-              ? "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;"
-              : "default-src 'self' 'unsafe-inline' 'unsafe-eval' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https: ws:;"
+              ? "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https: http://127.0.0.1:11434 http://localhost:11434;"
+              : "default-src 'self' 'unsafe-inline' 'unsafe-eval' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https: ws: http://127.0.0.1:11434 http://localhost:11434;"
           ]
         }
       })

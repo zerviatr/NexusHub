@@ -10,6 +10,7 @@
 import {
   sign as cryptoSign,
   generateKeyPairSync,
+  createPublicKey,
   type KeyLike,
 } from 'crypto'
 import fs from 'fs'
@@ -27,17 +28,18 @@ export interface EcdsaLicensePayload {
   extra?: Record<string, any>
 }
 
-// ─── Official Production/Dev Fallback NIST P-256 Keypair ──────────────────────
+// ─── Official Public Key ──────────────────────────────────────────────────────
 export const DEFAULT_ECDSA_PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoQ97L2t26dcKGAvpeiBi+MdFHU4h
 5kKdlcun3MBI2sMrbiT0EouZb6KkoNKQtRW3bfPfZNDXXJzxOyEPmQi7eA==
 -----END PUBLIC KEY-----`
 
-export const DEFAULT_ECDSA_PRIVATE_KEY = `-----BEGIN PRIVATE KEY-----
-MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgGGu5PUoEOzdodcLx
-s68RVnYRkgWVmWRitr8qZyt5hMChRANCAAShD3sva3bp1woYC+l6IGL4x0UdTiHm
-Qp2Vy6fcwEjawytuJPQSi5lvoqSg0pC1Fbdt899k0NdcnPE7IQ+ZCLt4
------END PRIVATE KEY-----`
+/**
+ * @deprecated Hardcoded private key has been eliminated for security.
+ * Production requires process.env.ZENDEV_LICENSE_PRIVATE_KEY.
+ * Development mode generates an ephemeral key pair dynamically if unset.
+ */
+export const DEFAULT_ECDSA_PRIVATE_KEY = undefined as unknown as string
 
 // ─── Base32 Codec ─────────────────────────────────────────────────────────────
 const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
@@ -67,12 +69,18 @@ export function base32Encode(buf: Buffer): string {
 let cachedPrivateKey: string | null = null
 let cachedPublicKey: string | null = null
 
+export function _resetKeyCache(): void {
+  cachedPrivateKey = null
+  cachedPublicKey = null
+}
+
 /**
  * Loads the ECDSA Key Pair with cascading fallbacks:
  * 1. Environment variables: ZENDEV_LICENSE_PRIVATE_KEY / ZENDEV_LICENSE_PUBLIC_KEY
  * 2. File paths: ZENDEV_PRIVATE_KEY_PATH / ZENDEV_PUBLIC_KEY_PATH
  * 3. Local directory: server/keys/ecdsa_private.pem & server/keys/ecdsa_public.pem
- * 4. Fallback: Automatically creates files in keys directory or uses official embedded keys.
+ * 4. Production guard: Throws error if private key is missing in production
+ * 5. Dev mode fallback: Generates ephemeral in-memory key pair dynamically with warning
  */
 export function loadOrGenerateKeyPair(keysDir?: string): {
   publicKey: string
@@ -85,9 +93,17 @@ export function loadOrGenerateKeyPair(keysDir?: string): {
   // 1. Check environment variables
   const envPrivate = process.env['ZENDEV_LICENSE_PRIVATE_KEY']
   const envPublic = process.env['ZENDEV_LICENSE_PUBLIC_KEY']
-  if (envPrivate && envPublic) {
+  if (envPrivate) {
     cachedPrivateKey = envPrivate.trim()
-    cachedPublicKey = envPublic.trim()
+    if (envPublic) {
+      cachedPublicKey = envPublic.trim()
+    } else {
+      try {
+        cachedPublicKey = createPublicKey(cachedPrivateKey).export({ type: 'spki', format: 'pem' }) as string
+      } catch {
+        cachedPublicKey = DEFAULT_ECDSA_PUBLIC_KEY
+      }
+    }
     return { privateKey: cachedPrivateKey, publicKey: cachedPublicKey }
   }
 
@@ -100,7 +116,7 @@ export function loadOrGenerateKeyPair(keysDir?: string): {
     return { privateKey: cachedPrivateKey, publicKey: cachedPublicKey }
   }
 
-  // 3. Check default keys directory (server/keys)
+  // 3. Check default keys directory (server/keys or root keys)
   const targetDir = keysDir || path.resolve(process.cwd(), 'keys')
   const defaultPrivFile = path.join(targetDir, 'ecdsa_private.pem')
   const defaultPubFile = path.join(targetDir, 'ecdsa_public.pem')
@@ -111,27 +127,32 @@ export function loadOrGenerateKeyPair(keysDir?: string): {
       cachedPublicKey = fs.readFileSync(defaultPubFile, 'utf8').trim()
       return { privateKey: cachedPrivateKey, publicKey: cachedPublicKey }
     } catch {
-      // Fall through to generation
+      // Fall through to validation/generation
     }
   }
 
-  // 4. Create directory and save official/new keypair
-  try {
-    if (!fs.existsSync(targetDir)) {
-      fs.mkdirSync(targetDir, { recursive: true })
-    }
-    // Write the official keys if none exist so admins can inspect them
-    fs.writeFileSync(defaultPrivFile, DEFAULT_ECDSA_PRIVATE_KEY, { encoding: 'utf8', mode: 0o600 })
-    fs.writeFileSync(defaultPubFile, DEFAULT_ECDSA_PUBLIC_KEY, { encoding: 'utf8', mode: 0o644 })
-    cachedPrivateKey = DEFAULT_ECDSA_PRIVATE_KEY
-    cachedPublicKey = DEFAULT_ECDSA_PUBLIC_KEY
-    return { privateKey: cachedPrivateKey, publicKey: cachedPublicKey }
-  } catch {
-    // Read-only filesystem fallback: use official in-memory defaults
-    cachedPrivateKey = DEFAULT_ECDSA_PRIVATE_KEY
-    cachedPublicKey = DEFAULT_ECDSA_PUBLIC_KEY
-    return { privateKey: cachedPrivateKey, publicKey: cachedPublicKey }
+  // 4. Production guard: enforce required private key
+  const isProduction = process.env['NODE_ENV'] === 'production'
+  if (isProduction) {
+    throw new Error(
+      '[SECURITY FATAL] ZENDEV_LICENSE_PRIVATE_KEY environment variable is required in production mode. Refusing to run without verified private key.'
+    )
   }
+
+  // 5. Development mode: generate ephemeral in-memory ECDSA key pair with explicit warning
+  console.warn(
+    '[SECURITY WARNING] ZENDEV_LICENSE_PRIVATE_KEY is not set. Generating ephemeral in-memory ECDSA key pair for development mode. Generated licenses will NOT be valid across restarts or against production public keys.'
+  )
+  const ephemeral = generateKeyPairSync('ec', {
+    namedCurve: 'prime256v1',
+    publicKeyEncoding: { type: 'spki', format: 'pem' },
+    privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
+  })
+
+  cachedPrivateKey = ephemeral.privateKey
+  cachedPublicKey = ephemeral.publicKey
+
+  return { privateKey: cachedPrivateKey, publicKey: cachedPublicKey }
 }
 
 /**

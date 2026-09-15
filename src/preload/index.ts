@@ -1,7 +1,36 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
+// Reference counting for pubsub subscriptions to avoid premature unsubscribing from backend
+const pubsubRefs = new Map<string, number>()
+
 // Typed API surface exposed to the renderer via contextBridge
 const nexusAPI = {
+  // PubSub Engine
+  pubsub: {
+    publish: (topic: string, data: any) => ipcRenderer.send('pubsub:publish', topic, data),
+    subscribe: (topic: string, cb: (data: any) => void) => {
+      const handler = (_: any, incomingTopic: string, data: any) => {
+        if (incomingTopic === topic) cb(data)
+      }
+      ipcRenderer.on('pubsub:message', handler)
+
+      const count = pubsubRefs.get(topic) || 0
+      if (count === 0) {
+        ipcRenderer.send('pubsub:subscribe', topic)
+      }
+      pubsubRefs.set(topic, count + 1)
+
+      return () => {
+        ipcRenderer.removeListener('pubsub:message', handler)
+        const newCount = (pubsubRefs.get(topic) || 1) - 1
+        pubsubRefs.set(topic, newCount)
+        if (newCount === 0) {
+          ipcRenderer.send('pubsub:unsubscribe', topic)
+        }
+      }
+    },
+  },
+
   // Tool IPC
   bypassLink: (url: string) => ipcRenderer.invoke('link:bypass', url),
   tempMail: {
@@ -155,6 +184,17 @@ const nexusAPI = {
     ipcRenderer.on('hud:toggle', handler)
     return () => ipcRenderer.removeListener('hud:toggle', handler)
   },
+  onVisibilityChange: (cb: (visible: boolean) => void) => {
+    const handler = (_: any, visible: boolean) => cb(visible)
+    ipcRenderer.on('app:visibility-change', handler)
+    return () => ipcRenderer.removeListener('app:visibility-change', handler)
+  },
+  onMemorySweep: (cb: () => void) => {
+    const handler = () => cb()
+    ipcRenderer.on('app:memory-sweep', handler)
+    return () => ipcRenderer.removeListener('app:memory-sweep', handler)
+  },
+  memorySweep: () => ipcRenderer.invoke('app:memorySweep'),
 
   // System Optimizer
   system: {
@@ -175,6 +215,40 @@ const nexusAPI = {
   port: {
     scan: () => ipcRenderer.invoke('port:scanActivePorts'),
     kill: (pid: number) => ipcRenderer.invoke('port:killProcess', pid),
+  },
+
+  // Safe Storage (OS Keychain / DPAPI Encryption)
+  safeStorage: {
+    isAvailable: () => ipcRenderer.invoke('safe-storage:is-available'),
+    encrypt: (plainText: string) => ipcRenderer.invoke('safe-storage:encrypt', plainText),
+    decrypt: (cipherText: string) => ipcRenderer.invoke('safe-storage:decrypt', cipherText),
+    store: (key: string, value: string) => ipcRenderer.invoke('safe-storage:store', key, value),
+    retrieve: (key: string) => ipcRenderer.invoke('safe-storage:retrieve', key),
+    delete: (key: string) => ipcRenderer.invoke('safe-storage:delete', key),
+  },
+
+  // Outbound Network Dispatcher & Diagnostics (API Studio)
+  net: {
+    dispatchRequest: (options: any) => ipcRenderer.invoke('net:dispatchRequest', options),
+    dnsLookup: (host: string) => ipcRenderer.invoke('net:dnsLookup', host),
+    tcpPing: (host: string, port: number, timeoutMs?: number) =>
+      ipcRenderer.invoke('net:tcpPing', host, port, timeoutMs),
+    sslCheck: (host: string, port?: number) => ipcRenderer.invoke('net:sslCheck', host, port),
+  },
+
+  // Tamper-Evident Activity Feed & Audit Journal
+  journal: {
+    record: (entry: any) => ipcRenderer.invoke('journal:record', entry),
+    query: (params?: any) => ipcRenderer.invoke('journal:query', params),
+    clear: () => ipcRenderer.invoke('journal:clear'),
+    verifyChain: () => ipcRenderer.invoke('journal:verifyChain'),
+    export: (format: 'json' | 'csv', filter?: any) => ipcRenderer.invoke('journal:export', format, filter),
+    getStats: () => ipcRenderer.invoke('journal:getStats'),
+    onActivity: (cb: (entry: any) => void) => {
+      const handler = (_: any, entry: any) => cb(entry)
+      ipcRenderer.on('journal:new-entry', handler)
+      return () => ipcRenderer.removeListener('journal:new-entry', handler)
+    },
   },
 }
 

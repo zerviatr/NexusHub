@@ -3,6 +3,8 @@ import * as os from 'os'
 import { exec } from 'child_process'
 import { promisify } from 'util'
 
+import { performMemorySweep } from '../services/memorySweep'
+
 const execAsync = promisify(exec)
 
 function getCpuLoad(): Promise<number[]> {
@@ -68,18 +70,7 @@ export function registerSentinelIPC(): void {
 
   ipcMain.handle('sentinel:optimizeMemory', async () => {
     try {
-      if (global.gc) {
-        global.gc()
-      }
-      // On Windows, empty working set for idle performance
-      if (process.platform === 'win32') {
-        try {
-          await execAsync(
-            `powershell -Command "[System.GC]::Collect(); [System.GC]::WaitForPendingFinalizers()"`
-          )
-        } catch {}
-      }
-
+      performMemorySweep()
       const freeAfter = os.freemem()
       return { success: true, freeMem: freeAfter }
     } catch (err: any) {

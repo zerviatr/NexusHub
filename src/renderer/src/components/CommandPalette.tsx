@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { detectSmartPaste } from '../lib/smartPasteDetector'
+import { cyberAudio } from '../lib/cyberAudio'
 import SmartPasteCard from './SmartPasteCard'
 import {
   Search,
@@ -21,6 +22,7 @@ import {
   Command,
   FileCheck,
   Activity,
+  ScrollText,
   Code2,
   ShieldAlert,
   Terminal,
@@ -52,6 +54,15 @@ const PALETTE_ITEMS: PaletteItem[] = [
     path: '/',
     icon: LayoutDashboard,
     keywords: ['home', 'overview', 'main', 'start']
+  },
+  {
+    id: 'activity-feed',
+    title: 'Activity Feed & Audit Journal',
+    subtitle: 'Tamper-evident cross-tool audit trail, live activity stream & SHA-256 chain verification',
+    category: 'Tools',
+    path: '/activity-feed',
+    icon: ScrollText,
+    keywords: ['activity', 'feed', 'audit', 'journal', 'log', 'history', 'tamper', 'sha256', 'hash', 'chain', 'verification', 'security']
   },
   {
     id: 'color-studio',

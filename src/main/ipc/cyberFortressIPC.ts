@@ -34,6 +34,9 @@ export function registerCyberFortressIPC(): void {
 
   // DoD 5220.22-M 7-Pass Shredder
   ipcMain.handle('fortress:shredFile', async (_, filePath: string) => {
+    if (!filePath || typeof filePath !== 'string') {
+      return { success: false, error: 'Geçersiz veya boş dosya yolu.' }
+    }
     if (isSystemProtectedPath(filePath)) {
       return { success: false, error: 'Sistem güvenliği nedeniyle korumalı Windows dizinleri imha edilemez.' }
     }
@@ -44,6 +47,9 @@ export function registerCyberFortressIPC(): void {
   ipcMain.handle(
     'fortress:encryptFile',
     async (_, { filePath, passphrase }: { filePath: string; passphrase: string }) => {
+      if (!filePath || typeof filePath !== 'string' || !passphrase || typeof passphrase !== 'string') {
+        return { success: false, error: 'Dosya yolu ve şifre gereklidir.' }
+      }
       return encryptFile(filePath, passphrase)
     }
   )
@@ -52,6 +58,9 @@ export function registerCyberFortressIPC(): void {
   ipcMain.handle(
     'fortress:decryptFile',
     async (_, { filePath, passphrase }: { filePath: string; passphrase: string }) => {
+      if (!filePath || typeof filePath !== 'string' || !passphrase || typeof passphrase !== 'string') {
+        return { success: false, error: 'Dosya yolu ve şifre gereklidir.' }
+      }
       return decryptFile(filePath, passphrase)
     }
   )

@@ -15,7 +15,7 @@
  */
 import { Router, Request, Response, NextFunction } from 'express'
 import { createHmac, timingSafeEqual, randomBytes, pbkdf2Sync } from 'crypto'
-import { getDb } from '../db'
+import { getDb, withTransaction } from '../db'
 import { generateKey } from '../keyGen'
 import { getAdminDashboardHtml } from '../adminDashboardHtml'
 import { sendLicenseEmail } from '../email'
@@ -27,15 +27,50 @@ import {
   notifyKeyRevoked
 } from '../services/notifier'
 
-export const adminRouter = Router()
-
-// ─── In-Memory Active Admin Sessions (24h TTL) ──────────────────────────────
-interface Session {
+export interface AdminSession {
   token: string
   createdAt: number
   expiresAt: number
 }
-const activeSessions = new Map<string, Session>()
+
+export interface AuthenticatedAdminRequest<B = any> extends Request {
+  adminSession?: AdminSession
+  adminToken?: string
+  body: B
+}
+
+export interface LicenseAdminRow {
+  key: string
+  tier: string
+  expires_at: number | bigint
+  order_id?: string | null
+  email?: string | null
+  max_activations?: number | bigint
+  is_revoked?: number | bigint
+  created_at?: number | bigint
+  sales_channel?: string | null
+  customer_note?: string | null
+  customer_name?: string | null
+  customer_country?: string | null
+  last_hwid_reset?: number | bigint | null
+  activation_count?: number | bigint
+  last_active?: number | bigint | null
+}
+
+export interface CouponRow {
+  code: string
+  days_to_add: number | bigint
+  is_used: number | bigint
+  used_by_key?: string | null
+  note?: string | null
+  created_at: number | bigint
+  used_at?: number | bigint | null
+}
+
+export const adminRouter = Router()
+
+// ─── In-Memory Active Admin Sessions (24h TTL) ──────────────────────────────
+const activeSessions = new Map<string, AdminSession>()
 
 // Cleanup expired sessions every hour
 setInterval(() => {
@@ -53,6 +88,16 @@ interface AttemptRecord {
   lockedUntil: number
 }
 const loginAttempts = new Map<string, AttemptRecord>()
+
+// Cleanup expired login attempts every 10 minutes
+setInterval(() => {
+  const now = Date.now()
+  for (const [ip, record] of loginAttempts.entries()) {
+    if (record.lockedUntil <= now) {
+      loginAttempts.delete(ip)
+    }
+  }
+}, 10 * 60 * 1000)
 
 function checkRateLimit(ip: string): { allowed: boolean; waitSec?: number } {
   const now = Date.now()
@@ -178,6 +223,10 @@ function requireAdminAuth(req: Request, res: Response, next: NextFunction): void
     return
   }
 
+  const authedReq = req as AuthenticatedAdminRequest
+  authedReq.adminSession = session
+  authedReq.adminToken = token
+
   next()
 }
 
@@ -286,8 +335,8 @@ adminRouter.post('/api/change-password', requireAdminAuth, async (req: Request, 
   }
 })
 
-// ─── GET /admin/api/keys ────────────────────────────────────────────────────
-adminRouter.get('/api/keys', requireAdminAuth, async (_req: Request, res: Response): Promise<void> => {
+// ─── GET /admin/api/keys & /admin/api/licenses ──────────────────────────────
+async function handleGetKeys(_req: Request, res: Response): Promise<void> {
   try {
     const db = getDb()
     const result = await db.execute(`
@@ -296,6 +345,9 @@ adminRouter.get('/api/keys', requireAdminAuth, async (_req: Request, res: Respon
         l.tier, 
         l.expires_at, 
         l.order_id, 
+        l.email,
+        l.customer_name,
+        l.customer_country,
         l.sales_channel,
         l.customer_note,
         l.max_activations, 
@@ -306,25 +358,32 @@ adminRouter.get('/api/keys', requireAdminAuth, async (_req: Request, res: Respon
       ORDER BY l.created_at DESC
     `)
 
-    const keys = result.rows.map((row: any) => ({
-      key: row.key,
-      tier: row.tier,
+    const keys = result.rows.map((row) => ({
+      key: String(row.key),
+      tier: String(row.tier),
       expires_at: Number(row.expires_at || 0),
-      order_id: row.order_id || '',
-      sales_channel: row.sales_channel || '',
-      customer_note: row.customer_note || '',
+      order_id: row.order_id ? String(row.order_id) : '',
+      email: row.email ? String(row.email) : '',
+      customer_name: row.customer_name ? String(row.customer_name) : '',
+      customer_country: row.customer_country ? String(row.customer_country) : '',
+      sales_channel: row.sales_channel ? String(row.sales_channel) : '',
+      customer_note: row.customer_note ? String(row.customer_note) : '',
       max_activations: Number(row.max_activations || 2),
       is_revoked: Number(row.is_revoked || 0),
       created_at: Number(row.created_at || 0),
       activation_count: Number(row.activation_count || 0),
     }))
 
-    res.json({ success: true, keys })
-  } catch (err: any) {
+    res.json({ success: true, keys, licenses: keys })
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err)
     console.error('[admin] get keys error:', err)
-    res.status(500).json({ success: false, error: err.message || 'Veritabanı hatası' })
+    res.status(500).json({ success: false, error: message || 'Veritabanı hatası' })
   }
-})
+}
+
+adminRouter.get('/api/keys', requireAdminAuth, handleGetKeys)
+adminRouter.get('/api/licenses', requireAdminAuth, handleGetKeys)
 
 // ─── POST /admin/api/keys/generate ──────────────────────────────────────────
 adminRouter.post('/api/keys/generate', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
@@ -336,7 +395,10 @@ adminRouter.post('/api/keys/generate', requireAdminAuth, async (req: Request, re
       maxActivations = 2,
       note = '',
       salesChannel = 'Direct',
-      customerNote = ''
+      customerNote = '',
+      customerName = '',
+      customerCountry = '',
+      email = ''
     } = req.body as {
       tier?: string
       durationDays?: number
@@ -344,6 +406,9 @@ adminRouter.post('/api/keys/generate', requireAdminAuth, async (req: Request, re
       note?: string
       salesChannel?: string
       customerNote?: string
+      customerName?: string
+      customerCountry?: string
+      email?: string
     }
 
     const secret = process.env['NEXUS_LICENSE_SECRET'] ?? 'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
@@ -357,14 +422,16 @@ adminRouter.post('/api/keys/generate', requireAdminAuth, async (req: Request, re
     const db = getDb()
 
     await db.execute({
-      sql: `INSERT INTO licenses (key, tier, expires_at, order_id, email, max_activations, is_revoked, created_at, sales_channel, customer_note)
-            VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?, ?)`,
+      sql: `INSERT INTO licenses (key, tier, expires_at, order_id, email, customer_name, customer_country, max_activations, is_revoked, created_at, sales_channel, customer_note)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)`,
       args: [
         key,
         tier,
         expiresAt,
         note || `MANUAL-${Date.now().toString().slice(-6)}`,
-        'anonymous@zendev.local',
+        email || 'anonymous@zendev.local',
+        customerName || null,
+        customerCountry || null,
         Number(maxActivations) || 2,
         Date.now(),
         salesChannel,
@@ -374,9 +441,10 @@ adminRouter.post('/api/keys/generate', requireAdminAuth, async (req: Request, re
 
     await recordAudit('KEY_GENERATED', `Key ${key} (${tier}, ${durationDays}d, ${salesChannel})`, ip)
     res.json({ success: true, key, tier, expiresAt, maxActivations })
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err)
     console.error('[admin] generate error:', err)
-    res.status(500).json({ success: false, error: err.message || 'Lisans üretilemedi' })
+    res.status(500).json({ success: false, error: message || 'Lisans üretilemedi' })
   }
 })
 
@@ -489,10 +557,12 @@ adminRouter.post('/api/keys/bulk-action', requireAdminAuth, async (req: Request,
       }
       await recordAudit('BULK_DEVICE_RESET', `${keys.length} keys device slots reset`, ip)
     } else if (action === 'delete') {
-      for (const k of keys) {
-        await db.execute({ sql: 'DELETE FROM activations WHERE license_key = ?', args: [k] })
-        await db.execute({ sql: 'DELETE FROM licenses WHERE key = ?', args: [k] })
-      }
+      await withTransaction(async (tx) => {
+        for (const k of keys) {
+          await tx.execute({ sql: 'DELETE FROM activations WHERE license_key = ?', args: [k] })
+          await tx.execute({ sql: 'DELETE FROM licenses WHERE key = ?', args: [k] })
+        }
+      })
       await recordAudit('BULK_DELETE', `${keys.length} keys deleted permanently`, ip)
     } else {
       res.status(400).json({ success: false, error: 'Geçersiz aksiyon' })
@@ -517,7 +587,7 @@ adminRouter.post('/api/keys/update-note', requireAdminAuth, async (req: Request,
 
     const db = getDb()
     await db.execute({
-      sql: 'UPDATE licenses SET order_id = ? WHERE key = ?',
+      sql: 'UPDATE licenses SET customer_note = ? WHERE key = ?',
       args: [note || '', key]
     })
 
@@ -531,24 +601,26 @@ adminRouter.post('/api/keys/update-note', requireAdminAuth, async (req: Request,
 adminRouter.post('/api/keys/revoke', requireAdminAuth, async (req: Request, res: Response): Promise<void> => {
   const ip = req.ip || req.socket.remoteAddress || 'unknown'
   try {
-    const { key, is_revoked } = req.body as { key?: string; is_revoked?: number }
+    const { key, is_revoked, reason } = req.body as { key?: string; is_revoked?: number; reason?: string }
     if (!key) {
       res.status(400).json({ success: false, error: 'Key parametresi zorunludur' })
       return
     }
 
+    const revokeValue = is_revoked === 0 ? 0 : 1
+
     const db = getDb()
     await db.execute({
       sql: 'UPDATE licenses SET is_revoked = ? WHERE key = ?',
-      args: [is_revoked === 1 ? 1 : 0, key]
+      args: [revokeValue, key]
     })
 
-    if (is_revoked === 1) {
-      notifyKeyRevoked({ key, reason: 'Admin panelinden manuel iptal edildi', ip })
+    if (revokeValue === 1) {
+      notifyKeyRevoked({ key, reason: reason || 'Admin panelinden manuel iptal edildi', ip })
     }
 
-    await recordAudit(is_revoked === 1 ? 'KEY_REVOKED' : 'KEY_REACTIVATED', `Key ${key}`, ip)
-    res.json({ success: true, key, is_revoked: is_revoked === 1 ? 1 : 0 })
+    await recordAudit(revokeValue === 1 ? 'KEY_REVOKED' : 'KEY_REACTIVATED', `Key ${key}`, ip)
+    res.json({ success: true, key, is_revoked: revokeValue })
   } catch (err: any) {
     console.error('[admin] revoke error:', err)
     res.status(500).json({ success: false, error: err.message || 'İptal işlemi başarısız' })
@@ -576,7 +648,7 @@ adminRouter.post('/api/keys/extend', requireAdminAuth, async (req: Request, res:
       return
     }
 
-    const row = result.rows[0] as any
+    const row = result.rows[0] as unknown as Pick<LicenseAdminRow, 'expires_at' | 'tier'>
     if (row.tier === 'lifetime' || Number(row.expires_at) === 0) {
       res.status(400).json({ success: false, error: 'Ömür boyu lisansların süresi uzatılamaz' })
       return
@@ -635,14 +707,15 @@ async function handleDeleteKey(req: Request, res: Response): Promise<void> {
       return
     }
 
-    const db = getDb()
-    await db.execute({
-      sql: 'DELETE FROM activations WHERE license_key = ?',
-      args: [key]
-    })
-    await db.execute({
-      sql: 'DELETE FROM licenses WHERE key = ?',
-      args: [key]
+    await withTransaction(async (tx) => {
+      await tx.execute({
+        sql: 'DELETE FROM activations WHERE license_key = ?',
+        args: [key]
+      })
+      await tx.execute({
+        sql: 'DELETE FROM licenses WHERE key = ?',
+        args: [key]
+      })
     })
 
     await recordAudit('KEY_DELETED', `Key ${key}`, ip)
@@ -931,7 +1004,7 @@ adminRouter.post('/api/coupons/redeem', requireAdminAuth, async (req: Request, r
       return
     }
 
-    const coupon = couponRes.rows[0] as any
+    const coupon = couponRes.rows[0] as unknown as CouponRow
     if (Number(coupon.is_used) === 1) {
       res.status(400).json({ success: false, error: 'Bu kupon daha önce kullanılmıştır' })
       return
@@ -948,7 +1021,7 @@ adminRouter.post('/api/coupons/redeem', requireAdminAuth, async (req: Request, r
       return
     }
 
-    const license = licenseRes.rows[0] as any
+    const license = licenseRes.rows[0] as unknown as LicenseAdminRow
     if (license.tier === 'lifetime') {
       res.status(400).json({ success: false, error: 'Bu lisans zaten Ömür Boyu (Lifetime) pakettir' })
       return
@@ -959,16 +1032,17 @@ adminRouter.post('/api/coupons/redeem', requireAdminAuth, async (req: Request, r
     const currentExp = Number(license.expires_at || 0)
     const newExpiresAt = Math.max(Date.now(), currentExp) + msToAdd
 
-    // 3. Update license
-    await db.execute({
-      sql: 'UPDATE licenses SET expires_at = ? WHERE key = ?',
-      args: [newExpiresAt, cleanKey]
-    })
+    // 3. Atomically update license and mark coupon as used in a transaction
+    await withTransaction(async (tx) => {
+      await tx.execute({
+        sql: 'UPDATE licenses SET expires_at = ? WHERE key = ?',
+        args: [newExpiresAt, cleanKey]
+      })
 
-    // 4. Mark coupon as used
-    await db.execute({
-      sql: 'UPDATE coupons SET is_used = 1, used_by_key = ?, used_at = ? WHERE code = ?',
-      args: [cleanKey, Date.now(), cleanCoupon]
+      await tx.execute({
+        sql: 'UPDATE coupons SET is_used = 1, used_by_key = ?, used_at = ? WHERE code = ?',
+        args: [cleanKey, Date.now(), cleanCoupon]
+      })
     })
 
     await recordAudit('COUPON_REDEEMED', `Coupon ${cleanCoupon} applied to key ${cleanKey} (+${daysToAdd}d)`, ip)
@@ -1008,7 +1082,7 @@ adminRouter.post('/api/keys/resend-email', requireAdminAuth, async (req: Request
       return
     }
 
-    const lic = row.rows[0] as any
+    const lic = row.rows[0] as unknown as Pick<LicenseAdminRow, 'key' | 'tier' | 'expires_at' | 'email' | 'order_id'>
     const recipient = (targetEmail || lic.email || '').trim()
 
     if (!recipient || !recipient.includes('@')) {

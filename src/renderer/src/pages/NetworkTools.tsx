@@ -35,6 +35,7 @@ import {
 } from '../lib/ipc'
 import { useT } from '../lib/i18n'
 import { useToast } from '../lib/ToastContext'
+import { logActivity } from '../lib/activityLogger'
 
 type Tab = 'myip' | 'ip' | 'dns' | 'port' | 'ping' | 'ssl'
 
@@ -102,8 +103,24 @@ export default function NetworkTools() {
     try {
       const res = await nexusAPI.network.myIp()
       setMyIpResult(res)
+      logActivity({
+        toolId: 'network',
+        action: 'my_ip',
+        category: 'network',
+        status: res?.success ? 'success' : 'failure',
+        details: `Public IP detection: ${res?.ip || 'Failed'}`,
+        metadata: { ip: res?.ip, country: res?.country, city: res?.city, error: res?.error },
+      })
     } catch (err: any) {
       setMyIpResult({ success: false, error: err.message || 'Detection failed' })
+      logActivity({
+        toolId: 'network',
+        action: 'my_ip',
+        category: 'network',
+        status: 'failure',
+        details: `Public IP detection failed: ${err.message}`,
+        metadata: { error: err.message },
+      })
     } finally {
       setIsDetectingIp(false)
     }
@@ -141,9 +158,25 @@ export default function NetworkTools() {
       if (activeTab === 'ip') {
         const r = await nexusAPI.network.ipLookup(host.trim())
         setIpResult(r)
+        logActivity({
+          toolId: 'network',
+          action: 'ip_lookup',
+          category: 'network',
+          status: r?.success ? 'success' : 'failure',
+          details: `IP lookup for ${host.trim()}${r?.ip ? ` (${r.ip})` : ''}`,
+          metadata: { host: host.trim(), ip: r?.ip, country: (r as any)?.country, city: (r as any)?.city, isp: (r as any)?.isp, error: r?.error },
+        })
       } else if (activeTab === 'dns') {
         const r = await nexusAPI.network.dnsQuery(host.trim(), dnsType)
         setDnsResult(r)
+        logActivity({
+          toolId: 'network',
+          action: 'dns_query',
+          category: 'network',
+          status: r?.success ? 'success' : 'failure',
+          details: `DNS query (${dnsType}) for ${host.trim()}: ${r?.records?.length ?? 0} records`,
+          metadata: { host: host.trim(), dnsType, recordsCount: r?.records?.length ?? 0, records: r?.records, error: r?.error },
+        })
       } else if (activeTab === 'port') {
         let ports = [...selectedPorts]
         if (customPorts.trim()) {
@@ -152,12 +185,47 @@ export default function NetworkTools() {
         }
         const r = await nexusAPI.network.portScan(host.trim(), ports)
         setPortResult(r)
+        const openPorts = r?.ports?.filter((p: any) => p.open)?.map((p: any) => p.port) || []
+        logActivity({
+          toolId: 'network',
+          action: 'port_scan',
+          category: 'network',
+          status: r?.success ? 'success' : 'failure',
+          details: `Port scan on ${host.trim()} (${ports.length} ports checked, ${openPorts.length} open)`,
+          metadata: { host: host.trim(), portsScanned: ports.length, openPortsCount: openPorts.length, openPorts, error: r?.error },
+        })
       } else if (activeTab === 'ping') {
         const r = await nexusAPI.network.ping(host.trim())
         setPingResult(r)
+        logActivity({
+          toolId: 'network',
+          action: 'ping',
+          category: 'network',
+          status: r?.success ? 'success' : 'failure',
+          details: `Ping to ${host.trim()} - ${r?.avgMs ? `${r.avgMs}ms avg` : (r?.success ? 'OK' : 'Failed')}`,
+          metadata: { host: host.trim(), avgMs: r?.avgMs, minMs: r?.minMs, maxMs: r?.maxMs, packetLoss: r?.packetLoss, error: r?.error },
+          durationMs: r?.avgMs,
+        })
       } else if (activeTab === 'ssl') {
         const r = await nexusAPI.network.sslInspect(host.trim())
         setSslResult(r)
+        const isValid = r?.success && !r?.isExpired
+        logActivity({
+          toolId: 'network',
+          action: 'ssl_inspect',
+          category: 'network',
+          status: isValid ? 'success' : 'failure',
+          details: `SSL cert inspection for ${host.trim()} - ${isValid ? 'VALID' : 'INVALID/EXPIRED'}`,
+          metadata: {
+            host: host.trim(),
+            sslValid: isValid,
+            isExpired: r?.isExpired,
+            daysRemaining: r?.daysRemaining,
+            issuer: r?.issuer,
+            subject: r?.subject,
+            error: r?.error,
+          },
+        })
       }
     } finally {
       setIsLoading(false)

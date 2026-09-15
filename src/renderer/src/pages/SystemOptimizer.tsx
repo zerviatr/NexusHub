@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Cpu, Trash2, Globe, Activity, CheckCircle2, AlertTriangle, RefreshCw, Sparkles } from 'lucide-react'
 import { cyberAudio } from '../lib/cyberAudio'
+import { useT } from '../lib/i18n'
+import { logActivity } from '../lib/activityLogger'
 
 interface TempScanResult {
   path: string
@@ -12,6 +14,7 @@ interface TempScanResult {
 }
 
 export default function SystemOptimizer() {
+  const { t } = useT()
   const [scanning, setScanning] = useState(false)
   const [cleaning, setCleaning] = useState(false)
   const [flushing, setFlushing] = useState(false)
@@ -41,11 +44,25 @@ export default function SystemOptimizer() {
     try {
       const res = await window.nexusAPI.system.cleanTemp()
       if (res.success) {
-        setCleanLog(`Başarıyla ${res.deletedCount} adet eski geçici dosya temizlendi. Kazanılan Alan: ${res.freedFormatted}`)
+        setCleanLog(t('systemOptimizer.cleanSuccess', { count: res.deletedCount, freed: res.freedFormatted }))
         await scanTempFiles()
       } else {
         setCleanLog(`Hata: ${res.error}`)
       }
+
+      logActivity({
+        toolId: 'system-optimizer',
+        action: 'clean_temp',
+        category: 'system',
+        status: res.success ? 'success' : 'failure',
+        details: `Cleaned temp files: ${res.deletedCount ?? 0} files deleted, ${res.freedFormatted ?? '0 B'} freed`,
+        metadata: {
+          deletedCount: res.deletedCount,
+          freedBytes: res.freedBytes,
+          freedFormatted: res.freedFormatted,
+          error: res.error,
+        },
+      })
     } finally {
       setCleaning(false)
     }
@@ -58,11 +75,22 @@ export default function SystemOptimizer() {
     try {
       const res = await window.nexusAPI.system.flushDns()
       if (res.success) {
-        setDnsLog(res.output || 'Windows DNS Çözümleyici Önbelleği Başarıyla Temizlendi.')
+        setDnsLog(res.output || t('systemOptimizer.dnsSuccess'))
         cyberAudio.copySuccess()
       } else {
         setDnsLog(`Hata: ${res.output}`)
       }
+
+      logActivity({
+        toolId: 'system-optimizer',
+        action: 'flush_dns',
+        category: 'system',
+        status: res.success ? 'success' : 'failure',
+        details: `Flushed OS DNS resolver cache`,
+        metadata: {
+          output: res.output,
+        },
+      })
     } finally {
       setFlushing(false)
     }
@@ -98,7 +126,7 @@ export default function SystemOptimizer() {
       if (window.nexusAPI?.system?.optimizeAll) {
         const res = await window.nexusAPI.system.optimizeAll()
         if (res.success) {
-          resultText = `⚡ Turbo Boost Tamamlandı! ${res.deletedFiles} geçici dosya temizlendi (${res.freedFormatted} alan açıldı) ve DNS önbelleği sıfırlandı.`
+          resultText = t('systemOptimizer.turboComplete', { deleted: res.deletedFiles, freed: res.freedFormatted })
         }
       } else {
         await cleanTempFiles()
@@ -109,6 +137,17 @@ export default function SystemOptimizer() {
       cyberAudio.copySuccess()
       await scanTempFiles()
       await benchmarkLatencies()
+
+      logActivity({
+        toolId: 'system-optimizer',
+        action: 'turbo_boost',
+        category: 'system',
+        status: 'success',
+        details: `Executed Turbo Boost system optimization`,
+        metadata: {
+          message: resultText,
+        },
+      })
     } finally {
       setTurboBoosting(false)
     }
@@ -126,10 +165,10 @@ export default function SystemOptimizer() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-nexus-text flex items-center gap-3">
             <Cpu className="w-7 h-7 text-nexus-accent" />
-            Windows System Optimizer & Cache Purger
+            {t('systemOptimizer.title')}
           </h1>
           <p className="text-sm text-nexus-muted mt-1">
-            Windows yerel önbellek, DNS çözümleyici ve çöp geçici dosyaları güvenle temizleyen performans santrali
+            {t('systemOptimizer.description')}
           </p>
         </div>
 
@@ -140,7 +179,7 @@ export default function SystemOptimizer() {
           className="px-5 py-3 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-mono font-black text-xs flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(6,182,212,0.4)] transition-all cursor-pointer shrink-0 disabled:opacity-50"
         >
           <Sparkles className={`w-4 h-4 ${turboBoosting ? 'animate-spin' : ''}`} />
-          <span>{turboBoosting ? 'SİBER HIZLANDIRILIYOR...' : '⚡ TEK TIKLA TURBO BOOST'}</span>
+          <span>{turboBoosting ? t('systemOptimizer.turboBoosting') : t('systemOptimizer.turboBoost')}</span>
         </button>
       </div>
 
@@ -174,7 +213,7 @@ export default function SystemOptimizer() {
                   <Trash2 className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-semibold text-nexus-text">Geçici Dosya & Çöp Temizleyici</h2>
+                  <h2 className="text-sm font-semibold text-nexus-text">{t('systemOptimizer.tempCleanerTitle')}</h2>
                   <span className="text-[11px] font-mono text-nexus-muted truncate block max-w-xs">
                     {tempStats?.path || '%TEMP%'}
                   </span>
@@ -183,7 +222,7 @@ export default function SystemOptimizer() {
               <button
                 onClick={scanTempFiles}
                 disabled={scanning}
-                className="p-2 rounded-lg bg-nexus-bg hover:bg-nexus-border/30 text-nexus-muted hover:text-nexus-text transition-colors"
+                className="p-2 rounded-lg bg-nexus-bg hover:bg-nexus-border/30 text-nexus-muted hover:text-nexus-text transition-colors cursor-pointer"
                 title="Yeniden Tara"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${scanning ? 'animate-spin text-nexus-accent' : ''}`} />
@@ -192,13 +231,13 @@ export default function SystemOptimizer() {
 
             <div className="bg-nexus-bg rounded-xl p-4 border border-nexus-border/30 my-4 space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-nexus-muted">Taranan Çöp Dosya Sayısı:</span>
+                <span className="text-nexus-muted">{t('systemOptimizer.scannedJunk')}</span>
                 <span className="font-mono font-semibold text-nexus-text">
-                  {tempStats ? `${tempStats.fileCount} dosya` : 'Hesaplanıyor...'}
+                  {tempStats ? `${tempStats.fileCount} dosya` : '...'}
                 </span>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-nexus-muted">Kazanılabilir Disk Alanı:</span>
+                <span className="text-nexus-muted">{t('systemOptimizer.recoverableSpace')}</span>
                 <span className="font-mono font-bold text-nexus-accent text-sm">
                   {tempStats?.sizeFormatted || '0.00 MB'}
                 </span>
@@ -216,10 +255,10 @@ export default function SystemOptimizer() {
           <button
             onClick={cleanTempFiles}
             disabled={cleaning || !tempStats || tempStats.fileCount === 0}
-            className="w-full flex items-center justify-center gap-2 py-3 bg-nexus-accent hover:bg-nexus-accent/90 disabled:opacity-50 text-white rounded-xl text-xs font-semibold shadow-lg shadow-nexus-accent/20 transition-all active:scale-95"
+            className="w-full flex items-center justify-center gap-2 py-3 bg-nexus-accent hover:bg-nexus-accent/90 disabled:opacity-50 text-white rounded-xl text-xs font-semibold shadow-lg shadow-nexus-accent/20 transition-all active:scale-95 cursor-pointer"
           >
             <Sparkles className="w-4 h-4" />
-            <span>{cleaning ? 'Çöpler Temizleniyor...' : 'Geçici Dosyaları Güvenle Temizle'}</span>
+            <span>{cleaning ? t('systemOptimizer.cleaning') : t('systemOptimizer.cleanBtn')}</span>
           </button>
         </div>
 
@@ -231,15 +270,15 @@ export default function SystemOptimizer() {
                 <Globe className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-sm font-semibold text-nexus-text">Windows DNS Önbellek Boşaltıcı</h2>
+                <h2 className="text-sm font-semibold text-nexus-text">{t('systemOptimizer.dnsPurgerTitle')}</h2>
                 <span className="text-[11px] font-mono text-nexus-muted">
-                  ipconfig /flushdns Yerel Komutu
+                  ipconfig /flushdns
                 </span>
               </div>
             </div>
 
             <p className="text-xs text-nexus-muted leading-relaxed my-4">
-              Bayatlamış DNS kayıtlarını, engellenen alan adlarını ve bozulmuş host yönlendirmelerini tek tıkla yenileyin. Bağlantı tıkanıklıklarını çözer.
+              {t('systemOptimizer.dnsDesc')}
             </p>
 
             {dnsLog && (
@@ -253,10 +292,10 @@ export default function SystemOptimizer() {
           <button
             onClick={flushDnsCache}
             disabled={flushing}
-            className="w-full flex items-center justify-center gap-2 py-3 bg-nexus-cyan hover:bg-nexus-cyan/90 disabled:opacity-50 text-black font-bold rounded-xl text-xs shadow-lg shadow-nexus-cyan/20 transition-all active:scale-95"
+            className="w-full flex items-center justify-center gap-2 py-3 bg-nexus-cyan hover:bg-nexus-cyan/90 disabled:opacity-50 text-black font-bold rounded-xl text-xs shadow-lg shadow-nexus-cyan/20 transition-all active:scale-95 cursor-pointer"
           >
             <Activity className="w-4 h-4" />
-            <span>{flushing ? 'DNS Temizleniyor...' : 'DNS Önbelleğini Sıfırla (Flush)'}</span>
+            <span>{flushing ? t('systemOptimizer.flushing') : t('systemOptimizer.flushBtn')}</span>
           </button>
         </div>
       </div>
@@ -266,15 +305,15 @@ export default function SystemOptimizer() {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Activity className="w-4 h-4 text-nexus-accent" />
-            <h3 className="text-sm font-semibold text-nexus-text">Yerel Ağ & Omurga Gecikme Benchmark'ı</h3>
+            <h3 className="text-sm font-semibold text-nexus-text">{t('systemOptimizer.latencyTitle')}</h3>
           </div>
           <button
             onClick={benchmarkLatencies}
             disabled={pinging}
-            className="flex items-center gap-1 text-xs font-mono text-nexus-accent hover:underline"
+            className="flex items-center gap-1 text-xs font-mono text-nexus-accent hover:underline cursor-pointer"
           >
             <RefreshCw className={`w-3 h-3 ${pinging ? 'animate-spin' : ''}`} />
-            <span>Testi Yenile</span>
+            <span>{t('systemOptimizer.refreshBenchmark')}</span>
           </button>
         </div>
 
@@ -286,7 +325,7 @@ export default function SystemOptimizer() {
             >
               <span className="text-xs text-nexus-muted">{r.host}</span>
               <span className={`text-xs font-bold ${r.latency && r.latency < 30 ? 'text-emerald-400' : 'text-amber-400'}`}>
-                {r.latency !== null ? `${r.latency} ms` : 'Zaman aşımı'}
+                {r.latency !== null ? `${r.latency} ms` : t('systemOptimizer.timeout')}
               </span>
             </div>
           ))}

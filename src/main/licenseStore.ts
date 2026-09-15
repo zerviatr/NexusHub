@@ -57,7 +57,7 @@ const TRIAL_DURATION_MS = 72 * 60 * 60 * 1000 // 72 hours Pro trial
 
 // ─── Key validation ───────────────────────────────────────────────────────────
 export function validateKey(rawKey: string): ValidationResult {
-  return validateLicenseKey(rawKey, SECRET)
+  return validateLicenseKey(rawKey, SECRET, getDeviceId())
 }
 
 // ─── safeStorage persistence ─────────────────────────────────────────────────

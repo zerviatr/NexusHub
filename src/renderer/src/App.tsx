@@ -1,6 +1,7 @@
-import { useState, useEffect, lazy, Suspense } from 'react'
+import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Upload } from 'lucide-react'
 import Sidebar from './components/Sidebar'
 import TitleBar from './components/TitleBar'
 import Dashboard from './pages/Dashboard'
@@ -16,6 +17,9 @@ import UpdateManager from './components/UpdateManager'
 import { cyberAudio } from './lib/cyberAudio'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useLicense } from './lib/LicenseContext'
+import { useToast } from './lib/ToastContext'
+import { useT } from './lib/i18n'
+import { resolveGatewayRoute, dispatchGatewayDrop, FileGatewayDropDetail } from './lib/fileGateway'
 
 // Code-split heavy tool pages for blazing fast app launch & minimal RAM footprint
 const TempMail = lazy(() => import('./pages/TempMail'))
@@ -35,10 +39,12 @@ const RegexStudio = lazy(() => import('./pages/RegexStudio'))
 const FakeDataStudio = lazy(() => import('./pages/FakeDataStudio'))
 const SystemOptimizer = lazy(() => import('./pages/SystemOptimizer'))
 const CurlRunner = lazy(() => import('./pages/CurlRunner'))
+const ApiStudio = lazy(() => import('./pages/ApiStudio'))
 const ColorStudio = lazy(() => import('./pages/ColorStudio'))
 const PortKiller = lazy(() => import('./pages/PortKiller'))
 const Scratchpad = lazy(() => import('./pages/Scratchpad'))
 const PdfStudio = lazy(() => import('./pages/PdfStudio'))
+const ActivityFeed = lazy(() => import('./pages/ActivityFeed'))
 const Account = lazy(() => import('./pages/Account'))
 
 const pageVariants = {
@@ -56,6 +62,8 @@ export default function App() {
   const location = useLocation()
   const navigate = useNavigate()
   const { status } = useLicense()
+  const { warning: showToastWarning } = useToast()
+  const { t } = useT()
 
   // Listen to desktop tray navigation and global shortcut events
   useEffect(() => {
@@ -70,6 +78,23 @@ export default function App() {
       unbindPalette?.()
     }
   }, [navigate])
+
+  // Listen to desktop tray visibility & memory sweep lifecycle events
+  useEffect(() => {
+    const unbindVis = window.nexusAPI?.onVisibilityChange?.((visible: boolean) => {
+      window.dispatchEvent(new CustomEvent('nexus:app-visibility', { detail: { visible } }))
+    })
+    const unbindSweep = window.nexusAPI?.onMemorySweep?.(() => {
+      window.dispatchEvent(new CustomEvent('nexus:app-memory-sweep'))
+      if (typeof (window as any).gc === 'function') {
+        try { (window as any).gc() } catch {}
+      }
+    })
+    return () => {
+      unbindVis?.()
+      unbindSweep?.()
+    }
+  }, [])
   
   // Initialize active Cyber Theme on app boot
   useEffect(() => {
@@ -105,6 +130,9 @@ export default function App() {
         } else if (k === 'f') {
           e.preventDefault()
           navigate('/fortress')
+        } else if (k === 'a') {
+          e.preventDefault()
+          navigate('/activity-feed')
         }
       }
 
@@ -124,6 +152,87 @@ export default function App() {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [navigate])
+
+  // Global window drag-and-drop file gateway
+  const [isDraggingFile, setIsDraggingFile] = useState(false)
+  const dragCounter = useRef(0)
+
+  useEffect(() => {
+    const handleDragEnter = (e: DragEvent) => {
+      e.preventDefault()
+      if (e.dataTransfer?.types?.includes('Files')) {
+        dragCounter.current += 1
+        setIsDraggingFile(true)
+      }
+    }
+
+    const handleDragOver = (e: DragEvent) => {
+      e.preventDefault()
+      if (e.dataTransfer) {
+        e.dataTransfer.dropEffect = 'copy'
+      }
+    }
+
+    const handleDragLeave = (e: DragEvent) => {
+      e.preventDefault()
+      dragCounter.current -= 1
+      if (dragCounter.current <= 0) {
+        dragCounter.current = 0
+        setIsDraggingFile(false)
+      }
+    }
+
+    const handleDrop = (e: DragEvent) => {
+      e.preventDefault()
+      dragCounter.current = 0
+      setIsDraggingFile(false)
+
+      const files = e.dataTransfer?.files
+      if (!files || files.length === 0) return
+
+      const file = files[0]
+      const targetRoute = resolveGatewayRoute(file.name)
+
+      if (!targetRoute) {
+        try {
+          cyberAudio.error()
+        } catch {}
+        showToastWarning(
+          t('gateway.unsupportedTitle') || 'Unsupported File Format',
+          t('gateway.unsupportedDesc') ||
+            'Unsupported file format. Please drop a valid document, image, database, vault, or data file.'
+        )
+        return
+      }
+
+      try {
+        cyberAudio.copySuccess()
+      } catch {}
+
+      const detail: FileGatewayDropDetail = {
+        file,
+        name: file.name,
+        path: (file as any).path || '',
+        size: file.size,
+        type: file.type,
+      }
+
+      dispatchGatewayDrop(detail)
+      navigate(targetRoute)
+    }
+
+    window.addEventListener('dragenter', handleDragEnter)
+    window.addEventListener('dragover', handleDragOver)
+    window.addEventListener('dragleave', handleDragLeave)
+    window.addEventListener('drop', handleDrop)
+
+    return () => {
+      window.removeEventListener('dragenter', handleDragEnter)
+      window.removeEventListener('dragover', handleDragOver)
+      window.removeEventListener('dragleave', handleDragLeave)
+      window.removeEventListener('drop', handleDrop)
+    }
+  }, [navigate, showToastWarning, t])
 
   const [hasAcceptedEula, setHasAcceptedEula] = useState<boolean>(
     localStorage.getItem('nexus_eula_accepted') === 'true'
@@ -258,14 +367,16 @@ export default function App() {
                     <Route path="/hash-studio" element={<HashStudio />} />
                     <Route path="/regex-studio" element={<RegexStudio />} />
                     <Route path="/fake-data" element={<FakeDataStudio />} />
-                    <Route path="/curl-runner" element={<CurlRunner />} />
+                    <Route path="/api-studio" element={<ApiStudio />} />
+                    <Route path="/curl-runner" element={<Navigate to="/api-studio" replace />} />
                     <Route path="/system-optimizer" element={<SystemOptimizer />} />
                     <Route path="/color-studio" element={<ColorStudio />} />
                     <Route path="/port-killer" element={<PortKiller />} />
                     <Route path="/scratchpad" element={<Scratchpad />} />
                     <Route path="/pdf-studio" element={<PdfStudio />} />
+                    <Route path="/activity-feed" element={<ActivityFeed />} />
                     <Route path="/sentinel" element={<ResourceSentinel />} />
-                    <Route path="/dev-sandbox" element={<DevSandbox />} />
+                    <Route path="/dev-sandbox" element={<Navigate to="/api-studio" replace />} />
                     <Route
                       path="/fortress"
                       element={isPro ? <CyberFortress /> : <ProLockGate toolName="Cyber Fortress" toolDesc="DoD 5220.22-M 7-pass file shredder and military-grade AES-256-GCM vault encryption." />}
@@ -281,6 +392,57 @@ export default function App() {
         </main>
       </div>
       <FloatingOrb />
+
+      {/* Global Drag-and-Drop File Gateway Overlay */}
+      <AnimatePresence>
+        {isDraggingFile && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] pointer-events-none flex items-center justify-center bg-nexus-bg/85 backdrop-blur-md border-4 border-dashed border-nexus-accent shadow-[inset_0_0_80px_rgba(var(--nexus-accent-rgb,139,92,246),0.25)]"
+          >
+            <div className="flex flex-col items-center gap-4 p-8 rounded-3xl bg-nexus-surface/90 border border-nexus-accent/40 shadow-2xl max-w-lg text-center">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-nexus-accent/30 to-nexus-cyan/20 border border-nexus-accent/50 flex items-center justify-center text-nexus-cyan shadow-lg shadow-nexus-accent/20">
+                <Upload className="w-8 h-8 animate-bounce" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-white gradient-text">ZenDev File Gateway</h2>
+                <p className="text-xs text-nexus-muted mt-1 max-w-sm">
+                  Release to instantly route this file to the matching workstation studio
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-[11px] font-mono text-nexus-muted w-full pt-2">
+                <div className="p-2 rounded-xl bg-nexus-card border border-white/5 text-left">
+                  <span className="text-nexus-cyan font-bold block">.pdf</span>
+                  <span>PDF Studio & Merging</span>
+                </div>
+                <div className="p-2 rounded-xl bg-nexus-card border border-white/5 text-left">
+                  <span className="text-amber-400 font-bold block">.sqlite / .db / .sql</span>
+                  <span>SQLite & Table Viewer</span>
+                </div>
+                <div className="p-2 rounded-xl bg-nexus-card border border-white/5 text-left">
+                  <span className="text-emerald-400 font-bold block">.png / .jpg / .webp</span>
+                  <span>Image Toolkit & Convert</span>
+                </div>
+                <div className="p-2 rounded-xl bg-nexus-card border border-white/5 text-left">
+                  <span className="text-rose-400 font-bold block">.nexusvault</span>
+                  <span>Cyber Fortress Vault</span>
+                </div>
+                <div className="p-2 rounded-xl bg-nexus-card border border-white/5 text-left">
+                  <span className="text-indigo-400 font-bold block">.json / .jwt</span>
+                  <span>JSON & JWT Studio</span>
+                </div>
+                <div className="p-2 rounded-xl bg-nexus-card border border-white/5 text-left">
+                  <span className="text-purple-400 font-bold block">.md / .txt / .sha256</span>
+                  <span>Scratchpad & Hash Studio</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
+

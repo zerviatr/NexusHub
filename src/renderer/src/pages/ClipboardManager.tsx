@@ -136,11 +136,42 @@ export default function ClipboardManager() {
     }
   }
 
+  const [isVisible, setIsVisible] = useState(() => (typeof document !== 'undefined' ? document.visibilityState !== 'hidden' : true))
+
+  // Listen to desktop tray sleep/wake lifecycle events
   useEffect(() => {
+    const handleVisChange = (e: any) => {
+      const visible = e.detail?.visible !== undefined ? Boolean(e.detail.visible) : (document.visibilityState !== 'hidden')
+      setIsVisible(visible)
+      if (visible) refresh()
+    }
+    const handleDomVis = () => {
+      const visible = document.visibilityState !== 'hidden'
+      setIsVisible(visible)
+      if (visible) refresh()
+    }
+
+    window.addEventListener('nexus:app-visibility' as any, handleVisChange)
+    document.addEventListener('visibilitychange', handleDomVis)
+
+    const unbindIpc = nexusAPI.onVisibilityChange?.((visible: boolean) => {
+      setIsVisible(visible)
+      if (visible) refresh()
+    })
+
+    return () => {
+      window.removeEventListener('nexus:app-visibility' as any, handleVisChange)
+      document.removeEventListener('visibilitychange', handleDomVis)
+      unbindIpc?.()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isVisible) return
     refresh()
     const interval = setInterval(refresh, 2000)
     return () => clearInterval(interval)
-  }, [])
+  }, [isVisible])
 
   const handleCopy = async (entry: ClipboardEntry) => {
     await nexusAPI.clipboard.write(entry.text)
@@ -153,7 +184,11 @@ export default function ClipboardManager() {
     e.stopPropagation()
     await nexusAPI.clipboard.delete(id)
     setHistory((prev) => prev.filter((e) => e.id !== id))
-    setPinnedIds((prev) => prev.filter((i) => i !== id))
+    setPinnedIds((prev) => {
+      const next = prev.filter((i) => i !== id)
+      localStorage.setItem('nexus_pinned_clipboard', JSON.stringify(next))
+      return next
+    })
   }
 
   const handleClearAll = async () => {

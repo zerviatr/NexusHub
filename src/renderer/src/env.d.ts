@@ -22,7 +22,7 @@ interface NexusAPI {
       finalUrl?: string
       cleanUrl?: string
       trackersRemoved?: number
-      removedList?: { name: string; category: string; description: string }[]
+      removedList?: { name: string; category: 'analytics' | 'social' | 'ads' | 'campaign' | 'other'; description: string }[]
       error?: string
     }>
     cleanBatch: (urls: string[]) => Promise<any[]>
@@ -65,6 +65,7 @@ interface NexusAPI {
   }
   pdf: {
     selectFiles: (allowMultiple?: boolean) => Promise<Array<{ path: string; name: string; size: number; pageCount?: number; title?: string; author?: string }>>
+    inspectFiles: (filePaths: string[]) => Promise<Array<{ path: string; name: string; size: number; pageCount?: number; title?: string; author?: string; error?: string }>>
     merge: (payload: { filePaths: string[]; outputFileName?: string }) => Promise<{ success: boolean; outputPath?: string; totalCount?: number; size?: number; canceled?: boolean; error?: string }>
     split: (payload: { filePath: string; pageRange: string }) => Promise<{ success: boolean; outputPath?: string; pageCount?: number; size?: number; canceled?: boolean; error?: string }>
   }
@@ -96,14 +97,17 @@ interface NexusAPI {
   onNavigate?: (cb: (path: string) => void) => () => void
   onPaletteToggle?: (cb: () => void) => () => void
   onHudToggle?: (cb: () => void) => () => void
-  system?: {
+  onVisibilityChange?: (cb: (visible: boolean) => void) => () => void
+  onMemorySweep?: (cb: () => void) => () => void
+  memorySweep?: () => Promise<{ success: boolean; freedMem?: number }>
+  system: {
     flushDns: () => Promise<{ success: boolean; output?: string }>
     scanTemp: () => Promise<{ path: string; fileCount: number; totalBytes: number; sizeFormatted: string; error?: string }>
     cleanTemp: () => Promise<{ success: boolean; deletedCount: number; freedBytes: number; freedFormatted: string; error?: string }>
     pingHost: (host: string) => Promise<{ success: boolean; latency: number | null; host: string }>
     optimizeAll?: () => Promise<{ success: boolean; dnsFlushed: boolean; deletedFiles: number; freedFormatted: string; freedBytes: number; error?: string }>
   }
-  settings?: {
+  settings: {
     getAutoLaunch: () => Promise<boolean>
     setAutoLaunch: (enable: boolean) => Promise<boolean>
   }
@@ -121,6 +125,167 @@ interface NexusAPI {
       error?: string
     }>
     kill: (pid: number) => Promise<{ success: boolean; message?: string; error?: string }>
+  }
+  safeStorage?: {
+    isAvailable: () => Promise<boolean>
+    encrypt: (plainText: string) => Promise<string>
+    decrypt: (cipherText: string) => Promise<string>
+    store: (key: string, value: string) => Promise<boolean>
+    retrieve: (key: string) => Promise<string | null>
+    delete: (key: string) => Promise<boolean>
+  }
+  net?: {
+    dispatchRequest: (options: {
+      id?: string
+      url: string
+      method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS'
+      headers?: Record<string, string>
+      body?: string
+      timeoutMs?: number
+      followRedirects?: boolean
+    }) => Promise<{
+      status: number
+      statusText: string
+      headers: Record<string, string>
+      data: string
+      timeMs: number
+      sizeBytes: number
+      error?: string
+    }>
+    dnsLookup: (host: string) => Promise<{
+      host: string
+      records: Array<{ type: string; address?: string; value?: string; ttl?: number; priority?: number }>
+      timeMs: number
+      error?: string
+    }>
+    tcpPing: (host: string, port: number, timeoutMs?: number) => Promise<{
+      host: string
+      port: number
+      open: boolean
+      timeMs: number
+      error?: string
+    }>
+    sslCheck: (host: string, port?: number) => Promise<{
+      host: string
+      port: number
+      valid: boolean
+      issuer: Record<string, string>
+      subject: Record<string, string>
+      validFrom: string
+      validTo: string
+      daysRemaining: number
+      fingerprint: string
+      cipher: string
+      error?: string
+    }>
+  }
+  journal?: {
+    record: (entry: {
+      id?: string
+      sequence?: number
+      timestamp?: number
+      toolId: string
+      action: string
+      category: 'security' | 'network' | 'system' | 'file' | 'crypto' | 'api' | 'general'
+      status?: 'success' | 'failure' | 'warning' | 'info'
+      details: string
+      metadata?: Record<string, any>
+      durationMs?: number
+    }) => Promise<{
+      success: boolean
+      entry?: {
+        id: string
+        sequence: number
+        timestamp: number
+        toolId: string
+        action: string
+        category: 'security' | 'network' | 'system' | 'file' | 'crypto' | 'api' | 'general'
+        status: 'success' | 'failure' | 'warning' | 'info'
+        details: string
+        metadata?: Record<string, any>
+        durationMs?: number
+        prevHash: string
+        hash: string
+      }
+      error?: string
+    }>
+    query: (params?: {
+      toolId?: string
+      category?: 'security' | 'network' | 'system' | 'file' | 'crypto' | 'api' | 'general'
+      status?: 'success' | 'failure' | 'warning' | 'info'
+      search?: string
+      startDate?: number
+      endDate?: number
+      limit?: number
+      offset?: number
+      order?: 'asc' | 'desc'
+    }) => Promise<{
+      entries: Array<{
+        id: string
+        sequence: number
+        timestamp: number
+        toolId: string
+        action: string
+        category: 'security' | 'network' | 'system' | 'file' | 'crypto' | 'api' | 'general'
+        status: 'success' | 'failure' | 'warning' | 'info'
+        details: string
+        metadata?: Record<string, any>
+        durationMs?: number
+        prevHash: string
+        hash: string
+      }>
+      total: number
+      hasMore: boolean
+    }>
+    clear: () => Promise<{ success: boolean; clearedCount: number; error?: string }>
+    verifyChain: () => Promise<{
+      valid: boolean
+      totalVerified: number
+      brokenIndex?: number
+      brokenEntryId?: string
+      brokenReason?: string
+      error?: string
+      expectedHash?: string
+      actualHash?: string
+      timestamp: number
+    }>
+    export: (
+      format: 'json' | 'csv',
+      filter?: any
+    ) => Promise<{
+      success: boolean
+      content: string
+      filename: string
+      mimeType: string
+      error?: string
+    }>
+    getStats: () => Promise<{
+      totalEntries: number
+      entriesByStatus: Record<'success' | 'failure' | 'warning' | 'info', number>
+      entriesByCategory: Record<
+        'security' | 'network' | 'system' | 'file' | 'crypto' | 'api' | 'general',
+        number
+      >
+      oldestTimestamp?: number
+      newestTimestamp?: number
+      chainValid: boolean
+    }>
+    onActivity: (
+      cb: (entry: {
+        id: string
+        sequence: number
+        timestamp: number
+        toolId: string
+        action: string
+        category: 'security' | 'network' | 'system' | 'file' | 'crypto' | 'api' | 'general'
+        status: 'success' | 'failure' | 'warning' | 'info'
+        details: string
+        metadata?: Record<string, any>
+        durationMs?: number
+        prevHash: string
+        hash: string
+      }) => void
+    ) => () => void
   }
 }
 

@@ -18,6 +18,8 @@ import BaseToolTemplate from '../components/BaseToolTemplate'
 import { nexusAPI } from '../lib/ipc'
 import { cyberAudio } from '../lib/cyberAudio'
 import { useToast } from '../lib/ToastContext'
+import { useT } from '../lib/i18n'
+import { logActivity } from '../lib/activityLogger'
 
 interface PortItem {
   protocol: string
@@ -29,6 +31,7 @@ interface PortItem {
 }
 
 export default function PortKiller() {
+  const { t } = useT()
   const { success: showToastSuccess, error: showToastError } = useToast()
 
   const [ports, setPorts] = useState<PortItem[]>([])
@@ -50,8 +53,28 @@ export default function PortKiller() {
       } else {
         showToastError('Tarama Hatası', res.error || 'Portlar taranamadı.')
       }
+
+      logActivity({
+        toolId: 'port-killer',
+        action: 'scan_ports',
+        category: 'system',
+        status: res.success ? 'success' : 'failure',
+        details: `Scanned active listening ports: ${res.ports?.length ?? 0} found`,
+        metadata: {
+          portCount: res.ports?.length ?? 0,
+          error: res.error,
+        },
+      })
     } catch (err: any) {
       showToastError('Hata', err.message || 'Bilinmeyen hata.')
+      logActivity({
+        toolId: 'port-killer',
+        action: 'scan_ports',
+        category: 'system',
+        status: 'failure',
+        details: `Port scan failed: ${err.message}`,
+        metadata: { error: err.message },
+      })
     } finally {
       setLoading(false)
     }
@@ -68,14 +91,44 @@ export default function PortKiller() {
       cyberAudio.shred()
       const res = await nexusAPI.port.kill(targetProcess.pid)
       if (res.success) {
-        showToastSuccess('İşlem Sonlandırıldı', `${targetProcess.processName} (PID ${targetProcess.pid}) port ${targetProcess.port} serbest bırakıldı.`)
+        showToastSuccess(
+          t('portKiller.toastKilled'),
+          t('portKiller.toastKilledDesc', { name: targetProcess.processName, pid: targetProcess.pid, port: targetProcess.port })
+        )
         setTargetProcess(null)
         await scanPorts()
       } else {
         showToastError('Sonlandırma Hatası', res.error || 'İşlem sonlandırılamadı.')
       }
+
+      logActivity({
+        toolId: 'port-killer',
+        action: 'kill_process',
+        category: 'system',
+        status: res.success ? 'success' : 'failure',
+        details: `Terminated process ${targetProcess.processName} (PID ${targetProcess.pid}) on port ${targetProcess.port}`,
+        metadata: {
+          pid: targetProcess.pid,
+          processName: targetProcess.processName,
+          port: targetProcess.port,
+          error: res.error,
+        },
+      })
     } catch (err: any) {
       showToastError('Hata', err.message || 'Yetki hatası.')
+      logActivity({
+        toolId: 'port-killer',
+        action: 'kill_process',
+        category: 'system',
+        status: 'failure',
+        details: `Failed to terminate process ${targetProcess.processName} (PID ${targetProcess.pid}): ${err.message}`,
+        metadata: {
+          pid: targetProcess.pid,
+          processName: targetProcess.processName,
+          port: targetProcess.port,
+          error: err.message,
+        },
+      })
     } finally {
       setIsKilling(false)
     }
@@ -102,8 +155,8 @@ export default function PortKiller() {
   return (
     <BaseToolTemplate
       icon={Activity}
-      title="Port & Process Watchdog"
-      description="Windows üzerinde dinlenen aktif TCP portlarını tarayın, hangi process'in hangi portu kilitlediğini görün ve tek tıkla sonlandırın."
+      title={t('portKiller.title')}
+      description={t('portKiller.description')}
       gradient="from-rose-600 to-amber-600"
     >
       <div className="space-y-6">
@@ -116,7 +169,7 @@ export default function PortKiller() {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Port (örn: 3000) veya process adı..."
+                placeholder={t('portKiller.searchPlaceholder')}
                 className="w-full pl-9 pr-4 py-2 rounded-xl bg-nexus-surface border border-nexus-border text-xs text-white placeholder-nexus-muted focus:outline-none focus:border-nexus-accent"
               />
             </div>
@@ -125,7 +178,7 @@ export default function PortKiller() {
               type="button"
               onClick={scanPorts}
               disabled={loading}
-              className="p-2.5 rounded-xl bg-nexus-surface hover:bg-white/[0.06] border border-nexus-border text-nexus-muted hover:text-white transition-all active:scale-95 disabled:opacity-50"
+              className="p-2.5 rounded-xl bg-nexus-surface hover:bg-white/[0.06] border border-nexus-border text-nexus-muted hover:text-white transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
               title="Yenile"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-nexus-cyan' : ''}`} />
@@ -135,9 +188,9 @@ export default function PortKiller() {
           {/* Filter presets */}
           <div className="flex items-center gap-2 self-start sm:self-auto">
             {[
-              { id: 'all', label: `Tümü (${ports.length})` },
-              { id: 'dev', label: 'Geliştirici Portları' },
-              { id: 'db', label: 'Veritabanı Portları' },
+              { id: 'all', label: t('portKiller.allPorts', { count: ports.length }) },
+              { id: 'dev', label: t('portKiller.devPorts') },
+              { id: 'db', label: t('portKiller.dbPorts') },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -145,7 +198,7 @@ export default function PortKiller() {
                   cyberAudio.click()
                   setActivePreset(tab.id as any)
                 }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                   activePreset === tab.id
                     ? 'bg-nexus-accent text-white shadow-md shadow-nexus-accent/20 font-semibold'
                     : 'text-nexus-muted hover:text-white bg-white/[0.03]'
@@ -163,19 +216,19 @@ export default function PortKiller() {
             <table className="w-full text-left text-xs">
               <thead className="bg-white/[0.02] border-b border-nexus-border/40 text-nexus-muted font-mono uppercase tracking-wider text-[11px]">
                 <tr>
-                  <th className="py-3 px-4">Port</th>
-                  <th className="py-3 px-4">Process Adı</th>
-                  <th className="py-3 px-4">PID</th>
-                  <th className="py-3 px-4">Durum</th>
-                  <th className="py-3 px-4">Yerel Adres</th>
-                  <th className="py-3 px-4 text-right">Eylem</th>
+                  <th className="py-3 px-4">{t('portKiller.colPort')}</th>
+                  <th className="py-3 px-4">{t('portKiller.colProcess')}</th>
+                  <th className="py-3 px-4">{t('portKiller.colPid')}</th>
+                  <th className="py-3 px-4">{t('portKiller.colState')}</th>
+                  <th className="py-3 px-4">{t('portKiller.colAddress')}</th>
+                  <th className="py-3 px-4 text-right">{t('portKiller.colAction')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-nexus-border/20 font-mono">
                 {filteredPorts.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="py-12 text-center text-nexus-muted">
-                      {loading ? 'Portlar taranıyor...' : 'Eşleşen aktif dinleme portu bulunamadı.'}
+                      {loading ? t('portKiller.scanning') : t('portKiller.noPorts')}
                     </td>
                   </tr>
                 ) : (
@@ -206,11 +259,11 @@ export default function PortKiller() {
                         <button
                           type="button"
                           onClick={() => setTargetProcess(item)}
-                          className="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 hover:text-rose-200 text-xs font-semibold flex items-center gap-1.5 ml-auto transition-all active:scale-95"
+                          className="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 hover:text-rose-200 text-xs font-semibold flex items-center gap-1.5 ml-auto transition-all active:scale-95 cursor-pointer"
                           title="Process'i Sonlandır"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
-                          <span>Kill</span>
+                          <span>{t('portKiller.killBtn')}</span>
                         </button>
                       </td>
                     </tr>
@@ -237,28 +290,28 @@ export default function PortKiller() {
                   <ShieldAlert className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Process'i Sonlandırma Onayı</h3>
-                  <p className="text-xs text-nexus-muted">Port kilidini kaldırmak üzeresiniz.</p>
+                  <h3 className="text-sm font-bold text-white">{t('portKiller.modalTitle')}</h3>
+                  <p className="text-xs text-nexus-muted">{t('portKiller.modalSubtitle')}</p>
                 </div>
               </div>
 
               <div className="p-3.5 rounded-xl bg-nexus-surface/80 border border-nexus-border/50 text-xs space-y-1.5 font-mono">
                 <div className="flex justify-between">
-                  <span className="text-nexus-muted">Hedef Port:</span>
+                  <span className="text-nexus-muted">{t('portKiller.targetPort')}</span>
                   <span className="text-nexus-cyan font-bold">:{targetProcess.port}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-nexus-muted">Process Adı:</span>
+                  <span className="text-nexus-muted">{t('portKiller.processName')}</span>
                   <span className="text-white font-bold">{targetProcess.processName}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-nexus-muted">PID:</span>
+                  <span className="text-nexus-muted">{t('portKiller.pid')}</span>
                   <span className="text-white">{targetProcess.pid}</span>
                 </div>
               </div>
 
               <p className="text-xs text-nexus-muted leading-relaxed">
-                Bu işlemi sonlandırmak, ilgili yazılımı anında kapatacaktır. Kaydedilmemiş veriler kaybolabilir.
+                {t('portKiller.warning')}
               </p>
 
               <div className="flex items-center justify-end gap-3 pt-2">
@@ -266,18 +319,18 @@ export default function PortKiller() {
                   type="button"
                   onClick={() => setTargetProcess(null)}
                   disabled={isKilling}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-nexus-muted hover:text-white transition-colors"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold text-nexus-muted hover:text-white transition-colors cursor-pointer"
                 >
-                  İptal
+                  {t('portKiller.cancel')}
                 </button>
                 <button
                   type="button"
                   onClick={handleKill}
                   disabled={isKilling}
-                  className="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold shadow-lg shadow-rose-500/20 flex items-center gap-2 active:scale-95 transition-all"
+                  className="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold shadow-lg shadow-rose-500/20 flex items-center gap-2 active:scale-95 transition-all cursor-pointer"
                 >
                   {isKilling && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
-                  <span>Zorla Kapat (Kill Process)</span>
+                  <span>{t('portKiller.confirmKill')}</span>
                 </button>
               </div>
             </motion.div>

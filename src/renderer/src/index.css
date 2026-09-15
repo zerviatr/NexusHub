@@ -3,39 +3,52 @@
 @tailwind utilities;
 
 :root {
-  --nexus-accent: var(--nexus-accent);
+  --nexus-accent: #8b5cf6;
+  --nexus-accent-rgb: 139, 92, 246;
   --nexus-accent-light: #a78bfa;
   --nexus-cyan: #06b6d4;
+  --nexus-cyan-rgb: 6, 182, 212;
   --nexus-cyan-light: #22d3ee;
+  --nexus-muted: #9494b8;
+  --nexus-muted-rgb: 148, 148, 184;
 }
 
 [data-theme="matrix"] {
   --nexus-accent: #10b981;
+  --nexus-accent-rgb: 16, 185, 129;
   --nexus-accent-light: #34d399;
   --nexus-cyan: #00ff66;
+  --nexus-cyan-rgb: 0, 255, 102;
   --nexus-cyan-light: #6ee7b7;
 }
 
 [data-theme="cyberpunk"] {
   --nexus-accent: #facc15;
+  --nexus-accent-rgb: 250, 204, 21;
   --nexus-accent-light: #fde047;
   --nexus-cyan: #06b6d4;
+  --nexus-cyan-rgb: 6, 182, 212;
   --nexus-cyan-light: #67e8f9;
 }
 
 [data-theme="synthwave"] {
   --nexus-accent: #ec4899;
+  --nexus-accent-rgb: 236, 72, 153;
   --nexus-accent-light: #f472b6;
   --nexus-cyan: #f97316;
+  --nexus-cyan-rgb: 249, 115, 22;
   --nexus-cyan-light: #fb923c;
 }
 
 [data-theme="crimson"] {
   --nexus-accent: #f43f5e;
+  --nexus-accent-rgb: 244, 63, 94;
   --nexus-accent-light: #fb7185;
   --nexus-cyan: #fbbf24;
+  --nexus-cyan-rgb: 251, 191, 36;
   --nexus-cyan-light: #fde68a;
 }
+
 
 @layer base {
   * {
@@ -105,7 +118,7 @@
     inset: -1px;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(var(--nexus-accent-rgb, 139, 92, 246), 0.4), rgba(6, 182, 212, 0.4));
+    background: linear-gradient(135deg, rgba(var(--nexus-accent-rgb, 139, 92, 246), 0.4), rgba(var(--nexus-cyan-rgb, 6, 182, 212), 0.4));
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
@@ -118,7 +131,7 @@
   }
 
   .glow-cyan {
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.2), 0 0 60px rgba(6, 182, 212, 0.1);
+    box-shadow: 0 0 20px rgba(var(--nexus-cyan-rgb, 6, 182, 212), 0.2), 0 0 60px rgba(var(--nexus-cyan-rgb, 6, 182, 212), 0.1);
   }
 
   /* Shimmer background animation */
@@ -135,7 +148,7 @@
 
   /* Animated gradient text */
   .gradient-text {
-    background: linear-gradient(135deg, var(--nexus-accent), #06b6d4, var(--nexus-accent));
+    background: linear-gradient(135deg, var(--nexus-accent), var(--nexus-cyan), var(--nexus-accent));
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -185,4 +198,12 @@
   .scrollbar-hidden::-webkit-scrollbar {
     display: none;
   }
+
+  /* Elevated contrast for muted text tokens (WCAG 2.1 AA >= 4.5:1 on #0a0a0f) */
+  .text-nexus-muted,
+  .text-nexus-text-muted,
+  .text-muted {
+    color: var(--nexus-muted, #9494b8) !important;
+  }
 }
+

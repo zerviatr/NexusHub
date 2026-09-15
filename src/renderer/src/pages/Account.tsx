@@ -29,7 +29,7 @@ export default function Account() {
   })
 
   const [updateStatus, setUpdateStatus] = useState<'idle' | 'checking' | 'latest' | 'available' | 'ready' | 'error'>('idle')
-  const [updateInfo, setUpdateInfo] = useState<{ version?: string; current?: string; message?: string }>({})
+  const [updateInfo, setUpdateInfo] = useState<{ version?: string; current?: string; message?: string; downloadUrl?: string; htmlUrl?: string; notes?: string }>({})
   const [downloadPercent, setDownloadPercent] = useState<number>(0)
 
   const [aiConfig, setAiConfig] = useState<AIConfig>(getAIConfig)
@@ -102,7 +102,7 @@ export default function Account() {
     setDownloadPercent(0)
     try {
       const res = await window.nexusAPI?.updater?.checkNow?.()
-      const cur = res?.currentVersion ? (res.currentVersion.startsWith('v') ? res.currentVersion : `v${res.currentVersion}`) : (updateInfo.current || 'v2.4.0')
+      const cur = res?.currentVersion ? (res.currentVersion.startsWith('v') ? res.currentVersion : `v${res.currentVersion}`) : (updateInfo.current || 'v2.4.2')
       const upd = res?.updateVersion ? (res.updateVersion.startsWith('v') ? res.updateVersion : `v${res.updateVersion}`) : undefined
 
       if (res?.error) {
@@ -125,7 +125,7 @@ export default function Account() {
       }
     } catch (err: any) {
       setUpdateStatus('error')
-      setUpdateInfo({ message: 'Sunucuya bağlantı kurulamadı veya yeni sürüm şu anda derleniyor. En kısa sürede çözülecektir.', current: (updateInfo.current || 'v2.4.0') })
+      setUpdateInfo({ message: 'Sunucuya bağlantı kurulamadı veya yeni sürüm şu anda derleniyor. En kısa sürede çözülecektir.', current: (updateInfo.current || 'v2.4.2') })
     }
   }
 

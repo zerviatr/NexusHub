@@ -112,7 +112,7 @@ export function registerLicenseIPC(): void {
       return { success: false, reason: 'No key provided' }
     }
 
-    if (rawKey.length > 64) {
+    if (rawKey.length > 1024) {
       return { success: false, reason: 'Invalid key format' }
     }
 

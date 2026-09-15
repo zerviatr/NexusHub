@@ -17,6 +17,7 @@ import {
 import BaseToolTemplate from '../components/BaseToolTemplate'
 import { cyberAudio } from '../lib/cyberAudio'
 import { useToast } from '../lib/ToastContext'
+import { useT } from '../lib/i18n'
 
 // Color conversion utilities
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
@@ -111,6 +112,7 @@ function getContrastRatio(hex1: string, hex2: string): number {
 type TabMode = 'converter' | 'palette' | 'contrast' | 'gradient'
 
 export default function ColorStudio() {
+  const { t } = useT()
   const { success: showToastSuccess, error: showToastError } = useToast()
   const [activeTab, setActiveTab] = useState<TabMode>('converter')
 
@@ -239,17 +241,17 @@ export default function ColorStudio() {
   return (
     <BaseToolTemplate
       icon={Palette}
-      title="Color Studio & Contrast Suite"
-      description="HEX, RGB, HSL ve CMYK renk dönüştürücü, ekran damlalığı, görselden renk paleti çıkarıcı ve WCAG 2.1 kontrast denetleyici."
+      title={t('colorStudio.title')}
+      description={t('colorStudio.description')}
       gradient="from-purple-600 to-pink-500"
     >
       {/* Navigation tabs */}
       <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-white/[0.03] border border-white/10 w-full md:w-fit mb-6">
         {[
-          { id: 'converter', label: 'Renk Dönüştürücü & Damlalık' },
-          { id: 'palette', label: 'Görsel Paleti Çıkarıcı' },
-          { id: 'contrast', label: 'WCAG Kontrast Denetleyici' },
-          { id: 'gradient', label: 'CSS Gradyan Stüdyosu' },
+          { id: 'converter', label: t('colorStudio.tabConverter') },
+          { id: 'palette', label: t('colorStudio.tabPalette') },
+          { id: 'contrast', label: t('colorStudio.tabContrast') },
+          { id: 'gradient', label: t('colorStudio.tabGradient') },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -284,7 +286,7 @@ export default function ColorStudio() {
                 title="Renk Paletini Aç"
               />
               <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl text-xs font-mono text-white pointer-events-none">
-                Değiştirmek İçin Tıkla
+                {t('colorStudio.clickToChange')}
               </span>
             </div>
 
@@ -295,7 +297,7 @@ export default function ColorStudio() {
                 className="w-full py-2.5 px-4 rounded-xl bg-nexus-surface hover:bg-white/[0.06] border border-nexus-border text-xs font-medium text-white flex items-center justify-center gap-2 transition-all active:scale-95 shadow-md"
               >
                 <Pipette className="w-4 h-4 text-nexus-cyan" />
-                <span>Ekranda İstediğin Yerden Renk Seç (Damlalık)</span>
+                <span>{t('colorStudio.eyedropperBtn')}</span>
               </button>
             )}
           </div>
@@ -303,7 +305,7 @@ export default function ColorStudio() {
           <div className="lg:col-span-7 glass-card p-6 space-y-4">
             <h3 className="text-sm font-semibold text-white flex items-center gap-2">
               <Sliders className="w-4 h-4 text-nexus-accent" />
-              <span>Anlık Renk Kodları & Çıktılar</span>
+              <span>{t('colorStudio.liveCodes')}</span>
             </h3>
 
             {[
@@ -327,7 +329,7 @@ export default function ColorStudio() {
                   type="button"
                   onClick={() => copyToClipboard(item.val, item.key)}
                   className="p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-nexus-muted hover:text-white transition-all active:scale-90"
-                  title="Kopyala"
+                  title={t('colorStudio.copy')}
                 >
                   {copiedKey === item.key ? (
                     <Check className="w-4 h-4 text-emerald-400" />
@@ -346,9 +348,9 @@ export default function ColorStudio() {
         <div className="glass-card p-6 space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h3 className="text-sm font-semibold text-white">Görselden Renk Paleti Çıkarma</h3>
+              <h3 className="text-sm font-semibold text-white">{t('colorStudio.paletteTitle')}</h3>
               <p className="text-xs text-nexus-muted mt-0.5">
-                Fotoğraf veya banner yükleyin, algoritma dominant renkleri otomatik çıkarsın.
+                {t('colorStudio.paletteDesc')}
               </p>
             </div>
             <button
@@ -357,7 +359,7 @@ export default function ColorStudio() {
               className="px-4 py-2 rounded-xl bg-nexus-accent hover:bg-nexus-accent/90 text-white text-xs font-semibold flex items-center gap-2 shadow-lg shadow-nexus-accent/20 transition-all active:scale-95"
             >
               <Upload className="w-4 h-4" />
-              <span>Görsel Yükle</span>
+              <span>{t('colorStudio.uploadImage')}</span>
             </button>
             <input
               ref={fileInputRef}
@@ -376,7 +378,7 @@ export default function ColorStudio() {
 
           <div>
             <h4 className="text-xs font-mono text-nexus-muted mb-3 uppercase tracking-wider">
-              Dominant Renk Paleti (Kopyalamak İçin Tıkla)
+              {t('colorStudio.dominantPalette')}
             </h4>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
               {extractedPalette.map((color, idx) => (
@@ -405,7 +407,7 @@ export default function ColorStudio() {
         <div className="glass-card p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
-              <label className="text-xs font-semibold text-white block">Metin Rengi (Foreground)</label>
+              <label className="text-xs font-semibold text-white block">{t('colorStudio.fgColor')}</label>
               <div className="flex items-center gap-3">
                 <input
                   type="color"
@@ -423,7 +425,7 @@ export default function ColorStudio() {
             </div>
 
             <div className="space-y-3">
-              <label className="text-xs font-semibold text-white block">Arka Plan Rengi (Background)</label>
+              <label className="text-xs font-semibold text-white block">{t('colorStudio.bgColor')}</label>
               <div className="flex items-center gap-3">
                 <input
                   type="color"
@@ -445,17 +447,17 @@ export default function ColorStudio() {
           <div className="p-6 rounded-2xl border border-nexus-border flex flex-col md:flex-row items-center justify-between gap-6" style={{ backgroundColor: bgColor }}>
             <div>
               <p className="text-2xl font-bold font-sans" style={{ color: fgColor }}>
-                Büyük Başlık Örneği
+                {t('colorStudio.headlinePreview')}
               </p>
               <p className="text-sm font-sans mt-1 opacity-90" style={{ color: fgColor }}>
-                Bu metin seçtiğiniz renk kombinasyonunun gerçek okunabilirliğini test eder.
+                {t('colorStudio.contrastSample')}
               </p>
             </div>
             <div className="text-center px-6 py-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 shrink-0">
               <span className="text-3xl font-mono font-extrabold text-white">
                 {contrastRatio}:1
               </span>
-              <span className="text-[10px] block font-mono text-nexus-muted mt-0.5">Kontrast Skoru</span>
+              <span className="text-[10px] block font-mono text-nexus-muted mt-0.5">{t('colorStudio.contrastScore')}</span>
             </div>
           </div>
 
@@ -498,13 +500,13 @@ export default function ColorStudio() {
             style={{ background: cssGradientString }}
           >
             <span className="px-4 py-2 rounded-xl bg-black/50 backdrop-blur-md text-white font-mono text-xs border border-white/10">
-              Canlı CSS Gradyan Önizleme
+              {t('colorStudio.gradientLive')}
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="text-xs font-semibold text-white block mb-2">Başlangıç Rengi</label>
+              <label className="text-xs font-semibold text-white block mb-2">{t('colorStudio.startColor')}</label>
               <div className="flex items-center gap-2">
                 <input
                   type="color"
@@ -522,7 +524,7 @@ export default function ColorStudio() {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-white block mb-2">Bitiş Rengi</label>
+              <label className="text-xs font-semibold text-white block mb-2">{t('colorStudio.endColor')}</label>
               <div className="flex items-center gap-2">
                 <input
                   type="color"
@@ -541,7 +543,7 @@ export default function ColorStudio() {
 
             <div>
               <label className="text-xs font-semibold text-white block mb-2">
-                Açı: {gradAngle}°
+                {t('colorStudio.angle', { angle: gradAngle })}
               </label>
               <input
                 type="range"
@@ -564,7 +566,7 @@ export default function ColorStudio() {
               className="px-4 py-2 rounded-xl bg-nexus-accent text-white text-xs font-mono font-semibold flex items-center gap-1.5 active:scale-95 transition-all shadow-lg shadow-nexus-accent/20 shrink-0"
             >
               {copiedKey === 'grad_css' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>Kopyala</span>
+              <span>{t('colorStudio.copy')}</span>
             </button>
           </div>
         </div>

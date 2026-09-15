@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Zap, Copy, Check, Download, RefreshCw, Database, CreditCard, User, Phone, MapPin, Mail } from 'lucide-react'
 import { cyberAudio } from '../lib/cyberAudio'
+import { useT } from '../lib/i18n'
 
 interface MockUser {
   id: string
@@ -29,7 +30,7 @@ function generateTestTc(): string {
   }
   const oddSum = digits[0] + digits[2] + digits[4] + digits[6] + digits[8]
   const evenSum = digits[1] + digits[3] + digits[5] + digits[7]
-  const d10 = (oddSum * 7 - evenSum) % 10
+  const d10 = ((oddSum * 7 - evenSum) % 10 + 10) % 10
   const totalSum = oddSum + evenSum + d10
   const d11 = totalSum % 10
   return [...digits, d10, d11].join('')
@@ -90,6 +91,7 @@ function generateSingleUser(): MockUser {
 }
 
 export default function FakeDataStudio() {
+  const { t } = useT()
   const [currentUser, setCurrentUser] = useState<MockUser>(generateSingleUser())
   const [copiedField, setCopiedField] = useState<string | null>(null)
   const [bulkCount, setBulkCount] = useState(10)
@@ -138,14 +140,14 @@ export default function FakeDataStudio() {
   }
 
   const fields = [
-    { label: 'Tam İsim', value: currentUser.fullName, key: 'name', icon: User },
-    { label: 'E-Posta Adresi', value: currentUser.email, key: 'email', icon: Mail },
-    { label: 'TR Telefon No', value: currentUser.phone, key: 'phone', icon: Phone },
-    { label: 'Şehir & Konum', value: currentUser.city, key: 'city', icon: MapPin },
-    { label: 'Şirket', value: currentUser.company, key: 'company', icon: Database },
-    { label: 'Test TC Kimlik No (Algoritmik Geçerli)', value: currentUser.tcNo, key: 'tc', icon: Zap },
-    { label: 'Test Kredi Kartı (Luhn Geçerli)', value: currentUser.creditCard, key: 'cc', icon: CreditCard },
-    { label: 'UUID v4', value: currentUser.uuid, key: 'uuid', icon: Zap },
+    { label: t('fakeData.fullName'), value: currentUser.fullName, key: 'name', icon: User },
+    { label: t('fakeData.email'), value: currentUser.email, key: 'email', icon: Mail },
+    { label: t('fakeData.phone'), value: currentUser.phone, key: 'phone', icon: Phone },
+    { label: t('fakeData.city'), value: currentUser.city, key: 'city', icon: MapPin },
+    { label: t('fakeData.company'), value: currentUser.company, key: 'company', icon: Database },
+    { label: t('fakeData.tcNo'), value: currentUser.tcNo, key: 'tc', icon: Zap },
+    { label: t('fakeData.creditCard'), value: currentUser.creditCard, key: 'cc', icon: CreditCard },
+    { label: t('fakeData.uuid'), value: currentUser.uuid, key: 'uuid', icon: Zap },
   ]
 
   return (
@@ -155,18 +157,18 @@ export default function FakeDataStudio() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-nexus-text flex items-center gap-3">
             <Zap className="w-7 h-7 text-nexus-cyan" />
-            Fake Data & Mock Identity Studio
+            {t('fakeData.title')}
           </h1>
           <p className="text-sm text-nexus-muted mt-1">
-            Geliştirici ve QA testleri için gerçekçi Türkçe sahte kimlik ve toplu mock veri üretici
+            {t('fakeData.description')}
           </p>
         </div>
         <button
           onClick={handleRefresh}
-          className="flex items-center gap-2 px-4 py-2 bg-nexus-accent hover:bg-nexus-accent/90 text-white rounded-xl text-xs font-medium shadow-lg shadow-nexus-accent/20 transition-all active:scale-95"
+          className="flex items-center gap-2 px-4 py-2 bg-nexus-accent hover:bg-nexus-accent/90 text-white rounded-xl text-xs font-medium shadow-lg shadow-nexus-accent/20 transition-all active:scale-95 cursor-pointer"
         >
           <RefreshCw className="w-3.5 h-3.5" />
-          <span>Yeni Kimlik Üret</span>
+          <span>{t('fakeData.newIdentity')}</span>
         </button>
       </div>
 
@@ -207,10 +209,10 @@ export default function FakeDataStudio() {
           <div>
             <h3 className="text-base font-semibold text-nexus-text flex items-center gap-2">
               <Database className="w-4 h-4 text-nexus-accent" />
-              Toplu Test Verisi Dışa Aktar (Bulk Export)
+              {t('fakeData.bulkExport')}
             </h3>
             <p className="text-xs text-nexus-muted mt-1">
-              Veritabanı veya API testleri için anında çoklu mock kayıt seti oluştur
+              {t('fakeData.bulkDesc')}
             </p>
           </div>
 
@@ -219,28 +221,28 @@ export default function FakeDataStudio() {
             <select
               value={bulkCount}
               onChange={(e) => setBulkCount(Number(e.target.value))}
-              className="bg-nexus-bg border border-nexus-border rounded-xl px-3 py-2 text-xs font-mono text-nexus-text focus:outline-none focus:border-nexus-accent"
+              className="bg-nexus-bg border border-nexus-border rounded-xl px-3 py-2 text-xs font-mono text-nexus-text focus:outline-none focus:border-nexus-accent cursor-pointer"
             >
-              <option value={10}>10 Kayıt</option>
-              <option value={50}>50 Kayıt</option>
-              <option value={100}>100 Kayıt</option>
-              <option value={500}>500 Kayıt</option>
+              <option value={10}>{t('fakeData.records', { count: 10 })}</option>
+              <option value={50}>{t('fakeData.records', { count: 50 })}</option>
+              <option value={100}>{t('fakeData.records', { count: 100 })}</option>
+              <option value={500}>{t('fakeData.records', { count: 500 })}</option>
             </select>
 
             <button
               onClick={() => exportBulk('json')}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-nexus-bg hover:bg-nexus-surface border border-nexus-border hover:border-nexus-accent/40 rounded-xl text-xs font-mono text-nexus-text transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-nexus-bg hover:bg-nexus-surface border border-nexus-border hover:border-nexus-accent/40 rounded-xl text-xs font-mono text-nexus-text transition-all cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-nexus-accent" />
-              <span>JSON İndir</span>
+              <span>{t('fakeData.downloadJson')}</span>
             </button>
 
             <button
               onClick={() => exportBulk('csv')}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-nexus-bg hover:bg-nexus-surface border border-nexus-border hover:border-nexus-cyan/40 rounded-xl text-xs font-mono text-nexus-text transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-nexus-bg hover:bg-nexus-surface border border-nexus-border hover:border-nexus-cyan/40 rounded-xl text-xs font-mono text-nexus-text transition-all cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-nexus-cyan" />
-              <span>CSV İndir</span>
+              <span>{t('fakeData.downloadCsv')}</span>
             </button>
           </div>
         </div>

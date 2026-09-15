@@ -23,6 +23,7 @@ import { useT } from '../lib/i18n'
 import { askAI } from '../lib/aiClient'
 import { cyberAudio } from '../lib/cyberAudio'
 import SqliteViewer from '../components/SqliteViewer'
+import { useFileGatewayDrop } from '../lib/fileGateway'
 
 type StudioTab = 'json' | 'jwt' | 'sqlite'
 
@@ -77,6 +78,42 @@ export default function JsonStudio() {
   // JWT Studio state
   const [rawJwt, setRawJwt] = useState<string>(SAMPLE_JWT)
   const [copiedJwtPayload, setCopiedJwtPayload] = useState<boolean>(false)
+
+  // Database drop state
+  const [droppedDbFile, setDroppedDbFile] = useState<File | null>(null)
+
+  // Ingest dropped files from global File Gateway
+  useFileGatewayDrop(async (detail) => {
+    const lower = detail.name.toLowerCase()
+    if (lower.endsWith('.json')) {
+      try {
+        const text = await detail.file.text()
+        setRawJson(text)
+        setActiveTab('json')
+        try { cyberAudio.click() } catch {}
+      } catch (err: any) {
+        console.error('Failed to parse dropped JSON file:', err)
+      }
+    } else if (lower.endsWith('.jwt')) {
+      try {
+        const text = await detail.file.text()
+        setRawJwt(text.trim())
+        setActiveTab('jwt')
+        try { cyberAudio.click() } catch {}
+      } catch (err: any) {
+        console.error('Failed to parse dropped JWT file:', err)
+      }
+    } else if (
+      lower.endsWith('.sqlite') ||
+      lower.endsWith('.db') ||
+      lower.endsWith('.db3') ||
+      lower.endsWith('.sql')
+    ) {
+      setDroppedDbFile(detail.file)
+      setActiveTab('sqlite')
+      try { cyberAudio.click() } catch {}
+    }
+  })
 
   // Listen to incoming data from Smart Paste (CommandPalette / MiniHud)
   useEffect(() => {
@@ -572,6 +609,7 @@ export default function JsonStudio() {
         {/* ─── TAB 3: SQLITE & TABLE VIEWER ──────────────────────────────── */}
         {activeTab === 'sqlite' && (
           <SqliteViewer
+            initialFile={droppedDbFile}
             onExportToJsonTab={(jsonString) => {
               setRawJson(jsonString)
               setActiveTab('json')

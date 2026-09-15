@@ -30,8 +30,36 @@ export default function FloatingOrb() {
   const navigate = useNavigate()
   const intervalRef = useRef<any>(null)
 
-  // Live telemetry polling
+  const [isVisible, setIsVisible] = useState(() => (typeof document !== 'undefined' ? document.visibilityState !== 'hidden' : true))
+
+  // Listen to desktop tray sleep/wake lifecycle events
   useEffect(() => {
+    const handleVisChange = (e: any) => {
+      const visible = e.detail?.visible !== undefined ? Boolean(e.detail.visible) : (document.visibilityState !== 'hidden')
+      setIsVisible(visible)
+    }
+    const handleDomVis = () => {
+      setIsVisible(document.visibilityState !== 'hidden')
+    }
+
+    window.addEventListener('nexus:app-visibility' as any, handleVisChange)
+    document.addEventListener('visibilitychange', handleDomVis)
+
+    const unbindIpc = window.nexusAPI?.onVisibilityChange?.((visible: boolean) => {
+      setIsVisible(visible)
+    })
+
+    return () => {
+      window.removeEventListener('nexus:app-visibility' as any, handleVisChange)
+      document.removeEventListener('visibilitychange', handleDomVis)
+      unbindIpc?.()
+    }
+  }, [])
+
+  // Live telemetry polling (completely paused while minimized to tray or hidden)
+  useEffect(() => {
+    if (!isVisible) return
+
     const fetchTelemetry = async () => {
       try {
         if (window.nexusAPI?.sentinel?.getStats) {
@@ -51,8 +79,13 @@ export default function FloatingOrb() {
     fetchTelemetry()
     const pollInterval = isOpen ? 3000 : 30000
     intervalRef.current = setInterval(fetchTelemetry, pollInterval)
-    return () => clearInterval(intervalRef.current)
-  }, [isOpen])
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
+  }, [isOpen, isVisible])
 
   // 1-Click Fast TempMail
   const handleQuickMail = async () => {

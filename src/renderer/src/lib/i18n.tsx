@@ -41,6 +41,7 @@ function interpolate(str: string, vars?: Vars): string {
 // ─── Context ──────────────────────────────────────────────────────────────────
 type I18nCtx = {
   locale: Locale
+  language: Locale
   setLocale: (l: Locale) => void
   /**
    * Translate a dot-notation key.
@@ -83,7 +84,11 @@ export function I18nProvider({
     return interpolate(raw, vars)
   }
 
-  return <I18nContext.Provider value={{ locale, setLocale, t }}>{children}</I18nContext.Provider>
+  return (
+    <I18nContext.Provider value={{ locale, language: locale, setLocale, t }}>
+      {children}
+    </I18nContext.Provider>
+  )
 }
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────

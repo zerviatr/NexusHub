@@ -29,12 +29,14 @@ import {
   createSampleDatabase
 } from '../lib/sqliteEngine'
 import { cyberAudio } from '../lib/cyberAudio'
+import { useFileGatewayDrop } from '../lib/fileGateway'
 
 interface SqliteViewerProps {
   onExportToJsonTab?: (jsonString: string) => void
+  initialFile?: File | null
 }
 
-export default function SqliteViewer({ onExportToJsonTab }: SqliteViewerProps) {
+export default function SqliteViewer({ onExportToJsonTab, initialFile }: SqliteViewerProps) {
   const [dbInstance, setDbInstance] = useState<any>(null)
   const [dbName, setDbName] = useState<string>('')
   const [dbSize, setDbSize] = useState<number>(0)
@@ -67,6 +69,15 @@ export default function SqliteViewer({ onExportToJsonTab }: SqliteViewerProps) {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isDragging, setIsDragging] = useState<boolean>(false)
+
+  // Cleanup dbInstance to prevent WebAssembly memory leak
+  useEffect(() => {
+    return () => {
+      if (dbInstance && typeof dbInstance.close === 'function') {
+        try { dbInstance.close() } catch (e) {}
+      }
+    }
+  }, [dbInstance])
 
   // Load sample database on demand or if requested
   const handleLoadSample = async () => {
@@ -147,6 +158,21 @@ export default function SqliteViewer({ onExportToJsonTab }: SqliteViewerProps) {
       setLoading(false)
     }
   }
+
+  // Auto-load initial database file passed from tab switch
+  useEffect(() => {
+    if (initialFile) {
+      processFile(initialFile)
+    }
+  }, [initialFile])
+
+  // Ingest dropped database files when SqliteViewer is mounted
+  useFileGatewayDrop((detail) => {
+    const lower = detail.name.toLowerCase()
+    if (lower.endsWith('.sqlite') || lower.endsWith('.db') || lower.endsWith('.db3') || lower.endsWith('.sql')) {
+      processFile(detail.file)
+    }
+  })
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]

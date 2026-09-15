@@ -22,6 +22,7 @@ import { createRateLimiter } from './middleware/rateLimiter'
 
 const app  = express()
 app.disable('x-powered-by')
+app.set('trust proxy', 1)
 const PORT = Number(process.env['PORT'] ?? 3000)
 
 // ── Raw body capture for webhook signature verification ────────────────────
@@ -31,6 +32,7 @@ app.use('/webhook', (req: Request, res: Response, next: NextFunction) => {
   let totalBytes = 0
   const MAX_WEBHOOK_SIZE = 1024 * 1024 // 1MB limit
 
+  req.on('error', (err) => next(err))
   req.on('data', (chunk: Buffer) => {
     totalBytes += chunk.length
     if (totalBytes > MAX_WEBHOOK_SIZE) {
@@ -62,16 +64,30 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
   next()
 })
 
+const ipWhitelist = (process.env['IP_WHITELIST'] || '127.0.0.1,::1')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean)
+
+const ipBlacklist = (process.env['IP_BLACKLIST'] || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean)
+
 const waitlistLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000,
   maxRequests: 5,
   message: 'Kısa süre içinde çok fazla bekleme listesi kaydı yapıldı. Lütfen daha sonra tekrar deneyin.',
+  whitelist: ipWhitelist,
+  blacklist: ipBlacklist,
 })
 
 const feedLimiter = createRateLimiter({
   windowMs: 60 * 1000,
   maxRequests: 60,
   message: 'Çok fazla istek gönderildi.',
+  whitelist: ipWhitelist,
+  blacklist: ipBlacklist,
 })
 
 // ── CORS ───────────────────────────────────────────────────────────────────
@@ -242,7 +258,7 @@ app.get('/api/recent-activations', feedLimiter, async (_req: Request, res: Respo
         time: formatRelativeTime(eventTimestamp),
         country,
         tier: r.tier,
-        key: r.key ? `${String(r.key).slice(0, 8)}***` : '',
+        key: r.key ? `NEXUS-***` : '',
       }
     })
 

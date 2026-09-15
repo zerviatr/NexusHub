@@ -9,9 +9,53 @@
  */
 import { Router, Request, Response } from 'express'
 import { createHmac } from 'crypto'
-import { getDb } from '../db'
+import { getDb, withTransaction } from '../db'
 import { notifyKeyActivated } from '../services/notifier'
 import { createRateLimiter } from '../middleware/rateLimiter'
+
+export interface LicenseRow {
+  key: string
+  tier: string
+  expires_at: number | bigint
+  order_id: string | null
+  email: string | null
+  max_activations: number | bigint
+  max_devices?: number | bigint
+  is_revoked: number | bigint
+  created_at: number | bigint
+  sales_channel?: string | null
+  customer_note?: string | null
+  customer_name?: string | null
+  customer_country?: string | null
+  last_hwid_reset?: number | bigint | null
+}
+
+export interface ActivateLicenseBody {
+  key?: string
+  deviceId?: string
+}
+
+export interface VerifyLicenseBody {
+  key?: string
+  deviceId?: string
+}
+
+export interface DeactivateLicenseBody {
+  key?: string
+  deviceId?: string
+}
+
+export interface LookupLicenseBody {
+  key?: string
+}
+
+export interface ResetHardwareBody {
+  key?: string
+}
+
+export interface TypedRequest<B = Record<string, any>> extends Request {
+  body: B
+}
 
 export const licenseRouter = Router()
 
@@ -48,13 +92,14 @@ function hashDevice(rawDeviceId: string): string {
   return createHmac('sha256', secret).update(rawDeviceId).digest('hex')
 }
 
-async function getLicense(key: string) {
+async function getLicense(key: string): Promise<LicenseRow | null> {
   const db = getDb()
   const res = await db.execute({
     sql:  'SELECT * FROM licenses WHERE key = ?',
     args: [key],
   })
-  return res.rows[0] ?? null
+  if (res.rows.length === 0) return null
+  return res.rows[0] as unknown as LicenseRow
 }
 
 async function getActivationCount(key: string): Promise<number> {
@@ -67,9 +112,9 @@ async function getActivationCount(key: string): Promise<number> {
 }
 
 // ─── POST /api/license/activate ──────────────────────────────────────────────
-licenseRouter.post('/activate', activateLimiter, async (req: Request, res: Response): Promise<void> => {
+licenseRouter.post('/activate', activateLimiter, async (req: TypedRequest<ActivateLicenseBody>, res: Response): Promise<void> => {
   try {
-    const { key, deviceId } = req.body as { key?: string; deviceId?: string }
+    const { key, deviceId } = req.body
 
     if (!key || !deviceId) {
       res.status(400).json({ success: false, reason: 'key and deviceId required' })
@@ -83,7 +128,7 @@ licenseRouter.post('/activate', activateLimiter, async (req: Request, res: Respo
       return
     }
 
-    if (license.is_revoked) {
+    if (Boolean(license.is_revoked)) {
       res.json({ success: false, reason: 'License key has been revoked' })
       return
     }
@@ -137,22 +182,22 @@ licenseRouter.post('/activate', activateLimiter, async (req: Request, res: Respo
       key,
       tier: String(license.tier),
       deviceId: hashedDevice,
-      salesChannel: license['sales_channel'] ? String(license['sales_channel']) : undefined,
-      customerInfo: license['customer_note'] ? String(license['customer_note']) : (license['email'] ? String(license['email']) : undefined),
+      salesChannel: license.sales_channel ? String(license.sales_channel) : undefined,
+      customerInfo: license.customer_note ? String(license.customer_note) : (license.email ? String(license.email) : undefined),
       expiresAt,
     })
 
     res.json({ success: true, tier: license.tier, expiresAt })
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[license] activate error:', err)
     res.status(500).json({ success: false, reason: 'Internal server error' })
   }
 })
 
 // ─── POST /api/license/verify ────────────────────────────────────────────────
-licenseRouter.post('/verify', verifyLimiter, async (req: Request, res: Response): Promise<void> => {
+licenseRouter.post('/verify', verifyLimiter, async (req: TypedRequest<VerifyLicenseBody>, res: Response): Promise<void> => {
   try {
-    const { key, deviceId } = req.body as { key?: string; deviceId?: string }
+    const { key, deviceId } = req.body
 
     if (!key || !deviceId) {
       res.status(400).json({ valid: false, reason: 'key and deviceId required' })
@@ -166,7 +211,7 @@ licenseRouter.post('/verify', verifyLimiter, async (req: Request, res: Response)
       return
     }
 
-    if (license.is_revoked) {
+    if (Boolean(license.is_revoked)) {
       res.json({ valid: false, reason: 'License revoked' })
       return
     }
@@ -195,16 +240,16 @@ licenseRouter.post('/verify', verifyLimiter, async (req: Request, res: Response)
     })
 
     res.json({ valid: true, tier: license.tier, expiresAt })
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[license] verify error:', err)
     res.status(500).json({ valid: false, reason: 'Internal server error' })
   }
 })
 
 // ─── POST /api/license/deactivate ────────────────────────────────────────────
-licenseRouter.post('/deactivate', async (req: Request, res: Response): Promise<void> => {
+licenseRouter.post('/deactivate', async (req: TypedRequest<DeactivateLicenseBody>, res: Response): Promise<void> => {
   try {
-    const { key, deviceId } = req.body as { key?: string; deviceId?: string }
+    const { key, deviceId } = req.body
 
     if (!key || !deviceId) {
       res.status(400).json({ ok: false, reason: 'key and deviceId required' })
@@ -221,16 +266,16 @@ licenseRouter.post('/deactivate', async (req: Request, res: Response): Promise<v
     console.log(`[license] Deactivated key=${key.slice(-8)} device=${hashedDevice.slice(0, 8)}...`)
 
     res.json({ ok: true })
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[license] deactivate error:', err)
     res.status(500).json({ ok: false, reason: 'Internal server error' })
   }
 })
 
 // ─── POST /api/license/lookup (Public Self-Service Portal) ───────────────────
-licenseRouter.post('/lookup', lookupLimiter, async (req: Request, res: Response): Promise<void> => {
+licenseRouter.post('/lookup', lookupLimiter, async (req: TypedRequest<LookupLicenseBody>, res: Response): Promise<void> => {
   try {
-    const { key } = req.body as { key?: string }
+    const { key } = req.body
     if (!key) {
       res.status(400).json({ found: false, reason: 'Lisans anahtarı gerekli' })
       return
@@ -255,19 +300,19 @@ licenseRouter.post('/lookup', lookupLimiter, async (req: Request, res: Response)
       isExpired,
       expiresAt,
       activeDevices,
-      maxDevices: Number((license as any).max_activations ?? (license as any).max_devices ?? 2),
+      maxDevices: Number(license.max_activations ?? license.max_devices ?? 2),
       createdAt: Number(license.created_at ?? 0),
     })
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[license] lookup error:', err)
     res.status(500).json({ found: false, reason: 'Sunucu hatası' })
   }
 })
 
 // ─── POST /api/license/reset-hardware (Self-Service HWID Clear with Anti-Piracy Cooldown) ──
-licenseRouter.post('/reset-hardware', resetHwidLimiter, async (req: Request, res: Response): Promise<void> => {
+licenseRouter.post('/reset-hardware', resetHwidLimiter, async (req: TypedRequest<ResetHardwareBody>, res: Response): Promise<void> => {
   try {
-    const { key } = req.body as { key?: string }
+    const { key } = req.body
     if (!key) {
       res.status(400).json({ success: false, reason: 'Lisans anahtarı gerekli' })
       return
@@ -280,14 +325,14 @@ licenseRouter.post('/reset-hardware', resetHwidLimiter, async (req: Request, res
       return
     }
 
-    if (license.is_revoked) {
+    if (Boolean(license.is_revoked)) {
       res.json({ success: false, reason: 'İptal edilmiş lisans için cihaz sıfırlanamaz' })
       return
     }
 
     // Anti-Piracy Cooldown: Enforce 24-hour waiting period between resets
     const HWID_RESET_COOLDOWN_MS = 24 * 60 * 60 * 1000
-    const lastReset = Number(license['last_hwid_reset'] ?? 0)
+    const lastReset = Number(license.last_hwid_reset ?? 0)
     const elapsed = Date.now() - lastReset
 
     if (lastReset > 0 && elapsed < HWID_RESET_COOLDOWN_MS) {
@@ -299,16 +344,16 @@ licenseRouter.post('/reset-hardware', resetHwidLimiter, async (req: Request, res
       return
     }
 
-    // Clear active activations
-    await getDb().execute({
-      sql: 'DELETE FROM activations WHERE license_key = ?',
-      args: [cleanKey],
-    })
-
-    // Stamp new reset timestamp
-    await getDb().execute({
-      sql: 'UPDATE licenses SET last_hwid_reset = ? WHERE key = ?',
-      args: [Date.now(), cleanKey],
+    // Clear active activations and update reset timestamp atomically within a transaction
+    await withTransaction(async (tx) => {
+      await tx.execute({
+        sql: 'DELETE FROM activations WHERE license_key = ?',
+        args: [cleanKey],
+      })
+      await tx.execute({
+        sql: 'UPDATE licenses SET last_hwid_reset = ? WHERE key = ?',
+        args: [Date.now(), cleanKey],
+      })
     })
 
     console.log(`[license] Self-service hardware reset completed for key=${cleanKey.slice(0, 8)}...`)
@@ -316,7 +361,7 @@ licenseRouter.post('/reset-hardware', resetHwidLimiter, async (req: Request, res
       success: true,
       message: 'Cihaz kilidi başarıyla sıfırlandı! Artık yeni bilgisayarınızda lisansınızı hemen aktive edebilirsiniz.',
     })
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('[license] reset-hardware error:', err)
     res.status(500).json({ success: false, reason: 'Sunucu hatası' })
   }

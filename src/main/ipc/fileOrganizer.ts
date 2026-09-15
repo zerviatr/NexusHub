@@ -139,9 +139,12 @@ async function undoLastExecution(): Promise<{ success: boolean; restored: number
 export function registerFileOrganizerIPC(): void {
   ipcMain.handle('organizer:selectDir', async () => selectDirectory())
   ipcMain.handle('organizer:scan', async (_event, dirPath: string) => scanDirectory(dirPath))
-  ipcMain.handle('organizer:execute', async (_event, operations: FileOperation[]) =>
-    executeOperations(operations)
-  )
+  ipcMain.handle('organizer:execute', async (_event, operations: FileOperation[]) => {
+    if (!Array.isArray(operations)) {
+      return { success: false, successfulOperations: 0, failedOperations: 0, errors: ['Geçersiz operasyon formatı'] }
+    }
+    return executeOperations(operations)
+  })
   ipcMain.handle('organizer:canUndo', async () => lastExecutionMoves.length > 0)
   ipcMain.handle('organizer:undo', async () => undoLastExecution())
 }

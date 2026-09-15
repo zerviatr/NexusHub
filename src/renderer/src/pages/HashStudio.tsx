@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import {
   FileCheck,
   Copy,
@@ -16,6 +16,8 @@ import BaseToolTemplate from '../components/BaseToolTemplate'
 import { useT } from '../lib/i18n'
 import { cyberAudio } from '../lib/cyberAudio'
 import { useToast } from '../lib/ToastContext'
+import { useFileGatewayDrop } from '../lib/fileGateway'
+import { logActivity } from '../lib/activityLogger'
 
 type HashTab = 'text' | 'file'
 
@@ -183,7 +185,7 @@ async function bufferToHex(buffer: ArrayBuffer): Promise<string> {
 }
 
 export default function HashStudio() {
-  const { success: showToastSuccess } = useToast()
+  const { success: showToastSuccess, error: showToastError } = useToast()
   const { t } = useT()
   const [activeTab, setActiveTab] = useState<HashTab>('text')
 
@@ -238,6 +240,7 @@ export default function HashStudio() {
     setSelectedFile(file)
     setIsHashingFile(true)
     setFileHashes(null)
+    const startTime = performance.now()
 
     try {
       if (file.size > 200 * 1024 * 1024) {
@@ -270,13 +273,50 @@ export default function HashStudio() {
         sha512
       })
       showToastSuccess('Hash Başarılı', 'Dosya bütünlük kodları üretildi.')
+
+      const durationMs = Math.round(performance.now() - startTime)
+      logActivity({
+        toolId: 'hash-studio',
+        action: 'file_hash',
+        category: 'crypto',
+        status: 'success',
+        details: `Computed cryptographic checksums for ${file.name} (${file.size} bytes)`,
+        metadata: {
+          fileName: file.name,
+          fileSize: file.size,
+          sha256,
+          md5: computedMd5,
+          sha1,
+          sha512,
+        },
+        durationMs,
+      })
     } catch (err: any) {
       console.error('File hashing error:', err)
       showToastError('Hash Hatası', err?.message || 'Dosya hash hesabı başarısız.')
+      logActivity({
+        toolId: 'hash-studio',
+        action: 'file_hash',
+        category: 'crypto',
+        status: 'failure',
+        details: `Failed to compute hash for ${file.name}: ${err?.message || 'Error'}`,
+        metadata: {
+          fileName: file.name,
+          fileSize: file.size,
+          error: err?.message,
+        },
+      })
     } finally {
       setIsHashingFile(false)
     }
   }
+
+  // Ingest dropped files from global File Gateway
+  useFileGatewayDrop((detail) => {
+    setActiveTab('file')
+    handleFileChange(detail.file)
+    try { cyberAudio.click() } catch {}
+  })
 
   const handleCopy = (text: string, key: string) => {
     navigator.clipboard.writeText(text)
@@ -293,6 +333,41 @@ export default function HashStudio() {
     if (!comparisonHash.trim() || !hashValue) return null
     return comparisonHash.trim().toLowerCase() === hashValue.toLowerCase()
   }
+
+  // Checksum verification audit logging
+  useEffect(() => {
+    const trimmed = comparisonHash.trim()
+    if (!trimmed || !activeHashes) return
+
+    const matchEntry = [
+      { alg: 'sha256', val: activeHashes.sha256 },
+      { alg: 'sha512', val: activeHashes.sha512 },
+      { alg: 'sha1', val: activeHashes.sha1 },
+      { alg: 'md5', val: activeHashes.md5 },
+    ].find((entry) => entry.val && entry.val.toLowerCase() === trimmed.toLowerCase())
+
+    const isMatch = !!matchEntry
+    const timer = setTimeout(() => {
+      logActivity({
+        toolId: 'hash-studio',
+        action: 'verify_checksum',
+        category: 'crypto',
+        status: isMatch ? 'success' : 'warning',
+        details: isMatch
+          ? `Checksum verified (${matchEntry?.alg.toUpperCase()} match) for ${selectedFile?.name || 'text payload'}`
+          : `Checksum mismatch for ${selectedFile?.name || 'text payload'}`,
+        metadata: {
+          fileName: selectedFile?.name || 'text_payload',
+          sha256: activeHashes.sha256,
+          expectedHash: trimmed,
+          matchResult: isMatch,
+          matchedAlgorithm: matchEntry?.alg,
+        },
+      })
+    }, 600)
+
+    return () => clearTimeout(timer)
+  }, [comparisonHash, activeHashes, selectedFile])
 
   return (
     <BaseToolTemplate

@@ -19,6 +19,7 @@ import {
   Search,
   FileCheck,
   Activity,
+  ScrollText,
   Code2,
   ShieldAlert,
   Terminal,
@@ -28,6 +29,8 @@ import {
   Palette,
   FileText,
   Radio,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
 import { cyberAudio } from '../lib/cyberAudio'
@@ -48,10 +51,10 @@ const NAV_GROUPS: NavGroup[] = [
   {
     labelKey: 'nav.groups.privacy',
     items: [
-      { path: '/temp-mail',  labelKey: 'nav.tools.tempMail',         icon: Mail },
-      { path: '/decrypter',  labelKey: 'nav.tools.decrypter',        icon: ShieldCheck },
-      { path: '/password',   labelKey: 'nav.tools.passwordGenerator', icon: Key },
-      { path: '/fortress',   labelKey: 'nav.tools.cyberFortress',    icon: ShieldAlert },
+      { path: '/temp-mail',  labelKey: 'nav.tools.tempMail',          icon: Mail },
+      { path: '/decrypter',  labelKey: 'nav.tools.decrypter',         icon: ShieldCheck },
+      { path: '/password',   labelKey: 'nav.tools.passwordGenerator',  icon: Key },
+      { path: '/fortress',   labelKey: 'nav.tools.cyberFortress',     icon: ShieldAlert },
     ],
   },
   {
@@ -61,8 +64,7 @@ const NAV_GROUPS: NavGroup[] = [
       { path: '/color-studio', labelKey: 'nav.tools.colorStudio',  icon: Palette },
       { path: '/regex-studio', labelKey: 'nav.tools.regexStudio',  icon: Terminal },
       { path: '/fake-data',    labelKey: 'nav.tools.fakeData',     icon: Zap },
-      { path: '/curl-runner',  labelKey: 'nav.tools.curlRunner',   icon: Send },
-      { path: '/dev-sandbox',  labelKey: 'nav.tools.devSandbox',   icon: Code2 },
+      { path: '/api-studio',   labelKey: 'nav.tools.apiStudio',    icon: Send },
       { path: '/qr-code',      labelKey: 'nav.tools.qrCode',       icon: QrCode },
       { path: '/json-studio',  labelKey: 'nav.tools.jsonStudio',   icon: Braces },
       { path: '/hash-studio',  labelKey: 'nav.tools.hashStudio',   icon: FileCheck },
@@ -99,14 +101,14 @@ function ActivePill() {
   )
 }
 
-function ActiveEdge() {
+function ActiveEdge({ collapsed = false }: { collapsed?: boolean }) {
   return (
     <motion.span
       initial={{ scaleY: 0, opacity: 0 }}
       animate={{ scaleY: 1, opacity: 1 }}
       exit={{ scaleY: 0, opacity: 0 }}
       transition={{ duration: 0.18, ease: 'easeOut' }}
-      className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-nexus-accent shadow-[0_0_8px_rgba(139,92,246,0.9)] pointer-events-none"
+      className={`absolute ${collapsed ? 'left-0.5' : 'left-0'} top-2 bottom-2 w-1 rounded-r-full bg-nexus-accent shadow-[0_0_8px_rgba(var(--nexus-accent-rgb,139,92,246),0.9)] pointer-events-none`}
     />
   )
 }
@@ -117,27 +119,39 @@ function NavItemBtn({
   isActive,
   onClick,
   label,
+  collapsed = false,
 }: {
   item: NavItem
   isActive: boolean
   onClick: () => void
   label: string
+  collapsed?: boolean
 }) {
   const Icon = item.icon
   return (
-    <button
-      onClick={onClick}
-      className={`
-        relative w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium
-        transition-colors duration-150 no-drag
-        ${isActive ? 'text-white' : 'text-nexus-muted hover:text-nexus-text hover:bg-nexus-card/40'}
-      `}
-    >
-      {isActive && <ActivePill />}
-      {isActive && <ActiveEdge />}
-      <Icon className="w-4 h-4 relative z-10 flex-shrink-0" />
-      <span className="relative z-10 truncate">{label}</span>
-    </button>
+    <div className="relative group">
+      <button
+        onClick={onClick}
+        title={collapsed ? label : undefined}
+        className={`
+          relative w-full flex items-center ${collapsed ? 'justify-center px-0 py-2.5' : 'gap-2.5 px-3 py-2'} rounded-lg text-[13px] font-medium
+          transition-colors duration-150 no-drag
+          ${isActive ? 'text-white' : 'text-nexus-muted hover:text-nexus-text hover:bg-nexus-card/40'}
+        `}
+      >
+        {isActive && <ActivePill />}
+        {isActive && <ActiveEdge collapsed={collapsed} />}
+        <Icon className="w-4 h-4 relative z-10 flex-shrink-0" />
+        {!collapsed && <span className="relative z-10 truncate">{label}</span>}
+      </button>
+
+      {/* Floating tooltip on collapsed mode */}
+      {collapsed && (
+        <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-nexus-surface border border-nexus-border/80 text-white text-xs rounded-lg shadow-xl whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-50">
+          {label}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -147,20 +161,43 @@ function NavGroupSection({
   currentPath,
   navigate,
   t,
+  collapsed = false,
 }: {
   group: NavGroup
   currentPath: string
   navigate: (p: string) => void
   t: (key: string) => string
+  collapsed?: boolean
 }) {
   const hasActive = group.items.some((i) => i.path === currentPath)
   const [open, setOpen] = useState(true)
+
+  if (collapsed) {
+    return (
+      <div className="space-y-1 py-1">
+        <div className="w-6 h-px mx-auto bg-nexus-border/40 my-1.5" />
+        {group.items.map((item) => (
+          <NavItemBtn
+            key={item.path}
+            item={item}
+            isActive={currentPath === item.path}
+            onClick={() => {
+              cyberAudio.navigate()
+              navigate(item.path)
+            }}
+            label={t(item.labelKey)}
+            collapsed={true}
+          />
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div className="mb-1">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-3 py-1.5 no-drag group"
+        className="w-full flex items-center justify-between px-3 py-1.5 no-drag group cursor-pointer"
       >
         <span className="text-[10px] text-nexus-muted font-semibold tracking-widest uppercase group-hover:text-nexus-text/70 transition-colors">
           {t(group.labelKey)}
@@ -194,6 +231,7 @@ function NavGroupSection({
                     navigate(item.path)
                   }}
                   label={t(item.labelKey)}
+                  collapsed={false}
                 />
               ))}
             </div>
@@ -210,8 +248,48 @@ export default function Sidebar() {
   const navigate = useNavigate()
   const { t } = useT()
   const isHome = location.pathname === '/'
-  const [appVersion, setAppVersion] = useState('1.0.5')
+  const isActivity = location.pathname === '/activity-feed'
+  const [appVersion, setAppVersion] = useState('2.4.2')
   const [downloadedUpdate, setDownloadedUpdate] = useState<string | null>(null)
+
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('nexus_sidebar_collapsed') === 'true'
+    } catch {
+      return false
+    }
+  })
+
+  const toggleCollapsed = () => {
+    setCollapsed((prev) => {
+      const next = !prev
+      try {
+        localStorage.setItem('nexus_sidebar_collapsed', String(next))
+      } catch {}
+      try {
+        cyberAudio.click()
+      } catch {}
+      window.dispatchEvent(new CustomEvent('nexus:sidebar-collapse', { detail: { collapsed: next } }))
+      return next
+    })
+  }
+
+  // Keyboard shortcut Ctrl+B / Cmd+B to toggle sidebar rail
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement
+      const isInput = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+      if (isInput) return
+
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+        e.preventDefault()
+        toggleCollapsed()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   useEffect(() => {
     window.nexusAPI?.getVersion?.().then((v) => {
@@ -228,59 +306,176 @@ export default function Sidebar() {
     <motion.aside
       initial={{ x: -80, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="w-56 h-full flex flex-col border-r border-nexus-border/30 bg-nexus-surface/50 backdrop-blur-xl"
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      className={`h-full flex flex-col border-r border-nexus-border/30 bg-nexus-surface/50 backdrop-blur-xl transition-all duration-300 ease-in-out relative select-none shrink-0 ${
+        collapsed ? 'w-16' : 'w-56'
+      }`}
     >
-      {/* Logo */}
-      <div className="p-5 flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl overflow-hidden shadow-lg border border-white/10 flex-shrink-0">
-          <img src={logoImg} alt="ZenDev" className="w-full h-full object-cover" />
+      {/* Logo & Toggle Header */}
+      {collapsed ? (
+        <div className="p-3 flex flex-col items-center gap-2">
+          <div
+            className="w-9 h-9 rounded-xl overflow-hidden shadow-lg border border-white/10 flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={() => navigate('/')}
+            title="ZenDev"
+          >
+            <img src={logoImg} alt="ZenDev" className="w-full h-full object-cover" />
+          </div>
+          <button
+            type="button"
+            onClick={toggleCollapsed}
+            title="Expand sidebar (Ctrl+B)"
+            className="p-1 rounded-lg text-nexus-muted hover:text-white hover:bg-white/5 transition-colors cursor-pointer no-drag"
+          >
+            <PanelLeftOpen className="w-4 h-4 text-nexus-cyan" />
+          </button>
         </div>
-        <div>
-          <h1 className="text-base font-bold gradient-text">ZenDev</h1>
-          <p className="text-[9px] text-nexus-muted font-medium tracking-widest uppercase">
-            {t('nav.subtitle') || 'Multi-Tool Suite'}
-          </p>
+      ) : (
+        <div className="p-4 flex items-center justify-between">
+          <div className="flex items-center gap-2.5 min-w-0 cursor-pointer" onClick={() => navigate('/')}>
+            <div className="w-9 h-9 rounded-xl overflow-hidden shadow-lg border border-white/10 flex-shrink-0">
+              <img src={logoImg} alt="ZenDev" className="w-full h-full object-cover" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-base font-bold gradient-text">ZenDev</h1>
+              <p className="text-[9px] text-nexus-muted font-medium tracking-widest uppercase truncate">
+                {t('nav.subtitle') || 'Multi-Tool Suite'}
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={toggleCollapsed}
+            title="Collapse sidebar (Ctrl+B)"
+            className="p-1.5 rounded-lg text-nexus-muted hover:text-white hover:bg-white/5 transition-colors cursor-pointer no-drag shrink-0"
+          >
+            <PanelLeftClose className="w-4 h-4" />
+          </button>
         </div>
-      </div>
+      )}
 
       {/* Divider */}
-      <div className="mx-4 h-px bg-gradient-to-r from-transparent via-nexus-border to-transparent" />
+      <div className={`${collapsed ? 'mx-2' : 'mx-4'} h-px bg-gradient-to-r from-transparent via-nexus-border to-transparent`} />
 
-      {/* Dashboard — pinned, outside groups */}
-      <div className="px-3 pt-3 pb-1 space-y-1">
-        <button
-          onClick={() => navigate('/')}
-          className={`
-            relative w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium
-            transition-colors duration-150 no-drag
-            ${isHome ? 'text-white' : 'text-nexus-muted hover:text-nexus-text hover:bg-nexus-card/40'}
-          `}
-        >
-          {isHome && <ActivePill />}
-          {isHome && <ActiveEdge />}
-          <LayoutDashboard className="w-4 h-4 relative z-10 flex-shrink-0" />
-          <span className="relative z-10">{t('nav.dashboard')}</span>
-        </button>
+      {/* Dashboard & Quick Search */}
+      <div className={`${collapsed ? 'px-2 pt-2' : 'px-3 pt-3'} pb-1 space-y-1`}>
+        {collapsed ? (
+          <div className="relative group flex justify-center">
+            <button
+              onClick={() => {
+                cyberAudio.navigate()
+                navigate('/')
+              }}
+              title={t('nav.dashboard')}
+              className={`
+                relative w-full flex items-center justify-center p-2.5 rounded-lg text-[13px] font-medium
+                transition-colors duration-150 no-drag
+                ${isHome ? 'text-white' : 'text-nexus-muted hover:text-nexus-text hover:bg-nexus-card/40'}
+              `}
+            >
+              {isHome && <ActivePill />}
+              {isHome && <ActiveEdge collapsed={true} />}
+              <LayoutDashboard className="w-4 h-4 relative z-10 flex-shrink-0" />
+            </button>
+            <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-nexus-surface border border-nexus-border/80 text-white text-xs rounded-lg shadow-xl whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-50">
+              {t('nav.dashboard')}
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => {
+              cyberAudio.navigate()
+              navigate('/')
+            }}
+            className={`
+              relative w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium
+              transition-colors duration-150 no-drag
+              ${isHome ? 'text-white' : 'text-nexus-muted hover:text-nexus-text hover:bg-nexus-card/40'}
+            `}
+          >
+            {isHome && <ActivePill />}
+            {isHome && <ActiveEdge collapsed={false} />}
+            <LayoutDashboard className="w-4 h-4 relative z-10 flex-shrink-0" />
+            <span className="relative z-10">{t('nav.dashboard')}</span>
+          </button>
+        )}
+
+        {/* Activity Feed */}
+        {collapsed ? (
+          <div className="relative group flex justify-center">
+            <button
+              onClick={() => {
+                cyberAudio.navigate()
+                navigate('/activity-feed')
+              }}
+              title={t('nav.tools.activityFeed') || 'Activity Feed'}
+              className={`
+                relative w-full flex items-center justify-center p-2.5 rounded-lg text-[13px] font-medium
+                transition-colors duration-150 no-drag
+                ${isActivity ? 'text-white' : 'text-nexus-muted hover:text-nexus-text hover:bg-nexus-card/40'}
+              `}
+            >
+              {isActivity && <ActivePill />}
+              {isActivity && <ActiveEdge collapsed={true} />}
+              <ScrollText className="w-4 h-4 relative z-10 flex-shrink-0 text-nexus-cyan" />
+            </button>
+            <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-nexus-surface border border-nexus-border/80 text-white text-xs rounded-lg shadow-xl whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-50">
+              {t('nav.tools.activityFeed') || 'Activity Feed'}
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => {
+              cyberAudio.navigate()
+              navigate('/activity-feed')
+            }}
+            className={`
+              relative w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium
+              transition-colors duration-150 no-drag
+              ${isActivity ? 'text-white' : 'text-nexus-muted hover:text-nexus-text hover:bg-nexus-card/40'}
+            `}
+          >
+            {isActivity && <ActivePill />}
+            {isActivity && <ActiveEdge collapsed={false} />}
+            <ScrollText className="w-4 h-4 relative z-10 flex-shrink-0 text-nexus-cyan" />
+            <span className="relative z-10">{t('nav.tools.activityFeed') || 'Activity Feed'}</span>
+          </button>
+        )}
 
         {/* Quick Switcher Trigger */}
-        <button
-          type="button"
-          onClick={() => window.dispatchEvent(new CustomEvent('nexus:open-palette'))}
-          className="w-full flex items-center justify-between px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.07] border border-white/5 text-xs text-nexus-muted hover:text-white transition-all group no-drag"
-        >
-          <span className="flex items-center gap-2">
-            <Search className="w-3.5 h-3.5 text-nexus-cyan" />
-            <span className="text-[12px]">Quick Search</span>
-          </span>
-          <span className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-[10px] font-mono text-nexus-muted">
-            Ctrl K
-          </span>
-        </button>
+        {collapsed ? (
+          <div className="relative group flex justify-center pt-1">
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('nexus:open-palette'))}
+              title="Quick Search (Ctrl+K)"
+              className="w-full flex items-center justify-center p-2 rounded-lg bg-white/[0.03] hover:bg-white/[0.07] border border-white/5 text-nexus-cyan hover:text-white transition-all no-drag"
+            >
+              <Search className="w-3.5 h-3.5" />
+            </button>
+            <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-nexus-surface border border-nexus-border/80 text-white text-xs rounded-lg shadow-xl whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-50">
+              Quick Search (Ctrl+K)
+            </div>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent('nexus:open-palette'))}
+            className="w-full flex items-center justify-between px-3 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.07] border border-white/5 text-xs text-nexus-muted hover:text-white transition-all group no-drag cursor-pointer"
+          >
+            <span className="flex items-center gap-2">
+              <Search className="w-3.5 h-3.5 text-nexus-cyan" />
+              <span className="text-[12px]">Quick Search</span>
+            </span>
+            <span className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-[10px] font-mono text-nexus-muted">
+              Ctrl K
+            </span>
+          </button>
+        )}
       </div>
 
       {/* Scrollable grouped nav */}
-      <nav className="flex-1 overflow-y-auto px-3 pb-2 space-y-2 scrollbar-hidden">
+      <nav className={`flex-1 overflow-y-auto ${collapsed ? 'px-2' : 'px-3'} pb-2 space-y-2 scrollbar-hidden`}>
         {NAV_GROUPS.map((group) => (
           <NavGroupSection
             key={group.labelKey}
@@ -288,13 +483,14 @@ export default function Sidebar() {
             currentPath={location.pathname}
             navigate={navigate}
             t={t}
+            collapsed={collapsed}
           />
         ))}
       </nav>
 
       {/* Footer */}
-      <div className="p-3">
-        {downloadedUpdate && (
+      <div className={collapsed ? 'p-2' : 'p-3'}>
+        {downloadedUpdate && !collapsed && (
           <button
             type="button"
             onClick={() => {
@@ -310,21 +506,54 @@ export default function Sidebar() {
             <span>Güncelle ({downloadedUpdate})</span>
           </button>
         )}
-        <button
-          onClick={() => navigate('/account')}
-          className={`
-            w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium mb-3
-            transition-colors duration-150 no-drag
-            ${location.pathname === '/account' ? 'text-white bg-nexus-accent/20 border border-nexus-accent/30' : 'text-nexus-muted hover:text-nexus-text hover:bg-nexus-card/40'}
-          `}
-        >
-          <Settings className={`w-4 h-4 flex-shrink-0 ${location.pathname === '/account' ? 'text-nexus-accent' : ''}`} />
-          <span className="truncate">{t('nav.account') || 'Account Settings'}</span>
-        </button>
-        <div className="glass-card p-2.5 text-center">
-          <p className="text-[10px] text-nexus-muted">ZenDev v{appVersion}</p>
-          <p className="text-[9px] text-nexus-muted/60 mt-0.5">Electron + React + TypeScript</p>
-        </div>
+
+        {collapsed ? (
+          <div className="relative group flex justify-center mb-2">
+            <button
+              onClick={() => {
+                cyberAudio.navigate()
+                navigate('/account')
+              }}
+              title={t('nav.account') || 'Account Settings'}
+              className={`
+                w-full flex items-center justify-center p-2.5 rounded-lg text-[13px] font-medium
+                transition-colors duration-150 no-drag cursor-pointer
+                ${location.pathname === '/account' ? 'text-white bg-nexus-accent/20 border border-nexus-accent/30' : 'text-nexus-muted hover:text-nexus-text hover:bg-nexus-card/40'}
+              `}
+            >
+              <Settings className={`w-4 h-4 flex-shrink-0 ${location.pathname === '/account' ? 'text-nexus-accent' : ''}`} />
+            </button>
+            <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-nexus-surface border border-nexus-border/80 text-white text-xs rounded-lg shadow-xl whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-50">
+              {t('nav.account') || 'Account Settings'}
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => {
+              cyberAudio.navigate()
+              navigate('/account')
+            }}
+            className={`
+              w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium mb-3
+              transition-colors duration-150 no-drag cursor-pointer
+              ${location.pathname === '/account' ? 'text-white bg-nexus-accent/20 border border-nexus-accent/30' : 'text-nexus-muted hover:text-nexus-text hover:bg-nexus-card/40'}
+            `}
+          >
+            <Settings className={`w-4 h-4 flex-shrink-0 ${location.pathname === '/account' ? 'text-nexus-accent' : ''}`} />
+            <span className="truncate">{t('nav.account') || 'Account Settings'}</span>
+          </button>
+        )}
+
+        {collapsed ? (
+          <div className="text-center py-1 font-mono text-[10px] text-nexus-muted/60" title={`ZenDev v${appVersion}`}>
+            v{appVersion}
+          </div>
+        ) : (
+          <div className="glass-card p-2.5 text-center">
+            <p className="text-[10px] text-nexus-muted font-mono font-semibold">ZenDev v{appVersion}</p>
+            <p className="text-[9px] text-nexus-muted/60 mt-0.5">Electron + React + TypeScript</p>
+          </div>
+        )}
       </div>
     </motion.aside>
   )

@@ -29,6 +29,7 @@ import {
 } from 'lucide-react'
 import BaseToolTemplate from '../components/BaseToolTemplate'
 import { useT } from '../lib/i18n'
+import { cyberAudio } from '../lib/cyberAudio'
 import { useToast } from '../lib/ToastContext'
 import {
   type SavedPasswordItem,
@@ -353,10 +354,10 @@ export default function PasswordGenerator() {
           const uniqueItems = Array.from(map.values())
           setVaultItems(uniqueItems)
           await saveEncryptedVault(uniqueItems)
-          toast({ title: 'Yedek İçe Aktarıldı', message: 'Tüm kayıtlı parolalar başarıyla geri yüklendi.', type: 'success' })
+          showToastSuccess('Yedek İçe Aktarıldı', 'Tüm kayıtlı parolalar başarıyla geri yüklendi.')
         }
       } catch {
-        toast({ title: 'İçe Aktarma Başarısız', message: 'Geçersiz JSON yedek dosyası yapısı.', type: 'error' })
+        showToastError('İçe Aktarma Başarısız', 'Geçersiz JSON yedek dosyası yapısı.')
       }
     }
     reader.readAsText(file)

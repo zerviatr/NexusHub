@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom'
 import { cyberAudio } from '../lib/cyberAudio'
 import { detectSmartPaste } from '../lib/smartPasteDetector'
 import SmartPasteCard from './SmartPasteCard'
+import { useT } from '../lib/i18n'
 
 export default function MiniHud() {
+  const { t } = useT()
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [quickHash, setQuickHash] = useState('')
@@ -100,7 +102,7 @@ export default function MiniHud() {
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-nexus-accent animate-pulse" />
               <span className="text-xs font-mono font-semibold tracking-wider text-nexus-accent uppercase">
-                Nexus Mini-HUD <span className="text-nexus-muted font-normal">(Ctrl+Shift+Space)</span>
+                {t('miniHud.title')} <span className="text-nexus-muted font-normal">(Ctrl+Shift+Space)</span>
               </span>
             </div>
             <button
@@ -114,13 +116,13 @@ export default function MiniHud() {
           {/* Quick Hash Box */}
           <div className="p-4 bg-nexus-bg/50 border-b border-nexus-border/20">
             <label className="text-[11px] font-mono text-nexus-muted mb-1.5 block flex items-center gap-1.5">
-              <Hash className="w-3.5 h-3.5 text-nexus-cyan" /> Anlık Hızlı SHA-256 Hesaplayıcı
+              <Hash className="w-3.5 h-3.5 text-nexus-cyan" /> {t('miniHud.quickHash')}
             </label>
             <input
               type="text"
               value={quickHash}
               onChange={(e) => handleComputeQuickHash(e.target.value)}
-              placeholder="Herhangi bir metin yaz..."
+              placeholder={t('miniHud.quickHashPlaceholder')}
               className="w-full bg-nexus-surface border border-nexus-border/40 rounded-lg px-3 py-2 text-xs text-nexus-text font-mono focus:outline-none focus:border-nexus-cyan transition-colors"
             />
             {quickResult && (
@@ -130,10 +132,10 @@ export default function MiniHud() {
                   cyberAudio.copySuccess()
                 }}
                 className="mt-2 text-[11px] font-mono text-nexus-cyan bg-nexus-cyan/10 border border-nexus-cyan/20 p-2 rounded truncate cursor-pointer hover:bg-nexus-cyan/20 transition-colors flex items-center justify-between"
-                title="Kopyalamak için tıkla"
+                title={t('miniHud.copy')}
               >
                 <span className="truncate">{quickResult}</span>
-                <span className="text-[9px] uppercase px-1.5 py-0.5 bg-nexus-cyan/30 rounded shrink-0 ml-2">Kopyala</span>
+                <span className="text-[9px] uppercase px-1.5 py-0.5 bg-nexus-cyan/30 rounded shrink-0 ml-2">{t('miniHud.copy')}</span>
               </div>
             )}
           </div>
@@ -158,7 +160,7 @@ export default function MiniHud() {
                   }
                 }
               }}
-              placeholder="Araç veya işlem ara (örn: regex, optimizer, mock, mail)..."
+              placeholder={t('miniHud.searchPlaceholder')}
               className="flex-1 bg-transparent border-none text-sm text-nexus-text placeholder-nexus-muted focus:outline-none font-sans"
             />
           </div>
@@ -201,7 +203,7 @@ export default function MiniHud() {
 
           {/* Footer */}
           <div className="px-4 py-2 bg-nexus-bg/70 border-t border-nexus-border/20 flex items-center justify-between text-[11px] text-nexus-muted">
-            <span>ESC ile kapat</span>
+            <span>{t('miniHud.escToClose')}</span>
             <span className="font-mono text-nexus-accent">ZenDev HUD v2.5</span>
           </div>
         </motion.div>

@@ -61,14 +61,46 @@ export default function TempMail() {
     if (!email) handleGenerate()
   }, [])
 
-  // Auto-refresh inbox every 5 seconds
+  const [isVisible, setIsVisible] = useState(() => (typeof document !== 'undefined' ? document.visibilityState !== 'hidden' : true))
+
+  // Handle tray sleep/wake
   useEffect(() => {
-    if (!email || activeMessageId) return
+    const handleVisChange = (e: any) => {
+      const visible = e.detail?.visible !== undefined ? Boolean(e.detail.visible) : (document.visibilityState !== 'hidden')
+      setIsVisible(visible)
+      if (visible && email && !activeMessageId) {
+        handleCheck(true)
+      }
+    }
+    const handleDomVis = () => {
+      const visible = document.visibilityState !== 'hidden'
+      setIsVisible(visible)
+      if (visible && email && !activeMessageId) handleCheck(true)
+    }
+
+    window.addEventListener('nexus:app-visibility' as any, handleVisChange)
+    document.addEventListener('visibilitychange', handleDomVis)
+
+    const unbindIpc = nexusAPI.onVisibilityChange?.((visible: boolean) => {
+      setIsVisible(visible)
+      if (visible && email && !activeMessageId) handleCheck(true)
+    })
+
+    return () => {
+      window.removeEventListener('nexus:app-visibility' as any, handleVisChange)
+      document.removeEventListener('visibilitychange', handleDomVis)
+      unbindIpc?.()
+    }
+  }, [email, activeMessageId])
+
+  // Auto-refresh inbox every 5 seconds (paused while hidden in tray)
+  useEffect(() => {
+    if (!email || activeMessageId || !isVisible) return
     const interval = setInterval(() => {
       handleCheck(true)
     }, 5000)
     return () => clearInterval(interval)
-  }, [email, activeMessageId])
+  }, [email, activeMessageId, isVisible])
 
   const handleGenerate = async () => {
     setIsGenerating(true)

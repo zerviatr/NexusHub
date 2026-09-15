@@ -16,6 +16,9 @@ import {
 } from 'lucide-react'
 import BaseToolTemplate from '../components/BaseToolTemplate'
 import { cyberAudio } from '../lib/cyberAudio'
+import { useT } from '../lib/i18n'
+import { useFileGatewayDrop } from '../lib/fileGateway'
+import { logActivity } from '../lib/activityLogger'
 
 interface SelectedPDF {
   path: string
@@ -27,6 +30,7 @@ interface SelectedPDF {
 }
 
 export default function PdfStudio() {
+  const { t } = useT()
   const [activeTab, setActiveTab] = useState<'merge' | 'split'>('merge')
 
   // Merge State
@@ -34,6 +38,33 @@ export default function PdfStudio() {
   const [isMerging, setIsMerging] = useState(false)
   const [isDraggingMerge, setIsDraggingMerge] = useState(false)
   const [mergeResult, setMergeResult] = useState<{ success: boolean; path?: string; pageCount?: number; size?: number; error?: string } | null>(null)
+
+  // Ingest dropped files from global File Gateway
+  useFileGatewayDrop(async (detail) => {
+    if (!detail.name.toLowerCase().endsWith('.pdf')) return
+    setActiveTab('merge')
+    if (detail.path && window.nexusAPI?.pdf?.inspectFiles) {
+      try {
+        const inspected = await window.nexusAPI.pdf.inspectFiles([detail.path])
+        if (inspected && inspected.length > 0) {
+          setMergeFiles((prev) => [...prev, ...inspected])
+          setMergeResult(null)
+          try { cyberAudio.click() } catch {}
+          return
+        }
+      } catch {}
+    }
+    setMergeFiles((prev) => [
+      ...prev,
+      {
+        path: detail.path || detail.name,
+        name: detail.name,
+        size: detail.size,
+      },
+    ])
+    setMergeResult(null)
+    try { cyberAudio.click() } catch {}
+  })
 
   // Split State
   const [splitFile, setSplitFile] = useState<SelectedPDF | null>(null)
@@ -114,8 +145,37 @@ export default function PdfStudio() {
       } else if (res && !res.canceled) {
         setMergeResult({ success: false, error: res.error || 'Birleştirme başarısız oldu' })
       }
+
+      if (res && !res.canceled) {
+        logActivity({
+          toolId: 'pdf-studio',
+          action: 'merge_pdf',
+          category: 'file',
+          status: res.success ? 'success' : 'failure',
+          details: `Merged ${mergeFiles.length} PDF files into ${res.outputPath ? res.outputPath.split(/[/\\]/).pop() : 'document'}`,
+          metadata: {
+            inputCount: mergeFiles.length,
+            fileNames: mergeFiles.map((f) => f.name),
+            totalPages: res.totalCount,
+            outputPath: res.outputPath,
+            sizeBytes: res.size,
+            error: res.error,
+          },
+        })
+      }
     } catch (err: any) {
       setMergeResult({ success: false, error: err.message })
+      logActivity({
+        toolId: 'pdf-studio',
+        action: 'merge_pdf',
+        category: 'file',
+        status: 'failure',
+        details: `PDF merge failed: ${err.message}`,
+        metadata: {
+          inputCount: mergeFiles.length,
+          error: err.message,
+        },
+      })
     } finally {
       setIsMerging(false)
     }
@@ -175,8 +235,37 @@ export default function PdfStudio() {
       } else if (res && !res.canceled) {
         setSplitResult({ success: false, error: res.error || 'Sayfa çıkarma başarısız oldu' })
       }
+
+      if (res && !res.canceled) {
+        logActivity({
+          toolId: 'pdf-studio',
+          action: 'split_pdf',
+          category: 'file',
+          status: res.success ? 'success' : 'failure',
+          details: `Split PDF pages [${pageRange.trim()}] from ${splitFile.name}`,
+          metadata: {
+            fileName: splitFile.name,
+            pageRange: pageRange.trim(),
+            extractedPages: res.pageCount,
+            outputPath: res.outputPath,
+            error: res.error,
+          },
+        })
+      }
     } catch (err: any) {
       setSplitResult({ success: false, error: err.message })
+      logActivity({
+        toolId: 'pdf-studio',
+        action: 'split_pdf',
+        category: 'file',
+        status: 'failure',
+        details: `PDF split failed for ${splitFile.name}: ${err.message}`,
+        metadata: {
+          fileName: splitFile.name,
+          pageRange: pageRange.trim(),
+          error: err.message,
+        },
+      })
     } finally {
       setIsSplitting(false)
     }
@@ -184,8 +273,8 @@ export default function PdfStudio() {
 
   return (
     <BaseToolTemplate
-      title="PDF Stüdyosu & Evrak Paketi"
-      description="PDF dosyalarını sıralı birleştirin, sayfa aralığına göre bölün veya yeni PDF oluşturun. %100 yerel ve gizli."
+      title={t('pdfStudio.title')}
+      description={t('pdfStudio.description')}
       icon={FileText}
       gradient="from-amber-500 to-rose-500"
     >
@@ -199,14 +288,14 @@ export default function PdfStudio() {
                 cyberAudio.click()
                 setActiveTab('merge')
               }}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === 'merge'
                   ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
                   : 'text-nexus-muted hover:text-white hover:bg-white/5'
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
-              PDF Birleştirme (Merge)
+              {t('pdfStudio.tabMerge')}
             </button>
             <button
               type="button"
@@ -214,20 +303,20 @@ export default function PdfStudio() {
                 cyberAudio.click()
                 setActiveTab('split')
               }}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 activeTab === 'split'
                   ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-sm'
                   : 'text-nexus-muted hover:text-white hover:bg-white/5'
               }`}
             >
               <Scissors className="w-3.5 h-3.5" />
-              PDF Bölme & Sayfa Çıkarma (Split)
+              {t('pdfStudio.tabSplit')}
             </button>
           </div>
 
           <span className="text-[11px] text-nexus-muted font-mono flex items-center gap-1.5">
             <Sparkles className="w-3 h-3 text-amber-400" />
-            pdf-lib Native Engine &bull; Sıfır Bulut Bağımlılığı
+            {t('pdfStudio.engineBadge')}
           </span>
         </div>
 
@@ -236,9 +325,9 @@ export default function PdfStudio() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-semibold text-white">Birleştirilecek PDF Listesi</h3>
+                <h3 className="text-sm font-semibold text-white">{t('pdfStudio.mergeList')}</h3>
                 <p className="text-xs text-nexus-muted">
-                  Dosyaların birleştirme sırasını yukarı/aşağı butonlarıyla düzenleyebilirsiniz.
+                  {t('pdfStudio.mergeListDesc')}
                 </p>
               </div>
 
@@ -246,17 +335,17 @@ export default function PdfStudio() {
                 <button
                   type="button"
                   onClick={handleSelectMergeFiles}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-xs font-semibold text-amber-300 transition-all shadow-sm active:scale-95"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-xs font-semibold text-amber-300 transition-all shadow-sm active:scale-95 cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  PDF Dosyası Ekle
+                  {t('pdfStudio.addPdf')}
                 </button>
                 {mergeFiles.length > 0 && (
                   <button
                     type="button"
                     onClick={() => setMergeFiles([])}
-                    className="p-2 rounded-xl hover:bg-rose-500/10 text-nexus-muted hover:text-rose-400 transition-colors"
-                    title="Listeyi Temizle"
+                    className="p-2 rounded-xl hover:bg-rose-500/10 text-nexus-muted hover:text-rose-400 transition-colors cursor-pointer"
+                    title={t('pdfStudio.clearList')}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -280,8 +369,8 @@ export default function PdfStudio() {
                   <FileText className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white">PDF Dosyalarını Sürükleyin veya Tıklayın</p>
-                  <p className="text-xs text-nexus-muted mt-1">İki veya daha fazla PDF bırakarak tek bir belgede birleştirin.</p>
+                  <p className="text-sm font-medium text-white">{t('pdfStudio.dropMerge')}</p>
+                  <p className="text-xs text-nexus-muted mt-1">{t('pdfStudio.dropMergeSub')}</p>
                 </div>
               </div>
             ) : (
@@ -318,7 +407,7 @@ export default function PdfStudio() {
                           type="button"
                           disabled={index === 0}
                           onClick={() => moveFile(index, 'up')}
-                          className="p-1.5 rounded-lg hover:bg-white/10 disabled:opacity-30 text-nexus-muted hover:text-white transition-colors"
+                          className="p-1.5 rounded-lg hover:bg-white/10 disabled:opacity-30 text-nexus-muted hover:text-white transition-colors cursor-pointer"
                           title="Yukarı Taşı"
                         >
                           <ArrowUp className="w-3.5 h-3.5" />
@@ -327,7 +416,7 @@ export default function PdfStudio() {
                           type="button"
                           disabled={index === mergeFiles.length - 1}
                           onClick={() => moveFile(index, 'down')}
-                          className="p-1.5 rounded-lg hover:bg-white/10 disabled:opacity-30 text-nexus-muted hover:text-white transition-colors"
+                          className="p-1.5 rounded-lg hover:bg-white/10 disabled:opacity-30 text-nexus-muted hover:text-white transition-colors cursor-pointer"
                           title="Aşağı Taşı"
                         >
                           <ArrowDown className="w-3.5 h-3.5" />
@@ -335,7 +424,7 @@ export default function PdfStudio() {
                         <button
                           type="button"
                           onClick={() => removeFile(index)}
-                          className="p-1.5 rounded-lg hover:bg-rose-500/20 text-nexus-muted hover:text-rose-400 transition-colors"
+                          className="p-1.5 rounded-lg hover:bg-rose-500/20 text-nexus-muted hover:text-rose-400 transition-colors cursor-pointer"
                           title="Kaldır"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -348,10 +437,10 @@ export default function PdfStudio() {
                 {/* Merge Action Card */}
                 <div className="flex items-center justify-between p-4 rounded-xl bg-nexus-surface border border-white/5 mt-4">
                   <div className="text-xs text-nexus-muted">
-                    Toplam <span className="text-white font-semibold">{mergeFiles.length} dosya</span>, yaklaşık{' '}
-                    <span className="text-amber-300 font-semibold">
-                      {mergeFiles.reduce((acc, f) => acc + (f.pageCount || 0), 0)} sayfa
-                    </span>
+                    {t('pdfStudio.mergeSummary', {
+                      files: mergeFiles.length,
+                      pages: mergeFiles.reduce((acc, f) => acc + (f.pageCount || 0), 0),
+                    })}
                   </div>
 
                   <button
@@ -363,12 +452,12 @@ export default function PdfStudio() {
                     {isMerging ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Birleştiriliyor...</span>
+                        <span>{t('pdfStudio.merging')}</span>
                       </>
                     ) : (
                       <>
                         <Download className="w-4 h-4" />
-                        <span>PDF'leri Birleştir & Kaydet</span>
+                        <span>{t('pdfStudio.mergeBtn')}</span>
                       </>
                     )}
                   </button>
@@ -386,8 +475,7 @@ export default function PdfStudio() {
                       <>
                         <CheckCircle2 className="w-4 h-4 shrink-0" />
                         <span>
-                          Başarıyla birleştirildi ({mergeResult.pageCount} sayfa). Dosya:{' '}
-                          <span className="font-mono text-white">{mergeResult.path}</span>
+                          {t('pdfStudio.mergeSuccess', { pages: mergeResult.pageCount ?? 0, path: mergeResult.path || '' })}
                         </span>
                       </>
                     ) : (
@@ -422,8 +510,8 @@ export default function PdfStudio() {
                   <Scissors className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white">Bölünecek PDF Dosyasını Sürükleyin veya Tıklayın</p>
-                  <p className="text-xs text-nexus-muted mt-1">Sayfa aralığı veya tekil sayfaları ayıklamak için PDF yükleyin.</p>
+                  <p className="text-sm font-medium text-white">{t('pdfStudio.dropSplit')}</p>
+                  <p className="text-xs text-nexus-muted mt-1">{t('pdfStudio.dropSplitSub')}</p>
                 </div>
               </div>
             ) : (
@@ -438,16 +526,16 @@ export default function PdfStudio() {
                       <p className="text-xs font-semibold text-white">{splitFile.name}</p>
                       <p className="text-[11px] text-nexus-muted font-mono mt-0.5">
                         {formatSize(splitFile.size)} &bull;{' '}
-                        <span className="text-rose-400 font-bold">{splitFile.pageCount} Sayfa</span>
+                        <span className="text-rose-400 font-bold">{splitFile.pageCount} Pages</span>
                       </p>
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={handleSelectSplitFile}
-                    className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-nexus-muted hover:text-white transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-nexus-muted hover:text-white transition-colors cursor-pointer"
                   >
-                    Farklı Dosya Seç
+                    {t('pdfStudio.selectOther')}
                   </button>
                 </div>
 
@@ -455,29 +543,29 @@ export default function PdfStudio() {
                 <div className="glass-panel p-5 rounded-2xl border border-white/5 space-y-4">
                   <div>
                     <label className="text-xs font-semibold text-white block mb-1">
-                      Çıkarılacak Sayfa Aralığı
+                      {t('pdfStudio.rangeLabel')}
                     </label>
                     <p className="text-[11px] text-nexus-muted mb-2">
-                      Virgülle ayrılmış sayfa numaraları veya aralıklar girebilirsiniz (Örn: <code className="text-rose-300">1-3, 5, 8-10</code>)
+                      {t('pdfStudio.rangeHint')}
                     </p>
                     <input
                       type="text"
                       value={pageRange}
                       onChange={(e) => setPageRange(e.target.value)}
-                      placeholder="Örn: 1-5 veya 2, 4, 6"
+                      placeholder="1-5, 8"
                       className="w-full bg-nexus-bg border border-nexus-border rounded-xl px-3.5 py-2.5 text-xs font-mono text-white focus:outline-none focus:border-rose-500"
                     />
                   </div>
 
                   {/* Quick Select Buttons */}
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-[11px] text-nexus-muted">Hızlı Seçim:</span>
+                    <span className="text-[11px] text-nexus-muted">{t('pdfStudio.quickSelect')}</span>
                     <button
                       type="button"
                       onClick={() => setPageRange('1')}
-                      className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] font-mono text-nexus-muted hover:text-white transition-colors"
+                      className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] font-mono text-nexus-muted hover:text-white transition-colors cursor-pointer"
                     >
-                      Yalnızca 1. Sayfa
+                      {t('pdfStudio.pageOne')}
                     </button>
                     {splitFile.pageCount && splitFile.pageCount >= 2 && (
                       <button
@@ -488,9 +576,9 @@ export default function PdfStudio() {
                             .join(', ')
                           setPageRange(odds)
                         }}
-                        className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] font-mono text-nexus-muted hover:text-white transition-colors"
+                        className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] font-mono text-nexus-muted hover:text-white transition-colors cursor-pointer"
                       >
-                        Tek Sayfalar (1, 3, 5...)
+                        {t('pdfStudio.oddPages')}
                       </button>
                     )}
                     {splitFile.pageCount && splitFile.pageCount >= 2 && (
@@ -502,9 +590,9 @@ export default function PdfStudio() {
                             .join(', ')
                           setPageRange(evens)
                         }}
-                        className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] font-mono text-nexus-muted hover:text-white transition-colors"
+                        className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] font-mono text-nexus-muted hover:text-white transition-colors cursor-pointer"
                       >
-                        Çift Sayfalar (2, 4, 6...)
+                        {t('pdfStudio.evenPages')}
                       </button>
                     )}
                   </div>
@@ -519,12 +607,12 @@ export default function PdfStudio() {
                       {isSplitting ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Sayfalar Ayrılıyor...</span>
+                          <span>{t('pdfStudio.splitting')}</span>
                         </>
                       ) : (
                         <>
                           <Scissors className="w-4 h-4" />
-                          <span>Sayfaları Ayıkla & Kaydet</span>
+                          <span>{t('pdfStudio.splitBtn')}</span>
                         </>
                       )}
                     </button>
@@ -543,8 +631,7 @@ export default function PdfStudio() {
                       <>
                         <CheckCircle2 className="w-4 h-4 shrink-0" />
                         <span>
-                          Sayfalar başarıyla çıkarıldı ({splitResult.pageCount} sayfa). Dosya:{' '}
-                          <span className="font-mono text-white">{splitResult.path}</span>
+                          {t('pdfStudio.splitSuccess', { pages: splitResult.pageCount ?? 0, path: splitResult.path || '' })}
                         </span>
                       </>
                     ) : (

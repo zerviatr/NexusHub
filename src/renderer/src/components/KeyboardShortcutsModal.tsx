@@ -2,32 +2,34 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Keyboard, X, Command, Sparkles, Volume2, Pin, Search } from 'lucide-react'
 import { cyberAudio } from '../lib/cyberAudio'
+import { useT } from '../lib/i18n'
 
 interface ShortcutItem {
   keys: string[]
-  desc: string
+  keyName: string
   category: 'global' | 'tools' | 'editor'
 }
 
 const SHORTCUTS: ShortcutItem[] = [
-  { keys: ['Ctrl', 'K'], desc: 'Evrensel Komut Paleti & Hızlı Arama', category: 'global' },
-  { keys: ['Ctrl', 'Shift', 'Space'], desc: 'ZenDev Mini-HUD Spotlight Penceresi', category: 'global' },
-  { keys: ['Ctrl', 'Shift', 'T'], desc: 'Pencereyi Ekranda Üstte Sabitle (Pin to Top)', category: 'global' },
-  { keys: ['Ctrl', 'Shift', 'S'], desc: 'Siber Mekanik Ses Efektlerini Aç / Kapat', category: 'global' },
-  { keys: ['?'], desc: 'Klavye Kısayolları Kılavuzunu Göster / Gizle', category: 'global' },
-  { keys: ['Esc'], desc: 'Açık Pencere, Modal veya Çekmeceyi Kapat', category: 'global' },
+  { keys: ['Ctrl', 'K'], keyName: 'cmdPalette', category: 'global' },
+  { keys: ['Ctrl', 'Shift', 'Space'], keyName: 'miniHud', category: 'global' },
+  { keys: ['Ctrl', 'Shift', 'T'], keyName: 'pinToTop', category: 'global' },
+  { keys: ['Ctrl', 'Shift', 'S'], keyName: 'toggleSfx', category: 'global' },
+  { keys: ['?'], keyName: 'toggleGuide', category: 'global' },
+  { keys: ['Esc'], keyName: 'closeEsc', category: 'global' },
 
-  { keys: ['Ctrl', 'F'], desc: 'Scratchpad İçi Canlı Bul & Değiştir', category: 'editor' },
-  { keys: ['Ctrl', 'S'], desc: 'Not / Ayarları Zorla Manuel Kaydet', category: 'editor' },
-  { keys: ['Tab'], desc: 'Scratchpad Kod / Metin 2 Boşluk Girintileme', category: 'editor' },
+  { keys: ['Ctrl', 'F'], keyName: 'scratchpadFind', category: 'editor' },
+  { keys: ['Ctrl', 'S'], keyName: 'scratchpadSave', category: 'editor' },
+  { keys: ['Tab'], keyName: 'scratchpadIndent', category: 'editor' },
 
-  { keys: ['Alt', 'D'], desc: 'Dashboard Ana Sayfasına Dön', category: 'tools' },
-  { keys: ['Alt', 'O'], desc: 'Windows System Optimizer Santraline Git', category: 'tools' },
-  { keys: ['Alt', 'P'], desc: 'Port Killer & TCP Gözlemcisine Git', category: 'tools' },
-  { keys: ['Alt', 'F'], desc: 'Cyber Fortress Kalkanına Git', category: 'tools' },
+  { keys: ['Alt', 'D'], keyName: 'gotoDashboard', category: 'tools' },
+  { keys: ['Alt', 'O'], keyName: 'gotoOptimizer', category: 'tools' },
+  { keys: ['Alt', 'P'], keyName: 'gotoPortKiller', category: 'tools' },
+  { keys: ['Alt', 'F'], keyName: 'gotoFortress', category: 'tools' },
 ]
 
 export default function KeyboardShortcutsModal() {
+  const { t, language } = useT()
   const [isOpen, setIsOpen] = useState(false)
   const [filter, setFilter] = useState('')
 
@@ -68,7 +70,10 @@ export default function KeyboardShortcutsModal() {
     }
   }, [isOpen])
 
-  const filteredShortcuts = SHORTCUTS.filter(
+  const filteredShortcuts = SHORTCUTS.map((s) => ({
+    ...s,
+    desc: t(`shortcutsModal.${s.keyName}`)
+  })).filter(
     (s) =>
       s.desc.toLowerCase().includes(filter.toLowerCase()) ||
       s.keys.some((k) => k.toLowerCase().includes(filter.toLowerCase()))
@@ -97,13 +102,13 @@ export default function KeyboardShortcutsModal() {
                 </div>
                 <div>
                   <h2 className="text-base font-bold text-white flex items-center gap-2">
-                    Klavye Kısayolları Kılavuzu
+                    {t('shortcutsModal.title')}
                     <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-nexus-cyan/20 text-nexus-cyan border border-nexus-cyan/30">
-                      PRO HUD
+                      {t('shortcutsModal.badge')}
                     </span>
                   </h2>
                   <p className="text-xs text-nexus-muted mt-0.5">
-                    Hızlı erişim tuşlarıyla ZenDev'ı fareye dokunmadan kontrol edin
+                    {t('shortcutsModal.desc')}
                   </p>
                 </div>
               </div>
@@ -122,7 +127,7 @@ export default function KeyboardShortcutsModal() {
                 type="text"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                placeholder="Kısayol veya komut ara (Örn: HUD, Pin, Ctrl)..."
+                placeholder={t('shortcutsModal.searchPlaceholder')}
                 className="w-full pl-10 pr-4 py-2 bg-nexus-bg/80 border border-nexus-border/50 rounded-xl text-xs text-white placeholder:text-nexus-muted outline-none focus:border-nexus-cyan/60 transition-colors"
                 autoFocus
               />
@@ -151,19 +156,29 @@ export default function KeyboardShortcutsModal() {
 
               {filteredShortcuts.length === 0 && (
                 <div className="text-center py-8 text-xs text-nexus-muted font-mono">
-                  Eşleşen kısayol bulunamadı.
+                  {t('shortcutsModal.noResults')}
                 </div>
               )}
             </div>
 
             {/* Footer quick hint */}
             <div className="pt-3 border-t border-nexus-border/30 flex items-center justify-between text-[11px] font-mono text-nexus-muted">
-              <span>İpucu: Bu pencereyi istediğiniz zaman <kbd className="px-1.5 py-0.5 rounded bg-nexus-bg text-nexus-cyan border border-nexus-border">?</kbd> tuşuna basarak açabilirsiniz.</span>
+              <span>
+                {language === 'tr' ? (
+                  <>
+                    İpucu: Bu pencereyi istediğiniz zaman <kbd className="px-1.5 py-0.5 rounded bg-nexus-bg text-nexus-cyan border border-nexus-border">?</kbd> tuşuna basarak açabilirsiniz.
+                  </>
+                ) : (
+                  <>
+                    Tip: You can open this window anytime by pressing <kbd className="px-1.5 py-0.5 rounded bg-nexus-bg text-nexus-cyan border border-nexus-border">?</kbd>
+                  </>
+                )}
+              </span>
               <button
                 onClick={() => setIsOpen(false)}
                 className="px-3.5 py-1.5 rounded-xl bg-nexus-accent/20 hover:bg-nexus-accent/30 border border-nexus-accent/40 text-nexus-accent font-bold cursor-pointer transition-all"
               >
-                Kapat
+                {t('shortcutsModal.close')}
               </button>
             </div>
           </motion.div>

@@ -23,6 +23,7 @@ import BaseToolTemplate from '../components/BaseToolTemplate'
 import { nexusAPI, ScannedFile, FileOperation, OrganizerExecutionResult } from '../lib/ipc'
 import { useT } from '../lib/i18n'
 import { useToast } from '../lib/ToastContext'
+import { logActivity } from '../lib/activityLogger'
 
 type PresetMode = 'custom' | 'dev' | 'photo' | 'office'
 
@@ -103,9 +104,32 @@ export default function BulkOrganizer() {
         setUndoMessage(warn)
         showToastError('Uyarı', warn)
       }
+
+      logActivity({
+        toolId: 'bulk-organizer',
+        action: 'undo_organize',
+        category: 'file',
+        status: res.success ? 'success' : 'failure',
+        details: `Reverted bulk organization: ${res.restored} files restored`,
+        metadata: {
+          restored: res.restored,
+          errorCount: res.errors?.length || 0,
+          errors: res.errors,
+        },
+      })
     } catch (err: any) {
       setUndoMessage(err.message || 'Geri alma başarısız')
       showToastError('Hata', err.message || 'Geri alma başarısız')
+      logActivity({
+        toolId: 'bulk-organizer',
+        action: 'undo_organize',
+        category: 'file',
+        status: 'failure',
+        details: `Undo organize failed: ${err.message}`,
+        metadata: {
+          error: err.message,
+        },
+      })
     } finally {
       setIsUndoing(false)
     }
@@ -216,8 +240,36 @@ export default function BulkOrganizer() {
         showToastError('Hata Oluştu', `${res.failedOperations} dosya taşınamadı.`)
       }
       await checkUndo()
+
+      logActivity({
+        toolId: 'bulk-organizer',
+        action: 'organize_batch',
+        category: 'file',
+        status: res.success ? 'success' : 'failure',
+        details: `Bulk organized ${res.successfulOperations} files (${res.failedOperations} failed)`,
+        metadata: {
+          operationsCount: opsToSend.length,
+          successfulOperations: res.successfulOperations,
+          failedOperations: res.failedOperations,
+          targetDir: selectedDir,
+          groupByTimeline,
+          organizeByCategory,
+        },
+      })
     } catch (err: any) {
       showToastError('İşlem Hatası', err.message || 'Bilinmeyen hata.')
+      logActivity({
+        toolId: 'bulk-organizer',
+        action: 'organize_batch',
+        category: 'file',
+        status: 'failure',
+        details: `Bulk organization failed: ${err.message}`,
+        metadata: {
+          operationsCount: activeOps.length,
+          targetDir: selectedDir,
+          error: err.message,
+        },
+      })
     } finally {
       setIsExecuting(false)
     }

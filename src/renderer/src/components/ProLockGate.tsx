@@ -62,7 +62,7 @@ export default function ProLockGate({ toolName, toolDesc }: ProLockGateProps) {
         </div>
 
         <p className="text-[11px] text-nexus-muted/80 mt-6">
-          Enjoy unlimited access to all 10 tools, native clipboard watcher, and future cloud bridges.
+          Enjoy unlimited access to all 25+ tools, native clipboard watcher, and future cloud bridges.
         </p>
       </motion.div>
     </div>

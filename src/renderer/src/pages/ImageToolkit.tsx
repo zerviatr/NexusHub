@@ -21,6 +21,9 @@ import BaseToolTemplate from '../components/BaseToolTemplate'
 import { nexusAPI, ImageMeta, ImageJob, ImageProcessResult } from '../lib/ipc'
 import { useT } from '../lib/i18n'
 import { useToast } from '../lib/ToastContext'
+import { cyberAudio } from '../lib/cyberAudio'
+import { useFileGatewayDrop } from '../lib/fileGateway'
+import { logActivity } from '../lib/activityLogger'
 
 type Format = 'jpeg' | 'png' | 'webp' | 'avif'
 type Preset = 'original' | 'hd' | '4k' | 'thumbnail' | 'custom'
@@ -58,6 +61,40 @@ export default function ImageToolkit() {
   const [stripExif, setStripExif] = useState(true)
   const [outputSuffix, setOutputSuffix] = useState('_converted')
   const [outputDir, setOutputDir] = useState('')
+
+  // Ingest dropped files from global File Gateway
+  useFileGatewayDrop(async (detail) => {
+    const validExts = /\.(png|jpe?g|webp|avif|gif|tiff|bmp|svg)$/i
+    if (!validExts.test(detail.name)) return
+
+    if (detail.path && typeof (window.nexusAPI as any)?.image?.getMetadata === 'function') {
+      try {
+        const meta = await nexusAPI.image.getMetadata(detail.path)
+        setFiles((prev) => [...prev, meta])
+        setResults([])
+        if (!outputDir) {
+          const parts = detail.path.replace(/\\/g, '/').split('/')
+          parts.pop()
+          setOutputDir(parts.join('/') + '/zendev_output')
+        }
+        showToastSuccess('Görseller Eklendi', '1 adet görsel başarıyla yüklendi.')
+        try { cyberAudio.click() } catch {}
+        return
+      } catch {}
+    }
+
+    // Fallback if metadata extraction not available or in web/test environment
+    const fallbackMeta: ImageMeta = {
+      filePath: detail.path || detail.name,
+      name: detail.name,
+      size: detail.size,
+      format: detail.name.split('.').pop()?.toLowerCase(),
+    }
+    setFiles((prev) => [...prev, fallbackMeta])
+    setResults([])
+    showToastSuccess('Görseller Eklendi', '1 adet görsel başarıyla yüklendi.')
+    try { cyberAudio.click() } catch {}
+  })
 
   // Split Comparison Slider Modal
   const [comparingFile, setComparingFile] = useState<{ original: ImageMeta; result?: ImageProcessResult } | null>(null)
@@ -155,8 +192,35 @@ export default function ImageToolkit() {
         'Dönüştürme Tamamlandı',
         `${successCount} görsel başarıyla dönüştürüldü ve EXIF arındırıldı.`
       )
+      logActivity({
+        toolId: 'image-toolkit',
+        action: 'batch_convert',
+        category: 'file',
+        status: successCount > 0 ? 'success' : 'failure',
+        details: `Batch converted ${jobs.length} images to ${format.toUpperCase()} (${successCount} succeeded, ${jobs.length - successCount} failed)`,
+        metadata: {
+          count: jobs.length,
+          format,
+          quality,
+          stripExif,
+          successCount,
+          failCount: jobs.length - successCount,
+        },
+      })
     } catch (err: any) {
       showToastError('Dönüştürme Hatası', err.message || 'İşlem başarısız.')
+      logActivity({
+        toolId: 'image-toolkit',
+        action: 'batch_convert',
+        category: 'file',
+        status: 'failure',
+        details: `Batch image conversion failed: ${err.message}`,
+        metadata: {
+          count: jobs.length,
+          format,
+          error: err.message,
+        },
+      })
     } finally {
       setIsProcessing(false)
     }

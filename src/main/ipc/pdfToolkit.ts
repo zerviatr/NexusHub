@@ -92,7 +92,7 @@ export function registerPdfToolkitIPC(): void {
     'pdf:merge',
     async (_, { filePaths, outputFileName }: { filePaths: string[]; outputFileName?: string }) => {
       try {
-        if (!filePaths || filePaths.length < 2) {
+        if (!Array.isArray(filePaths) || filePaths.length < 2) {
           throw new Error('Birleştirmek için en az 2 PDF dosyası seçilmelidir.')
         }
 

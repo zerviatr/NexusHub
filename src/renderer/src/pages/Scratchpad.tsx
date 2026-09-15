@@ -43,6 +43,8 @@ import {
 import BaseToolTemplate from '../components/BaseToolTemplate'
 import { cyberAudio } from '../lib/cyberAudio'
 import { useToast } from '../lib/ToastContext'
+import { useT } from '../lib/i18n'
+import { useFileGatewayDrop } from '../lib/fileGateway'
 
 interface Note {
   id: string
@@ -72,7 +74,7 @@ async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey>
     ['deriveKey']
   )
   return crypto.subtle.deriveKey(
-    { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
+    { name: 'PBKDF2', salt: salt.buffer as ArrayBuffer, iterations: 100000, hash: 'SHA-256' },
     keyMaterial,
     { name: 'AES-GCM', length: 256 },
     false,
@@ -90,7 +92,12 @@ async function encryptNoteText(text: string, password: string): Promise<string> 
   combined.set(salt, 0)
   combined.set(iv, salt.length)
   combined.set(new Uint8Array(ciphertext), salt.length + iv.length)
-  return btoa(String.fromCharCode(...combined))
+  let str = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < combined.length; i += chunkSize) {
+    str += String.fromCharCode.apply(null, Array.from(combined.subarray(i, i + chunkSize)));
+  }
+  return btoa(str);
 }
 
 async function decryptNoteText(cipherB64: string, password: string): Promise<string> {
@@ -256,6 +263,7 @@ MIT © 2026 ZenDev
 }
 
 export default function Scratchpad() {
+  const { t } = useT()
   const { success: showToastSuccess, error: showToastError } = useToast()
 
   // Multi-tab storage
@@ -287,6 +295,28 @@ export default function Scratchpad() {
   const [showTemplates, setShowTemplates] = useState(false)
   const [editingTitleId, setEditingTitleId] = useState<string | null>(null)
   const [tempTitle, setTempTitle] = useState('')
+
+  // Ingest dropped markdown/text files from global File Gateway
+  useFileGatewayDrop(async (detail) => {
+    const validExts = /\.(md|markdown|txt)$/i
+    if (!validExts.test(detail.name)) return
+    try {
+      const content = await detail.file.text()
+      const newNote: Note = {
+        id: 'note-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7),
+        title: detail.name,
+        content,
+        updatedAt: Date.now(),
+      }
+      setNotes((prev) => [newNote, ...prev])
+      setActiveNoteId(newNote.id)
+      try { cyberAudio.click() } catch {}
+      showToastSuccess('Not Aktarıldı', `${detail.name} içeriği yeni nota eklendi.`)
+    } catch (err: any) {
+      console.error('Failed to read note file:', err)
+      showToastError('Hata', 'Dosya okunamadı.')
+    }
+  })
 
   // 1. Find & Replace state
   const [showFindReplace, setShowFindReplace] = useState(false)
@@ -337,24 +367,32 @@ export default function Scratchpad() {
   }, [snapshots])
 
   // Periodic auto-snapshot (every 3 minutes if content changed)
+  // Use ref to hold the latest activeNote so timer does not reset on every keystroke
+  const activeNoteRef = useRef(activeNote)
+  useEffect(() => {
+    activeNoteRef.current = activeNote
+  }, [activeNote])
+
+  // Periodic auto-snapshot (every 3 minutes if content changed)
   useEffect(() => {
     const timer = setInterval(() => {
-      if (!activeNote || activeNote.isEncrypted || !activeNote.content.trim()) return
+      const currentNote = activeNoteRef.current
+      if (!currentNote || currentNote.isEncrypted || !currentNote.content.trim()) return
       setSnapshots((prev) => {
         const last = prev[0]
-        if (last && last.content === activeNote.content) return prev
+        if (last && last.content === currentNote.content) return prev
         const newSnap: NoteSnapshot = {
           id: `snap-${Date.now()}`,
           timestamp: Date.now(),
-          previewTitle: activeNote.title,
-          charCount: activeNote.content.length,
-          content: activeNote.content,
+          previewTitle: currentNote.title,
+          charCount: currentNote.content.length,
+          content: currentNote.content,
         }
         return [newSnap, ...prev].slice(0, 15)
       })
     }, 180000)
     return () => clearInterval(timer)
-  }, [activeNote])
+  }, [])
 
   // Update active note content
   const updateContent = (newContent: string) => {
@@ -1140,17 +1178,17 @@ export default function Scratchpad() {
     return (
       <BaseToolTemplate
         icon={FileText}
-        title="Markdown Scratchpad Ultimate"
-        description="Şifreli Güvenli Kasa Modu Aktif."
+        title={t('scratchpad.title')}
+        description={t('scratchpad.unlockTitle')}
         gradient="from-emerald-600 to-teal-500"
       >
         <div className="glass-card p-12 flex flex-col items-center justify-center text-center max-w-md mx-auto my-12 border-rose-500/30 bg-rose-500/5">
           <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center mb-4 shadow-xl shadow-rose-500/20">
             <Lock className="w-8 h-8 text-rose-400 animate-pulse" />
           </div>
-          <h2 className="text-lg font-bold text-white mb-1">Şifreli Not Kalkanı</h2>
+          <h2 className="text-lg font-bold text-white mb-1">{t('scratchpad.unlockTitle')}</h2>
           <p className="text-xs text-nexus-muted mb-6">
-            "{activeNote.title}" notu askeri düzey AES-256-GCM ile şifrelendi. İçeriği görüntülemek için parolanızı girin.
+            {t('scratchpad.unlockDesc')}
           </p>
 
           <form
@@ -1164,17 +1202,17 @@ export default function Scratchpad() {
               type="password"
               value={unlockPassword}
               onChange={(e) => setUnlockPassword(e.target.value)}
-              placeholder="Kilit açma parolasını girin..."
+              placeholder={t('scratchpad.unlockPasswordPlaceholder')}
               autoFocus
               className="w-full p-2.5 rounded-xl bg-nexus-surface border border-nexus-border focus:border-rose-400 text-xs text-white text-center outline-none font-mono"
             />
             <button
               type="submit"
               disabled={isDecrypting || !unlockPassword}
-              className="w-full py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+              className="w-full py-2.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
             >
               <Unlock className="w-4 h-4" />
-              <span>{isDecrypting ? 'Şifre Çözülüyor...' : 'Notun Kilidini Aç'}</span>
+              <span>{isDecrypting ? '...' : t('scratchpad.unlockBtn')}</span>
             </button>
           </form>
         </div>
@@ -1186,8 +1224,8 @@ export default function Scratchpad() {
     <div className={isZenMode ? 'fixed inset-0 z-50 bg-nexus-bg p-6 flex flex-col overflow-hidden' : ''}>
       <BaseToolTemplate
         icon={FileText}
-        title="Markdown Scratchpad Ultimate"
-        description="Çoklu sekme, canlı görevler, görsel sürükle-bırak, bul-değiştir, AES şifreli kasa ve akış şeması destekli tam teşekküllü stüdyo."
+        title={t('scratchpad.title')}
+        description={t('scratchpad.description')}
         gradient="from-emerald-600 to-teal-500"
       >
         <div className="space-y-4">
@@ -1247,7 +1285,7 @@ export default function Scratchpad() {
                       <button
                         type="button"
                         onClick={(e) => handleDeleteNote(note.id, e)}
-                        className="opacity-0 group-hover:opacity-100 hover:text-rose-400 p-0.5 transition-opacity"
+                        className="opacity-0 group-hover:opacity-100 hover:text-rose-400 p-0.5 transition-opacity cursor-pointer"
                         title="Sekmeyi Sil"
                       >
                         <X className="w-3 h-3" />
@@ -1261,11 +1299,11 @@ export default function Scratchpad() {
               <button
                 type="button"
                 onClick={handleAddNote}
-                className="p-1.5 px-2.5 rounded-xl bg-nexus-surface/40 hover:bg-nexus-accent/20 border border-white/5 hover:border-nexus-accent/40 text-nexus-muted hover:text-white transition-all flex items-center gap-1 text-xs"
-                title="Yeni Not Ekle"
+                className="p-1.5 px-2.5 rounded-xl bg-nexus-surface/40 hover:bg-nexus-accent/20 border border-white/5 hover:border-nexus-accent/40 text-nexus-muted hover:text-white transition-all flex items-center gap-1 text-xs cursor-pointer"
+                title={t('scratchpad.newNote')}
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Yeni</span>
+                <span>{t('scratchpad.newNote')}</span>
               </button>
             </div>
 
@@ -1286,12 +1324,12 @@ export default function Scratchpad() {
               <button
                 type="button"
                 onClick={() => setShowFindReplace(!showFindReplace)}
-                className={`p-2 rounded-xl border transition-all ${
+                className={`p-2 rounded-xl border transition-all cursor-pointer ${
                   showFindReplace
                     ? 'bg-nexus-cyan/20 text-nexus-cyan border-nexus-cyan/40'
                     : 'bg-nexus-surface border-nexus-border text-nexus-muted hover:text-white'
                 }`}
-                title="Bul & Değiştir (Ctrl+F)"
+                title={t('scratchpad.findReplace')}
               >
                 <Replace className="w-3.5 h-3.5" />
               </button>
@@ -1300,8 +1338,8 @@ export default function Scratchpad() {
               <button
                 type="button"
                 onClick={() => setShowVaultModal(true)}
-                className="p-2 rounded-xl bg-nexus-surface hover:bg-rose-500/20 border border-nexus-border text-nexus-muted hover:text-rose-400 transition-all"
-                title="Notu Parola ile Şifrele"
+                className="p-2 rounded-xl bg-nexus-surface hover:bg-rose-500/20 border border-nexus-border text-nexus-muted hover:text-rose-400 transition-all cursor-pointer"
+                title={t('scratchpad.lockVault')}
               >
                 <Lock className="w-3.5 h-3.5" />
               </button>
@@ -1311,8 +1349,8 @@ export default function Scratchpad() {
                 <button
                   type="button"
                   onClick={() => setShowTimeline(!showTimeline)}
-                  className="p-2 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-nexus-muted hover:text-white transition-all"
-                  title="Sürüm Geçmişi (Snapshots)"
+                  className="p-2 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-nexus-muted hover:text-white transition-all cursor-pointer"
+                  title={t('scratchpad.timeline')}
                 >
                   <History className="w-3.5 h-3.5 text-amber-400" />
                 </button>
@@ -1326,8 +1364,8 @@ export default function Scratchpad() {
                       className="absolute right-0 top-full mt-2 w-72 rounded-2xl bg-nexus-surface/98 border border-amber-500/40 shadow-2xl p-3 z-50 backdrop-blur-xl"
                     >
                       <div className="text-[10px] font-mono text-amber-400 uppercase pb-2 border-b border-white/5 flex items-center justify-between">
-                        <span>Zaman Tüneli Snapshots</span>
-                        <span>{snapshots.length} Kayıt</span>
+                        <span>{t('scratchpad.timeline')}</span>
+                        <span>{snapshots.length}</span>
                       </div>
                       <div className="max-h-60 overflow-y-auto space-y-1.5 mt-2">
                         {snapshots.length === 0 ? (
@@ -1351,7 +1389,7 @@ export default function Scratchpad() {
                                 </span>
                               </div>
                               <div className="text-[10px] text-nexus-muted mt-0.5">
-                                {snap.charCount} karakter
+                                {snap.charCount} {t('scratchpad.characters')}
                               </div>
                             </div>
                           ))
@@ -1367,10 +1405,10 @@ export default function Scratchpad() {
                 <button
                   type="button"
                   onClick={() => setShowTemplates(!showTemplates)}
-                  className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all"
+                  className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all cursor-pointer"
                 >
                   <BookOpen className="w-3.5 h-3.5 text-nexus-cyan" />
-                  <span>Şablonlar</span>
+                  <span>{t('scratchpad.templates')}</span>
                 </button>
 
                 <AnimatePresence>
@@ -1382,7 +1420,7 @@ export default function Scratchpad() {
                       className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-nexus-surface/98 border border-nexus-cyan/40 shadow-2xl p-2 z-50 backdrop-blur-xl"
                     >
                       <div className="text-[10px] font-mono text-nexus-muted uppercase px-2 py-1 border-b border-white/5">
-                        Hazır Şablon Ekle
+                        {t('scratchpad.templates')}
                       </div>
                       <div className="space-y-1 mt-1">
                         {Object.entries(TEMPLATES).map(([key, tpl]) => (
@@ -1390,7 +1428,7 @@ export default function Scratchpad() {
                             key={key}
                             type="button"
                             onClick={() => handleApplyTemplate(key)}
-                            className="w-full text-left p-2 rounded-xl text-xs text-nexus-text hover:text-white hover:bg-nexus-cyan/10 transition-colors flex items-center justify-between"
+                            className="w-full text-left p-2 rounded-xl text-xs text-nexus-text hover:text-white hover:bg-nexus-cyan/10 transition-colors flex items-center justify-between cursor-pointer"
                           >
                             <span>{tpl.title}</span>
                             <Plus className="w-3 h-3 text-nexus-cyan" />
@@ -1406,12 +1444,12 @@ export default function Scratchpad() {
               <button
                 type="button"
                 onClick={() => setIsZenMode(!isZenMode)}
-                className={`p-2 rounded-xl border transition-all ${
+                className={`p-2 rounded-xl border transition-all cursor-pointer ${
                   isZenMode
                     ? 'bg-nexus-accent text-white border-nexus-accent'
                     : 'bg-nexus-surface border-nexus-border text-nexus-muted hover:text-white'
                 }`}
-                title="Zen / Tam Ekran Odaklanma Modu"
+                title={t('scratchpad.zenMode')}
               >
                 {isZenMode ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
               </button>
@@ -1582,29 +1620,29 @@ export default function Scratchpad() {
               <button
                 type="button"
                 onClick={() => setViewMode('edit')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                   viewMode === 'edit' ? 'bg-nexus-accent text-white shadow-sm' : 'text-nexus-muted hover:text-white'
                 }`}
               >
-                Editör
+                {t('scratchpad.editView')}
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode('split')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                   viewMode === 'split' ? 'bg-nexus-accent text-white shadow-sm' : 'text-nexus-muted hover:text-white'
                 }`}
               >
-                İkili Panel
+                {t('scratchpad.splitView')}
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode('preview')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                   viewMode === 'preview' ? 'bg-nexus-accent text-white shadow-sm' : 'text-nexus-muted hover:text-white'
                 }`}
               >
-                Önizleme
+                {t('scratchpad.previewView')}
               </button>
             </div>
 
@@ -1613,18 +1651,18 @@ export default function Scratchpad() {
               <button
                 type="button"
                 onClick={handleCopy}
-                className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95"
-                title="Markdown Kopyala"
+                className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer"
+                title={t('scratchpad.copyMd')}
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span className="hidden sm:inline">Kopyala</span>
+                <span className="hidden sm:inline">{t('scratchpad.copyMd')}</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleCopyHtml}
-                className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95"
-                title="HTML Kopyala"
+                className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer"
+                title={t('scratchpad.copyHtml')}
               >
                 <FileCode className="w-3.5 h-3.5 text-nexus-cyan" />
                 <span className="hidden sm:inline">HTML</span>
@@ -1633,8 +1671,8 @@ export default function Scratchpad() {
               <button
                 type="button"
                 onClick={handleDownloadMd}
-                className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95"
-                title="Markdown İndir"
+                className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer"
+                title={t('scratchpad.downloadMd')}
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>.md</span>
@@ -1643,8 +1681,8 @@ export default function Scratchpad() {
               <button
                 type="button"
                 onClick={handleDownloadHtml}
-                className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95"
-                title="HTML İndir"
+                className="px-2.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer"
+                title="HTML"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>.html</span>
@@ -1653,8 +1691,8 @@ export default function Scratchpad() {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="p-2 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white transition-all active:scale-95"
-                title="PDF Olarak Yazdır / Kaydet"
+                className="p-2 rounded-xl bg-nexus-surface hover:bg-white/[0.08] border border-nexus-border text-xs text-white transition-all active:scale-95 cursor-pointer"
+                title="Print"
               >
                 <Printer className="w-3.5 h-3.5 text-purple-400" />
               </button>
@@ -1672,9 +1710,9 @@ export default function Scratchpad() {
               >
                 <div className="flex items-center justify-between pb-2 border-b border-nexus-border/30 mb-2">
                   <span className="text-[11px] font-mono text-nexus-muted uppercase">
-                    Markdown Girişi & Kodlama
+                    Markdown
                   </span>
-                  <span className="text-[10px] font-mono text-emerald-400">● Otomatik Kaydedildi</span>
+                  <span className="text-[10px] font-mono text-emerald-400">● Auto-Saved</span>
                 </div>
 
                 <div className="flex-1 flex overflow-hidden">
@@ -1697,7 +1735,7 @@ export default function Scratchpad() {
                     onScroll={handleEditorScroll}
                     onDrop={handleDrop}
                     onDragOver={(e) => e.preventDefault()}
-                    placeholder="Markdown metninizi buraya yazın... Görsel sürükleyip bırakabilirsiniz."
+                    placeholder="Markdown..."
                     className="flex-1 w-full pl-3 bg-transparent resize-none focus:outline-none font-mono text-xs text-white leading-relaxed placeholder-nexus-muted selection:bg-nexus-accent/30 overflow-y-auto"
                   />
                 </div>
@@ -1713,8 +1751,8 @@ export default function Scratchpad() {
                 } glass-card p-6 overflow-y-auto h-full bg-nexus-surface/40 border-nexus-border/60`}
               >
                 <div className="flex items-center justify-between pb-2 border-b border-nexus-border/30 mb-4">
-                  <span className="text-[11px] font-mono text-nexus-muted uppercase">Canlı Çıktı</span>
-                  <span className="text-[10px] font-mono text-nexus-cyan">Etkileşimli Görevler Aktif</span>
+                  <span className="text-[11px] font-mono text-nexus-muted uppercase">{t('scratchpad.previewView')}</span>
+                  <span className="text-[10px] font-mono text-nexus-cyan">Live</span>
                 </div>
                 <div className="prose prose-invert max-w-none">
                   {renderAdvancedMarkdown(activeNote.content)}
@@ -1727,31 +1765,31 @@ export default function Scratchpad() {
           <div className="glass-card p-3 px-4 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-nexus-muted">
             <div className="flex items-center gap-6">
               <span>
-                Karakter: <strong className="text-white">{charCount}</strong>
+                <strong className="text-white">{charCount}</strong> {t('scratchpad.characters')}
               </span>
               <span>
-                Kelime: <strong className="text-white">{wordCount}</strong>
+                <strong className="text-white">{wordCount}</strong> {t('scratchpad.words')}
               </span>
               <span>
-                Satır: <strong className="text-white">{lineCount}</strong>
+                <strong className="text-white">{lineCount}</strong> {t('scratchpad.lines')}
               </span>
               <span className="flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-nexus-cyan" />
                 <span>
-                  Okuma Süresi: <strong className="text-white">~{readingTimeMinutes} dk</strong>
+                  <strong className="text-white">~{readingTimeMinutes}</strong> {t('scratchpad.readingTime')}
                 </span>
               </span>
             </div>
             <div className="flex items-center gap-3 text-[11px] text-nexus-muted/80">
-              <span>Kısayollar:</span>
+              <span>Shortcuts:</span>
               <kbd className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-nexus-cyan">
-                Ctrl+F (Bul)
+                Ctrl+F
               </kbd>
               <kbd className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-nexus-cyan">
-                Ctrl+B (Kalın)
+                Ctrl+B
               </kbd>
               <kbd className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-nexus-cyan">
-                Tab (Girinti)
+                Tab
               </kbd>
             </div>
           </div>
@@ -1769,16 +1807,16 @@ export default function Scratchpad() {
               >
                 <div className="flex items-center gap-2 mb-4 text-rose-400">
                   <Lock className="w-5 h-5" />
-                  <h3 className="text-sm font-bold text-white">Notu Parola ile Şifrele</h3>
+                  <h3 className="text-sm font-bold text-white">{t('scratchpad.lockModalTitle')}</h3>
                 </div>
                 <p className="text-xs text-nexus-muted mb-4">
-                  Belirleyeceğiniz parola AES-256-GCM ile notu şifreler. Parolayı unutursanız veriler kurtarılamaz.
+                  {t('scratchpad.lockModalDesc')}
                 </p>
                 <input
                   type="password"
                   value={vaultPassword}
                   onChange={(e) => setVaultPassword(e.target.value)}
-                  placeholder="Kilit parolası belirleyin..."
+                  placeholder={t('scratchpad.lockPasswordPlaceholder')}
                   className="w-full p-2.5 rounded-xl bg-black/50 border border-nexus-border text-xs text-white outline-none focus:border-rose-400 mb-4 font-mono"
                 />
                 <div className="flex items-center justify-end gap-2">
@@ -1788,17 +1826,17 @@ export default function Scratchpad() {
                       setShowVaultModal(false)
                       setVaultPassword('')
                     }}
-                    className="px-3 py-1.5 rounded-xl bg-nexus-surface border border-nexus-border text-xs text-nexus-muted hover:text-white"
+                    className="px-3 py-1.5 rounded-xl bg-nexus-surface border border-nexus-border text-xs text-nexus-muted hover:text-white cursor-pointer"
                   >
                     İptal
                   </button>
                   <button
                     type="button"
                     onClick={handleLockNote}
-                    className="px-3 py-1.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-xs text-white font-semibold flex items-center gap-1.5"
+                    className="px-3 py-1.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-xs text-white font-semibold flex items-center gap-1.5 cursor-pointer"
                   >
                     <Lock className="w-3.5 h-3.5" />
-                    <span>Şifrele ve Kilitle</span>
+                    <span>{t('scratchpad.lockConfirmBtn')}</span>
                   </button>
                 </div>
               </motion.div>

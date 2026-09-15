@@ -213,6 +213,26 @@ class CyberAudioEngine {
     } catch {}
   }
 
+  // --- Error Buzz ---
+  public error() {
+    try {
+      const ctx = this.initContext()
+      if (!ctx) return
+      const now = ctx.currentTime
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sawtooth'
+      osc.frequency.setValueAtTime(220, now)
+      osc.frequency.exponentialRampToValueAtTime(110, now + 0.18)
+      gain.gain.setValueAtTime(0.08 * this.volume, now)
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start(now)
+      osc.stop(now + 0.18)
+    } catch {}
+  }
+
   // --- Purge / Sonic Rumble ---
   public purge() {
     try {
