@@ -17,7 +17,8 @@
     "dist:mac": "electron-vite build && electron-builder --mac",
     "dist:linux": "electron-vite build && electron-builder --linux",
     "dist:dir": "electron-vite build && electron-builder --dir",
-    "docs:archive": "node scripts/archive-legacy-docs.mjs"
+    "docs:archive": "node scripts/archive-legacy-docs.mjs",
+    "repo:clean": "node scripts/github-cleaner.mjs"
   },
   "build": {
     "appId": "app.zendev.desktop",
