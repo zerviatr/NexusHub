@@ -4,7 +4,8 @@ export function getAdminDashboardHtml(): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZenDev — Enterprise License Console</title>
+  <title>ZenDev v2.4.3 — Master License & System Console</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2307080f'/%3E%3Crect x='2' y='2' width='60' height='60' rx='14' fill='none' stroke='%2306b6d4' stroke-width='1.5' stroke-opacity='0.4'/%3E%3Cpath d='M14 16 L48 16 C50 16 51 17 50 19 L40 30 L48 44 C49 46 48 48 46 48 L14 48 C12 48 11 47 12 45 L22 34 L14 20 C13 18 14 16 16 16 Z' fill='url(%23g)' stroke='%2300f2fe' stroke-width='3' stroke-linejoin='round'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2300f2fe'/%3E%3Cstop offset='60%25' stop-color='%2306b6d4'/%3E%3Cstop offset='100%25' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='3.5' fill='%23ffffff'/%3E%3C/svg%3E">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -67,11 +68,11 @@ export function getAdminDashboardHtml(): string {
   <div id="login-view" class="flex-1 flex items-center justify-center p-4">
     <div class="glass-card w-full max-w-md p-8 rounded-2xl shadow-2xl relative border border-nexus-border">
       <div class="flex flex-col items-center text-center mb-6">
-        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-nexus-cyan/20 to-nexus-accent/20 border border-nexus-cyan/30 flex items-center justify-center mb-4 shadow-lg shadow-nexus-cyan/10">
-          <i data-lucide="shield-check" class="w-7 h-7 text-nexus-cyan"></i>
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-400/20 via-sky-500/20 to-purple-600/20 border border-nexus-cyan/40 flex items-center justify-center mb-4 shadow-lg shadow-nexus-cyan/20">
+          <i data-lucide="terminal" class="w-7 h-7 text-nexus-cyan"></i>
         </div>
-        <h1 class="text-xl font-extrabold text-white tracking-tight">ZenDev Master Console</h1>
-        <p class="text-xs text-nexus-muted mt-1">Sıfır-Veri Lisans & Yetki Sistemi</p>
+        <h1 class="text-xl font-extrabold text-white tracking-tight">Zen<span class="text-nexus-cyan">Dev</span> v2.4.3 Console</h1>
+        <p class="text-xs text-nexus-muted mt-1">Sıfır-Veri Lisans & Sistem Yönetim Merkezi</p>
       </div>
 
       <form id="login-form" class="space-y-4" onsubmit="handleLogin(event)">
@@ -98,10 +99,16 @@ export function getAdminDashboardHtml(): string {
           <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </button>
 
-        <p class="text-[11px] text-center text-nexus-muted/60 mt-4 flex items-center justify-center gap-1">
-          <i data-lucide="lock" class="w-3 h-3"></i>
-          <span>Uçtan uca zamanlama saldırısına karşı korumalı</span>
-        </p>
+        <div class="pt-3 flex items-center justify-between text-[11px] text-nexus-muted/80">
+          <a href="/" class="hover:text-nexus-cyan flex items-center gap-1 transition">
+            <i data-lucide="arrow-left" class="w-3 h-3"></i>
+            <span>Ana Web Sitesine Dön</span>
+          </a>
+          <span class="flex items-center gap-1">
+            <i data-lucide="shield-check" class="w-3 h-3 text-nexus-emerald"></i>
+            <span>PBKDF2 Korumalı</span>
+          </span>
+        </div>
       </form>
     </div>
   </div>
@@ -113,13 +120,16 @@ export function getAdminDashboardHtml(): string {
     <!-- Navbar -->
     <header class="border-b border-nexus-border bg-nexus-surface/80 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-6 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-nexus-cyan to-nexus-accent flex items-center justify-center font-bold text-black text-sm shadow-md shadow-nexus-cyan/20">
-          N
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-400 via-sky-500 to-purple-600 p-[1.5px] shadow-md shadow-cyan-500/20">
+          <div class="w-full h-full bg-[#08090D] rounded-[10px] flex items-center justify-center">
+            <i data-lucide="terminal" class="w-4 h-4 text-nexus-cyan"></i>
+          </div>
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h2 class="text-sm font-bold text-white leading-none">ZenDev Key Controller</h2>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-nexus-cyan/10 text-nexus-cyan border border-nexus-cyan/30">Zero-PII Enterprise</span>
+            <h2 class="text-sm font-bold text-white leading-none font-mono">Zen<span class="text-nexus-cyan">Dev</span> Controller</h2>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-nexus-cyan/10 text-nexus-cyan border border-nexus-cyan/30">v2.4.3 Tauri Edition</span>
+            <span class="hidden sm:inline px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/10 text-purple-300 border border-purple-500/30">Zero-PII</span>
           </div>
           <p class="text-[11px] text-nexus-muted mt-0.5 flex items-center gap-2">
             <span id="server-telemetry" class="text-nexus-emerald flex items-center gap-1">
@@ -128,12 +138,17 @@ export function getAdminDashboardHtml(): string {
             </span>
             <span>&bull;</span>
             <span id="telemetry-stats" class="text-nexus-muted/70 hidden sm:inline">Uptime: — | DB: —</span>
+            <span class="hidden md:inline text-cyan-400/60 font-mono text-[10px]">&bull; Tauri v2 + Rust Core</span>
           </p>
         </div>
       </div>
 
       <!-- Quick Action Buttons -->
       <div class="flex items-center gap-1.5 sm:gap-2">
+        <a href="/" target="_blank" class="p-2 px-2.5 rounded-xl bg-nexus-card border border-nexus-cyan/30 text-nexus-cyan hover:bg-nexus-cyan/10 transition text-xs font-semibold flex items-center gap-1.5" title="Resmi Web Sitesini Aç">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          <span class="hidden md:inline">Ana Site</span>
+        </a>
         <button onclick="openNotifModal()" class="p-2 px-2.5 rounded-xl bg-nexus-card border border-nexus-border text-amber-400 hover:bg-amber-400/10 transition text-xs font-semibold flex items-center gap-1.5" title="Telegram & Discord Bildirimleri">
           <i data-lucide="bell" class="w-3.5 h-3.5"></i>
           <span class="hidden md:inline">Bildirimler</span>
