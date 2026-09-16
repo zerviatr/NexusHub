@@ -367,15 +367,33 @@ export default function App() {
                     <Route path="/hash-studio" element={<HashStudio />} />
                     <Route path="/regex-studio" element={<RegexStudio />} />
                     <Route path="/fake-data" element={<FakeDataStudio />} />
-                    <Route path="/api-studio" element={<ApiStudio />} />
+                    <Route
+                      path="/api-studio"
+                      element={isPro ? <ApiStudio /> : <ProLockGate toolName="API Studio Pro" toolDesc="Full REST & GraphQL client with automated test suites, environment vaults, and cURL exporters." />}
+                    />
                     <Route path="/curl-runner" element={<Navigate to="/api-studio" replace />} />
-                    <Route path="/system-optimizer" element={<SystemOptimizer />} />
+                    <Route
+                      path="/system-optimizer"
+                      element={isPro ? <SystemOptimizer /> : <ProLockGate toolName="System Optimizer Pro" toolDesc="Deep-clean compiler caches, npm build artifacts, Windows temp bloat, and reclaim valuable SSD space." />}
+                    />
                     <Route path="/color-studio" element={<ColorStudio />} />
-                    <Route path="/port-killer" element={<PortKiller />} />
+                    <Route
+                      path="/port-killer"
+                      element={isPro ? <PortKiller /> : <ProLockGate toolName="PortKiller Pro" toolDesc="Instant SIGKILL process terminator, conflicting TCP/UDP socket scanner, and hardware port inspector." />}
+                    />
                     <Route path="/scratchpad" element={<Scratchpad />} />
-                    <Route path="/pdf-studio" element={<PdfStudio />} />
-                    <Route path="/activity-feed" element={<ActivityFeed />} />
-                    <Route path="/sentinel" element={<ResourceSentinel />} />
+                    <Route
+                      path="/pdf-studio"
+                      element={isPro ? <PdfStudio /> : <ProLockGate toolName="PDF Studio Pro" toolDesc="100% offline PDF workstation to merge, split, encrypt with AES-256, and apply custom security watermarks." />}
+                    />
+                    <Route
+                      path="/activity-feed"
+                      element={isPro ? <ActivityFeed /> : <ProLockGate toolName="Audit Journal & Forensics" toolDesc="Cryptographic tamper-evident activity ledger tracking all security events and operations." />}
+                    />
+                    <Route
+                      path="/sentinel"
+                      element={isPro ? <ResourceSentinel /> : <ProLockGate toolName="ResourceSentinel Radar" toolDesc="60 FPS real-time CPU, RAM, disk I/O velocity, and thermal telemetry hardware diagnostics." />}
+                    />
                     <Route path="/dev-sandbox" element={<Navigate to="/api-studio" replace />} />
                     <Route
                       path="/fortress"

@@ -20,7 +20,7 @@ export type Language = 'tr' | 'en';
 export type Currency = 'TRY' | 'USD' | 'EUR';
 
 export interface PricingPlan {
-  id: 'personal' | 'studio';
+  id: 'free' | 'personal' | 'studio';
   nameTr: string;
   nameEn: string;
   badgeTr: string;
@@ -34,6 +34,11 @@ export interface PricingPlan {
   };
   featuresTr: string[];
   featuresEn: string[];
+  limitationsTr?: string[];
+  limitationsEn?: string[];
+  ctaTr?: string;
+  ctaEn?: string;
+  ctaHref?: string;
   recommended?: boolean;
 }
 

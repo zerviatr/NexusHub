@@ -327,53 +327,107 @@ export const ZENDEV_TOOLS: ToolItem[] = [
 
 export const PRICING_PLANS: PricingPlan[] = [
   {
-    id: 'personal',
-    nameTr: 'ZenDev Lifetime Personal',
-    nameEn: 'ZenDev Lifetime Personal',
-    badgeTr: 'Bireysel Geliştirici',
-    badgeEn: 'Indie Hacker',
-    descriptionTr: 'Tek geliştirici için 27+ gücün tümü. Aylık abonelik yok, ömür boyu sınırsız kullanım.',
-    descriptionEn: 'All 27+ cyber developer tools for a single developer. Zero subscriptions, lifetime license.',
+    id: 'free',
+    nameTr: 'ZenDev Community Free',
+    nameEn: 'ZenDev Community Free',
+    badgeTr: 'Kalıcı Ücretsiz',
+    badgeEn: 'Free Forever',
+    descriptionTr: 'Temel geliştirici yardımcı araçları ve hafif günlük iş akışları için ömür boyu ücretsiz sürüm.',
+    descriptionEn: 'Perpetual free edition for lightweight developer utilities and everyday essential tasks.',
     prices: {
-      TRY: { current: 349, original: 699, symbol: '₺' },
-      USD: { current: 29, original: 59, symbol: '$' },
-      EUR: { current: 27, original: 55, symbol: '€' }
+      TRY: { current: 0, original: 0, symbol: '₺' },
+      USD: { current: 0, original: 0, symbol: '$' },
+      EUR: { current: 0, original: 0, symbol: '€' }
+    },
+    featuresTr: [
+      '8 Temel Yardımcı Araç (Hash, QR, Regex, JSON, Renk vb.)',
+      'Tek Windows Bilgisayarında Yerel Kullanım',
+      'Tauri v2 + Rust Ultra Hafif Motor (35 MB RAM)',
+      '%100 Çevrimdışı Çalışma & Sıfır Telemetri',
+      'Topluluk Desteği & Açık Dokümantasyon'
+    ],
+    featuresEn: [
+      '8 Essential Utilities (Hash, QR, Regex, JSON, Color, etc.)',
+      'Single Windows machine offline usage',
+      'Tauri v2 + Rust ultra-lean engine (35 MB RAM)',
+      '100% offline privacy & zero telemetry',
+      'Community Discord & public documentation'
+    ],
+    limitationsTr: [
+      'PortKiller & Anında SIGKILL (Kilitli)',
+      'ApiStudio REST & GraphQL İstemcisi (Kilitli)',
+      'ResourceSentinel Canlı Telemetri Radarı (Kilitli)',
+      'CyberFortress DoD 7-Pass İmha & AES Kasa (Kilitli)',
+      'PdfStudio AES Şifreli Filigran İstasyonu (Kilitli)',
+      'SystemOptimizer & Pano Geçmişi (Kilitli)'
+    ],
+    limitationsEn: [
+      'PortKiller & Instant SIGKILL (Locked)',
+      'ApiStudio REST & GraphQL Client (Locked)',
+      'ResourceSentinel Hardware Radar (Locked)',
+      'CyberFortress DoD 7-Pass Shredder & Vault (Locked)',
+      'PdfStudio Encrypted Watermarker (Locked)',
+      'SystemOptimizer & Clipboard History (Locked)'
+    ],
+    ctaTr: 'Ücretsiz İndir',
+    ctaEn: 'Download Free',
+    ctaHref: '#download'
+  },
+  {
+    id: 'personal',
+    nameTr: 'ZenDev Lifetime Pro',
+    nameEn: 'ZenDev Lifetime Pro',
+    badgeTr: 'En Popüler / Bireysel Geliştirici',
+    badgeEn: 'Most Popular / Indie Hacker',
+    descriptionTr: 'Tek geliştirici için 27+ gücün tamamı. Aylık abonelik yok, ömür boyu sınırsız kullanım.',
+    descriptionEn: 'All 27+ cyber developer tools for a single developer. Zero subscriptions, lifetime license.',
+    recommended: true,
+    prices: {
+      TRY: { current: 699, original: 1399, symbol: '₺' },
+      USD: { current: 49, original: 99, symbol: '$' },
+      EUR: { current: 45, original: 89, symbol: '€' }
     },
     featuresTr: [
       '27+ Araç ve Stüdyonun Tamamına Ömür Boyu Erişim',
-      '2 Adet Kişisel Windows Bilgisayarında Aktivasyon',
+      'PortKiller, ApiStudio, ResourceSentinel & PdfStudio Açık',
+      'CyberFortress Askeri 7-Pass İmha & AES-256-GCM Kasa',
+      '2 Adet Kişisel Windows Bilgisayarında Eşzamanlı Aktivasyon',
       'Ömür Boyu Ücretsiz Güncellemeler (v2.x ve v3.x dahil)',
       'Tauri v2 + Rust Ultra Düşük Bellek Mimarisi (35 MB RAM)',
       '%100 Çevrimdışı & Yerel Veri Gizliliği (Sıfır Bulut İzi)',
       'Self-Service Donanım Kimliği (HWID) Sıfırlama Portalı',
-      'Topluluk Discord ve GitHub Öncelikli Destek'
+      '30 Gün Koşulsuz Para İade Garantisi'
     ],
     featuresEn: [
       'Lifetime access to all 27+ tools & studios',
+      'Unlocked PortKiller, ApiStudio, Sentinel & PdfStudio',
+      'CyberFortress military 7-pass shredder & AES vault',
       'Activate on 2 personal Windows machines simultaneously',
       'Free lifetime upgrades (v2.x and v3.x included)',
       'Tauri v2 + Rust ultra-lean engine (35 MB RAM)',
       '100% offline-first privacy (Zero cloud telemetry)',
       'Self-service HWID machine transfer portal',
-      'Discord community & priority GitHub support'
-    ]
+      '30-day money-back guarantee without hassle'
+    ],
+    ctaTr: 'Ömür Boyu Pro Satın Al',
+    ctaEn: 'Get Lifetime Pro',
+    ctaHref: '#pricing'
   },
   {
     id: 'studio',
     nameTr: 'ZenDev Studio & Team Pack',
     nameEn: 'ZenDev Studio & Team Pack',
-    badgeTr: 'En Popüler / Takım',
+    badgeTr: 'Takım & Şirket',
     badgeEn: 'Best Value / Teams',
     descriptionTr: 'Yazılım ekipleri, ajanslar ve kurumsal geliştiriciler için 5 cihazlı ticari lisans paketi.',
     descriptionEn: 'Commercial team license for software agencies, startups, and engineering squads (5 machines).',
-    recommended: true,
     prices: {
-      TRY: { current: 799, original: 1599, symbol: '₺' },
-      USD: { current: 79, original: 159, symbol: '$' },
-      EUR: { current: 75, original: 149, symbol: '€' }
+      TRY: { current: 1899, original: 3799, symbol: '₺' },
+      USD: { current: 129, original: 249, symbol: '$' },
+      EUR: { current: 119, original: 229, symbol: '€' }
     },
     featuresTr: [
-      'Bireysel plandaki her şey + 5 Adet Cihaz Aktivasyonu',
+      'Bireysel plandaki her şey + 5 Adet Cihaz Aktivasyonu (~$25/cihaz)',
       'Ticari ve Kurumsal Projelerde Sınırsız Kullanım İzni',
       'Kurumsal E-Fatura ve Şirket Gider Makbuzu Desteği',
       'Öncelikli E-Posta & Özel Danışmanlık Kanalı',
@@ -389,7 +443,10 @@ export const PRICING_PLANS: PricingPlan[] = [
       'Team license management portal & bulk HWID revocation',
       'Early access to upcoming Plugin SDK ecosystem',
       '30-day money-back guarantee without hassle'
-    ]
+    ],
+    ctaTr: 'Takım Lisansı Satın Al',
+    ctaEn: 'Get Team License',
+    ctaHref: '#pricing'
   }
 ];
 

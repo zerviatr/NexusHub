@@ -34,11 +34,13 @@ import {
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
 import { cyberAudio } from '../lib/cyberAudio'
+import { useLicense } from '../lib/LicenseContext'
 
 type NavItem = {
   path: string
   labelKey: string
   icon: React.ElementType
+  isPro?: boolean
 }
 
 type NavGroup = {
@@ -51,10 +53,10 @@ const NAV_GROUPS: NavGroup[] = [
   {
     labelKey: 'nav.groups.privacy',
     items: [
-      { path: '/temp-mail',  labelKey: 'nav.tools.tempMail',          icon: Mail },
-      { path: '/decrypter',  labelKey: 'nav.tools.decrypter',         icon: ShieldCheck },
+      { path: '/temp-mail',  labelKey: 'nav.tools.tempMail',          icon: Mail, isPro: true },
+      { path: '/decrypter',  labelKey: 'nav.tools.decrypter',         icon: ShieldCheck, isPro: true },
       { path: '/password',   labelKey: 'nav.tools.passwordGenerator',  icon: Key },
-      { path: '/fortress',   labelKey: 'nav.tools.cyberFortress',     icon: ShieldAlert },
+      { path: '/fortress',   labelKey: 'nav.tools.cyberFortress',     icon: ShieldAlert, isPro: true },
     ],
   },
   {
@@ -64,7 +66,7 @@ const NAV_GROUPS: NavGroup[] = [
       { path: '/color-studio', labelKey: 'nav.tools.colorStudio',  icon: Palette },
       { path: '/regex-studio', labelKey: 'nav.tools.regexStudio',  icon: Terminal },
       { path: '/fake-data',    labelKey: 'nav.tools.fakeData',     icon: Zap },
-      { path: '/api-studio',   labelKey: 'nav.tools.apiStudio',    icon: Send },
+      { path: '/api-studio',   labelKey: 'nav.tools.apiStudio',    icon: Send, isPro: true },
       { path: '/qr-code',      labelKey: 'nav.tools.qrCode',       icon: QrCode },
       { path: '/json-studio',  labelKey: 'nav.tools.jsonStudio',   icon: Braces },
       { path: '/hash-studio',  labelKey: 'nav.tools.hashStudio',   icon: FileCheck },
@@ -73,19 +75,19 @@ const NAV_GROUPS: NavGroup[] = [
   {
     labelKey: 'nav.groups.files',
     items: [
-      { path: '/pdf-studio', labelKey: 'nav.tools.pdfStudio',        icon: FileText },
-      { path: '/organizer',  labelKey: 'nav.tools.bulkOrganizer',    icon: FolderArchive },
-      { path: '/clipboard',  labelKey: 'nav.tools.clipboardManager', icon: Clipboard },
-      { path: '/image',      labelKey: 'nav.tools.imageToolkit',     icon: ImageIcon },
+      { path: '/pdf-studio', labelKey: 'nav.tools.pdfStudio',        icon: FileText, isPro: true },
+      { path: '/organizer',  labelKey: 'nav.tools.bulkOrganizer',    icon: FolderArchive, isPro: true },
+      { path: '/clipboard',  labelKey: 'nav.tools.clipboardManager', icon: Clipboard, isPro: true },
+      { path: '/image',      labelKey: 'nav.tools.imageToolkit',     icon: ImageIcon, isPro: true },
     ],
   },
   {
     labelKey: 'nav.groups.network',
     items: [
-      { path: '/port-killer',      labelKey: 'nav.tools.portKiller',      icon: Radio },
-      { path: '/system-optimizer', labelKey: 'nav.tools.systemOptimizer', icon: Cpu },
-      { path: '/network',          labelKey: 'nav.tools.networkTools',     icon: Globe },
-      { path: '/sentinel',         labelKey: 'nav.tools.sentinel',         icon: Activity },
+      { path: '/port-killer',      labelKey: 'nav.tools.portKiller',      icon: Radio, isPro: true },
+      { path: '/system-optimizer', labelKey: 'nav.tools.systemOptimizer', icon: Cpu, isPro: true },
+      { path: '/network',          labelKey: 'nav.tools.networkTools',     icon: Globe, isPro: true },
+      { path: '/sentinel',         labelKey: 'nav.tools.sentinel',         icon: Activity, isPro: true },
     ],
   },
 ]
@@ -120,22 +122,25 @@ function NavItemBtn({
   onClick,
   label,
   collapsed = false,
+  isPro = true,
 }: {
   item: NavItem
   isActive: boolean
   onClick: () => void
   label: string
   collapsed?: boolean
+  isPro?: boolean
 }) {
   const Icon = item.icon
+  const showPro = item.isPro && !isPro
   return (
     <div className="relative group">
       <button
         onClick={onClick}
-        title={collapsed ? label : undefined}
+        title={collapsed ? (showPro ? `${label} (PRO)` : label) : undefined}
         className={`
           relative w-full flex items-center ${collapsed ? 'justify-center px-0 py-2.5' : 'gap-2.5 px-3 py-2'} rounded-lg text-[13px] font-medium
-          transition-colors duration-150 no-drag
+          transition-colors duration-150 no-drag cursor-pointer
           ${isActive ? 'text-white' : 'text-nexus-muted hover:text-nexus-text hover:bg-nexus-card/40'}
         `}
       >
@@ -143,12 +148,25 @@ function NavItemBtn({
         {isActive && <ActiveEdge collapsed={collapsed} />}
         <Icon className="w-4 h-4 relative z-10 flex-shrink-0" />
         {!collapsed && <span className="relative z-10 truncate">{label}</span>}
+        {!collapsed && showPro && (
+          <span className="relative z-10 ml-auto text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">
+            PRO
+          </span>
+        )}
+        {collapsed && showPro && (
+          <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-sm" />
+        )}
       </button>
 
       {/* Floating tooltip on collapsed mode */}
       {collapsed && (
-        <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-nexus-surface border border-nexus-border/80 text-white text-xs rounded-lg shadow-xl whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-50">
-          {label}
+        <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-nexus-surface border border-nexus-border/80 text-white text-xs rounded-lg shadow-xl whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-50 flex items-center gap-1.5">
+          <span>{label}</span>
+          {showPro && (
+            <span className="text-[9px] font-mono font-bold px-1 rounded bg-amber-500/20 text-amber-300">
+              PRO
+            </span>
+          )}
         </div>
       )}
     </div>
@@ -162,12 +180,14 @@ function NavGroupSection({
   navigate,
   t,
   collapsed = false,
+  isPro = true,
 }: {
   group: NavGroup
   currentPath: string
   navigate: (p: string) => void
   t: (key: string) => string
   collapsed?: boolean
+  isPro?: boolean
 }) {
   const hasActive = group.items.some((i) => i.path === currentPath)
   const [open, setOpen] = useState(true)
@@ -187,6 +207,7 @@ function NavGroupSection({
             }}
             label={t(item.labelKey)}
             collapsed={true}
+            isPro={isPro}
           />
         ))}
       </div>
@@ -232,6 +253,7 @@ function NavGroupSection({
                   }}
                   label={t(item.labelKey)}
                   collapsed={false}
+                  isPro={isPro}
                 />
               ))}
             </div>
@@ -247,9 +269,11 @@ export default function Sidebar() {
   const location = useLocation()
   const navigate = useNavigate()
   const { t } = useT()
+  const { status } = useLicense()
+  const isPro = status === 'active'
   const isHome = location.pathname === '/'
   const isActivity = location.pathname === '/activity-feed'
-  const [appVersion, setAppVersion] = useState('2.4.2')
+  const [appVersion, setAppVersion] = useState('2.4.3')
   const [downloadedUpdate, setDownloadedUpdate] = useState<string | null>(null)
 
   const [collapsed, setCollapsed] = useState<boolean>(() => {
@@ -484,9 +508,35 @@ export default function Sidebar() {
             navigate={navigate}
             t={t}
             collapsed={collapsed}
+            isPro={isPro}
           />
         ))}
       </nav>
+
+      {/* Upgrade to Pro Callout for Free Users */}
+      {!isPro && !collapsed && (
+        <div className="mx-3 mb-2 p-3 rounded-2xl bg-gradient-to-br from-amber-500/10 via-purple-500/10 to-nexus-cyan/10 border border-amber-500/30 text-left">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-[11px] font-bold text-amber-400 font-mono flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5" />
+              ZenDev Free
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                cyberAudio.copySuccess()
+                navigate('/account')
+              }}
+              className="text-[9px] font-mono font-extrabold px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-black hover:brightness-110 transition cursor-pointer"
+            >
+              PRO'ya Geç
+            </button>
+          </div>
+          <p className="text-[10px] text-nexus-muted leading-relaxed">
+            PortKiller, ApiStudio ve 10+ ileri mühendislik aracını sınırsız açın.
+          </p>
+        </div>
+      )}
 
       {/* Footer */}
       <div className={collapsed ? 'p-2' : 'p-3'}>
