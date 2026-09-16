@@ -1,35 +1,44 @@
 import React, { useState } from 'react';
-import { Sparkles, Binary, KeyRound, Regex, Database, Unlock } from 'lucide-react';
+import { Sparkles, Binary, KeyRound, Regex, Database, Unlock, Palette, QrCode, Shuffle, ShieldAlert } from 'lucide-react';
 import { Language } from '../../lib/types';
 import { translations } from '../../lib/translations';
+import { cyberAudio } from '../../lib/cyberAudio';
 import { LiveHashDemo } from './LiveHashDemo';
 import { LivePasswordDemo } from './LivePasswordDemo';
 import { LiveRegexDemo } from './LiveRegexDemo';
 import { LiveJwtDemo } from './LiveJwtDemo';
 import { LiveDecrypterDemo } from './LiveDecrypterDemo';
+import { LiveColorDemo } from './LiveColorDemo';
+import { LiveQrDemo } from './LiveQrDemo';
+import { LiveFakeDataDemo } from './LiveFakeDataDemo';
+import { LiveShredderDemo } from './LiveShredderDemo';
 
 interface LivePlaygroundProps {
   lang: Language;
 }
 
-type TabKey = 'hash' | 'password' | 'regex' | 'jwt' | 'decoder';
+type TabKey = 'hash' | 'password' | 'regex' | 'jwt' | 'decoder' | 'color' | 'qr' | 'fakeData' | 'shredder';
 
 export const LivePlayground: React.FC<LivePlaygroundProps> = ({ lang }) => {
   const [activeTab, setActiveTab] = useState<TabKey>('hash');
   const t = translations[lang].playground;
 
   const tabList = [
-    { key: 'hash' as TabKey, label: t.tabs.hash, icon: Binary, color: 'text-cyan-400' },
-    { key: 'password' as TabKey, label: t.tabs.password, icon: KeyRound, color: 'text-purple-400' },
-    { key: 'regex' as TabKey, label: t.tabs.regex, icon: Regex, color: 'text-cyan-400' },
-    { key: 'jwt' as TabKey, label: t.tabs.jwt, icon: Database, color: 'text-sky-400' },
-    { key: 'decoder' as TabKey, label: t.tabs.decoder, icon: Unlock, color: 'text-emerald-400' }
+    { key: 'hash' as TabKey, label: 'HashStudio (SHA-256)', icon: Binary, color: 'text-cyan-400' },
+    { key: 'password' as TabKey, label: 'PasswordGen (Entropi)', icon: KeyRound, color: 'text-purple-400' },
+    { key: 'regex' as TabKey, label: 'RegexStudio (Canlı)', icon: Regex, color: 'text-cyan-400' },
+    { key: 'jwt' as TabKey, label: 'JsonStudio (JWT)', icon: Database, color: 'text-sky-400' },
+    { key: 'decoder' as TabKey, label: 'UniversalDecrypter', icon: Unlock, color: 'text-emerald-400' },
+    { key: 'color' as TabKey, label: 'ColorStudio (WCAG)', icon: Palette, color: 'text-cyan-300' },
+    { key: 'qr' as TabKey, label: 'QrCodeStudio', icon: QrCode, color: 'text-sky-300' },
+    { key: 'fakeData' as TabKey, label: 'FakeDataStudio', icon: Shuffle, color: 'text-purple-300' },
+    { key: 'shredder' as TabKey, label: 'DoD 7-Pass Shredder', icon: ShieldAlert, color: 'text-rose-400' }
   ];
 
   return (
     <section id="playground" className="py-24 relative overflow-hidden bg-[#070914] border-t border-b border-gray-800/80">
       {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-cyan-500/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-cyan-500/5 blur-[140px] rounded-full pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
@@ -50,7 +59,6 @@ export const LivePlayground: React.FC<LivePlaygroundProps> = ({ lang }) => {
         <div className="bg-[#0b0e1b] border border-cyan-500/30 rounded-2xl shadow-2xl shadow-black/80 overflow-hidden">
           {/* Header Bar */}
           <div className="bg-[#060812] border-b border-gray-800 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-            {/* macOS / Linux style dots */}
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-rose-500/80" />
               <div className="w-3 h-3 rounded-full bg-amber-500/80" />
@@ -61,7 +69,7 @@ export const LivePlayground: React.FC<LivePlaygroundProps> = ({ lang }) => {
             </div>
 
             <span className="text-[11px] font-mono text-cyan-400 bg-cyan-950/50 px-2.5 py-0.5 rounded border border-cyan-500/30">
-              ⚡ 0ms Latency / Client-Side
+              ⚡ 0ms Latency / %100 İstemci Taraflı
             </span>
           </div>
 
@@ -73,8 +81,11 @@ export const LivePlayground: React.FC<LivePlaygroundProps> = ({ lang }) => {
               return (
                 <button
                   key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-mono font-medium transition whitespace-nowrap ${
+                  onClick={() => {
+                    setActiveTab(tab.key);
+                    cyberAudio.playClick();
+                  }}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-mono font-medium transition whitespace-nowrap ${
                     isActive
                       ? 'bg-cyan-500/15 text-white border border-cyan-500/40 shadow-sm'
                       : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/40'
@@ -88,12 +99,16 @@ export const LivePlayground: React.FC<LivePlaygroundProps> = ({ lang }) => {
           </div>
 
           {/* Demo Content Area */}
-          <div className="p-6 sm:p-8 min-h-[290px] flex flex-col justify-center">
+          <div className="p-6 sm:p-8 min-h-[310px] flex flex-col justify-center">
             {activeTab === 'hash' && <LiveHashDemo />}
             {activeTab === 'password' && <LivePasswordDemo />}
             {activeTab === 'regex' && <LiveRegexDemo />}
             {activeTab === 'jwt' && <LiveJwtDemo />}
             {activeTab === 'decoder' && <LiveDecrypterDemo />}
+            {activeTab === 'color' && <LiveColorDemo />}
+            {activeTab === 'qr' && <LiveQrDemo />}
+            {activeTab === 'fakeData' && <LiveFakeDataDemo />}
+            {activeTab === 'shredder' && <LiveShredderDemo />}
           </div>
         </div>
       </div>
