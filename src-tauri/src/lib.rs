@@ -15,6 +15,12 @@ pub mod sentinel;
 pub mod optimizer;
 pub mod journal;
 pub mod updater;
+pub mod process_ext;
+
+pub use process_ext::{
+    silent_command, silent_async_command, std_command, tokio_command, SilentCommand,
+    CREATE_NO_WINDOW,
+};
 
 #[cfg(test)]
 mod tests;
@@ -68,21 +74,21 @@ fn window_is_always_on_top() -> bool {
 fn open_external(url: String) -> Result<(), String> {
     #[cfg(target_os = "windows")]
     {
-        std::process::Command::new("cmd")
+        silent_command("cmd")
             .args(["/C", "start", "", &url])
             .spawn()
             .map_err(|e| e.to_string())?;
     }
     #[cfg(target_os = "macos")]
     {
-        std::process::Command::new("open")
+        silent_command("open")
             .arg(&url)
             .spawn()
             .map_err(|e| e.to_string())?;
     }
     #[cfg(target_os = "linux")]
     {
-        std::process::Command::new("xdg-open")
+        silent_command("xdg-open")
             .arg(&url)
             .spawn()
             .map_err(|e| e.to_string())?;

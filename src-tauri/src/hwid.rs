@@ -19,6 +19,7 @@
 
 use hmac::{Hmac, Mac};
 use sha2::{Digest, Sha256};
+use crate::process_ext::silent_command;
 
 type HmacSha256 = Hmac<Sha256>;
 
@@ -65,7 +66,7 @@ pub fn get_raw_machine_guid() -> Result<String, Box<dyn std::error::Error + Send
 
     #[cfg(target_os = "macos")]
     {
-        let output = std::process::Command::new("ioreg")
+        let output = silent_command("ioreg")
             .args(["-rd1", "-c", "IOPlatformExpertDevice"])
             .output()?;
         let stdout = String::from_utf8_lossy(&output.stdout);
@@ -87,7 +88,7 @@ pub fn get_raw_machine_guid() -> Result<String, Box<dyn std::error::Error + Send
         let content = fs::read_to_string("/var/lib/dbus/machine-id")
             .or_else(|_| fs::read_to_string("/etc/machine-id"))
             .or_else(|_| {
-                let output = std::process::Command::new("hostname").output()?;
+                let output = silent_command("hostname").output()?;
                 Ok(String::from_utf8_lossy(&output.stdout).to_string())
             })?;
 
@@ -115,7 +116,7 @@ pub fn get_guid_from_registry() -> Result<String, Box<dyn std::error::Error + Se
 
 #[cfg(target_os = "windows")]
 pub fn get_guid_from_reg_cmd() -> Result<String, Box<dyn std::error::Error + Send + Sync>> {
-    let output = std::process::Command::new("REG.exe")
+    let output = silent_command("REG.exe")
         .args(["QUERY", r"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography", "/v", "MachineGuid"])
         .output()?;
 

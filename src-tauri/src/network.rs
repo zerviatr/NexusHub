@@ -30,7 +30,7 @@ use std::time::Duration;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use tokio::net::TcpStream;
-use tokio::process::Command;
+use crate::process_ext::silent_async_command;
 
 /// Service banner lookup map for standard well-known TCP ports.
 pub fn lookup_service_name(port: u16) -> &'static str {
@@ -379,13 +379,13 @@ pub async fn network_ping(host: String, count: Option<u32>) -> PingResult {
     let count_str = ping_count.to_string();
 
     #[cfg(target_os = "windows")]
-    let output = Command::new("ping.exe")
+    let output = silent_async_command("ping.exe")
         .args(["-n", &count_str, sanitized])
         .output()
         .await;
 
     #[cfg(not(target_os = "windows"))]
-    let output = Command::new("ping")
+    let output = silent_async_command("ping")
         .args(["-c", &count_str, sanitized])
         .output()
         .await;
@@ -802,7 +802,7 @@ pub async fn network_dns_query(
 
     // Fallback to local nslookup command execution
     let type_arg = format!("-type={}", q_type);
-    let output = Command::new("nslookup")
+    let output = silent_async_command("nslookup")
         .args([&type_arg, &sanitized_host])
         .output()
         .await;

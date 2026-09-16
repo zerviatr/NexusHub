@@ -23,7 +23,7 @@
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use sysinfo::System;
-use tokio::process::Command;
+use crate::process_ext::silent_async_command;
 
 /// Structured representation of an active system network port.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -190,7 +190,7 @@ pub async fn get_system_pid_map() -> HashMap<u32, String> {
     // 2. Windows fallback using `tasklist /FO CSV /NH` for services without full names
     #[cfg(target_os = "windows")]
     {
-        if let Ok(out) = Command::new("tasklist").args(["/FO", "CSV", "/NH"]).output().await {
+        if let Ok(out) = silent_async_command("tasklist").args(["/FO", "CSV", "/NH"]).output().await {
             let stdout = String::from_utf8_lossy(&out.stdout);
             for line in stdout.lines() {
                 let trimmed = line.trim();
@@ -218,14 +218,14 @@ pub async fn scan_active_ports_internal() -> Result<Vec<ActivePortEntry>, String
     let pid_map = get_system_pid_map().await;
 
     #[cfg(target_os = "windows")]
-    let cmd_output = Command::new("netstat")
+    let cmd_output = silent_async_command("netstat")
         .args(["-ano"])
         .output()
         .await
         .map_err(|e| format!("Failed to execute netstat: {}", e))?;
 
     #[cfg(not(target_os = "windows"))]
-    let cmd_output = Command::new("netstat")
+    let cmd_output = silent_async_command("netstat")
         .args(["-tulnp"])
         .output()
         .await
@@ -274,7 +274,7 @@ pub async fn port_kill_process(pid: i64) -> Result<KillProcessResult, String> {
     #[cfg(target_os = "windows")]
     {
         let pid_str = valid_pid.to_string();
-        let output = Command::new("taskkill")
+        let output = silent_async_command("taskkill")
             .args(["/F", "/PID", &pid_str])
             .output()
             .await
@@ -300,7 +300,7 @@ pub async fn port_kill_process(pid: i64) -> Result<KillProcessResult, String> {
     #[cfg(not(target_os = "windows"))]
     {
         let pid_str = valid_pid.to_string();
-        let output = Command::new("kill")
+        let output = silent_async_command("kill")
             .args(["-9", &pid_str])
             .output()
             .await

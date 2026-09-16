@@ -13,7 +13,7 @@
 // limitations under the License.
 
 use std::fs;
-use std::process::Command;
+use crate::process_ext::silent_command;
 use std::time::{Duration, Instant, SystemTime};
 use serde::{Deserialize, Serialize};
 
@@ -73,13 +73,13 @@ pub fn format_bytes_to_mb(bytes: u64) -> String {
 pub async fn system_flush_dns() -> Result<SystemFlushResult, String> {
     tokio::task::spawn_blocking(|| {
         #[cfg(target_os = "windows")]
-        let output_res = Command::new("ipconfig").arg("/flushdns").output();
+        let output_res = silent_command("ipconfig").arg("/flushdns").output();
 
         #[cfg(target_os = "macos")]
-        let output_res = Command::new("dscacheutil").arg("-flushcache").output();
+        let output_res = silent_command("dscacheutil").arg("-flushcache").output();
 
         #[cfg(target_os = "linux")]
-        let output_res = Command::new("resolvectl").arg("flush-caches").output();
+        let output_res = silent_command("resolvectl").arg("flush-caches").output();
 
         match output_res {
             Ok(output) => {
@@ -202,12 +202,12 @@ pub async fn system_ping_host(host: String) -> Result<SystemPingResult, String> 
         let start = Instant::now();
 
         #[cfg(target_os = "windows")]
-        let res = Command::new("ping")
+        let res = silent_command("ping")
             .args(["-n", "1", "-w", "1000", &target])
             .output();
 
         #[cfg(not(target_os = "windows"))]
-        let res = Command::new("ping")
+        let res = silent_command("ping")
             .args(["-c", "1", "-W", "1", &target])
             .output();
 

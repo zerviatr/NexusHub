@@ -35,6 +35,10 @@ ZenDev is a developer productivity platform built with a high-performance Tauri 
 | 12 | Bilingual i18n Parity | 100% parity between tr.json and en.json for all new tools and features | M4 | ORIGINAL_REQUEST §R4 |
 | 13 | Desktop Navigation Wiring | Wire routes in App.tsx, Sidebar.tsx, Dashboard.tsx, CommandPalette | M4 | ORIGINAL_REQUEST §R3 |
 | 14 | E2E & Unit Test Suites | Vitest unit/integration tests for all 4 new tools and elevation features | M5 | ORIGINAL_REQUEST §Acceptance Criteria |
+| 15 | Subprocess Invocations Audit | Static audit of all 20 process creation sites across 6 modules | M6 | ORIGINAL_REQUEST §R1 |
+| 16 | Centralized Silent Command Module | Implement `src-tauri/src/process_ext.rs` with `CREATE_NO_WINDOW` (0x08000000), `SilentCommand` trait, and constructors | M6 | ORIGINAL_REQUEST §R2 |
+| 17 | Call-Site Subprocess Refactor | Refactor all 20 process call sites across 6 modules to use silent execution pattern | M6 | ORIGINAL_REQUEST §R2, §R3 |
+| 18 | Automated Static Analysis & Gate Verification | Rust lint test `silent_command_lint_test.rs`, Vitest parity, `.cargo/config.toml`, `cargo check/test`, `npm test` (46 files, 691 tests), `npm run build` | M7 | ORIGINAL_REQUEST §Acceptance Criteria |
 
 ## Milestones
 | # | Name | Scope | Dependencies | Status |
@@ -44,6 +48,8 @@ ZenDev is a developer productivity platform built with a high-performance Tauri 
 | M3 | Four New Developer Utilities | `JwtStudio`, `CronStudio`, `MermaidStudio`, `EncodingStudio` page & engine files | none | DONE |
 | M4 | Desktop Navigation & i18n | `App.tsx`, `Sidebar.tsx`, `Dashboard.tsx`, `tr.json`, `en.json`, `package.json` | M2, M3 | DONE |
 | M5 | Comprehensive Verification | `tests/`: 554+ tests + new test suites, `cargo check`, build passes | M1, M2, M3, M4 | DONE |
+| M6 | Silent Command Module & Call-Site Migration | `process_ext.rs`, `lib.rs`, `port_watchdog.rs`, `network.rs`, `optimizer.rs`, `hwid.rs`, `updater.rs` | M5 | DONE |
+| M7 | Automated Static Analysis & Full Suite Gate | `silent_command_lint_test.rs`, `.cargo/config.toml`, `tests/websiteM1.challenge.test.ts`, `cargo check`, `cargo test`, `npm test`, `npm run build` | M6 | DONE |
 
 ## Interface Contracts
 ### Web Playground Contract (`website/src/components/LivePlayground/`)
@@ -84,7 +90,32 @@ ZenDev is a developer productivity platform built with a high-performance Tauri 
 - `tr.json` and `en.json` must maintain strict 1:1 key parity at all times.
 - Required namespaces: `activityJournal`, `portKiller`, `jwtStudio`, `cronStudio`, `mermaidStudio`, `encodingStudio`, `nav.tools.*`.
 
+### Silent Command Subprocess Contract (`src-tauri/src/process_ext.rs`)
+- Win32 Process Creation Flag: `pub const CREATE_NO_WINDOW: u32 = 0x0800_0000;`
+- Extension Trait: `pub trait SilentCommand { fn silent(&mut self) -> &mut Self; }`
+- Constructors:
+  - `pub fn silent_command<S: AsRef<OsStr>>(program: S) -> std::process::Command` (aliases: `std_command`)
+  - `pub fn silent_async_command<S: AsRef<OsStr>>(program: S) -> tokio::process::Command` (aliases: `tokio_command`)
+- Cross-platform Semantics:
+  - On Windows: Conditionally attaches `creation_flags(0x0800_0000)` to eliminate console window flashes.
+  - On non-Windows: Compiles as a zero-cost inlined no-op without warnings or allocations.
+  - Standard I/O (stdout, stderr, exit code, pipes, tokio streams) functions completely identically.
+
 ## Code Layout
+- `src-tauri/src/`:
+  - `process_ext.rs` (centralized silent command builder and extension trait)
+  - `lib.rs` (module export and URL launcher)
+  - `port_watchdog.rs` (async commands: tasklist, netstat, taskkill)
+  - `network.rs` (async commands: ping.exe, nslookup)
+  - `optimizer.rs` (blocking commands: ipconfig, ping)
+  - `hwid.rs` (fallback registry query: REG.exe)
+  - `updater.rs` (installer execution: cmd.exe)
+- `src-tauri/tests/`:
+  - `silent_command_lint_test.rs` (Rust automated static analysis test enforcing CREATE_NO_WINDOW)
+- `src-tauri/.cargo/`:
+  - `config.toml` (target configuration for clean test execution)
+- `tests/`:
+  - `silentCommand.test.ts` (Vitest companion static analysis test)
 - `website/src/components/`:
   - `ArchitectureRadar.tsx` (animated benchmark cards)
   - `Navbar.tsx` (direct download button)

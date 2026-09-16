@@ -275,7 +275,7 @@ pub fn updater_install_now(app: AppHandle) -> Result<(), String> {
         if path.exists() {
             #[cfg(target_os = "windows")]
             {
-                let _ = std::process::Command::new("cmd")
+                let _ = crate::process_ext::silent_command("cmd")
                     .args(["/C", "start", "", path.to_str().unwrap_or_default()])
                     .spawn();
             }

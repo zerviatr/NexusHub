@@ -50,7 +50,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path dist_release
-          $tag = if ($env:GITHUB_REF -like "refs/tags/*") { $env:GITHUB_REF.Replace("refs/tags/", "") } else { "v2.5.0" }
+          $tag = if ($env:GITHUB_REF -like "refs/tags/*") { $env:GITHUB_REF.Replace("refs/tags/", "") } else { "v2.5.1" }
           $version = $tag.TrimStart("v")
           
           # Find Tauri output NSIS installer
