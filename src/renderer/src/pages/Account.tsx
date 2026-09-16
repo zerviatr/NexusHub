@@ -135,10 +135,14 @@ export default function Account() {
     : '••••••••••••••••••••••••'
 
   const tierLabels: Record<string, string> = {
-    free: 'Free',
-    pro: 'Pro',
-    team: 'Team',
-    lifetime: t('account.lifetime') || 'Lifetime',
+    free: locale === 'tr' ? 'Free Community (Ücretsiz)' : 'Free Community',
+    pro: locale === 'tr' ? 'Pro Developer (SaaS Abone)' : 'Pro Developer (SaaS Subscriber)',
+    pro_monthly: locale === 'tr' ? 'Pro Developer (Aylık Abonelik)' : 'Pro Developer (Monthly SaaS)',
+    pro_annual: locale === 'tr' ? 'Pro Developer (Yıllık Abonelik)' : 'Pro Developer (Annual SaaS)',
+    team: locale === 'tr' ? 'Team & Studio SaaS (5 Koltuk)' : 'Team & Studio SaaS (5 Seats)',
+    team_monthly: locale === 'tr' ? 'Team & Studio (Aylık SaaS)' : 'Team & Studio (Monthly SaaS)',
+    team_annual: locale === 'tr' ? 'Team & Studio (Yıllık SaaS)' : 'Team & Studio (Annual SaaS)',
+    lifetime: locale === 'tr' ? 'Enterprise Ömür Boyu Lisans' : 'Enterprise Lifetime',
   }
 
   const formatExpiry = (ms: number | null) => {
@@ -308,7 +312,9 @@ export default function Account() {
             </div>
 
             <div>
-              <p className="text-xs text-nexus-muted uppercase tracking-widest mb-1">{t('account.validUntil') || 'Valid Until'}</p>
+              <p className="text-xs text-nexus-muted uppercase tracking-widest mb-1">
+                {locale === 'tr' ? 'Sonraki Yenilenme / Bitiş Tarihi' : (t('account.validUntil') || 'Next Renewal / Expiry')}
+              </p>
               <div className="flex items-center gap-2">
                 {expiresAt === 0 || !expiresAt ? (
                   <Infinity className="w-4 h-4 text-nexus-muted" />
@@ -316,9 +322,19 @@ export default function Account() {
                   <Clock className="w-4 h-4 text-nexus-muted" />
                 )}
                 <span className="text-sm text-nexus-text">
-                  {expiresAt === 0 ? t('account.lifetime') || 'Lifetime' : formatExpiry(expiresAt)}
+                  {expiresAt === 0 ? (locale === 'tr' ? 'Ömür Boyu Sınırsız' : 'Lifetime Unlimited') : formatExpiry(expiresAt)}
                 </span>
               </div>
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => window.nexusAPI?.openExternal('https://zendev-production-4a5b.up.railway.app#pricing')}
+                className="w-full py-2 text-xs font-semibold rounded-lg bg-nexus-surface hover:bg-white/10 border border-nexus-border text-nexus-cyan transition flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <span>{locale === 'tr' ? 'Aboneliği Yönet & Plan Değiştir' : 'Manage Subscription & Plans'}</span>
+              </button>
             </div>
           </div>
         </motion.div>

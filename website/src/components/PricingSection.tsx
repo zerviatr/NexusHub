@@ -13,8 +13,8 @@
 // limitations under the License.
 
 import React, { useState } from 'react';
-import { Check, X, ShieldCheck, Sparkles, Tag, ArrowRight, Lock, Download } from 'lucide-react';
-import { Language, Currency, PricingPlan } from '../lib/types';
+import { Check, X, ShieldCheck, Sparkles, Tag, ArrowRight, Lock, Download, Calendar, Zap } from 'lucide-react';
+import { Language, Currency, PricingPlan, BillingCycle } from '../lib/types';
 import { PRICING_PLANS } from '../lib/toolsData';
 import { translations } from '../lib/translations';
 import { cyberAudio } from '../lib/cyberAudio';
@@ -30,6 +30,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
   currency,
   setCurrency
 }) => {
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>('yearly');
   const [coupon, setCoupon] = useState('');
   const [discountPercent, setDiscountPercent] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
@@ -62,14 +63,14 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
   const getDiscountedPrice = (price: number) => {
     if (price === 0) return 0;
     if (!couponApplied || discountPercent === 0) return price;
-    return Math.round(price * (1 - discountPercent / 100));
+    return Math.round(price * (1 - discountPercent / 100) * 100) / 100;
   };
 
   return (
     <section id="pricing" className="py-24 bg-[#05060b] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
+        <div className="text-center max-w-3xl mx-auto mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-semibold tracking-wider mb-4">
             <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
             {t.tag}
@@ -81,9 +82,46 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
             {t.subtitle}
           </p>
 
+          {/* Interactive Billing Cycle Toggle (Monthly vs Yearly) */}
+          <div className="mt-8 inline-flex items-center p-1.5 rounded-2xl bg-[#0a0d18] border border-cyan-500/30 shadow-xl">
+            <button
+              type="button"
+              onClick={() => {
+                cyberAudio.playClick();
+                setBillingCycle('monthly');
+              }}
+              className={`px-5 py-2 text-xs font-mono font-bold rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
+                billingCycle === 'monthly'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 shadow-md shadow-cyan-500/10'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>{t.billingToggleMonthly}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                cyberAudio.playClick();
+                setBillingCycle('yearly');
+              }}
+              className={`px-5 py-2 text-xs font-mono font-bold rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
+                billingCycle === 'yearly'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 shadow-md shadow-cyan-500/10'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-400" />
+              <span>{t.billingToggleYearly}</span>
+              <span className="px-2 py-0.5 text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 rounded-full font-extrabold">
+                {t.saveBadge}
+              </span>
+            </button>
+          </div>
+
           {/* Currency Switcher */}
-          <div className="mt-8 inline-flex items-center gap-1 bg-[#0a0d18] border border-gray-800 rounded-xl p-1 text-xs font-mono">
-            <span className="text-gray-400 px-2">{t.currencyToggle}</span>
+          <div className="mt-6 flex items-center justify-center gap-1 text-xs font-mono">
+            <span className="text-gray-500 mr-1">{t.currencyToggle}</span>
             {(['TRY', 'USD', 'EUR'] as Currency[]).map((c) => (
               <button
                 key={c}
@@ -94,7 +132,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
                 className={`px-3 py-1 rounded-lg transition cursor-pointer ${
                   currency === c
                     ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 shadow-sm'
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-gray-400 hover:text-white bg-[#0a0d18] border border-gray-800/80'
                 }`}
               >
                 {c === 'TRY' ? '₺ TRY' : c === 'USD' ? '$ USD' : '€ EUR'}
@@ -140,10 +178,17 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
           {PRICING_PLANS.map((plan) => {
             const priceInfo = plan.prices[currency];
-            const finalPrice = getDiscountedPrice(priceInfo.current);
             const isFree = plan.id === 'free';
             const isPersonal = plan.id === 'personal';
             const isStudio = plan.id === 'studio';
+
+            const monthlyRaw = priceInfo.monthly;
+            const yearlyRaw = priceInfo.yearly;
+            const monthlyEqRaw = priceInfo.monthlyEquivalent;
+
+            const finalMonthly = getDiscountedPrice(monthlyRaw);
+            const finalYearly = getDiscountedPrice(yearlyRaw);
+            const finalMonthlyEq = getDiscountedPrice(monthlyEqRaw);
 
             return (
               <div
@@ -182,26 +227,49 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
 
                   {/* Price Tag */}
                   <div className="my-6">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-4xl font-black text-white font-mono">
-                        {isFree ? (lang === 'tr' ? '0 ₺' : '$0') : `${priceInfo.symbol}${finalPrice}`}
-                      </span>
-                      <span className="text-xs text-cyan-400 font-mono font-bold uppercase">
-                        {isFree
-                          ? (lang === 'tr' ? '/ KALICI ÜCRETSİZ' : '/ FREE FOREVER')
-                          : (lang === 'tr' ? '/ TEK SEFERLİK' : '/ PERPETUAL OWN')}
-                      </span>
-                    </div>
-
-                    {!isFree && (
-                      <div className="flex items-center gap-2 mt-1 text-xs font-mono text-gray-500">
-                        <span className="line-through">
-                          {priceInfo.symbol}
-                          {priceInfo.original}
+                    {isFree ? (
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-4xl font-black text-white font-mono">
+                          {currency === 'TRY' ? '0 ₺' : '$0'}
                         </span>
-                        <span className="text-emerald-400 font-semibold">
-                          %{Math.round(((priceInfo.original - finalPrice) / priceInfo.original) * 100)} {lang === 'tr' ? 'İndirim' : 'Off'}
+                        <span className="text-xs text-cyan-400 font-mono font-bold uppercase">
+                          {lang === 'tr' ? '/ KALICI ÜCRETSİZ' : '/ FREE FOREVER'}
                         </span>
+                      </div>
+                    ) : billingCycle === 'yearly' ? (
+                      <div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-4xl font-black text-white font-mono">
+                            {priceInfo.symbol}{finalMonthlyEq}
+                          </span>
+                          <span className="text-xs text-cyan-400 font-mono font-bold uppercase">
+                            {t.perMonth}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1.5 text-xs font-mono text-gray-400">
+                          <span>
+                            {lang === 'tr'
+                              ? `Yıllık ${priceInfo.symbol}${finalYearly} faturalandırılır`
+                              : `Billed ${priceInfo.symbol}${finalYearly} annually`}
+                          </span>
+                          <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">
+                            {lang === 'tr' ? '2 Ay Bedava' : '2 Mo Free'}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-4xl font-black text-white font-mono">
+                            {priceInfo.symbol}{finalMonthly}
+                          </span>
+                          <span className="text-xs text-cyan-400 font-mono font-bold uppercase">
+                            {t.perMonth}
+                          </span>
+                        </div>
+                        <div className="text-xs font-mono text-gray-500 mt-1.5">
+                          {t.billedMonthly} • {lang === 'tr' ? 'Taahhütsüz' : 'No lock-in'}
+                        </div>
                       </div>
                     )}
                   </div>

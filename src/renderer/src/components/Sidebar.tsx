@@ -529,11 +529,11 @@ export default function Sidebar() {
               }}
               className="text-[9px] font-mono font-extrabold px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-black hover:brightness-110 transition cursor-pointer"
             >
-              PRO'ya Geç
+              PRO Abone Ol
             </button>
           </div>
           <p className="text-[10px] text-nexus-muted leading-relaxed">
-            PortKiller, ApiStudio ve 10+ ileri mühendislik aracını sınırsız açın.
+            PortKiller, ApiStudio ve 10+ ileri araca 149 ₺/ay'dan başlayan esnek SaaS planlarıyla abone olun.
           </p>
         </div>
       )}

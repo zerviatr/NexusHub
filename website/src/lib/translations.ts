@@ -86,12 +86,12 @@ export const translations = {
       }
     },
     roi: {
-      tag: 'ANTİ-SAAS TASARRUF HESAPLAYICISI',
-      title: 'Aylık Aboneliklerden Ne Kadar Tasarruf Edeceksiniz?',
-      subtitle: 'Her ay düzenli ödediğiniz SaaS araçlarını seçin, ZenDev ile ilk yıl ne kadar kâr edeceğinizi görün.',
-      annualSavings: 'Yıllık SaaS Masrafınız:',
-      zendevCost: 'ZenDev Tek Seferlik Fiyat:',
-      netProfit: 'İlk Yılda Cebe Kalan Net Tasarruf:',
+      tag: 'SAAS KONSOLİDASYON & TASARRUF HESAPLAYICISI',
+      title: 'Tek Bir ZenDev SaaS Aboneliği ile Ne Kadar Kâr Edeceksiniz?',
+      subtitle: 'Ayrı ayrı abone olduğunuz araçları seçin, ZenDev Pro SaaS ile her yıl ne kadar net tasarruf edeceğinizi görün.',
+      annualSavings: 'Mevcut Yıllık SaaS Masrafınız:',
+      zendevCost: 'ZenDev Pro Yıllık SaaS Ücreti:',
+      netProfit: 'Her Yıl Cebe Kalan Net Tasarruf:',
       paybackPeriod: 'Amortisman Süresi:',
       days: 'Gün'
     },
@@ -107,15 +107,22 @@ export const translations = {
       resetSuccess: 'Donanım kilidi (HWID) başarıyla sıfırlandı. Yeni bilgisayarınızda aktive edebilirsiniz.'
     },
     pricing: {
-      tag: 'ŞEFFAF FİYATLANDIRMA',
-      title: 'Abonelik Yok. Gizli Ücret Yok. Ömür Boyu Sahip Olun.',
-      subtitle: 'Tüm güncellemeler, v2.x ve v3.x sürümleri fiyata dahildir.',
+      tag: 'ŞEFFAF SAAS FİYATLANDIRMASI',
+      title: 'Öngörülebilir, Esnek ve Güçlü Geliştirici Aboneliği',
+      subtitle: 'Tüm 27+ güce, bulut senkronizasyonuna ve sürekli gelen yeni araçlara kesintisiz erişin. Taahhüt yok, istediğiniz an iptal edin.',
+      billingToggleMonthly: 'Aylık Faturalandırma',
+      billingToggleYearly: 'Yıllık Faturalandırma',
+      saveBadge: '%33 Tasarruf • 2+ Ay Bedava',
+      perMonth: '/ ay',
+      perYear: '/ yıl',
+      billedAnnually: 'yıllık peşin faturalandırılır',
+      billedMonthly: 'aylık düzenli faturalandırılır',
       currencyToggle: 'Para Birimi:',
-      buyNow: 'Hemen Satın Al',
+      buyNow: 'Abonelik Başlat',
       couponPlaceholder: 'İndirim Kuponu (örn: ZENDEV20)',
       applyCoupon: 'Uygula',
-      moneyBack: '30 Gün Koşulsuz Para İade Garantisi',
-      secureCheckout: 'Stripe & LemonSqueezy 256-bit SSL Güvenli Ödeme'
+      moneyBack: '14 Gün Koşulsuz Para İade Garantisi & Taahhütsüz İptal',
+      secureCheckout: 'Stripe & LemonSqueezy 256-bit SSL Güvenli SaaS Ödemesi'
     },
     footer: {
       tagline: 'ZenDev — Geliştiriciler İçin Askeri Standartta Güç & Yerel Gizlilik Paketi.',
@@ -210,12 +217,12 @@ export const translations = {
       }
     },
     roi: {
-      tag: 'ANTI-SAAS SAVINGS CALCULATOR',
-      title: 'How Much Will You Save From SaaS Subscriptions?',
-      subtitle: 'Select the tools you currently pay for, and calculate your immediate 1st year savings with ZenDev.',
-      annualSavings: 'Your Annual SaaS Cost:',
-      zendevCost: 'ZenDev One-Time Price:',
-      netProfit: 'Net 1st Year Savings Kept:',
+      tag: 'SAAS CONSOLIDATION & SAVINGS CALCULATOR',
+      title: 'How Much Will You Save By Consolidating Into ZenDev SaaS?',
+      subtitle: 'Select the fragmented subscriptions you currently pay for, and see how much ZenDev Pro SaaS saves every year.',
+      annualSavings: 'Your Current Annual SaaS Cost:',
+      zendevCost: 'ZenDev Pro Annual SaaS Cost:',
+      netProfit: 'Net Annual Savings Retained:',
       paybackPeriod: 'Payback Period:',
       days: 'Days'
     },
@@ -231,15 +238,22 @@ export const translations = {
       resetSuccess: 'HWID slot released successfully. You can now activate on your new computer.'
     },
     pricing: {
-      tag: 'TRANSPARENT PRICING',
-      title: 'Zero Subscriptions. Zero Hidden Fees. Own It Forever.',
-      subtitle: 'All future updates, including v2.x and v3.x releases, are included.',
+      tag: 'TRANSPARENT SAAS PRICING',
+      title: 'Predictable, Flexible & Powerful Developer Subscription',
+      subtitle: 'Continuous access to 27+ cyber developer tools, cloud sync, and automatic feature drops. Cancel anytime with zero lock-in.',
+      billingToggleMonthly: 'Monthly Billing',
+      billingToggleYearly: 'Annual Billing',
+      saveBadge: 'Save 33% • 2 Months Free',
+      perMonth: '/ mo',
+      perYear: '/ yr',
+      billedAnnually: 'billed annually upfront',
+      billedMonthly: 'billed monthly',
       currencyToggle: 'Currency:',
-      buyNow: 'Get ZenDev Now',
+      buyNow: 'Start Subscription',
       couponPlaceholder: 'Discount code (e.g., ZENDEV20)',
       applyCoupon: 'Apply',
-      moneyBack: '30-Day Hassle-Free Money-Back Guarantee',
-      secureCheckout: 'Stripe & LemonSqueezy 256-Bit SSL Encrypted Checkout'
+      moneyBack: '14-Day Hassle-Free Money-Back Guarantee & Instant Cancellation',
+      secureCheckout: 'Stripe & LemonSqueezy 256-Bit SSL Encrypted SaaS Checkout'
     },
     footer: {
       tagline: 'ZenDev — Military-Grade Power & Offline-First Privacy Suite for Engineers.',

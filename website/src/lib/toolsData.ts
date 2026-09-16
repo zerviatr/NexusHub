@@ -332,23 +332,23 @@ export const PRICING_PLANS: PricingPlan[] = [
     nameEn: 'ZenDev Community Free',
     badgeTr: 'Kalıcı Ücretsiz',
     badgeEn: 'Free Forever',
-    descriptionTr: 'Temel geliştirici yardımcı araçları ve hafif günlük iş akışları için ömür boyu ücretsiz sürüm.',
+    descriptionTr: 'Temel geliştirici yardımcı araçları ve hafif günlük iş akışları için sonsuza dek ücretsiz sürüm.',
     descriptionEn: 'Perpetual free edition for lightweight developer utilities and everyday essential tasks.',
     prices: {
-      TRY: { current: 0, original: 0, symbol: '₺' },
-      USD: { current: 0, original: 0, symbol: '$' },
-      EUR: { current: 0, original: 0, symbol: '€' }
+      TRY: { monthly: 0, yearly: 0, monthlyEquivalent: 0, symbol: '₺' },
+      USD: { monthly: 0, yearly: 0, monthlyEquivalent: 0, symbol: '$' },
+      EUR: { monthly: 0, yearly: 0, monthlyEquivalent: 0, symbol: '€' }
     },
     featuresTr: [
       '8 Temel Yardımcı Araç (Hash, QR, Regex, JSON, Renk vb.)',
-      'Tek Windows Bilgisayarında Yerel Kullanım',
+      'Tek Bilgisayarda Yerel & Çevrimdışı Kullanım',
       'Tauri v2 + Rust Ultra Hafif Motor (35 MB RAM)',
       '%100 Çevrimdışı Çalışma & Sıfır Telemetri',
       'Topluluk Desteği & Açık Dokümantasyon'
     ],
     featuresEn: [
       '8 Essential Utilities (Hash, QR, Regex, JSON, Color, etc.)',
-      'Single Windows machine offline usage',
+      'Single machine offline usage',
       'Tauri v2 + Rust ultra-lean engine (35 MB RAM)',
       '100% offline privacy & zero telemetry',
       'Community Discord & public documentation'
@@ -356,18 +356,18 @@ export const PRICING_PLANS: PricingPlan[] = [
     limitationsTr: [
       'PortKiller & Anında SIGKILL (Kilitli)',
       'ApiStudio REST & GraphQL İstemcisi (Kilitli)',
-      'ResourceSentinel Canlı Telemetri Radarı (Kilitli)',
-      'CyberFortress DoD 7-Pass İmha & AES Kasa (Kilitli)',
-      'PdfStudio AES Şifreli Filigran İstasyonu (Kilitli)',
-      'SystemOptimizer & Pano Geçmişi (Kilitli)'
+      'ResourceSentinel Canlı Donanım Radarı (Kilitli)',
+      'CyberFortress Askeri AES-256-GCM Kasa (Kilitli)',
+      'PdfStudio Yerel Filigran & Düzenleyici (Kilitli)',
+      'SystemOptimizer & Bellek Temizleyici (Kilitli)'
     ],
     limitationsEn: [
       'PortKiller & Instant SIGKILL (Locked)',
       'ApiStudio REST & GraphQL Client (Locked)',
       'ResourceSentinel Hardware Radar (Locked)',
-      'CyberFortress DoD 7-Pass Shredder & Vault (Locked)',
+      'CyberFortress Military AES Vault (Locked)',
       'PdfStudio Encrypted Watermarker (Locked)',
-      'SystemOptimizer & Clipboard History (Locked)'
+      'SystemOptimizer & Memory Defrag (Locked)'
     ],
     ctaTr: 'Ücretsiz İndir',
     ctaEn: 'Download Free',
@@ -375,78 +375,78 @@ export const PRICING_PLANS: PricingPlan[] = [
   },
   {
     id: 'personal',
-    nameTr: 'ZenDev Lifetime Pro',
-    nameEn: 'ZenDev Lifetime Pro',
-    badgeTr: 'En Popüler / Bireysel Geliştirici',
-    badgeEn: 'Most Popular / Indie Hacker',
-    descriptionTr: 'Tek geliştirici için 27+ gücün tamamı. Aylık abonelik yok, ömür boyu sınırsız kullanım.',
-    descriptionEn: 'All 27+ cyber developer tools for a single developer. Zero subscriptions, lifetime license.',
+    nameTr: 'ZenDev Pro Developer SaaS',
+    nameEn: 'ZenDev Pro Developer SaaS',
+    badgeTr: 'En Popüler / Geliştirici SaaS',
+    badgeEn: 'Most Popular / Developer SaaS',
+    descriptionTr: 'Tüm 27+ güce tam erişim. Sürekli yeni araç güncellemeleri, bulut senkronizasyonu ve öncelikli destek.',
+    descriptionEn: 'Full access to all 27+ power tools. Continuous drops, cloud sync, and priority engineering support.',
     recommended: true,
     prices: {
-      TRY: { current: 699, original: 1399, symbol: '₺' },
-      USD: { current: 49, original: 99, symbol: '$' },
-      EUR: { current: 45, original: 89, symbol: '€' }
+      TRY: { monthly: 149, yearly: 1190, monthlyEquivalent: 99, symbol: '₺' },
+      USD: { monthly: 9.99, yearly: 79, monthlyEquivalent: 6.58, symbol: '$' },
+      EUR: { monthly: 8.99, yearly: 69, monthlyEquivalent: 5.75, symbol: '€' }
     },
     featuresTr: [
-      '27+ Araç ve Stüdyonun Tamamına Ömür Boyu Erişim',
-      'PortKiller, ApiStudio, ResourceSentinel & PdfStudio Açık',
+      '27+ Araç ve Stüdyonun Tamamına Kesintisiz Erişim',
+      'PortKiller, ApiStudio, ResourceSentinel & PdfStudio Kilitsiz',
       'CyberFortress Askeri 7-Pass İmha & AES-256-GCM Kasa',
-      '2 Adet Kişisel Windows Bilgisayarında Eşzamanlı Aktivasyon',
-      'Ömür Boyu Ücretsiz Güncellemeler (v2.x ve v3.x dahil)',
+      '2 Adet Kişisel Bilgisayarda Eşzamanlı Aktivasyon',
+      'Sürekli Bulut Senkronizasyonu & Otomatik Yeni Araç Eklentileri',
       'Tauri v2 + Rust Ultra Düşük Bellek Mimarisi (35 MB RAM)',
-      '%100 Çevrimdışı & Yerel Veri Gizliliği (Sıfır Bulut İzi)',
-      'Self-Service Donanım Kimliği (HWID) Sıfırlama Portalı',
-      '30 Gün Koşulsuz Para İade Garantisi'
+      '%100 Yerel Veri Gizliliği & Çevrimdışı Çalışabilme Garantisi',
+      'Self-Service Donanım Kimliği (HWID) Transfer Portalı',
+      'Esnek Faturalandırma & İstediğin Zaman Tek Tıkla İptal'
     ],
     featuresEn: [
-      'Lifetime access to all 27+ tools & studios',
+      'Continuous access to all 27+ cyber tools & studios',
       'Unlocked PortKiller, ApiStudio, Sentinel & PdfStudio',
       'CyberFortress military 7-pass shredder & AES vault',
-      'Activate on 2 personal Windows machines simultaneously',
-      'Free lifetime upgrades (v2.x and v3.x included)',
+      'Activate on 2 personal machines simultaneously',
+      'Continuous cloud sync & automatic tool drops',
       'Tauri v2 + Rust ultra-lean engine (35 MB RAM)',
-      '100% offline-first privacy (Zero cloud telemetry)',
+      '100% offline-first privacy & zero tracking',
       'Self-service HWID machine transfer portal',
-      '30-day money-back guarantee without hassle'
+      'Flexible billing & 1-click hassle-free cancellation'
     ],
-    ctaTr: 'Ömür Boyu Pro Satın Al',
-    ctaEn: 'Get Lifetime Pro',
-    ctaHref: '#pricing'
+    ctaTr: 'Pro Abonelik Başlat',
+    ctaEn: 'Start Pro Subscription',
+    ctaHref: 'https://zendev.lemonsqueezy.com'
   },
   {
     id: 'studio',
-    nameTr: 'ZenDev Studio & Team Pack',
-    nameEn: 'ZenDev Studio & Team Pack',
-    badgeTr: 'Takım & Şirket',
-    badgeEn: 'Best Value / Teams',
-    descriptionTr: 'Yazılım ekipleri, ajanslar ve kurumsal geliştiriciler için 5 cihazlı ticari lisans paketi.',
-    descriptionEn: 'Commercial team license for software agencies, startups, and engineering squads (5 machines).',
+    nameTr: 'ZenDev Team & Studio SaaS',
+    nameEn: 'ZenDev Team & Studio SaaS',
+    badgeTr: '5 Geliştirici / Kurumsal SaaS',
+    badgeEn: '5 Dev Seats / Team SaaS',
+    descriptionTr: 'Yazılım ekipleri ve ajanslar için paylaşımlı kurumsal SaaS. 5 koltuk, merkezi yönetim ve fatura desteği.',
+    descriptionEn: 'Shared team SaaS for engineering squads and agencies. 5 seats, centralized seat admin, and VAT invoices.',
     prices: {
-      TRY: { current: 1899, original: 3799, symbol: '₺' },
-      USD: { current: 129, original: 249, symbol: '$' },
-      EUR: { current: 119, original: 229, symbol: '€' }
+      TRY: { monthly: 449, yearly: 3590, monthlyEquivalent: 299, symbol: '₺' },
+      USD: { monthly: 29.99, yearly: 239, monthlyEquivalent: 19.90, symbol: '$' },
+      EUR: { monthly: 25.99, yearly: 209, monthlyEquivalent: 17.40, symbol: '€' }
     },
     featuresTr: [
-      'Bireysel plandaki her şey + 5 Adet Cihaz Aktivasyonu (~$25/cihaz)',
+      'Pro plandaki her şey + 5 Adet Geliştirici Koltuğu Dahil',
       'Ticari ve Kurumsal Projelerde Sınırsız Kullanım İzni',
+      'Merkezi Takım Lisans Yönetim Paneli ve Koltuk Tahsisi',
+      'Ekip Ortak Şifreli Snippet & API Koleksiyonu Senkronizasyonu',
       'Kurumsal E-Fatura ve Şirket Gider Makbuzu Desteği',
-      'Öncelikli E-Posta & Özel Danışmanlık Kanalı',
-      'Takım İçi Lisans Yönetim Paneli ve Toplu HWID İptali',
-      'Gelecek Eklenti (Plugin SDK) Erken Erişim Hakkı',
-      '30 Gün Koşulsuz Para İade Garantisi'
+      'Doğrudan Mühendislik Desteği & SLA Garantisi',
+      'Gelecek Eklenti (Plugin SDK) Erken Erişim Hakkı'
     ],
     featuresEn: [
-      'Everything in Personal + 5 simultaneous machine activations',
+      'Everything in Pro + 5 simultaneous developer seats included',
       'Commercial usage rights for agency and enterprise projects',
+      'Centralized team license management portal & seat allocation',
+      'Shared team encrypted snippet & API preset synchronization',
       'Official company VAT/Tax invoice support',
-      'Priority email & dedicated engineering support channel',
-      'Team license management portal & bulk HWID revocation',
-      'Early access to upcoming Plugin SDK ecosystem',
-      '30-day money-back guarantee without hassle'
+      'Direct engineering support & enterprise SLA',
+      'Early access to upcoming Plugin SDK ecosystem'
     ],
-    ctaTr: 'Takım Lisansı Satın Al',
-    ctaEn: 'Get Team License',
-    ctaHref: '#pricing'
+    ctaTr: 'Ekip Aboneliği Başlat',
+    ctaEn: 'Start Team Subscription',
+    ctaHref: 'https://zendev.lemonsqueezy.com'
   }
 ];
 

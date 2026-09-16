@@ -35,15 +35,15 @@ export default function ProLockGate({ toolName, toolDesc }: ProLockGateProps) {
   const perks = isTr ? [
     '27+ Geliştirici ve Siber Güvenlik Aracının Tamamı',
     'PortKiller, ApiStudio, ResourceSentinel & PdfStudio',
-    'DoD 5220.22-M 7-Pass İmha ve AES-256-GCM Kasa',
-    '2 Kişisel Windows Bilgisayarında Eşzamanlı Kullanım',
-    'Ömür Boyu Ücretsiz Güncelleme & Sıfır Abonelik'
+    'Sürekli Yeni Araç Güncellemeleri & Eklenti Paketleri',
+    '2 Kişisel Bilgisayarda Eşzamanlı Kullanım',
+    'Taahhütsüz İstediğin Zaman Tek Tıkla İptal'
   ] : [
     'Complete access to all 27+ developer & cyber tools',
     'Unlocked PortKiller, ApiStudio, ResourceSentinel & PdfStudio',
-    'Military-grade DoD 7-Pass file shredder & AES vault',
-    'Activate on 2 personal Windows machines simultaneously',
-    'Lifetime updates with zero recurring subscription fees'
+    'Continuous tool updates & automatic feature drops',
+    'Activate on 2 personal machines simultaneously',
+    'Cancel anytime with zero long-term commitment'
   ]
 
   return (
@@ -63,7 +63,7 @@ export default function ProLockGate({ toolName, toolDesc }: ProLockGateProps) {
 
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold tracking-wider uppercase mb-4">
           <Zap className="w-3.5 h-3.5 text-amber-400" />
-          <span>{isTr ? 'ZenDev Pro Sürümüne Özel' : 'ZenDev Pro Tier Exclusive'}</span>
+          <span>{isTr ? 'ZenDev Pro SaaS Özel' : 'ZenDev Pro SaaS Exclusive'}</span>
         </div>
 
         <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 font-heading">{toolName}</h2>
@@ -74,7 +74,7 @@ export default function ProLockGate({ toolName, toolDesc }: ProLockGateProps) {
         {/* Perks Box */}
         <div className="bg-black/30 border border-white/10 rounded-2xl p-4 mb-7 text-left max-w-md mx-auto space-y-2">
           <div className="text-[11px] font-mono font-bold text-nexus-cyan uppercase tracking-wider mb-2">
-            {isTr ? 'Pro Lisansla Açılan Özellikler:' : 'Unlocked with Pro Lifetime:'}
+            {isTr ? 'Pro Abonelikle Açılan Özellikler:' : 'Unlocked with Pro Subscription:'}
           </div>
           {perks.map((perk, i) => (
             <div key={i} className="flex items-start gap-2 text-xs text-nexus-text">
@@ -86,9 +86,9 @@ export default function ProLockGate({ toolName, toolDesc }: ProLockGateProps) {
 
         {/* Pricing Highlight Pill */}
         <div className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-nexus-cyan/15 to-nexus-accent/15 border border-nexus-cyan/30 text-xs font-mono">
-          <span className="text-nexus-muted">{isTr ? 'Tek Seferlik Ömür Boyu:' : 'One-Time Lifetime:'}</span>
-          <span className="text-white font-bold text-sm">{isTr ? '699 ₺' : '$49'}</span>
-          <span className="text-emerald-400 font-semibold text-[11px]">{isTr ? 'Abonelik Yok' : 'Zero Subscriptions'}</span>
+          <span className="text-nexus-muted">{isTr ? 'Aylık:' : 'Monthly:'}</span>
+          <span className="text-white font-bold text-sm">{isTr ? '149 ₺ / ay' : '$9.99 / mo'}</span>
+          <span className="text-emerald-400 font-semibold text-[11px]">{isTr ? '(Yıllık 99 ₺/ay)' : '(Annual $6.58/mo)'}</span>
         </div>
 
         {/* Action Buttons */}
@@ -107,7 +107,7 @@ export default function ProLockGate({ toolName, toolDesc }: ProLockGateProps) {
             onClick={handleBuy}
             className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent text-nexus-bg font-bold text-xs shadow-lg shadow-nexus-cyan/20 hover:brightness-110 transition-all active:scale-95 cursor-pointer"
           >
-            <span>{isTr ? 'Ömür Boyu Pro Al' : 'Get Pro Lifetime'}</span>
+            <span>{isTr ? 'Pro\'ya Abone Ol' : 'Subscribe to Pro'}</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </button>
         </div>

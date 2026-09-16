@@ -71,7 +71,7 @@ export const RoiCalculator: React.FC<RoiCalculatorProps> = ({ lang, currency }) 
   };
 
   const currencySymbol = currency === 'TRY' ? '₺' : currency === 'USD' ? '$' : '€';
-  const zendevPrice = currency === 'TRY' ? 349 : currency === 'USD' ? 29 : 27;
+  const zendevPrice = currency === 'TRY' ? 1190 : currency === 'USD' ? 79 : 69;
 
   const { annualSaaS, netSavings, paybackDays } = useMemo(() => {
     const monthlyTotal = selectedTools.reduce((acc, id) => {

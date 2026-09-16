@@ -19,6 +19,15 @@ export interface ToolItem {
 export type Language = 'tr' | 'en';
 export type Currency = 'TRY' | 'USD' | 'EUR';
 
+export type BillingCycle = 'monthly' | 'yearly';
+
+export interface PricingPriceTier {
+  monthly: number;
+  yearly: number;
+  symbol: string;
+  monthlyEquivalent: number;
+}
+
 export interface PricingPlan {
   id: 'free' | 'personal' | 'studio';
   nameTr: string;
@@ -28,9 +37,9 @@ export interface PricingPlan {
   descriptionTr: string;
   descriptionEn: string;
   prices: {
-    TRY: { current: number; original: number; symbol: string };
-    USD: { current: number; original: number; symbol: string };
-    EUR: { current: number; original: number; symbol: string };
+    TRY: PricingPriceTier;
+    USD: PricingPriceTier;
+    EUR: PricingPriceTier;
   };
   featuresTr: string[];
   featuresEn: string[];

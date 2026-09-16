@@ -128,16 +128,30 @@ export async function processWebhookPayload(
       throw new Error(`Missing required fields in order_created: orderId='${orderId}', email='${email}'`)
     }
 
-    // Map LemonSqueezy variant/product to tier
+    // Map LemonSqueezy variant/product to tier and duration
     const variantName = (attrs?.first_order_item?.variant_name as string ?? '').toLowerCase()
 
-    let tier = 'lifetime'
-    if (variantName.includes('team') || variantName.includes('studio')) tier = 'team'
-    else if (variantName.includes('free')) tier = 'free'
-    else if (variantName.includes('annual') || variantName.includes('year') || variantName.includes('sub')) tier = 'pro'
+    let tier = 'pro'
+    let monthsExpiry = 12
+    if (variantName.includes('team') || variantName.includes('studio')) {
+      tier = 'team'
+      monthsExpiry = variantName.includes('month') ? 1 : 12
+    } else if (variantName.includes('free')) {
+      tier = 'free'
+      monthsExpiry = 0
+    } else if (variantName.includes('month')) {
+      tier = 'pro'
+      monthsExpiry = 1
+    } else if (variantName.includes('lifetime')) {
+      tier = 'lifetime'
+      monthsExpiry = 0
+    } else {
+      tier = 'pro'
+      monthsExpiry = 12
+    }
 
     const secret = process.env['NEXUS_LICENSE_SECRET'] ?? 'NEXUS_DEV_SECRET_DO_NOT_USE_IN_PROD'
-    const expiresAt = tierToExpiry(tier)
+    const expiresAt = monthsExpiry === 0 ? 0 : Date.now() + monthsExpiry * (30.44 * 24 * 3600 * 1000)
     const key = generateKey(tier, expiresAt, secret)
 
     const db = getDb()
@@ -155,7 +169,7 @@ export async function processWebhookPayload(
 
     const userName = (attrs?.user_name || attrs?.customer_name || '').trim()
     const userCountry = (attrs?.country || attrs?.billing_address?.country || '').trim()
-    const maxActivations = (tier === 'team' || variantName.includes('studio')) ? 3 : 2
+    const maxActivations = (tier === 'team' || variantName.includes('studio')) ? (variantName.includes('5') ? 5 : 3) : 2
 
     // Atomically persist license in a transaction
     await withTransaction(async (tx) => {

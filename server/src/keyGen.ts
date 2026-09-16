@@ -28,10 +28,14 @@ const JAN_2024_MS = new Date('2024-01-01T00:00:00Z').getTime()
 const MONTH_MS    = 30.44 * 24 * 3600 * 1000
 
 const TIER_CHAR: Record<string, string> = {
-  free:     'F',
-  pro:      'P',
-  team:     'T',
-  lifetime: 'L',
+  free:         'F',
+  pro:          'P',
+  pro_monthly:  'P',
+  pro_annual:   'P',
+  team:         'T',
+  team_monthly: 'T',
+  team_annual:  'T',
+  lifetime:     'L',
 }
 
 /**
@@ -114,9 +118,13 @@ export function tierToExpiry(tier: string): number {
   if (tier === 'lifetime') return 0
 
   const months: Record<string, number> = {
-    free: 0,  // free keys never expire either (feature-gated by tier)
-    pro:  12,
-    team: 12,
+    free:         0,  // free keys never expire either (feature-gated by tier)
+    pro_monthly:  1,
+    pro_annual:   12,
+    pro:          12,
+    team_monthly: 1,
+    team_annual:  12,
+    team:         12,
   }
   const m = months[tier] ?? 0
   if (m === 0) return 0
