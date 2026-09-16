@@ -3,20 +3,20 @@ name: Build & Release ZenDev
 on:
   push:
     tags:
-      - 'v*.*.*'           # Triggers on version tags: v1.0.0, v1.2.3, etc.
+      - 'v*.*.*'           # Triggers on version tags: v1.0.0, v2.4.3, etc.
   workflow_dispatch:        # Manual trigger for testing builds without a tag
     inputs:
       draft:
         description: 'Create as draft release'
         required: false
-        default: 'true'
+        default: 'false'
 
 permissions:
   contents: write           # Required to create GitHub Releases and upload artifacts
 
 jobs:
   # ────────────────────────────────────────────────────────────────────────────
-  # Windows Build (signed with EV or OV certificate)
+  # Windows Build (Tauri v2 + Rust)
   # ────────────────────────────────────────────────────────────────────────────
   build-windows:
     runs-on: windows-latest
@@ -30,25 +30,58 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Cache electron and electron-builder
-        uses: actions/cache@v4
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
         with:
-          path: |
-            ~\AppData\Local\electron\Cache
-            ~\AppData\Local\electron-builder\Cache
-          key: ${{ runner.os }}-electron-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-electron-
+          targets: x86_64-pc-windows-msvc
+
+      - name: Rust Cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri -> target
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build & Package (Windows)
-        env:
-          # ─── Code Signing ───────────────────────────────────────────────────
-          CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
-        run: npm run dist:win -- --publish never
+      - name: Build & Package (Windows Tauri NSIS)
+        run: npm run dist:win
+
+      - name: Prepare Release Artifacts & Bridge latest.yml
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist_release
+          $tag = if ($env:GITHUB_REF -like "refs/tags/*") { $env:GITHUB_REF.Replace("refs/tags/", "") } else { "v2.4.3" }
+          $version = $tag.TrimStart("v")
+          
+          # Find Tauri output NSIS installer
+          $nsisInstaller = Get-ChildItem -Path "src-tauri/target/release/bundle/nsis/*.exe" | Select-Object -First 1
+          if (-not $nsisInstaller) {
+            Write-Error "NSIS installer was not found in src-tauri/target/release/bundle/nsis/"
+            exit 1
+          }
+          
+          $targetName = "ZenDev-Setup-$version.exe"
+          $destination = Join-Path "dist_release" $targetName
+          Copy-Item $nsisInstaller.FullName -Destination $destination
+          
+          # Calculate SHA-512 for legacy electron-updater compatibility
+          $hashBytes = (Get-FileHash -Path $destination -Algorithm SHA512).Hash.ToLower()
+          $size = (Get-Item $destination).Length
+          $releaseDate = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
+          
+          $latestYml = @"
+version: $version
+files:
+  - url: $targetName
+    sha512: $hashBytes
+    size: $size
+path: $targetName
+sha512: $hashBytes
+releaseDate: '$releaseDate'
+"@
+          
+          [System.IO.File]::WriteAllText("dist_release/latest.yml", $latestYml.Trim(), [System.Text.Encoding]::UTF8)
+          Write-Host "Created dist_release/latest.yml and $targetName successfully."
 
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
@@ -59,67 +92,7 @@ jobs:
           generate_release_notes: true
           make_latest: true
           files: |
-            dist/*.exe
-            dist/*.blockmap
-            dist/latest.yml
+            dist_release/ZenDev-Setup-*.exe
+            dist_release/latest.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  # ────────────────────────────────────────────────────────────────────────────
-  # macOS Build (optional, manual trigger only)
-  # ────────────────────────────────────────────────────────────────────────────
-  build-macos:
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: macos-latest
-    continue-on-error: true
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build & Package (macOS)
-        env:
-          CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run dist:mac
-
-  # ────────────────────────────────────────────────────────────────────────────
-  # Linux Build (optional, manual trigger only)
-  # ────────────────────────────────────────────────────────────────────────────
-  build-linux:
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Linux packaging dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y rpm fakeroot dpkg
-
-      - name: Build & Package (Linux)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run dist:linux

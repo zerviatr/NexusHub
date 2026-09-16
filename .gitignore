@@ -13,6 +13,12 @@ coverage/
 # Electron
 release/
 
+# Tauri / Rust
+src-tauri/target/
+dist_release/
+.agents/teamwork_preview_*/
+.agents/sentinel/
+
 # Environment files — NEVER commit these
 .env
 .env.local

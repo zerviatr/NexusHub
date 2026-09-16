@@ -2,191 +2,45 @@
   "name": "zendev",
   "version": "2.4.2",
   "description": "ZenDev — Premium Multi-Tool Desktop Application",
-  "main": "./out/main/index.js",
-  "author": {
-    "name": "ZenDev",
-    "email": "support@zendev.app"
-  },
   "scripts": {
-    "dev": "electron-vite dev",
-    "build": "electron-vite build",
-    "test": "vitest run",
-    "start": "electron-vite preview",
-    "dist": "electron-vite build && electron-builder",
-    "dist:win": "electron-vite build && electron-builder --win",
-    "dist:mac": "electron-vite build && electron-builder --mac",
-    "dist:linux": "electron-vite build && electron-builder --linux",
-    "dist:dir": "electron-vite build && electron-builder --dir",
-    "docs:archive": "node scripts/archive-legacy-docs.mjs",
-    "repo:clean": "node scripts/github-cleaner.mjs"
-  },
-  "build": {
-    "appId": "app.zendev.desktop",
-    "productName": "ZenDev",
-    "copyright": "Copyright © 2026 ZenDev",
-    "directories": {
-      "buildResources": "build",
-      "output": "dist"
-    },
-    "files": [
-      "out/**",
-      "build/icons/**",
-      "package.json"
-    ],
-    "extraResources": [
-      {
-        "from": "build/icons",
-        "to": "icons"
-      }
-    ],
-    "extraMetadata": {
-      "main": "out/main/index.js"
-    },
-    "asar": true,
-    "asarUnpack": [
-      "**/*.node",
-      "**/node_modules/@img/**",
-      "**/node_modules/sharp/**"
-    ],
-    "compression": "normal",
-    "win": {
-      "icon": "build/icons/icon.ico",
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
-      "artifactName": "${productName}-Setup-${version}.${ext}"
-    },
-    "nsis": {
-      "oneClick": true,
-      "perMachine": false,
-      "differentialPackage": true,
-      "packElevateHelper": false,
-      "allowToChangeInstallationDirectory": false,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "ZenDev",
-      "uninstallDisplayName": "ZenDev",
-      "installerIcon": "build/icons/icon.ico",
-      "uninstallerIcon": "build/icons/icon.ico",
-      "installerHeaderIcon": "build/icons/icon.ico",
-      "deleteAppDataOnUninstall": false,
-      "runAfterFinish": true,
-      "artifactName": "${productName}-Setup-${version}.${ext}"
-    },
-    "mac": {
-      "icon": "build/icons/icon.icns",
-      "category": "public.app-category.utilities",
-      "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        },
-        {
-          "target": "zip",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
-      ],
-      "hardenedRuntime": true,
-      "notarize": false,
-      "artifactName": "${productName}-${version}-${arch}.${ext}",
-      "gatekeeperAssess": false
-    },
-    "dmg": {
-      "icon": "build/icons/icon.icns",
-      "background": "build/installer/dmg-background.png",
-      "window": {
-        "width": 660,
-        "height": 400
-      },
-      "contents": [
-        {
-          "x": 180,
-          "y": 170,
-          "type": "file"
-        },
-        {
-          "x": 480,
-          "y": 170,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
-    "linux": {
-      "icon": "build/icons/icon.png",
-      "category": "Utility",
-      "target": [
-        {
-          "target": "AppImage",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
-          "target": "deb",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
-      "artifactName": "${productName}-${version}-${arch}.${ext}"
-    },
-    "publish": {
-      "provider": "github",
-      "owner": "zerviatr",
-      "repo": "NexusHub",
-      "releaseType": "release"
-    }
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "dist:win": "tauri build --bundles nsis",
+    "test": "vitest run"
   },
   "dependencies": {
+    "@tauri-apps/api": "^2.2.0",
+    "@tauri-apps/plugin-opener": "^2.2.0",
     "axios": "^1.7.9",
     "cheerio": "^1.0.0",
     "dompurify": "^3.4.15",
-    "electron-updater": "^6.8.9",
-    "node-machine-id": "^1.1.12",
-    "pdf-lib": "^1.17.1",
     "qrcode": "^1.5.4",
-    "sharp": "^0.35.4",
     "validator": "^13.12.0"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^2.2.0",
+    "@types/dompurify": "^3.0.5",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
+    "@types/sql.js": "^1.4.11",
     "@types/validator": "^13.12.2",
     "@vitejs/plugin-react": "^4.5.2",
     "autoprefixer": "^10.4.21",
-    "electron": "^35.2.1",
-    "electron-builder": "^26.15.3",
-    "electron-vite": "^3.1.0",
+    "framer-motion": "^12.12.0",
+    "lucide-react": "^0.511.0",
     "postcss": "^8.5.3",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.8.3",
-    "vite": "^6.3.5",
-    "vitest": "^5.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0",
-    "framer-motion": "^12.12.0",
-    "lucide-react": "^0.511.0",
     "sql.js": "^1.14.2",
-    "@types/dompurify": "^3.0.5",
-    "@types/qrcode": "^1.5.6",
-    "@types/sql.js": "^1.4.11"
-  },
-  "allowScripts": {
-    "esbuild@0.25.12": true,
-    "electron@35.7.5": true,
-    "electron-winstaller@5.4.0": true
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^5.0.0"
   }
 }
