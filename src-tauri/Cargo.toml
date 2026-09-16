@@ -1,6 +1,6 @@
 [package]
 name = "zendev"
-version = "2.4.2"
+version = "2.4.3"
 description = "ZenDev — Premium Multi-Tool Desktop Application"
 authors = ["ZenDev Team"]
 edition = "2021"

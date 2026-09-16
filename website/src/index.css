@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyber-bg: #05060b;
+  --color-cyber-surface: #0a0d18;
+  --color-cyber-card: #0f1322;
+  --color-cyber-card-hover: #141a2f;
+  --color-cyber-border: #1a2238;
+  --color-neon-cyan: #00f2fe;
+  --color-neon-blue: #0ea5e9;
+  --color-neon-purple: #8b5cf6;
+  --color-neon-green: #10b981;
+  --color-neon-amber: #f59e0b;
+  --color-neon-rose: #f43f5e;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-cyber-bg);
+    color: #e2e8f0;
+    font-family: var(--font-sans);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #05060b;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e2640;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00f2fe55;
+  }
+}
+
+/* Cyber Grid Background */
+.bg-cyber-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(14, 165, 233, 0.05) 1px, transparent 1px);
+}
+
+.bg-cyber-radial {
+  background: radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.12) 0%, rgba(139, 92, 246, 0.05) 35%, transparent 70%);
+}
+
+/* Glassmorphism */
+.glass-panel {
+  background: rgba(15, 19, 34, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 242, 254, 0.12);
+}
+
+.glass-panel-hover:hover {
+  border-color: rgba(0, 242, 254, 0.35);
+  box-shadow: 0 0 25px rgba(0, 242, 254, 0.12);
+}
+
+/* Neon Glows */
+.neon-glow-cyan {
+  text-shadow: 0 0 12px rgba(0, 242, 254, 0.6);
+}
+
+.neon-border-cyan {
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.25);
+}
+
+.neon-glow-purple {
+  text-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+}
+
+/* Scanline Effect */
+.scanlines {
+  position: relative;
+}
+.scanlines::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.3;
+}

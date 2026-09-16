@@ -1,10 +1,11 @@
 {
   "name": "zendev",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "ZenDev — Premium Multi-Tool Desktop Application",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:website": "npm run build --prefix website",
     "preview": "vite preview",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",

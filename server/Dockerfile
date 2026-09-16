@@ -10,6 +10,7 @@ RUN npm ci --omit=dev
 
 COPY tsconfig.json ./
 COPY src ./src
+COPY public ./public
 
 # Build TypeScript
 RUN npm install typescript --save-dev && npx tsc

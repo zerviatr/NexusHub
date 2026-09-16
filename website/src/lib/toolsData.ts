@@ -1,0 +1,465 @@
+import { ToolItem, PricingPlan, Testimonial, FaqItem } from './types';
+
+export const ZENDEV_TOOLS: ToolItem[] = [
+  // ── SİBER GÜVENLİK & KRİPTOGRAFİ ─────────────────────────────
+  {
+    id: 'cyber-fortress',
+    name: 'CyberFortress',
+    category: 'security',
+    titleTr: 'AES-256-GCM Askeri Kasa & DoD 7-Pass Shredder',
+    titleEn: 'AES-256-GCM Military Vault & DoD 7-Pass Shredder',
+    descriptionTr: 'Hassas dosya ve metinlerinizi kuantum-dirençli AES-256-GCM ile şifreleyin. DoD 5220.22-M 7-aşama üzerine yazma algoritmasıyla verileri geri getirilemez şekilde imha edin.',
+    descriptionEn: 'Encrypt confidential files and text with quantum-resilient AES-256-GCM. Obliterate files irrecoverably using the DoD 5220.22-M 7-pass overwrite standard.',
+    badgeTr: 'Askeri Standart',
+    badgeEn: 'Military Grade',
+    icon: 'ShieldAlert',
+    hasInBrowserDemo: false,
+    highlightTag: 'AES-256 + Shredder',
+    techSpecs: ['AES-256-GCM', 'PBKDF2 / Argon2', 'DoD 5220.22-M', 'Sıfır Bulut İzi']
+  },
+  {
+    id: 'hash-studio',
+    name: 'HashStudio',
+    category: 'security',
+    titleTr: 'Çoklu Hash & Kriptografik İmza Laboratuvarı',
+    titleEn: 'Multi-Hash & Cryptographic Signature Lab',
+    descriptionTr: 'MD5, SHA-1, SHA-256, SHA-512, bcrypt ve HMAC hashlerini tek tıkla üretin. Büyük dosyaların sağlama toplamlarını (checksum) bellek taşması olmadan hesaplayın.',
+    descriptionEn: 'Generate MD5, SHA-1, SHA-256, SHA-512, bcrypt, and HMAC signatures in milliseconds. Calculate checksums for multi-gigabyte files with OOM safety.',
+    badgeTr: 'Canlı Demo Var',
+    badgeEn: 'Live Demo Available',
+    icon: 'Binary',
+    hasInBrowserDemo: true,
+    highlightTag: 'HMAC & Checksums',
+    techSpecs: ['Web Crypto API', 'SHA-256 / SHA-512', 'HMAC Doğrulama', 'Streaming Hash']
+  },
+  {
+    id: 'password-generator',
+    name: 'PasswordGenerator',
+    category: 'security',
+    titleTr: 'Kriptografik Parola & Entropi Kalkanı',
+    titleEn: 'Cryptographic Password & Entropy Shield',
+    descriptionTr: 'Donanım kaynaklı CSPRNG rastgeleliği ile kırılması yüzyıllar sürecek parolalar üretin. Canlı zxcvbn entropi puanlamasıyla zayıf şifreleri anında tespit edin.',
+    descriptionEn: 'Generate bulletproof passwords with hardware CSPRNG entropy. Detect vulnerabilities instantly with real-time zxcvbn entropy scoring.',
+    badgeTr: 'Canlı Demo Var',
+    badgeEn: 'Live Demo Available',
+    icon: 'KeyRound',
+    hasInBrowserDemo: true,
+    highlightTag: 'CSPRNG + zxcvbn',
+    techSpecs: ['CSPRNG Rastgelelik', 'zxcvbn Entropi', 'Karakter Seti Kuralları', 'Sızıntı Kontrolü']
+  },
+  {
+    id: 'universal-decrypter',
+    name: 'UniversalDecrypter',
+    category: 'security',
+    titleTr: 'Evrensel Çoklu Kod Çözücü & Analizci',
+    titleEn: 'Universal Multi-Format Decrypter & Decoder',
+    descriptionTr: 'Base64, Hex, URL Encode, HTML Entities, Binary, ROT13 ve Sezar şifrelemelerini anında otomatik tespit edip tek tıkla çözün.',
+    descriptionEn: 'Auto-detect and decode Base64, Hex, URL Encode, HTML Entities, Binary, ROT13, and Caesar ciphers seamlessly in real-time.',
+    badgeTr: 'Canlı Demo Var',
+    badgeEn: 'Live Demo Available',
+    icon: 'Unlock',
+    hasInBrowserDemo: true,
+    highlightTag: '7 Format Çözücü',
+    techSpecs: ['Base64 / Hex', 'URL & HTML Entity', 'Binary Byte Çevirici', 'Otomatik Biçim Algılama']
+  },
+
+  // ── YAZILIM GELİŞTİRİCİ & APİ GÜÇ İSTASYONU ──────────────────
+  {
+    id: 'api-studio',
+    name: 'ApiStudio & CurlRunner',
+    category: 'developer',
+    titleTr: 'Yerel REST İstemcisi & cURL Köprüsü',
+    titleEn: 'Offline REST Client & cURL Bridge',
+    descriptionTr: 'Postman ve Insomnia aboneliklerini çöpe atın. Ortam değişkenleri, başlık düzenleyici, gövde doğrulama ve cURL içe/dışa aktarımıyla tamamen yerel API geliştirme.',
+    descriptionEn: 'Ditch Postman SaaS lock-in. Full offline REST workstation with environment variables, header presets, JSON body validation, and 1-click cURL runner.',
+    badgeTr: 'Postman Katili',
+    badgeEn: 'Postman Killer',
+    icon: 'Send',
+    hasInBrowserDemo: false,
+    highlightTag: 'cURL & REST',
+    techSpecs: ['cURL Parser', 'Çevre Değişkenleri', 'Gelişmiş Başlıklar', 'İstek Geçmişi']
+  },
+  {
+    id: 'json-sqlite-studio',
+    name: 'JsonStudio & SqliteViewer',
+    category: 'developer',
+    titleTr: 'JSON Ağaç Formatlayıcı & WASM SQLite Konsolu',
+    titleEn: 'JSON Tree Formatter & WASM SQLite Console',
+    descriptionTr: 'Bozuk JSON verilerini otomatik onarın, renkli ağaç yapısında gezin ve JWT tokenları anında çözün. sql.js WebAssembly ile herhangi bir SQLite veritabanını tarayıcı hızında sorgulayın.',
+    descriptionEn: 'Auto-repair broken JSON, navigate complex objects in tree view, and inspect JWT tokens. Run raw SQL queries against any SQLite database via WebAssembly sql.js.',
+    badgeTr: 'Canlı Demo Var',
+    badgeEn: 'Live Demo Available',
+    icon: 'Database',
+    hasInBrowserDemo: true,
+    highlightTag: 'WASM SQLite',
+    techSpecs: ['sql.js WebAssembly', 'JWT Header/Payload', 'JSONPath Sorguları', 'CSV Export']
+  },
+  {
+    id: 'regex-studio',
+    name: 'RegexStudio',
+    category: 'developer',
+    titleTr: 'Düzenli İfade Test & Hata Teşhis Motoru',
+    titleEn: 'Regular Expression Tester & Diagnostic Lab',
+    descriptionTr: 'Karmaşık düzenli ifadeleri eşzamanlı eşleşme renklendirmesiyle test edin. Yakalama gruplarını (capture groups) ve bayrakları (flags) interaktif hata ipuçlarıyla analiz edin.',
+    descriptionEn: 'Test complex regular expressions with live regex match highlighting, capture group inspect, and human-readable syntax breakdown.',
+    badgeTr: 'Canlı Demo Var',
+    badgeEn: 'Live Demo Available',
+    icon: 'Regex',
+    hasInBrowserDemo: true,
+    highlightTag: 'Anlık Eşleşme',
+    techSpecs: ['Canlı RegExp Motoru', 'Grup Ayrıştırma', 'Hazır Regex Kütüphanesi', 'Detaylı Hata İpuçları']
+  },
+  {
+    id: 'dev-sandbox',
+    name: 'DevSandbox',
+    category: 'developer',
+    titleTr: 'İzole JavaScript & TypeScript REPL Konsolu',
+    titleEn: 'Isolated JS/TS REPL & Code Sandbox',
+    descriptionTr: 'Tarayıcı geliştirici konsolunu kirletmeden, temiz ve izole sanal alanda JavaScript ve TypeScript kod parçacıklarını anında çalıştırıp konsol çıktılarını inceleyin.',
+    descriptionEn: 'Safely execute arbitrary JavaScript and TypeScript snippets in an isolated runtime sandbox with formatted console outputs.',
+    badgeTr: 'İzole REPL',
+    badgeEn: 'Isolated REPL',
+    icon: 'Terminal',
+    hasInBrowserDemo: false,
+    highlightTag: 'JS / TS Koşturucu',
+    techSpecs: ['İzole Runtime', 'Konsol Çıktı Yakalama', 'TypeScript Desteği', 'Zaman Aşımı Koruması']
+  },
+  {
+    id: 'fake-data-studio',
+    name: 'FakeDataStudio',
+    category: 'developer',
+    titleTr: 'Sentetik Test Verisi & Mock Üreticisi',
+    titleEn: 'Synthetic Mock Data & Factory Generator',
+    descriptionTr: 'Veritabanı ve API testleri için tek tıkla binlerce sahte kullanıcı, Türk/Yabancı ad-soyad, sahte TC kimlik, IBAN, kredi kartı ve adres verisi üretip JSON/CSV/SQL formatında indirin.',
+    descriptionEn: 'Generate thousands of realistic mock records (users, addresses, emails, credit cards, transactions) in JSON, CSV, or SQL INSERT format for stress testing.',
+    badgeTr: 'Mock Veri Fabrikası',
+    badgeEn: 'Mock Factory',
+    icon: 'Shuffle',
+    hasInBrowserDemo: false,
+    highlightTag: 'JSON / CSV / SQL',
+    techSpecs: ['Yerelleştirilmiş Kimlik', 'Toplu Üretim', 'SQL Schema Uyumlu', 'İlişkisel Çıktı']
+  },
+
+  // ── SİSTEM, SÜREÇ & AĞ MÜHENDİSLİĞİ ─────────────────────────
+  {
+    id: 'port-killer',
+    name: 'PortKiller',
+    category: 'system',
+    titleTr: 'Port Çakışma Katili & PID Yöneticisi',
+    titleEn: 'Port Conflict Killer & PID Sentinel',
+    descriptionTr: '"Port 3000 already in use" hatasına tek tıkla son verin. Dinlenen açık TCP/UDP portlarını tarayın, hangi sürecin kilitlediğini anında bulun ve SIGKILL ile sonlandırın.',
+    descriptionEn: 'End "Port 3000 already in use" headaches forever. Scan open listening TCP/UDP ports, identify culprit PIDs, and terminate them instantly with SIGKILL.',
+    badgeTr: 'Geliştirici Kurtarıcı',
+    badgeEn: 'Dev Savior',
+    icon: 'ZapOff',
+    hasInBrowserDemo: false,
+    highlightTag: 'SIGKILL Tek Tıkla',
+    techSpecs: ['TCP/UDP Dinleme Taraması', 'PID Süreç Haritası', 'Yönetici İzni Desteği', 'Otomatik Yenileme']
+  },
+  {
+    id: 'network-tools',
+    name: 'NetworkTools',
+    category: 'system',
+    titleTr: 'Gelişmiş Ağ Teşhis & İstihbarat Kiti',
+    titleEn: 'Advanced Network Diagnostic & Recon Kit',
+    descriptionTr: 'Düşük gecikmeli Ping, DNS A/AAAA/MX/TXT çözümleyici, TCP Port Taraması, Whois sorgulaması ve IP coğrafi konum belirleme araçları.',
+    descriptionEn: 'Sub-millisecond ICMP Ping, comprehensive DNS resolver (A/MX/TXT/NS), TCP Port Scanner, Whois lookup, and GeoIP map visualizer.',
+    badgeTr: 'Ağ Analizi',
+    badgeEn: 'Network Recon',
+    icon: 'Network',
+    hasInBrowserDemo: false,
+    highlightTag: 'DNS & Ping & GeoIP',
+    techSpecs: ['DNS Kayıt Analizcisi', 'TCP Socket Scanner', 'Whois İstihbaratı', 'Düşük Gecikme Ölçümü']
+  },
+  {
+    id: 'resource-sentinel',
+    name: 'ResourceSentinel',
+    category: 'system',
+    titleTr: 'Canlı Donanım Teşhisi & Telemetri Radarı',
+    titleEn: 'Live Hardware Diagnostics & Telemetry Radar',
+    descriptionTr: 'CPU yükü, RAM tahsisi, disk I/O hızları ve sıcaklık sensörlerini saniyelik grafiklerle izleyin. Ağır derleme işlemlerinde sistem darboğazlarını anında yakalayın.',
+    descriptionEn: 'Monitor real-time CPU utilization, RAM pressure, disk I/O velocity, and thermal status with 60fps telemetry radar.',
+    badgeTr: 'Canlı Radar',
+    badgeEn: 'Live Radar',
+    icon: 'Activity',
+    hasInBrowserDemo: false,
+    highlightTag: '60 FPS Donanım',
+    techSpecs: ['Çekirdek Başına CPU', 'RAM Bellek Baskısı', 'Disk Okuma/Yazma', 'Termal Eşik Uyarıları']
+  },
+  {
+    id: 'system-optimizer',
+    name: 'SystemOptimizer',
+    category: 'system',
+    titleTr: 'Sistem Temizleyici & Gizlilik Kalkanı',
+    titleEn: 'System Disk Cleaner & Privacy Shield',
+    descriptionTr: 'npm önbellekleri, geçici log dosyaları, çöp kutusu ve kullanılmayan paket kalıntılarını güvenle tarayıp gigabaytlarca disk alanını tek tıkla geri kazanın.',
+    descriptionEn: 'Safely sweep npm/node_modules caches, temporary compile artifacts, Windows temp directories, and reclaim gigabytes of valuable SSD space.',
+    badgeTr: 'Disk Kurtarıcı',
+    badgeEn: 'Disk Saver',
+    icon: 'Trash2',
+    hasInBrowserDemo: false,
+    highlightTag: 'GB Alan Kurtar',
+    techSpecs: ['Derleyici Önbellek Taraması', 'Güvenli İnceleme Modu', 'Temp Dosya Temizliği', 'SSD Ömür Koruma']
+  },
+
+  // ── GÜNLÜK İŞ AKIŞI & ÜRETKENLİK ───────────────────────────
+  {
+    id: 'scratchpad',
+    name: 'Scratchpad Ultimate',
+    category: 'productivity',
+    titleTr: 'Çok Sekmeli Markdown Defteri & Sıfır Veri Kaybı',
+    titleEn: 'Multi-Tab Markdown Scratchpad & Zero-Loss Engine',
+    descriptionTr: 'Elektrik kesilse dahi tek kelime kaybetmeyin. Sekmeli mimari, sözdizimi vurgulamalı Markdown editörü ve yerel otomatik kaydetme motoru.',
+    descriptionEn: 'Never lose a thought. Multi-tab Markdown scratchpad with instant SQLite backing, code syntax highlighting, and zero-loss crash resilience.',
+    badgeTr: 'Sıfır Veri Kaybı',
+    badgeEn: 'Zero Data Loss',
+    icon: 'FileText',
+    hasInBrowserDemo: false,
+    highlightTag: 'Sekmeli Markdown',
+    techSpecs: ['Sekmeli Mimari', 'Anlık Markdown Önizleme', 'Yerel SQLite Kalıcılığı', 'Dışa Aktarma']
+  },
+  {
+    id: 'bulk-organizer',
+    name: 'BulkOrganizer',
+    category: 'productivity',
+    titleTr: 'Akıllı Toplu Dosya Yeniden Adlandırma & Düzenleyici',
+    titleEn: 'Smart Bulk File Renamer & Category Organizer',
+    descriptionTr: 'Yüzlerce dosyayı regex şablonları, sayaçlar, uzantı kuralları ve zaman damgalarıyla anında yeniden adlandırın. Hata yapmadan önce canlı önizleme yapın.',
+    descriptionEn: 'Rename hundreds of files simultaneously using regex templates, prefix/suffix counters, and date tokens with live preview before applying.',
+    badgeTr: 'Toplu Yeniden Adlandırma',
+    badgeEn: 'Batch Renamer',
+    icon: 'FolderSync',
+    hasInBrowserDemo: false,
+    highlightTag: 'Regex Destekli',
+    techSpecs: ['Regex Değiştirici', 'Sayı Sayacı & Sıralama', 'Canlı Önizleme Matrisi', 'Geri Alma (Undo) Desteği']
+  },
+  {
+    id: 'pdf-studio',
+    name: 'PdfStudio',
+    category: 'productivity',
+    titleTr: 'Yerel PDF Çalışma İstasyonu & Filigran Kalkanı',
+    titleEn: 'Offline PDF Workstation & Security Watermarker',
+    descriptionTr: 'Belgelerinizi asla yabancı sunuculara yüklemeyin. pdf-lib tabanlı yerel motor ile PDF sayfalarını birleştirin, bölün, döndürün, şifreleyin ve filigran ekleyin.',
+    descriptionEn: 'Never upload sensitive company contracts to third-party cloud tools. Merge, split, rotate, encrypt, and watermark PDFs 100% locally.',
+    badgeTr: '100% Yerel PDF',
+    badgeEn: '100% Local PDF',
+    icon: 'FileCheck2',
+    hasInBrowserDemo: false,
+    highlightTag: 'Buluta Dosya Yüklemez',
+    techSpecs: ['pdf-lib Yerel Motor', 'Sayfa Ayırma/Birleştirme', 'AES Parola Koruma', 'Özelleştirilmiş Filigran']
+  },
+  {
+    id: 'image-toolkit',
+    name: 'ImageToolkit',
+    category: 'productivity',
+    titleTr: 'Görsel Optimizasyonu & EXIF Gizlilik Temizleyici',
+    titleEn: 'Image Optimization & EXIF Metadata Scrubber',
+    descriptionTr: 'PNG ve JPEG dosyalarını modern WebP ve AVIF formatlarına dönüştürün, kayıpsız sıkıştırın ve fotoğraflardaki GPS konum/cihaz EXIF bilgilerini sıyırın.',
+    descriptionEn: 'Convert PNG/JPEG to WebP/AVIF, compress with visual fidelity, and scrub sensitive GPS location and camera EXIF metadata before sharing.',
+    badgeTr: 'WebP / AVIF Dönüştürücü',
+    badgeEn: 'WebP / AVIF Converter',
+    icon: 'Image',
+    hasInBrowserDemo: false,
+    highlightTag: 'Kayıpsız Sıkıştırma',
+    techSpecs: ['WebP & AVIF Çıkış', 'EXIF Metadata Silici', 'Boyutlandırma Motoru', 'Toplu Dönüştürme']
+  },
+  {
+    id: 'color-studio',
+    name: 'ColorStudio',
+    category: 'productivity',
+    titleTr: 'Renk Laboratuvarı & WCAG Erişilebilirlik Denetimi',
+    titleEn: 'Color Studio & WCAG 2.1 Contrast Checker',
+    descriptionTr: 'HEX, RGB, HSL, OKLCH renk alanları arasında anında dönüşüm yapın. Arka plan ve metin kontrastını WCAG 2.1 AA/AAA standartlarında canlı denetleyin.',
+    descriptionEn: 'Convert between HEX, RGB, HSL, and OKLCH. Audit foreground/background contrast compliance with WCAG 2.1 AA/AAA accessibility metrics.',
+    badgeTr: 'Canlı Demo Var',
+    badgeEn: 'Live Demo Available',
+    icon: 'Palette',
+    hasInBrowserDemo: true,
+    highlightTag: 'WCAG AAA Denetimi',
+    techSpecs: ['OKLCH / HSL / HEX', 'WCAG 2.1 AA/AAA Skor', 'Harmonik Palet Üretici', 'CSS Değişken Dışa Aktarma']
+  },
+  {
+    id: 'qr-code-studio',
+    name: 'QrCodeStudio',
+    category: 'productivity',
+    titleTr: 'Vektörel QR Kod İstasyonu & Okuyucu',
+    titleEn: 'Vector QR Studio & Offline Decoder',
+    descriptionTr: 'WiFi, URL, Metin ve VCard için yüksek çözünürlüklü SVG/PNG QR kodları üretin, logonuzu merkezine yerleştirin ve ekran görüntüsünden QR kod okuyun.',
+    descriptionEn: 'Generate high-res vector SVG/PNG QR codes with embedded center logos and custom colors. Read QR codes directly from images offline.',
+    badgeTr: 'Canlı Demo Var',
+    badgeEn: 'Live Demo Available',
+    icon: 'QrCode',
+    hasInBrowserDemo: true,
+    highlightTag: 'SVG / PNG Logo Gömme',
+    techSpecs: ['Vektörel SVG Çıktı', 'Özel Logo Gömme', 'Hata Düzeltme Seviyesi (H)', 'Görselden QR Okuma']
+  },
+  {
+    id: 'temp-mail',
+    name: 'TempMail',
+    category: 'productivity',
+    titleTr: 'Geçici Tek Kullanımlık E-Posta İstemcisi',
+    titleEn: 'Disposable Disposable Email Sentinel',
+    descriptionTr: 'Deneme üyelikleri ve spamdan kaçınmak için anında anonim e-posta adresi oluşturun, gelen doğrulama bağlantılarını yerleşik kutuda canlı görüntüleyin.',
+    descriptionEn: 'Generate instant disposable inboxes for trial accounts and API testing. Receive OTP codes and verification links without spamming personal email.',
+    badgeTr: 'Spam Kalkanı',
+    badgeEn: 'Spam Shield',
+    icon: 'Mail',
+    hasInBrowserDemo: false,
+    highlightTag: 'Anlık Gelen Kutusu',
+    techSpecs: ['Otomatik Yenileme', 'HTML E-posta Önizleme', 'Bağlantı Ayıklayıcı', 'Sıfır Kayıt Şartı']
+  },
+  {
+    id: 'clipboard-manager',
+    name: 'ClipboardManager',
+    category: 'productivity',
+    titleTr: 'Şifreli Pano Geçmişi & Snippet Kasası',
+    titleEn: 'Encrypted Clipboard Journal & Snippet Vault',
+    descriptionTr: 'Kopyaladığınız metinleri, kod parçalarını ve komutları yerel SQLite veritabanında şifreli olarak saklayın. Sık kullandığınız şablonları favorilere ekleyin.',
+    descriptionEn: 'Retain clipboard history locally with AES encryption. Tag frequently used code snippets, SQL queries, and cURL commands for instant retrieval.',
+    badgeTr: 'Pano Geçmişi',
+    badgeEn: 'Clipboard History',
+    icon: 'ClipboardList',
+    hasInBrowserDemo: false,
+    highlightTag: 'Şifreli Saklama',
+    techSpecs: ['Yerel Şifreli SQLite', 'Hızlı Arama & Filtreleme', 'Snippet Koleksiyonu', 'Hassas Veri Temizleme']
+  }
+];
+
+export const PRICING_PLANS: PricingPlan[] = [
+  {
+    id: 'personal',
+    nameTr: 'ZenDev Lifetime Personal',
+    nameEn: 'ZenDev Lifetime Personal',
+    badgeTr: 'Bireysel Geliştirici',
+    badgeEn: 'Indie Hacker',
+    descriptionTr: 'Tek geliştirici için 27+ gücün tümü. Aylık abonelik yok, ömür boyu sınırsız kullanım.',
+    descriptionEn: 'All 27+ cyber developer tools for a single developer. Zero subscriptions, lifetime license.',
+    prices: {
+      TRY: { current: 349, original: 699, symbol: '₺' },
+      USD: { current: 29, original: 59, symbol: '$' },
+      EUR: { current: 27, original: 55, symbol: '€' }
+    },
+    featuresTr: [
+      '27+ Araç ve Stüdyonun Tamamına Ömür Boyu Erişim',
+      '2 Adet Kişisel Windows Bilgisayarında Aktivasyon',
+      'Ömür Boyu Ücretsiz Güncellemeler (v2.x ve v3.x dahil)',
+      'Tauri v2 + Rust Ultra Düşük Bellek Mimarisi (35 MB RAM)',
+      '%100 Çevrimdışı & Yerel Veri Gizliliği (Sıfır Bulut İzi)',
+      'Self-Service Donanım Kimliği (HWID) Sıfırlama Portalı',
+      'Topluluk Discord ve GitHub Öncelikli Destek'
+    ],
+    featuresEn: [
+      'Lifetime access to all 27+ tools & studios',
+      'Activate on 2 personal Windows machines simultaneously',
+      'Free lifetime upgrades (v2.x and v3.x included)',
+      'Tauri v2 + Rust ultra-lean engine (35 MB RAM)',
+      '100% offline-first privacy (Zero cloud telemetry)',
+      'Self-service HWID machine transfer portal',
+      'Discord community & priority GitHub support'
+    ]
+  },
+  {
+    id: 'studio',
+    nameTr: 'ZenDev Studio & Team Pack',
+    nameEn: 'ZenDev Studio & Team Pack',
+    badgeTr: 'En Popüler / Takım',
+    badgeEn: 'Best Value / Teams',
+    descriptionTr: 'Yazılım ekipleri, ajanslar ve kurumsal geliştiriciler için 5 cihazlı ticari lisans paketi.',
+    descriptionEn: 'Commercial team license for software agencies, startups, and engineering squads (5 machines).',
+    recommended: true,
+    prices: {
+      TRY: { current: 799, original: 1599, symbol: '₺' },
+      USD: { current: 79, original: 159, symbol: '$' },
+      EUR: { current: 75, original: 149, symbol: '€' }
+    },
+    featuresTr: [
+      'Bireysel plandaki her şey + 5 Adet Cihaz Aktivasyonu',
+      'Ticari ve Kurumsal Projelerde Sınırsız Kullanım İzni',
+      'Kurumsal E-Fatura ve Şirket Gider Makbuzu Desteği',
+      'Öncelikli E-Posta & Özel Danışmanlık Kanalı',
+      'Takım İçi Lisans Yönetim Paneli ve Toplu HWID İptali',
+      'Gelecek Eklenti (Plugin SDK) Erken Erişim Hakkı',
+      '30 Gün Koşulsuz Para İade Garantisi'
+    ],
+    featuresEn: [
+      'Everything in Personal + 5 simultaneous machine activations',
+      'Commercial usage rights for agency and enterprise projects',
+      'Official company VAT/Tax invoice support',
+      'Priority email & dedicated engineering support channel',
+      'Team license management portal & bulk HWID revocation',
+      'Early access to upcoming Plugin SDK ecosystem',
+      '30-day money-back guarantee without hassle'
+    ]
+  }
+];
+
+export const TESTIMONIALS: Testimonial[] = [
+  {
+    id: '1',
+    author: 'Kaan Demir',
+    role: 'Senior Backend Architect',
+    company: 'Fintech Hub',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+    rating: 5,
+    toolUsed: 'PortKiller + ApiStudio',
+    textTr: 'Postman ve Insomnia aboneliklerini şirket genelinde iptal edip ZenDev\'e geçtik. PortKiller ve ApiStudio inanılmaz hafif. Tauri v2 ile 30 MB RAM harcaması Electron kabusundan sonra büyüleyici.',
+    textEn: 'We cancelled team Postman subscriptions and switched to ZenDev. PortKiller and ApiStudio are blazing fast. Seeing only 30 MB RAM usage after Electron bloat is astonishing.'
+  },
+  {
+    id: '2',
+    author: 'Elena Rostova',
+    role: 'Lead Security Auditor',
+    company: 'CyberShield EU',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
+    rating: 5,
+    toolUsed: 'CyberFortress + HashStudio',
+    textTr: 'DoD 7-pass shredder ve AES-256-GCM kasanın tamamen yerel çalışması gizlilik standartlarımız için biçilmiş kaftan. Müşteri verilerini sızdırma korkusu olmadan çevrimdışı çalışabiliyoruz.',
+    textEn: 'The offline DoD 7-pass shredder and AES-256-GCM vault are indispensable for our audit team. Zero network requests, 100% offline-first security.'
+  },
+  {
+    id: '3',
+    author: 'Murat Yıldırım',
+    role: 'Full-Stack Developer',
+    company: 'Freelance & Indie',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
+    rating: 5,
+    toolUsed: 'SqliteViewer + Scratchpad',
+    textTr: 'WASM SQLite görüntüleyici tek kelimeyle kusursuz. Büyük DB dosyalarını anında açıyor, sorguları milisaniyede koşturuyor. Scratchpad ise markdown notlarım için vazgeçilmezim oldu.',
+    textEn: 'The WASM SQLite reader is pure perfection. Loads massive local DBs instantly. Scratchpad has replaced all my messy notepad tabs.'
+  }
+];
+
+export const FAQ_ITEMS: FaqItem[] = [
+  {
+    id: 'faq-1',
+    category: 'general',
+    questionTr: 'ZenDev nedir ve neden abonelik modeli yerine tek seferlik ödeme?',
+    questionEn: 'What is ZenDev and why one-time payment instead of subscription?',
+    answerTr: 'ZenDev, geliştiriciler ve güvenlik uzmanları için 27+ profesyonel aracı tek bir masaüstü uygulamasında birleştiren Tauri v2 tabanlı bir güç paketidir. Yazılımcıların her ay onlarca araca yüzlerce dolar abonelik ödemesinden (SaaS yorgunluğu) bıktık. ZenDev bir kez satın alınır, ömür boyu sizin olur.',
+    answerEn: 'ZenDev combines 27+ professional tools into a single desktop suite powered by Tauri v2 and Rust. We are fundamentally against SaaS subscription fatigue. You buy ZenDev once, own it forever.'
+  },
+  {
+    id: 'faq-2',
+    category: 'technical',
+    questionTr: 'Tauri v2 ve Rust mimarisinin Electron\'dan farkı nedir?',
+    questionEn: 'How does Tauri v2 + Rust differ from traditional Electron apps?',
+    answerTr: 'Klasik Electron uygulamaları arka planda tam bir Chromium ve Node.js motoru çalıştırarak 400-600 MB RAM tüketir. ZenDev v2.4.3 ise Windows yerel WebView2 ve Rust işletim sistemi köprüsü kullanarak yalnızca ~35 MB RAM harcar ve 0.4 saniyede açılır.',
+    answerEn: 'Traditional Electron apps bundle a full Chromium browser and consume 400-600 MB RAM. ZenDev v2.4.3 leverages Windows native WebView2 and a Rust backend, consuming only ~35 MB RAM with sub-second boot time.'
+  },
+  {
+    id: 'faq-3',
+    category: 'license',
+    questionTr: 'Bilgisayarımı değiştirirsem lisansımı yeni cihaza aktarabilir miyim?',
+    questionEn: 'If I change my computer, can I transfer my license to the new machine?',
+    answerTr: 'Evet! Web sitemizdeki "Müşteri Portalı" üzerinden lisans anahtarınızı girerek eski bilgisayarınızın donanım kimliğini (HWID) tek tıkla sıfırlayabilir ve yeni cihazınızda hemen aktive edebilirsiniz.',
+    answerEn: 'Yes! Using our website\'s Self-Service Customer Portal, you can enter your license key, release your old HWID slot with 1-click, and activate on your new computer.'
+  },
+  {
+    id: 'faq-4',
+    category: 'security',
+    questionTr: 'Verilerim buluta veya sunucularınıza gönderiliyor mu?',
+    questionEn: 'Is any of my data sent to the cloud or your servers?',
+    answerTr: 'Kesinlikle HAYIR. ZenDev %100 offline-first prensibiyle çalışır. Dosyalarınız, parolalarınız, API istekleriniz ve SQLite veritabanlarınız yalnızca sizin bilgisayarınızda işlenir ve saklanır. Sıfır telemetri.',
+    answerEn: 'Absolutely NOT. ZenDev operates on a strict 100% offline-first philosophy. Your files, passwords, API requests, and databases never leave your local machine. Zero telemetry.'
+  }
+];

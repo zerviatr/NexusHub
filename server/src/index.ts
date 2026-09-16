@@ -13,6 +13,8 @@
  */
 import 'dotenv/config'
 import express, { Request, Response, NextFunction } from 'express'
+import path from 'path'
+import fs from 'fs'
 import { getDb, migrate } from './db'
 import { webhookRouter } from './routes/webhook'
 import { licenseRouter } from './routes/license'
@@ -149,7 +151,18 @@ ${urls.map(u => `  <url>
   res.send(xml)
 })
 
+// ── Static Web Assets & Landing Page ──────────────────────────────────────
+const publicDir = path.join(__dirname, '../public')
+if (fs.existsSync(publicDir)) {
+  app.use(express.static(publicDir))
+}
+
 app.get('/', (_req: Request, res: Response) => {
+  const publicIndex = path.join(publicDir, 'index.html')
+  if (fs.existsSync(publicIndex)) {
+    res.sendFile(publicIndex)
+    return
+  }
   res.setHeader('Content-Type', 'text/html; charset=utf-8')
   res.send(renderLandingPage())
 })
