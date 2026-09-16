@@ -22,7 +22,7 @@ export const TestimonialsWall: React.FC<TestimonialsWallProps> = ({ lang }) => {
           </h2>
           <p className="mt-4 text-sm sm:text-base text-gray-400">
             {lang === 'tr'
-              ? 'Abonelik tuzaklarından kurtulup tek yazılımla 27+ güce kavuşan geliştiricilerin gerçek deneyimleri.'
+              ? 'Abonelik tuzaklarından kurtulup tek yazılımla 31+ güce kavuşan geliştiricilerin gerçek deneyimleri.'
               : 'Real feedback from developers who ditched subscription traps for ZenDev.'}
           </p>
         </div>

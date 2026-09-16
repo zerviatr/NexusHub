@@ -50,7 +50,9 @@ graph TD
 | **Security Review** | "security", "vulnerability", "exploit"     | `security-auditor` + `penetration-tester`   | ✅ YES       |
 | **Performance**     | "slow", "optimize", "performance", "speed" | `performance-optimizer`                     | ✅ YES       |
 | **Product Def**     | "requirements", "user story", "backlog", "MVP" | `product-owner`                             | ✅ YES       |
+| **ZenDev Gatekeeper** | "özellik ekleyelim mi", "şu aracı ekle", "roadmap", "feature proposal", "yeni araç" | `product-owner` + `@zendev-feature-gatekeeper` | ✅ YES |
 | **New Feature**     | "build", "create", "implement", "new app"  | `orchestrator` → multi-agent                | ⚠️ ASK FIRST |
+
 | **Complex Task**    | Multiple domains detected                  | `orchestrator` → multi-agent                | ⚠️ ASK FIRST |
 
 ### 3. Automatic Routing Protocol
@@ -115,6 +117,8 @@ function analyzeRequest(userMessage) {
 | **Performance** | slow, lag, optimize, cache, performance    | `performance-optimizer` |
 | **SEO**         | seo, meta, analytics, sitemap, robots      | `seo-specialist`        |
 | **Game**        | unity, godot, phaser, game, multiplayer    | `game-developer`        |
+| **Feature Gate** | özellik ekleyelim mi, roadmap, feature proposal, araç önerisi | `product-owner` + `@zendev-feature-gatekeeper` |
+
 
 ### Multi-Domain Tasks (Auto-invoke Orchestrator)
 

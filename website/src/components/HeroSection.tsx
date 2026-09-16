@@ -34,7 +34,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
             <Zap className="w-4 h-4 text-cyan-400 animate-pulse" />
             <span>{t.tag}</span>
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-            <span className="text-gray-400 font-normal">v2.4.3 LATEST</span>
+            <span className="text-gray-400 font-normal">v2.5.2 LATEST</span>
           </div>
 
           {/* Main Title */}
@@ -55,9 +55,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
               href={ZENDEV_RELEASE_CONFIG.setupExe}
-              download="ZenDev-Setup-2.4.3.exe"
+              download="ZenDev-Setup-2.5.2.exe"
               onClick={() => cyberAudio.playSuccess()}
-              title="Download ZenDev v2.4.3 Setup (.exe)"
+              title="Download ZenDev v2.5.2 Setup (.exe)"
               className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 text-sm font-bold font-mono text-black bg-gradient-to-r from-cyan-400 via-sky-400 to-cyan-300 hover:from-cyan-300 hover:to-sky-200 rounded-xl shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/45 transition transform hover:-translate-y-0.5 cursor-pointer"
             >
               <Download className="w-5 h-5" />
@@ -66,9 +66,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
 
             <a
               href={ZENDEV_RELEASE_CONFIG.portableExe}
-              download="ZenDev-Portable-2.4.3.exe"
+              download="ZenDev-Portable-2.5.2.exe"
               onClick={() => cyberAudio.playClick()}
-              title="Download ZenDev v2.4.3 Portable (.exe)"
+              title="Download ZenDev v2.5.2 Portable (.exe)"
               className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-6 py-4 text-sm font-semibold font-mono text-gray-200 bg-[#0d1222] hover:bg-[#12182d] border border-gray-700 hover:border-cyan-500/50 rounded-xl transition cursor-pointer"
             >
               <Terminal className="w-4 h-4 text-cyan-400" />
@@ -104,7 +104,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
           {/* Quick Metrics Bar */}
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             <div className="bg-[#0b0e1b]/80 border border-cyan-500/20 rounded-xl p-4 text-center">
-              <div className="text-2xl font-black text-cyan-400 font-mono">27+</div>
+              <div className="text-2xl font-black text-cyan-400 font-mono">31+</div>
               <div className="text-xs text-gray-400 font-mono mt-1">{t.stats.tools}</div>
             </div>
             <div className="bg-[#0b0e1b]/80 border border-purple-500/20 rounded-xl p-4 text-center">
@@ -132,7 +132,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
                 <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
                 <span className="w-3 h-3 rounded-full bg-green-500/80" />
                 <span className="text-xs font-mono text-gray-400 ml-2">
-                  ZenDev Desktop v2.4.3 [Tauri Rust Engine]
+                  ZenDev Desktop v2.5.2 [Tauri Rust Engine]
                 </span>
               </div>
               <div className="flex items-center gap-3 text-xs font-mono text-gray-400">
@@ -347,7 +347,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
                         <tbody>
                           <tr className="border-b border-gray-800/50">
                             <td className="p-1.5">1</td>
-                            <td className="p-1.5">ZenDev v2.4.3 (Tauri)</td>
+                            <td className="p-1.5">ZenDev v2.5.2 (Tauri)</td>
                             <td className="p-1.5 text-emerald-400 font-bold">34.8 MB</td>
                           </tr>
                           <tr>
@@ -362,12 +362,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
                 )}
 
                 <div className="mt-4 pt-3 border-t border-gray-800/80 flex items-center justify-between text-xs font-mono text-gray-400">
-                  <span>ZenDev v2.4.3 Masaüstü Sürümünü İndirin</span>
+                  <span>ZenDev v2.5.2 Masaüstü Sürümünü İndirin</span>
                   <a
                     href="#arsenal"
                     className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 font-bold"
                   >
-                    <span>27 Aracın Tümünü Gör</span>
+                    <span>31 Aracın Tümünü Gör</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </a>
                 </div>

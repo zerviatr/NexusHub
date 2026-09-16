@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Binary, Copy, Check, ShieldCheck } from 'lucide-react';
 
 export const LiveHashDemo: React.FC = () => {
-  const [input, setInput] = useState('ZenDev v2.4.3 Tauri Edition — 100% Offline & Private');
+  const [input, setInput] = useState('ZenDev v2.5.2 Tauri Edition — 100% Offline & Private');
   const [sha256, setSha256] = useState('');
   const [copied, setCopied] = useState(false);
 

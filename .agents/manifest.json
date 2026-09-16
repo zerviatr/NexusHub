@@ -608,6 +608,16 @@
       "scripts": [],
       "version": "1.0.0"
     },
+    "brand-identity": {
+      "allowedTools": [
+        "Read",
+        "Glob",
+        "Grep"
+      ],
+      "path": "skills/brand-identity/SKILL.md",
+      "scripts": [],
+      "version": "1.0.0"
+    },
     "clean-code": {
       "allowedTools": [
         "Read",
@@ -1091,6 +1101,30 @@
       "path": "skills/webapp-testing/SKILL.md",
       "scripts": [
         "skills/webapp-testing/scripts/playwright_runner.py"
+      ],
+      "version": "1.0.0"
+    },
+    "zendev": {
+      "allowedTools": [
+        "Read",
+        "Edit",
+        "Write",
+        "Glob",
+        "Grep"
+      ],
+      "path": "skills/zendev/SKILL.md",
+      "scripts": [],
+      "version": "1.0.0"
+    },
+    "zendev-feature-gatekeeper": {
+      "allowedTools": [
+        "Read",
+        "Glob",
+        "Grep"
+      ],
+      "path": "skills/zendev-feature-gatekeeper/SKILL.md",
+      "scripts": [
+        "skills/zendev-feature-gatekeeper/scripts/gatekeeper.py"
       ],
       "version": "1.0.0"
     }

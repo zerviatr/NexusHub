@@ -619,4 +619,25 @@ describe('Empirical Challenge: Milestone M1 Website Modernization', () => {
       expect(heroSource).toContain('href={ZENDEV_RELEASE_CONFIG.portableExe}');
     });
   });
+
+  // =========================================================================
+  // TASK 5: Non-Version Invariant Guard (secret_keys.env 2.4 KB & sRGB gamma 2.4)
+  // =========================================================================
+  describe('5. Non-Version Constants & Invariant Integrity', () => {
+    it('verifies HeroSection.tsx line 280 preserves secret_keys.env (2.4 KB)', () => {
+      const heroSource = fs.readFileSync(
+        path.resolve(__dirname, '../website/src/components/HeroSection.tsx'),
+        'utf-8'
+      );
+      expect(heroSource).toContain('secret_keys.env (2.4 KB)');
+    });
+
+    it('verifies LiveColorDemo.tsx line 24 preserves sRGB gamma transfer constant 2.4', () => {
+      const colorDemoSource = fs.readFileSync(
+        path.resolve(__dirname, '../website/src/components/LivePlayground/LiveColorDemo.tsx'),
+        'utf-8'
+      );
+      expect(colorDemoSource).toContain('Math.pow((s + 0.055) / 1.055, 2.4)');
+    });
+  });
 });

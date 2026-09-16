@@ -20,7 +20,7 @@ type Base64Mode = 'encode' | 'decode';
 
 export const LiveBase64Demo: React.FC = () => {
   const [mode, setMode] = useState<Base64Mode>('encode');
-  const [input, setInput] = useState('ZenDev v2.4.3: Hızlı, Güvenli ve Özgür Geliştirici Paketi! 🚀');
+  const [input, setInput] = useState('ZenDev v2.5.2: Hızlı, Güvenli ve Özgür Geliştirici Paketi! 🚀');
   const [urlSafe, setUrlSafe] = useState(false);
   const [output, setOutput] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -209,7 +209,7 @@ export const LiveBase64Demo: React.FC = () => {
         <div className="flex items-center gap-1.5 ml-auto">
           <span className="text-[11px] text-gray-500">Hazır Örnekler:</span>
           <button
-            onClick={() => loadPreset('ZenDev v2.4.3: Hızlı, Güvenli ve Özgür Geliştirici Paketi! 🚀', 'encode')}
+            onClick={() => loadPreset('ZenDev v2.5.2: Hızlı, Güvenli ve Özgür Geliştirici Paketi! 🚀', 'encode')}
             className="px-2 py-0.5 rounded bg-gray-900 hover:bg-gray-800 text-[11px] text-gray-300 border border-gray-800"
           >
             Türkçe & Emoji
@@ -221,7 +221,7 @@ export const LiveBase64Demo: React.FC = () => {
             JSON
           </button>
           <button
-            onClick={() => loadPreset('WmVuRGV2IHYyLjQuMzogSMSxemzEsSwgR8O8dmVubGkgdmUgw5Z6Z8O8ciBHZWxpxZ90aXJpY2kgUGFrZXRpISDwn5mp', 'decode')}
+            onClick={() => loadPreset('WmVuRGV2IHYyLjUuMjogSMSxemzEsSwgR8O8dmVubGkgdmUgw5Z6Z8O8ciBHZWxpxZ90aXJpY2kgUGFrZXRpISDwn5qA', 'decode')}
             className="px-2 py-0.5 rounded bg-gray-900 hover:bg-gray-800 text-[11px] text-cyan-300 border border-cyan-500/30"
           >
             Base64 Örneği

@@ -2,7 +2,8 @@ import React, { useState, useMemo } from 'react';
 import {
   Search, ShieldAlert, Binary, KeyRound, Unlock, Send, Database, Regex,
   Terminal, Shuffle, ZapOff, Network, Activity, Trash2, FileText, FolderSync,
-  FileCheck2, Image, Palette, QrCode, Mail, ClipboardList, Sparkles, X, Check
+  FileCheck2, Image, Palette, QrCode, Mail, ClipboardList, Sparkles, X, Check,
+  Clock, Workflow
 } from 'lucide-react';
 import { ToolItem, ToolCategory, Language } from '../lib/types';
 import { ZENDEV_TOOLS } from '../lib/toolsData';
@@ -15,7 +16,8 @@ interface ToolCatalogProps {
 const ICON_MAP: Record<string, any> = {
   ShieldAlert, Binary, KeyRound, Unlock, Send, Database, Regex,
   Terminal, Shuffle, ZapOff, Network, Activity, Trash2, FileText,
-  FolderSync, FileCheck2, Image, Palette, QrCode, Mail, ClipboardList
+  FolderSync, FileCheck2, Image, Palette, QrCode, Mail, ClipboardList,
+  Clock, Workflow
 };
 
 export const ToolCatalog: React.FC<ToolCatalogProps> = ({ lang }) => {
@@ -218,7 +220,7 @@ export const ToolCatalog: React.FC<ToolCatalogProps> = ({ lang }) => {
             </div>
 
             <div className="mt-8 pt-4 border-t border-gray-800 flex items-center justify-between">
-              <span className="text-xs font-mono text-emerald-400">● ZenDev v2.4.3 ile Yerleşik Gelir</span>
+              <span className="text-xs font-mono text-emerald-400">● ZenDev v2.5.2 ile Yerleşik Gelir</span>
               <a
                 href="#download"
                 onClick={() => setSelectedTool(null)}

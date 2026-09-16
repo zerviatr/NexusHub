@@ -1,6 +1,9 @@
-﻿---
+---
 name: brand-identity
 description: Provides the single source of truth for brand guidelines, design tokens, technology choices, and voice/tone. Use this skill whenever generating UI components, styling applications, writing copy, or creating user-facing assets to ensure brand consistency.
+when_to_use: "Whenever generating UI components, styling applications, writing copy, or creating user-facing assets to ensure brand consistency."
+allowed-tools: Read, Glob, Grep
+version: 1.0.0
 ---
 # Brand Identity & Guidelines
 **Brand Name:** [INSERT BRAND NAME HERE]

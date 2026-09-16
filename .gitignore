@@ -59,5 +59,9 @@ electron-builder-cache/
 .agents/.ag-kit/
 
 
+# Python cache
+__pycache__/
+*.pyc
+
 # ECDSA Private Key
 keys/*private*.pem

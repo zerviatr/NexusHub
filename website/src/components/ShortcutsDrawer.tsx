@@ -95,7 +95,7 @@ export const ShortcutsDrawer: React.FC<ShortcutsDrawerProps> = ({
             </div>
             <div>
               <h3 className="text-base font-bold text-white font-mono flex items-center gap-2">
-                <span>{isTr ? 'ZenDev v2.4.3 Kısayol & CLI Kılavuzu' : 'ZenDev v2.4.3 Cheatsheet & CLI'}</span>
+                <span>{isTr ? 'ZenDev v2.5.2 Kısayol & CLI Kılavuzu' : 'ZenDev v2.5.2 Cheatsheet & CLI'}</span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/40 text-cyan-300">
                   CheatSheet
                 </span>

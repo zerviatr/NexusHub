@@ -4,6 +4,9 @@ description: >-
   ZenDev Electron uygulamasina ait mimari bilgi, i18n kaliplari,
   IPC conventions, teknoloji stack ve backlog. ZenDev'da degisiklik
   yapilacagi zaman bu skill'i oku.
+when_to_use: "ZenDev Electron uygulamasında mimari, i18n, IPC, sayfa ve araç geliştirmeleri veya değişiklikleri yapılırken kullanılır."
+allowed-tools: Read, Edit, Write, Glob, Grep
+version: 1.0.0
 ---
 
 # ZenDev Proje Skill
@@ -49,7 +52,9 @@ src/
     update-project-map.md     — Haritayi ne zaman guncelle kurali
   skills/
     zendev/SKILL.md         — Bu dosya
+    zendev-feature-gatekeeper/SKILL.md — Zorunlu ozellik kapi bekcisi (5 asamali filtre)
 YAPILACAKLAR.md               — Backlog (proje kokunde)
+
 ```
 
 ## i18n Kalibi — Yeni Sayfa Eklerken
@@ -75,8 +80,27 @@ ipcMain.handle('channel-name', async (_, ...args) => {
 // Tip tanimlari: src/renderer/src/lib/ipc.ts
 ```
 
+## Özellik ve Araç Kabul Kuralı (Feature Gatekeeper Entegrasyonu)
+
+> 🛑 **ZORUNLU ÖN KOŞUL:** ZenDev için önerilen HER YENİ ÖZELLİK, ARAÇ veya BACKLOG MADDESİ öncelikle [`zendev-feature-gatekeeper`](../zendev-feature-gatekeeper/SKILL.md) 5 aşamalı filtresinden geçirilmek zorundadır. Yüzeysel veya otomatik onay kesinlikle verilemez.
+
+### 5 Aşamalı Filtre Süzgeci
+1. **Filtre 1 — Ödeme Testi:** Kullanıcı bu araç için ayda para öder mi, yoksa ücretsiz web/CLI aracı yeterli mi?
+2. **Filtre 2 — Kişisel İhtiyaç mı, Genel İhtiyaç mı?:** Kurucunun anlık kişisel hevesi mi, yoksa hedef kitle (API-ağırlıklı geliştiriciler ve ekipler) için tekrarlayan bir problem mi?
+3. **Filtre 3 — Çekirdekle İlişki Testi:** Geliştirici stüdyoları (JSON, cURL, Regex, JWT, Cron, Mermaid, Encoding) çekirdeğini güçlendiriyor mu, yoksa ürünü dağınık bir araç kutusuna (Swiss Army knife) mı döndürüyor?
+4. **Filtre 4 — Risk ve Güven Testi:** Kullanıcı onaysız arka plan müdahalesi, sistem müdahalesi, kötüye kullanım (spam/abuse) veya güvenlik riski var mı?
+5. **Filtre 5 — Bakım Maliyeti Testi:** OS/platform bazlı kırılganlık veya yüksek harici destek yükü getiriyor mu?
+
+### Kalıcı Kara Liste (Asla Kabul Edilmeyecekler)
+- Sistem seviyesi müdahale araçları (port/process öldürme, DNS flush, önbellek temizleme)
+- Kullanıcı onaysız sessiz arka plan güncelleyicileri/işlemleri
+- Kötüye kullanıma açık anonimlik araçları (temp mail vb.)
+- Düşük diferansiyasyonlu OS-native araçlar (clipboard manager, not defteri vb.)
+
 ## Yeni Tool Ekleme — Adim Adim
+0. **Gatekeeper Değerlendirmesi:** Özelliği/aracı `@zendev-feature-gatekeeper` 5 filtre testinden geçir ve gerekçeli onay al. Kalıcı kara liste maddeleri doğrudan elenir.
 1. `src/renderer/src/pages/YeniTool.tsx` olustur
+
 2. `BaseToolTemplate` kullan (icon, title, description, gradient props)
 3. `useT()` ile i18n ekle — hic hardcoded string kalmamali
 4. `src/renderer/src/App.tsx`'e route ekle

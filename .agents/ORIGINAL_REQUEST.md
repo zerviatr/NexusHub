@@ -130,3 +130,71 @@ Engineer a unified, zero-overhead helper module (e.g. `src-tauri/src/process_ext
 ## Follow-up — 2026-09-16T14:16:23Z
 
 Execute the NSIS Silent Update Fix as detailed in prompt_draft.md. Team scale is Full multi-agent team, and Integrity Mode is Clean, safe Rust/Tauri standards without artificial restrictions. Reconfigure the Tauri v2 updater settings (e.g., installMode in tauri.conf.json or /S arguments in updater.rs) to ensure silent background updates on Windows. Build, test, and push to GitHub as v2.5.2.
+
+## Follow-up — 2026-09-16T20:27:32Z
+
+Synchronize the ZenDev marketing web application located in `website/` with the desktop application repository state (version v2.5.2, 31 core developer tools, silent command execution engine, updated changelog, and direct release download assets).
+
+Working directory: c:/Users/futbo/Desktop/AI Projeleri/NexusHub
+Integrity mode: development
+
+## Requirements
+
+### R1. Developer Tool Arsenal & Catalog Expansion (27+ to 31+ Tools)
+Synchronize all tool count metrics across the marketing website from 27 to 31 tools. Expand the tool catalog in `website/src/lib/toolsData.ts` to include the four new elevation developer studios (`JwtStudio`, `CronStudio`, `MermaidStudio`, and `EncodingStudio`) alongside existing tools, ensuring complete bilingual Turkish and English descriptions, badges, technical specifications, and search tags.
+
+### R2. Version & Release Asset Synchronization (v2.4.3 to v2.5.2)
+Update all hardcoded version references across the website (Navbar, Hero section, CTA buttons, FAQ entries, and download helpers) from `v2.4.3` to `v2.5.2`. Verify that direct download actions trigger the correct Windows installer (`ZenDev-Setup-2.5.2.exe`) and portable binary (`ZenDev-Portable-2.5.2.exe`) GitHub release endpoints with automatic fallback to the latest release page.
+
+### R3. Changelog & Architecture Consistency
+Update the release notes modal (`ChangelogModal.tsx`) to document the evolution up to v2.5.2, highlighting the v2.5.0 Tauri v2 + Rust migration, v2.5.1 elevation developer studios, and v2.5.2 silent command subprocess architecture (`CREATE_NO_WINDOW`). Keep architecture benchmark cards and metrics aligned with measured performance (<26 MB RAM, 0.35s boot latency, 4.6 MB installer).
+
+### R4. Bilingual i18n & Translation Parity
+Update `website/src/lib/translations.ts` across both Turkish (`tr`) and English (`en`) namespaces so that all navigation items, counters, hero headlines, and FAQ responses reflect the 31+ tools and v2.5.2 release without missing keys or discrepancies.
+
+## Acceptance Criteria
+
+### Build & Static Verification
+- [ ] `npm run build` executed in `website/` completes cleanly with exit code 0.
+- [ ] `npx vitest run tests/websiteM1.challenge.test.ts` executes and all tests pass with 0 failures.
+
+### Content & Data Integrity
+- [ ] `website/src/lib/toolsData.ts` contains comprehensive entries for `JwtStudio`, `CronStudio`, `MermaidStudio`, and `EncodingStudio`.
+- [ ] Zero occurrences of the legacy version string `v2.4.3` remain in `website/src/lib/translations.ts` or `website/src/components/ChangelogModal.tsx`.
+- [ ] Navbar, Hero section, and Catalog category headers accurately display `31+ Araç` / `31+ Tools` and `v2.5.2`.
+
+## Follow-up — 2026-09-16T20:43:46Z
+
+This is a single self-contained fix; keep it small and focused.
+
+Entegrasyon Hedefi: Masaüstündeki `C:\Users\futbo\Desktop\skill.md` dosyasında tanımlı `zendev-feature-gatekeeper` skill'ini, NexusHub projesinin `.agents/skills/` dizinine ve global Antigravity/Gemini CLI yapılandırmasına (`~/.gemini/config/skills/`) entegre etmek; hafızaya (`MEMORY.md`), referanslara ve ajan routing kurallarına işleyerek kalıcı, otonom ve acımasız bir özellik kapı bekçisi (Feature Gatekeeper) haline getirmek.
+
+Working directory: c:\Users\futbo\Desktop\AI Projeleri\NexusHub
+Integrity mode: development
+Requested team: Small, focused team
+
+## Requirements
+
+### R1. Skill Dosya ve Dizin Entegrasyonu
+- Masaüstündeki `C:\Users\futbo\Desktop\skill.md` içeriği `c:\Users\futbo\Desktop\AI Projeleri\NexusHub\.agents\skills\zendev-feature-gatekeeper\SKILL.md` olarak yerleştirilmelidir.
+- Skill ayrıca makine düzeyinde global yapılandırmaya (`C:\Users\futbo\.gemini\config\skills\zendev-feature-gatekeeper\SKILL.md`) kopyalanarak gelecekteki tüm oturumlarda ve projelerde doğrudan keşfedilebilir hale getirilmelidir.
+
+### R2. Sistem Hafızası ve Kural Entegrasyonu
+- `.agents/memory/MEMORY.md` ve `.agents/rules/quick-reference.md` dosyalarına `zendev-feature-gatekeeper` skill'i eklenmeli; ZenDev için önerilen her yeni özellikte (feature bloat riskini önlemek için) 5 aşamalı filtrenin (Ödeme Testi, Kişisel vs Genel İhtiyaç, Çekirdekle İlişki, Risk/Güven, Bakım Maliyeti) zorunlu işletileceği kaydedilmelidir.
+- `.agents/skills/zendev/SKILL.md` dosyası ile doğrudan çapraz referans kurulmalıdır.
+
+### R3. Doğrulama ve Entegrasyon Testi
+- Skill'in YAML frontmatter yapısı, Antigravity skill standardı ve dizin yapısı test edilerek doğrulanmalıdır.
+- Test senaryosu: Skill aktifken örnek bir özellik önerisinde ("port temizleme veya yeni bir swiss-army knife aracı ekleyelim mi?") sistemin otomatik olarak `zendev-feature-gatekeeper` kurallarını uygulayıp 5 filtre formatında gerekçeli ret/değerlendirme ürettiği teyit edilmelidir.
+
+## Acceptance Criteria
+
+### Doğrulama Kriterleri
+- [ ] `c:\Users\futbo\Desktop\AI Projeleri\NexusHub\.agents\skills\zendev-feature-gatekeeper\SKILL.md` eksiksiz oluşturuldu.
+- [ ] `C:\Users\futbo\.gemini\config\skills\zendev-feature-gatekeeper\SKILL.md` eksiksiz oluşturuldu.
+- [ ] YAML frontmatter `name: zendev-feature-gatekeeper` ve açıklama alanları hatasız.
+- [ ] `.agents/memory/MEMORY.md` güncellendi ve kural kalıcı belleğe işlendi.
+- [ ] `.agents/rules/quick-reference.md` ve `.agents/skills/zendev/SKILL.md` çapraz referansları bağlandı.
+- [ ] Örnek bir özellik sorgulaması ile gatekeeper filtre mekanizması test edilerek doğrulandı.
+
+

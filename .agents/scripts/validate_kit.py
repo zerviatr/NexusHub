@@ -61,7 +61,7 @@ def add(findings: list[Finding], severity: str, code: str, path: Path, message: 
 
 
 def extract_frontmatter(path: Path) -> tuple[str | None, int]:
-    text = path.read_text("utf-8", errors="replace")
+    text = path.read_text("utf-8-sig", errors="replace").replace("\r\n", "\n")
     if not text.startswith("---\n"):
         return None, 1
     end = text.find("\n---\n", 4)

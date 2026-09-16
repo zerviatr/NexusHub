@@ -96,7 +96,7 @@ export const LiveQrDemo: React.FC = () => {
               QR Yok
             </div>
           )}
-          <span className="text-[10px] font-mono text-gray-500 mt-2">v2.4.3 QR Motoru</span>
+          <span className="text-[10px] font-mono text-gray-500 mt-2">v2.5.2 QR Motoru</span>
         </div>
       </div>
     </div>

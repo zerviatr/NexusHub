@@ -1,19 +1,19 @@
 export const translations = {
   tr: {
     nav: {
-      tools: '27+ Araç',
+      tools: '31+ Araç',
       playground: 'Canlı Demo',
       performance: 'Tauri v2 Hızı',
       calculator: 'Tasarruf Hesabı',
       pricing: 'Fiyatlandırma',
       portal: 'Lisans Portalı',
-      downloadBtn: 'Hemen İndir v2.4.3',
-      whatsNew: 'v2.4.3 Yenilikler'
+      downloadBtn: 'Hemen İndir v2.5.2',
+      whatsNew: 'v2.5.2 Yenilikler'
     },
     hero: {
       tag: '🔥 TAURI v2 & RUST İLE SIFIRDAN YAZILDI',
       titleHighlight: 'Abonelik Tuzağına Son.',
-      titleMain: '27+ Siber Geliştirici Gücü Tek Masaüstü Yazılımında.',
+      titleMain: '31+ Siber Geliştirici Gücü Tek Masaüstü Yazılımında.',
       subtitle: 'Postman, SQLite tarayıcıları, PDF araçları, parola yöneticileri ve dosya imha yazılımları için her ay yüzlerce dolar ödemeyi bırakın. Tek seferlik lisans, %100 yerel gizlilik, sıfır bulut izi.',
       downloadNsis: 'Windows Yükleyici İndir (x64)',
       downloadPortable: 'Portable .exe İndir',
@@ -21,7 +21,7 @@ export const translations = {
       copied: 'Kopyalandı!',
       cleanCodeBadge: 'VirusTotal 0/72 Temiz Kod Raporu',
       stats: {
-        tools: '27+ Güçlü Araç',
+        tools: '31+ Güçlü Araç',
         ram: '<26 MB RAM',
         boot: '0.35s Açılış',
         license: 'Ömür Boyu Lisans'
@@ -44,9 +44,9 @@ export const translations = {
     catalog: {
       tag: 'TAM CEPHANELİK',
       title: 'Geliştiricinin ve Güvenlik Uzmanının İhtiyacı Olan Her Şey',
-      subtitle: 'Birbirinden bağımsız çalışan, arayüzü tek tip ve siberpunk hızında tasarlanmış 27 profesyonel istasyon.',
+      subtitle: 'Birbirinden bağımsız çalışan, arayüzü tek tip ve siberpunk hızında tasarlanmış 31 profesyonel istasyon.',
       categories: {
-        all: 'Tümü (27)',
+        all: 'Tümü (31)',
         security: 'Siber Güvenlik & Kasa',
         developer: 'Yazılım & API Geliştirici',
         system: 'Sistem & Ağ Mühendisliği',
@@ -59,7 +59,7 @@ export const translations = {
     radar: {
       tag: 'MİMARİ KARŞILAŞTIRMA',
       title: 'Tauri v2 + Rust: Neden Klasik Electron\'u Terk Ettik?',
-      subtitle: 'ZenDev v2.4.3 ile tüm mimariyi baştan aşağı Rust ile yeniden inşa ettik. İşte somut donanım rakamları:',
+      subtitle: 'ZenDev v2.5.2 ile tüm mimariyi baştan aşağı Rust ile yeniden inşa ettik. İşte somut donanım rakamları:',
       metrics: {
         ram: {
           title: 'Bellek (RAM) Tüketimi',
@@ -111,7 +111,7 @@ export const translations = {
     pricing: {
       tag: 'ŞEFFAF SAAS FİYATLANDIRMASI',
       title: 'Öngörülebilir, Esnek ve Güçlü Geliştirici Aboneliği',
-      subtitle: 'Tüm 27+ güce, bulut senkronizasyonuna ve sürekli gelen yeni araçlara kesintisiz erişin. Taahhüt yok, istediğiniz an iptal edin.',
+      subtitle: 'Tüm 31+ güce, bulut senkronizasyonuna ve sürekli gelen yeni araçlara kesintisiz erişin. Taahhüt yok, istediğiniz an iptal edin.',
       billingToggleMonthly: 'Aylık Faturalandırma',
       billingToggleYearly: 'Yıllık Faturalandırma',
       saveBadge: '%33 Tasarruf • 2+ Ay Bedava',
@@ -134,19 +134,19 @@ export const translations = {
   },
   en: {
     nav: {
-      tools: '27+ Tools',
+      tools: '31+ Tools',
       playground: 'Live Demo',
       performance: 'Tauri v2 Speed',
       calculator: 'ROI Calculator',
       pricing: 'Pricing',
       portal: 'License Portal',
-      downloadBtn: 'Download v2.4.3',
-      whatsNew: 'v2.4.3 What\'s New'
+      downloadBtn: 'Download v2.5.2',
+      whatsNew: 'v2.5.2 What\'s New'
     },
     hero: {
       tag: '🔥 REBUILT FROM SCRATCH WITH TAURI v2 & RUST',
       titleHighlight: 'Stop Subscription Fatigue.',
-      titleMain: '27+ Cyber Developer Powers in One Desktop Suite.',
+      titleMain: '31+ Cyber Developer Powers in One Desktop Suite.',
       subtitle: 'Stop paying hundreds of dollars every month for Postman, SQLite viewers, PDF utilities, and password managers. One-time license, 100% offline-first privacy, zero telemetry.',
       downloadNsis: 'Download Windows Setup (x64)',
       downloadPortable: 'Download Portable .exe',
@@ -154,7 +154,7 @@ export const translations = {
       copied: 'Copied!',
       cleanCodeBadge: 'VirusTotal 0/72 Clean Code Report',
       stats: {
-        tools: '27+ Power Tools',
+        tools: '31+ Power Tools',
         ram: '<26 MB RAM',
         boot: '0.35s Cold Start',
         license: 'Lifetime License'
@@ -177,9 +177,9 @@ export const translations = {
     catalog: {
       tag: 'THE FULL ARSENAL',
       title: 'Everything Developers & Security Engineers Need',
-      subtitle: '27 specialized developer workstations designed with unified cyberpunk aesthetics and lightning responsiveness.',
+      subtitle: '31 specialized developer workstations designed with unified cyberpunk aesthetics and lightning responsiveness.',
       categories: {
-        all: 'All Tools (27)',
+        all: 'All Tools (31)',
         security: 'Security & Cryptography',
         developer: 'Developer & API Suite',
         system: 'System & Network Recon',
@@ -192,7 +192,7 @@ export const translations = {
     radar: {
       tag: 'ARCHITECTURE BENCHMARK',
       title: 'Tauri v2 + Rust: Why We Ditched Traditional Electron',
-      subtitle: 'With ZenDev v2.4.3, we rebuilt our core foundation with Rust. Here are the real hardware benchmarks:',
+      subtitle: 'With ZenDev v2.5.2, we rebuilt our core foundation with Rust. Here are the real hardware benchmarks:',
       metrics: {
         ram: {
           title: 'Memory (RAM) Footprint',
@@ -244,7 +244,7 @@ export const translations = {
     pricing: {
       tag: 'TRANSPARENT SAAS PRICING',
       title: 'Predictable, Flexible & Powerful Developer Subscription',
-      subtitle: 'Continuous access to 27+ cyber developer tools, cloud sync, and automatic feature drops. Cancel anytime with zero lock-in.',
+      subtitle: 'Continuous access to 31+ cyber developer tools, cloud sync, and automatic feature drops. Cancel anytime with zero lock-in.',
       billingToggleMonthly: 'Monthly Billing',
       billingToggleYearly: 'Annual Billing',
       saveBadge: 'Save 33% • 2 Months Free',

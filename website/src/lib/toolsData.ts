@@ -322,8 +322,76 @@ export const ZENDEV_TOOLS: ToolItem[] = [
     hasInBrowserDemo: false,
     highlightTag: 'Şifreli Saklama',
     techSpecs: ['Yerel Şifreli SQLite', 'Hızlı Arama & Filtreleme', 'Snippet Koleksiyonu', 'Hassas Veri Temizleme']
+  },
+
+  // ── YAZILIM GELİŞTİRİCİ: YENİ ELEVASYON STÜDYOLARI (v2.5.2) ──
+  {
+    id: 'jwt-studio',
+    name: 'JwtStudio',
+    category: 'developer',
+    titleTr: 'JWT & Token Çözümleyici, İmzalayıcı & Süre Takipçisi',
+    titleEn: 'JWT & Token Inspector, HMAC-SHA256 Signer & Expiry Tracker',
+    descriptionTr: 'JSON Web Token (JWT) başlık ve yüklerini anında çözümleyin, HMAC-SHA256 imzalarını gizli anahtar ile doğrulayın, süre bitiş zaman çizelgesini izleyin ve %100 çevrimdışı imzalı token üretin.',
+    descriptionEn: 'Inspect and decode JWT headers and payloads, verify HMAC-SHA256 signatures with custom secrets, track token expiration timelines, and generate signed tokens 100% offline.',
+    badgeTr: 'Canlı Demo Var',
+    badgeEn: 'Live Demo Available',
+    icon: 'KeyRound',
+    hasInBrowserDemo: true,
+    highlightTag: 'HMAC-SHA256 & Token',
+    techSpecs: ['HMAC-SHA256 İmzalama', 'Canlı Token Çözümleyici', 'Süre Dolanım Zaman Çizelgesi', 'Özel Talep (Claims) Üretici']
+  },
+  {
+    id: 'cron-studio',
+    name: 'CronStudio',
+    category: 'developer',
+    titleTr: 'Görsel Cron İfade Mimarı & Doğal Dil Zamanlayıcısı',
+    titleEn: 'Visual Cron Expression Builder & Natural Language Scheduler',
+    descriptionTr: '5 segmentli (dakika, saat, gün, ay, haftanın günü) görsel cron ifadeleri oluşturun, Türkçe ve İngilizce doğal dil açıklamalarını inceleyin ve sonraki 10 çalışma zaman damgasını canlı geri sayımla takip edin.',
+    descriptionEn: 'Build 5-part cron expressions visually (minute, hour, day, month, weekday), read natural language schedule breakdowns, and forecast the next 10 execution timestamps with live countdowns.',
+    badgeTr: 'Doğal Dil Motoru',
+    badgeEn: 'Natural Language Engine',
+    icon: 'Clock',
+    hasInBrowserDemo: false,
+    highlightTag: 'Doğal Dil & 10 Çalışma',
+    techSpecs: ['5 Segmentli Görsel Kurucu', 'Türkçe & İngilizce Açıklama', 'Sonraki 10 Çalışma Zamanı', 'Popüler Şablon Kütüphanesi']
+  },
+  {
+    id: 'mermaid-studio',
+    name: 'MermaidStudio',
+    category: 'developer',
+    titleTr: 'Canlı Markdown & Mermaid Mimari Şema Tuvali',
+    titleEn: 'Real-Time Markdown & Mermaid Architecture Diagram Canvas',
+    descriptionTr: 'Akış şemaları (flowchart), sekans diyagramları, ERD ve durum makinelerini siberpunk karanlık temada gerçek zamanlı render edin. Yakınlaştırma/kaydırma kontrolleriyle vektörel SVG veya yüksek çözünürlüklü PNG olarak indirin.',
+    descriptionEn: 'Render flowcharts, sequence diagrams, ER diagrams, and state machines in real time. Pan, zoom, and export production-ready vector SVG or high-resolution PNG assets with zero cloud latency.',
+    badgeTr: 'Vektörel Şema Tuvali',
+    badgeEn: 'Vector Diagram Canvas',
+    icon: 'Workflow',
+    hasInBrowserDemo: false,
+    highlightTag: 'SVG / PNG Vektör Dışa Aktar',
+    techSpecs: ['Akış & Sekans Şemaları', 'ERD & Durum Makineleri', 'Vektörel SVG / PNG İndir', 'Siberpunk Karanlık Tema']
+  },
+  {
+    id: 'encoding-studio',
+    name: 'EncodingStudio',
+    category: 'developer',
+    titleTr: 'Evrensel Çok Modlu Base64, Hex & Data-URL Laboratuvarı',
+    titleEn: 'Universal Multi-Modal Base64, Hex, Data-URL & Hex Dump Lab',
+    descriptionTr: 'Metin, Base64, Hex ve URL formatları arasında iki yönlü eşzamanlı dönüşüm yapın. Medya dosyalarını Data-URL formatına çevirip HTML/CSS kodlarını kopyalayın ve kanonik 16-bayt hex dökümünü etkileşimli inceleyin.',
+    descriptionEn: 'Two-way synchronized conversion between Text, Base64, Hex, and URL encoding. Convert media files to Data-URLs with ready-to-use HTML/CSS snippets, and inspect canonical 16-byte hex dumps with interactive byte hover.',
+    badgeTr: 'Canlı Demo Var',
+    badgeEn: 'Live Demo Available',
+    icon: 'Binary',
+    hasInBrowserDemo: true,
+    highlightTag: '16-Bayt Hex Dökümü',
+    techSpecs: ['İki Yönlü Eşzamanlı Çeviri', 'Medya Data-URL Üretici', 'Kanonik 16-Bayt Hex Dökümü', 'C-Array / URL Encode Çıkışı']
   }
 ];
+
+/**
+ * Total active native developer workstations in ZenDev v2.5.2 suite.
+ * Synchronized across website Navbar, Hero, Catalog, CommandPalette, and Pricing.
+ */
+export const TOTAL_TOOLS_COUNT = 31;
 
 export const PRICING_PLANS: PricingPlan[] = [
   {
@@ -379,8 +447,8 @@ export const PRICING_PLANS: PricingPlan[] = [
     nameEn: 'ZenDev Pro Developer SaaS',
     badgeTr: 'En Popüler / Geliştirici SaaS',
     badgeEn: 'Most Popular / Developer SaaS',
-    descriptionTr: 'Tüm 27+ güce tam erişim. Sürekli yeni araç güncellemeleri, bulut senkronizasyonu ve öncelikli destek.',
-    descriptionEn: 'Full access to all 27+ power tools. Continuous drops, cloud sync, and priority engineering support.',
+    descriptionTr: 'Tüm 31+ güce tam erişim. Sürekli yeni araç güncellemeleri, bulut senkronizasyonu ve öncelikli destek.',
+    descriptionEn: 'Full access to all 31+ power tools. Continuous drops, cloud sync, and priority engineering support.',
     recommended: true,
     prices: {
       TRY: { monthly: 149, yearly: 1190, monthlyEquivalent: 99, symbol: '₺' },
@@ -388,7 +456,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       EUR: { monthly: 8.99, yearly: 69, monthlyEquivalent: 5.75, symbol: '€' }
     },
     featuresTr: [
-      '27+ Araç ve Stüdyonun Tamamına Kesintisiz Erişim',
+      '31+ Araç ve Stüdyonun Tamamına Kesintisiz Erişim',
       'PortKiller, ApiStudio, ResourceSentinel & PdfStudio Kilitsiz',
       'CyberFortress Askeri 7-Pass İmha & AES-256-GCM Kasa',
       '2 Adet Kişisel Bilgisayarda Eşzamanlı Aktivasyon',
@@ -399,7 +467,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       'Esnek Faturalandırma & İstediğin Zaman Tek Tıkla İptal'
     ],
     featuresEn: [
-      'Continuous access to all 27+ cyber tools & studios',
+      'Continuous access to all 31+ cyber tools & studios',
       'Unlocked PortKiller, ApiStudio, Sentinel & PdfStudio',
       'CyberFortress military 7-pass shredder & AES vault',
       'Activate on 2 personal machines simultaneously',
@@ -492,16 +560,16 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'general',
     questionTr: 'ZenDev nedir ve neden abonelik modeli yerine tek seferlik ödeme?',
     questionEn: 'What is ZenDev and why one-time payment instead of subscription?',
-    answerTr: 'ZenDev, geliştiriciler ve güvenlik uzmanları için 27+ profesyonel aracı tek bir masaüstü uygulamasında birleştiren Tauri v2 tabanlı bir güç paketidir. Yazılımcıların her ay onlarca araca yüzlerce dolar abonelik ödemesinden (SaaS yorgunluğu) bıktık. ZenDev bir kez satın alınır, ömür boyu sizin olur.',
-    answerEn: 'ZenDev combines 27+ professional tools into a single desktop suite powered by Tauri v2 and Rust. We are fundamentally against SaaS subscription fatigue. You buy ZenDev once, own it forever.'
+    answerTr: 'ZenDev, geliştiriciler ve güvenlik uzmanları için 31+ profesyonel aracı tek bir masaüstü uygulamasında birleştiren Tauri v2 tabanlı bir güç paketidir. Yazılımcıların her ay onlarca araca yüzlerce dolar abonelik ödemesinden (SaaS yorgunluğu) bıktık. ZenDev bir kez satın alınır, ömür boyu sizin olur.',
+    answerEn: 'ZenDev combines 31+ professional tools into a single desktop suite powered by Tauri v2 and Rust. We are fundamentally against SaaS subscription fatigue. You buy ZenDev once, own it forever.'
   },
   {
     id: 'faq-2',
     category: 'technical',
     questionTr: 'Tauri v2 ve Rust mimarisinin Electron\'dan farkı nedir?',
     questionEn: 'How does Tauri v2 + Rust differ from traditional Electron apps?',
-    answerTr: 'Klasik Electron uygulamaları arka planda tam bir Chromium ve Node.js motoru çalıştırarak 400-600 MB RAM tüketir. ZenDev v2.4.3 ise Windows yerel WebView2 ve Rust işletim sistemi köprüsü kullanarak yalnızca ~35 MB RAM harcar ve 0.4 saniyede açılır.',
-    answerEn: 'Traditional Electron apps bundle a full Chromium browser and consume 400-600 MB RAM. ZenDev v2.4.3 leverages Windows native WebView2 and a Rust backend, consuming only ~35 MB RAM with sub-second boot time.'
+    answerTr: 'Klasik Electron uygulamaları arka planda tam bir Chromium ve Node.js motoru çalıştırarak 400-600 MB RAM tüketir. ZenDev v2.5.2 ise Windows yerel WebView2 ve Rust işletim sistemi köprüsü kullanarak yalnızca < 26 MB RAM harcar ve 0.35 saniyede açılır.',
+    answerEn: 'Traditional Electron apps bundle a full Chromium browser and consume 400-600 MB RAM. ZenDev v2.5.2 leverages Windows native WebView2 and a Rust backend, consuming only < 26 MB RAM with 0.35s boot latency.'
   },
   {
     id: 'faq-3',

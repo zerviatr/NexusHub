@@ -310,7 +310,7 @@ export const SimulatedCheckoutModal: React.FC<SimulatedCheckoutModalProps> = ({
                 </div>
                 <div className="flex items-start gap-2">
                   <span className="w-4 h-4 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-500/30 text-[10px] flex items-center justify-center shrink-0 mt-0.5 font-bold">2</span>
-                  <span>{lang === 'tr' ? 'ZenDev v2.4.3 masaüstü uygulamasını açın.' : 'Launch the ZenDev v2.4.3 desktop application.'}</span>
+                  <span>{lang === 'tr' ? 'ZenDev v2.5.2 masaüstü uygulamasını açın.' : 'Launch the ZenDev v2.5.2 desktop application.'}</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <span className="w-4 h-4 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-500/30 text-[10px] flex items-center justify-center shrink-0 mt-0.5 font-bold">3</span>
