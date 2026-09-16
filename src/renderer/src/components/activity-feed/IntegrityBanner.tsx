@@ -48,10 +48,16 @@ export const IntegrityBanner: React.FC<IntegrityBannerProps> = ({
             <Lock className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-white">
-              {t('activityFeed.integrity.genesisBlock') || 'Cryptographic Ledger Ready'}
-            </h3>
-            <p className="text-xs text-nexus-muted">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-white">
+                {t('activityFeed.integrity.genesisBlock') || 'Cryptographic Ledger Ready'}
+              </h3>
+              <span className="flex items-center gap-1 text-[10px] font-mono text-nexus-cyan bg-nexus-cyan/10 px-2 py-0.5 rounded-full border border-nexus-cyan/30">
+                <ShieldCheck className="w-3 h-3" />
+                <span>Genesis State</span>
+              </span>
+            </div>
+            <p className="text-xs text-nexus-muted mt-0.5">
               {t('activityFeed.empty.noEventsDesc') ||
                 'Activity records will automatically stream here as you use workstation tools.'}
             </p>
@@ -97,7 +103,7 @@ export const IntegrityBanner: React.FC<IntegrityBannerProps> = ({
           </div>
 
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <h3 className="text-sm font-semibold text-white tracking-wide">
                 {!isValid
                   ? t('activityFeed.integrity.compromisedTitle') || 'Audit Tampering Detected!'
@@ -107,9 +113,25 @@ export const IntegrityBanner: React.FC<IntegrityBannerProps> = ({
                       'Cryptographic Hash Chain Verified'}
               </h3>
               {isValid && !isVerifying && (
-                <span className="flex items-center gap-1 text-[11px] font-medium text-emerald-400 bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                  <CheckCircle2 className="w-3 h-3" />
-                  <span>100% Intact</span>
+                <>
+                  <span className="flex items-center gap-1 text-[11px] font-medium text-emerald-400 bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.15)]">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>100% Intact</span>
+                  </span>
+                  <span className="flex items-center gap-1 text-[11px] font-mono font-medium text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/25">
+                    <Lock className="w-3 h-3 text-emerald-400" />
+                    <span>Chained SHA-256</span>
+                  </span>
+                  <span className="hidden sm:flex items-center gap-1 text-[10px] font-mono text-nexus-cyan bg-nexus-cyan/10 px-2 py-0.5 rounded-full border border-nexus-cyan/30">
+                    <ShieldCheck className="w-3 h-3 text-nexus-cyan" />
+                    <span>Genesis Root #1 Anchored</span>
+                  </span>
+                </>
+              )}
+              {!isValid && (
+                <span className="flex items-center gap-1 text-[11px] font-mono font-bold text-rose-300 bg-rose-500/25 px-2.5 py-0.5 rounded-full border border-rose-500/50 shadow-[0_0_15px_rgba(244,63,94,0.3)] animate-pulse">
+                  <AlertTriangle className="w-3 h-3 text-rose-400" />
+                  <span>TAMPER ALERT: DISCONTINUITY AT BLOCK #{brokenIndex ?? 0}</span>
                 </span>
               )}
             </div>

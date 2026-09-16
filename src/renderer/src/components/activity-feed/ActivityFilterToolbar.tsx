@@ -15,10 +15,107 @@
  */
 
 import React from 'react'
-import { Search, X, Filter, RotateCcw } from 'lucide-react'
+import {
+  Search,
+  X,
+  Filter,
+  RotateCcw,
+  Layers,
+  ShieldAlert,
+  FileCheck,
+  Globe,
+  Cpu,
+  AlertCircle,
+  Clock,
+  Sparkles,
+} from 'lucide-react'
 import { ActivityCategory, ActivityFilter, ActivityStatus } from './types'
 import { cyberAudio } from '../../lib/cyberAudio'
 import { useT } from '../../lib/i18n'
+
+export type FilterPresetId =
+  | 'all'
+  | 'security'
+  | 'crypto'
+  | 'network'
+  | 'system'
+  | 'failures'
+  | 'today'
+
+interface FilterPresetDef {
+  id: FilterPresetId
+  labelKey: string
+  defaultLabel: string
+  icon: React.ComponentType<{ className?: string }>
+  apply: (current: ActivityFilter) => ActivityFilter
+  isActive: (filter: ActivityFilter) => boolean
+}
+
+export const FILTER_PRESETS: FilterPresetDef[] = [
+  {
+    id: 'all',
+    labelKey: 'activityFeed.filters.allTime',
+    defaultLabel: 'All',
+    icon: Layers,
+    apply: () => ({ search: '', toolId: '', category: '', status: '', timeRange: 'all' }),
+    isActive: (f) =>
+      !f.search && !f.toolId && !f.category && !f.status && f.timeRange === 'all',
+  },
+  {
+    id: 'security',
+    labelKey: 'activityFeed.categories.security',
+    defaultLabel: 'Security',
+    icon: ShieldAlert,
+    apply: (f) => ({ ...f, category: 'security', status: '', search: '', timeRange: 'all', toolId: '' }),
+    isActive: (f) =>
+      !f.search && !f.toolId && f.category === 'security' && !f.status && f.timeRange === 'all',
+  },
+  {
+    id: 'crypto',
+    labelKey: 'activityFeed.categories.crypto',
+    defaultLabel: 'Crypto',
+    icon: FileCheck,
+    apply: (f) => ({ ...f, category: 'crypto', status: '', search: '', timeRange: 'all', toolId: '' }),
+    isActive: (f) =>
+      !f.search && !f.toolId && f.category === 'crypto' && !f.status && f.timeRange === 'all',
+  },
+  {
+    id: 'network',
+    labelKey: 'activityFeed.categories.network',
+    defaultLabel: 'Network',
+    icon: Globe,
+    apply: (f) => ({ ...f, category: 'network', status: '', search: '', timeRange: 'all', toolId: '' }),
+    isActive: (f) =>
+      !f.search && !f.toolId && f.category === 'network' && !f.status && f.timeRange === 'all',
+  },
+  {
+    id: 'system',
+    labelKey: 'activityFeed.categories.system',
+    defaultLabel: 'System',
+    icon: Cpu,
+    apply: (f) => ({ ...f, category: 'system', status: '', search: '', timeRange: 'all', toolId: '' }),
+    isActive: (f) =>
+      !f.search && !f.toolId && f.category === 'system' && !f.status && f.timeRange === 'all',
+  },
+  {
+    id: 'failures',
+    labelKey: 'activityFeed.statuses.failure',
+    defaultLabel: 'Failures',
+    icon: AlertCircle,
+    apply: (f) => ({ ...f, status: 'failure', category: '', search: '', timeRange: 'all', toolId: '' }),
+    isActive: (f) =>
+      !f.search && !f.toolId && !f.category && f.status === 'failure' && f.timeRange === 'all',
+  },
+  {
+    id: 'today',
+    labelKey: 'activityFeed.filters.today',
+    defaultLabel: 'Today',
+    icon: Clock,
+    apply: (f) => ({ ...f, timeRange: 'today', category: '', status: '', search: '', toolId: '' }),
+    isActive: (f) =>
+      !f.search && !f.toolId && !f.category && !f.status && f.timeRange === 'today',
+  },
+]
 
 interface ActivityFilterToolbarProps {
   filter: ActivityFilter
@@ -165,6 +262,35 @@ export const ActivityFilterToolbar: React.FC<ActivityFilterToolbarProps> = ({
             </button>
           )}
         </div>
+      </div>
+
+      {/* Quick Filter Presets Row */}
+      <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-white/5">
+        <span className="text-[11px] text-nexus-muted font-medium mr-1 flex items-center gap-1">
+          <Sparkles className="w-3 h-3 text-nexus-cyan" />
+          <span>Presets:</span>
+        </span>
+        {FILTER_PRESETS.map((preset) => {
+          const isSelected = preset.isActive(filter)
+          const PresetIcon = preset.icon
+          return (
+            <button
+              key={preset.id}
+              onClick={() => {
+                cyberAudio.click()
+                onFilterChange(preset.apply(filter))
+              }}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium transition-all cursor-pointer ${
+                isSelected
+                  ? 'bg-nexus-cyan/20 text-nexus-cyan border border-nexus-cyan/40 shadow-sm font-semibold'
+                  : 'bg-nexus-card/60 text-nexus-muted border border-white/5 hover:text-nexus-text hover:bg-nexus-card'
+              }`}
+            >
+              <PresetIcon className="w-3 h-3" />
+              <span>{t(preset.labelKey) || preset.defaultLabel}</span>
+            </button>
+          )
+        })}
       </div>
 
       {/* Bottom row: Category pills + Status pills + Time range tabs */}

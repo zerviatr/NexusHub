@@ -46,6 +46,10 @@ const Scratchpad = lazy(() => import('./pages/Scratchpad'))
 const PdfStudio = lazy(() => import('./pages/PdfStudio'))
 const ActivityFeed = lazy(() => import('./pages/ActivityFeed'))
 const Account = lazy(() => import('./pages/Account'))
+const JwtStudio = lazy(() => import('./pages/JwtStudio'))
+const CronStudio = lazy(() => import('./pages/CronStudio'))
+const MermaidStudio = lazy(() => import('./pages/MermaidStudio'))
+const EncodingStudio = lazy(() => import('./pages/EncodingStudio'))
 
 const pageVariants = {
   initial: { opacity: 0, y: 20, scale: 0.98 },
@@ -400,6 +404,10 @@ export default function App() {
                       element={isPro ? <CyberFortress /> : <ProLockGate toolName="Cyber Fortress" toolDesc="DoD 5220.22-M 7-pass file shredder and military-grade AES-256-GCM vault encryption." />}
                     />
                     <Route path="/cyber-fortress" element={<Navigate to="/fortress" replace />} />
+                    <Route path="/jwt-studio" element={<JwtStudio />} />
+                    <Route path="/cron-studio" element={<CronStudio />} />
+                    <Route path="/mermaid-studio" element={<MermaidStudio />} />
+                    <Route path="/encoding-studio" element={<EncodingStudio />} />
                     <Route path="/account" element={<Account />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>

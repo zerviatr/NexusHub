@@ -31,7 +31,11 @@
       "portKiller": "Port Killer & TCP Gözlemcisi",
       "scratchpad": "Markdown Scratchpad Not Defteri",
       "pdfStudio": "PDF Stüdyosu & Evrak",
-      "activityFeed": "Aktivite Akışı & Denetim Günlüğü"
+      "activityFeed": "Aktivite Akışı & Denetim Günlüğü",
+      "jwtStudio": "JWT & Token Stüdyosu",
+      "cronStudio": "Cron İfade Stüdyosu",
+      "mermaidStudio": "Mermaid & Mimari Tuval",
+      "encodingStudio": "Base64, Hex & Data-URL Stüdyosu"
     },
     "account": "Hesap Ayarları"
   },
@@ -225,6 +229,18 @@
       },
       "hashStudio": {
         "desc": "Anlık bütünlük doğrulamasıyla metin ve dosyalar için MD5, SHA-1, SHA-256 ve SHA-512 sağlama toplamları hesaplayın."
+      },
+      "jwtStudio": {
+        "desc": "JSON Web Token çözümleyin, HMAC-SHA256 imzalarını doğrulayın ve yerel token üretin."
+      },
+      "cronStudio": {
+        "desc": "Görsel cron oluşturucu, Türkçe doğal dil açıklamaları ve sonraki 10 çalışma zamanı."
+      },
+      "mermaidStudio": {
+        "desc": "Gerçek zamanlı mimari şemaları, sekans akışları ve ERD görselleştirici (SVG/PNG aktarımı)."
+      },
+      "encodingStudio": {
+        "desc": "Evrensel metin ve medya dönüştürücü, Data-URL önizleyici ve kanonik hex döküm görüntüleyici."
       }
     }
   },
@@ -397,7 +413,28 @@
     "cancel": "İptal",
     "confirmKill": "Zorla Kapat (Kill Process)",
     "toastKilled": "İşlem Sonlandırıldı",
-    "toastKilledDesc": "{{name}} (PID {{pid}}) port {{port}} serbest bırakıldı."
+    "toastKilledDesc": "{{name}} (PID {{pid}}) port {{port}} serbest bırakıldı.",
+    "autoRefresh": "Otomatik Yenileme",
+    "autoRefreshActive": "Canlı İzleme (3 sn)",
+    "autoRefreshPaused": "Otomatik Yenileme Kapalı",
+    "interval": "Aralık",
+    "presets": {
+      "all": "Tüm Portlar",
+      "web": "Web (80, 443...)",
+      "database": "Veritabanı",
+      "dev": "Dev Sunucuları",
+      "gaming": "Oyun & Ses"
+    },
+    "webPorts": "Web Portları",
+    "gamingPorts": "Oyun & LAN",
+    "scanError": "Tarama Hatası",
+    "scanFailed": "Portlar taranamadı.",
+    "scanErrorDesc": "Aktif portlar taranamadı: {{error}}",
+    "killError": "Sonlandırma Hatası",
+    "killFailed": "Process sonlandırılamadı.",
+    "killErrorDesc": "PID {{pid}} işlemi sonlandırılamadı: {{error}}",
+    "permissionError": "Yetki hatası. Yönetici yetkileri gerekebilir.",
+    "refreshTooltip": "Dinlenen portları yenile"
   },
   "systemOptimizer": {
     "title": "Windows System Optimizer & Cache Purger",
@@ -741,7 +778,11 @@
       "compromisedDesc": "#{{index}} numaralı blokta hash zinciri kopması saptandı. Olası veritabanı manipülasyonu!",
       "verifying": "SHA-256 Hash Zinciri Doğrulanıyor...",
       "reverify": "Yeniden Doğrula",
-      "genesisBlock": "Kriptografik Kayıt Defteri Hazır"
+      "genesisBlock": "Kriptografik Kayıt Defteri Hazır",
+      "badgeVerified": "Doğrulanmış Blok",
+      "badgeCompromised": "Blok Bütünlüğü Bozuk",
+      "badgeGenesis": "Genesis Bloğu",
+      "tooltipVerified": "Önceki blokla kriptografik SHA-256 bağlantısı kesintisiz"
     },
     "filters": {
       "searchPlaceholder": "Eylem, araç, detay veya SHA-256 hash ara...",
@@ -806,7 +847,188 @@
       "tamperWarning": "Uyarı: #{{index}} numaralı blokta hash zinciri kopmuş!",
       "cleared": "Aktivite günlüğü başarıyla temizlendi",
       "exported": "Denetim günlüğü {{format}} olarak dışa aktarıldı"
+    },
+    "presets": {
+      "all": "Tüm Aktiviteler",
+      "errors": "Hatalar ve Başarısızlıklar",
+      "security": "Siber Güvenlik & Kasa",
+      "network": "Ağ İşlemleri",
+      "recent": "Son 1 Saat",
+      "crypto": "Kripto ve İmzalar",
+      "system": "Sistem Telemetrisi",
+      "failures": "Başarısız ve Engellenenler",
+      "today": "Bugün"
+    },
+    "shortcuts": {
+      "exportCsv": "Hızlı CSV Dışa Aktar",
+      "exportJson": "Hızlı JSON Dışa Aktar"
     }
+  },
+  "jwtStudio": {
+    "title": "JWT & Token Stüdyosu",
+    "description": "JSON Web Token'ları inceleyin, HMAC-SHA256 imzalarını doğrulayın ve %100 çevrimdışı token üretin.",
+    "tabs": {
+      "debugger": "JWT İnceleyici",
+      "generator": "Token Üretici",
+      "inspect": "İncele & Doğrula",
+      "generate": "Token Üretici"
+    },
+    "header": "Başlık (Header - Algoritma & Tip)",
+    "payload": "Yük (Payload - Veriler & Talepler)",
+    "signature": "İmza Doğrulama",
+    "secretKey": "HMAC Gizli Anahtarı",
+    "secretPlaceholder": "İmzayı doğrulamak için gizli anahtarı girin...",
+    "base64Secret": "Anahtar Base64 Formatında",
+    "verified": "İmza Doğrulandı",
+    "invalidSignature": "Geçersiz İmza",
+    "unsigned": "İmzasız / Anahtar Bekleniyor",
+    "tokenPlaceholder": "JWT tokenınızı buraya yapıştırın (eyJhbGciOi...)",
+    "rawToken": "Kodlanmış JWT",
+    "rawTokenPlaceholder": "eyJhbGciOiJIUzI1NiIs... yapıştırın",
+    "sigValid": "İmza Doğrulandı",
+    "sigInvalid": "Geçersiz İmza",
+    "sigEmpty": "Gizli Anahtar Bekleniyor",
+    "timeline": {
+      "title": "Token Geçerlilik Zaman Çizelgesi",
+      "active": "Aktif Token",
+      "expired": "Süresi Dolmuş",
+      "expiringSoon": "Yakında Dolacak",
+      "future": "Henüz Aktif Değil (nbf)",
+      "expiresIn": "{{time}} sonra süresi dolacak",
+      "expiredAgo": "{{time}} önce süresi doldu",
+      "issuedAt": "Üretim Zamanı",
+      "expiresAt": "Bitiş Zamanı",
+      "notBefore": "Öncesinde Geçersiz (nbf)",
+      "remaining": "Kalan Süre"
+    },
+    "claims": {
+      "sub": "Özne (Subject)",
+      "iss": "Dağıtıcı (Issuer)",
+      "aud": "Hedef Kitle (Audience)",
+      "exp": "Bitiş Zamanı (Expiration)",
+      "nbf": "Geçerlilik Başlangıcı (Not Before)",
+      "iat": "Üretilme Zamanı (Issued At)",
+      "jti": "Benzersiz Token ID (JWT ID)"
+    },
+    "generatorLabels": {
+      "algorithm": "Algoritma",
+      "claimsPreset": "Hazır Talep Şablonu",
+      "expiry": "Geçerlilik Süresi",
+      "generate": "İmzalı Token Üret",
+      "generatedToken": "Üretilen Token",
+      "copyToken": "Tokenı Kopyala"
+    },
+    "gen": {
+      "algorithm": "Algoritma",
+      "claims": "Yük JSON",
+      "generateBtn": "İmzalı JWT Üret",
+      "copySuccess": "JWT Panoya Kopyalandı"
+    }
+  },
+  "cronStudio": {
+    "title": "Cron İfade Stüdyosu",
+    "description": "Görsel cron oluşturucu, Türkçe açıklamalar ve sonraki 10 çalışma zamanı çizelgesi.",
+    "expression": "Cron İfadesi",
+    "humanReadable": "Zamanlama Açıklaması",
+    "humanExplanation": "İnsan Diliyle Açıklama",
+    "nextExecutions": "Sonraki 10 Çalışma Zamanı",
+    "runNumber": "Sıra #",
+    "scheduledTime": "Planlanan Zaman",
+    "relativeTime": "Kalan Süre",
+    "presetsTitle": "Hazır Şablonlar",
+    "invalidExpression": "Geçersiz cron ifadesi sözdizimi",
+    "copySchedule": "Takvimi Kopyala",
+    "fields": {
+      "minute": "Dakika",
+      "hour": "Saat",
+      "dayOfMonth": "Ayın Günü",
+      "month": "Ay",
+      "dayOfWeek": "Haftanın Günü"
+    },
+    "builder": {
+      "minute": "Dakika (0-59)",
+      "hour": "Saat (0-23)",
+      "dayOfMonth": "Ayın Günü (1-31)",
+      "month": "Ay (1-12)",
+      "dayOfWeek": "Haftanın Günü (0-6 Paz-Cmt)"
+    },
+    "presets": {
+      "title": "Popüler Şablonlar",
+      "everyMinute": "Her Dakika",
+      "every5Min": "Her 5 Dakikada Bir",
+      "everyHour": "Her Saat Başı",
+      "dailyMidnight": "Her Gece Yarısı (00:00)",
+      "weekdays": "Hafta İçi Her Gün 09:00",
+      "weeklySunday": "Haftalık (Pazar Gece Yarısı)",
+      "monthly": "Her Ayın 1'inde"
+    }
+  },
+  "mermaidStudio": {
+    "title": "Mermaid & Mimari Tuval",
+    "description": "Akış şemaları, sekans diyagramları, ERD ve durum makineleri için gerçek zamanlı görselleştirici.",
+    "editor": "Diyagram Kodu",
+    "editorTitle": "Diyagram Tanımı",
+    "preview": "Canlı Tuval",
+    "previewTitle": "Canlı Görsel Tuval",
+    "copySvg": "SVG Kopyala",
+    "downloadSvg": "SVG İndir",
+    "copyPng": "PNG Kopyala",
+    "downloadPng": "PNG İndir",
+    "exportSvg": "SVG Olarak İndir",
+    "exportPng": "PNG Olarak İndir",
+    "zoomIn": "Yakınlaştır",
+    "zoomOut": "Uzaklaştır",
+    "resetZoom": "Yakınlaştırmayı Sıfırla",
+    "syntaxError": "Diyagram sözdizimi hatası: {{error}}",
+    "renderSuccess": "Diyagram başarıyla çizildi",
+    "templates": {
+      "title": "Diyagram Şablonları",
+      "flowchart": "Akış Şeması (Flowchart)",
+      "sequence": "Sekans Diyagramı",
+      "erd": "Varlık İlişki (ERD)",
+      "state": "Durum Makinesi",
+      "classDiagram": "Sınıf Diyagramı",
+      "gitGraph": "Git Dallanma Şeması"
+    }
+  },
+  "encodingStudio": {
+    "title": "Base64, Hex & Data-URL Stüdyosu",
+    "description": "Çok modlu veri dönüştürücü, medya Data-URL önizleyici ve kanonik 16 bayt hex döküm aracı.",
+    "tabs": {
+      "text": "Metin Dönüştürücü",
+      "file": "Dosya & Data-URL",
+      "hexdump": "Hex Döküm Görüntüleyici",
+      "hexDump": "Hex Döküm Analizörü"
+    },
+    "inputText": "Girdi Metni",
+    "outputBase64": "Base64 Çıktısı",
+    "outputHex": "Hex Çıktısı",
+    "outputUrl": "URL Kodlu Çıktı",
+    "dropFile": "Dosyayı buraya bırakın veya seçin",
+    "mediaPreview": "Medya Önizleme",
+    "mimeType": "MIME Türü",
+    "fileSize": "Dosya Boyutu",
+    "copyDataUrl": "Data-URL Kopyala",
+    "copyHtmlImg": "HTML <img> Kopyala",
+    "copyCssBg": "CSS Background Kopyala",
+    "offset": "Ofset",
+    "hexBytes": "Hex Baytları",
+    "ascii": "ASCII Metni",
+    "input": "Girdi Metni / Baytlar",
+    "output": "Kodlanmış Çıktı",
+    "mode": {
+      "encode": "Kodla",
+      "decode": "Çöz"
+    },
+    "format": {
+      "base64": "Base64",
+      "hex": "Onaltılık (Hex)",
+      "dataUrl": "Veri URL'si (Data-URL)"
+    },
+    "fileDrop": "Dosyayı buraya sürükleyin veya seçin",
+    "fileInfo": "Dosya: {{name}} ({{size}}, {{type}})",
+    "preview": "Data-URL Medya Önizlemesi",
+    "copy": "Sonucu Kopyala",
+    "copied": "Kopyalandı!"
   }
 }
-

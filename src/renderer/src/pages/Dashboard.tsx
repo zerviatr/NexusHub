@@ -26,6 +26,10 @@ import {
   Star,
   Palette,
   FileText,
+  KeyRound,
+  Clock,
+  GitBranch,
+  Binary,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
 import { cyberAudio } from '../lib/cyberAudio'
@@ -273,6 +277,46 @@ export default function Dashboard() {
       gradient: 'from-amber-600 to-rose-600',
       glowColor: 'rgba(245, 158, 11, 0.3)',
       status: 'Yeni',
+    },
+    {
+      id: 'jwt-studio',
+      path: '/jwt-studio',
+      title: t('nav.tools.jwtStudio') || 'JWT & Token Studio',
+      description: t('dashboard.tools.jwtStudio.desc') || 'Inspect, decode, verify HMAC-SHA256 signatures, and generate JSON Web Tokens locally.',
+      icon: KeyRound,
+      gradient: 'from-violet-600 to-indigo-600',
+      glowColor: 'rgba(139, 92, 246, 0.3)',
+      status: t('dashboard.status.ready') || 'Ready',
+    },
+    {
+      id: 'cron-studio',
+      path: '/cron-studio',
+      title: t('nav.tools.cronStudio') || 'Cron Expression Studio',
+      description: t('dashboard.tools.cronStudio.desc') || 'Visual cron expression builder with natural language explanations and execution schedules.',
+      icon: Clock,
+      gradient: 'from-amber-500 to-orange-600',
+      glowColor: 'rgba(245, 158, 11, 0.3)',
+      status: t('dashboard.status.ready') || 'Ready',
+    },
+    {
+      id: 'mermaid-studio',
+      path: '/mermaid-studio',
+      title: t('nav.tools.mermaidStudio') || 'Mermaid & Flow Studio',
+      description: t('dashboard.tools.mermaidStudio.desc') || 'Real-time architecture diagrams, sequence flows, and ERD visualizer with SVG/PNG export.',
+      icon: GitBranch,
+      gradient: 'from-cyan-500 to-blue-600',
+      glowColor: 'rgba(6, 182, 212, 0.3)',
+      status: t('dashboard.status.ready') || 'Ready',
+    },
+    {
+      id: 'encoding-studio',
+      path: '/encoding-studio',
+      title: t('nav.tools.encodingStudio') || 'Base64 & Hex Studio',
+      description: t('dashboard.tools.encodingStudio.desc') || 'Universal text and media converter, Data-URL visualizer, and canonical hex dump inspector.',
+      icon: Binary,
+      gradient: 'from-emerald-500 to-teal-600',
+      glowColor: 'rgba(16, 185, 129, 0.3)',
+      status: t('dashboard.status.ready') || 'Ready',
     },
   ]
 

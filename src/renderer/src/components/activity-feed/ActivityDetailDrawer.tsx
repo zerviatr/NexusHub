@@ -247,9 +247,15 @@ export const ActivityDetailDrawer: React.FC<ActivityDetailDrawerProps> = ({
               {/* Current Block Hash */}
               <div className="p-3.5 rounded-lg bg-nexus-card/80 border border-white/10 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-medium text-nexus-cyan">
-                    {t('activityFeed.drawer.currentHash') || 'SHA-256 Block Hash'}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-medium text-nexus-cyan">
+                      {t('activityFeed.drawer.currentHash') || 'SHA-256 Block Hash'}
+                    </span>
+                    <span className="flex items-center gap-1 text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                      <Lock className="w-2.5 h-2.5" />
+                      <span>Chained</span>
+                    </span>
+                  </div>
                   <button
                     onClick={() => handleCopy(entry.hash, 'hash', 'SHA-256 Block Hash')}
                     className="flex items-center gap-1 text-[11px] text-nexus-muted hover:text-white"
@@ -270,9 +276,24 @@ export const ActivityDetailDrawer: React.FC<ActivityDetailDrawerProps> = ({
               {/* Previous Block Hash */}
               <div className="p-3.5 rounded-lg bg-nexus-card/80 border border-white/10 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-medium text-nexus-muted">
-                    {t('activityFeed.drawer.previousHash') || 'Previous Block Hash'}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-medium text-nexus-muted">
+                      {t('activityFeed.drawer.previousHash') || 'Previous Block Hash'}
+                    </span>
+                    {entry.sequence === 1 ||
+                    entry.prevHash.startsWith('0000000000000000') ||
+                    !entry.prevHash ? (
+                      <span className="flex items-center gap-1 text-[10px] font-mono text-nexus-cyan bg-nexus-cyan/10 px-1.5 py-0.5 rounded border border-nexus-cyan/30">
+                        <ShieldCheck className="w-2.5 h-2.5 text-nexus-cyan" />
+                        <span>Genesis Block Root</span>
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/25">
+                        <Lock className="w-2.5 h-2.5" />
+                        <span>Verified Predecessor</span>
+                      </span>
+                    )}
+                  </div>
                   <button
                     onClick={() =>
                       handleCopy(entry.prevHash, 'prevHash', 'Previous Block Hash')

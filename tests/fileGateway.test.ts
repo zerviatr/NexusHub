@@ -1,4 +1,4 @@
-﻿import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import {
   resolveGatewayRoute,
   setPendingDrop,
@@ -48,10 +48,38 @@ describe('File Gateway — Extension Routing & Rejection', () => {
       expect(resolveGatewayRoute('BACKUP.NEXUSVAULT')).toBe('/fortress')
     })
 
-    it('routes JSON and JWT tokens to /json-studio', () => {
+    it('routes JSON documents to /json-studio', () => {
       expect(resolveGatewayRoute('config.json')).toBe('/json-studio')
-      expect(resolveGatewayRoute('auth_token.jwt')).toBe('/json-studio')
       expect(resolveGatewayRoute('PACKAGE.JSON')).toBe('/json-studio')
+    })
+
+    it('routes JWT tokens to /jwt-studio', () => {
+      expect(resolveGatewayRoute('auth_token.jwt')).toBe('/jwt-studio')
+      expect(resolveGatewayRoute('TOKEN.JWT')).toBe('/jwt-studio')
+      expect(resolveGatewayRoute('session.bearer.jwt')).toBe('/jwt-studio')
+    })
+
+    it('routes cron schedule files to /cron-studio', () => {
+      expect(resolveGatewayRoute('backup.cron')).toBe('/cron-studio')
+      expect(resolveGatewayRoute('SCHEDULE.CRON')).toBe('/cron-studio')
+      expect(resolveGatewayRoute('crontab.tab')).toBe('/cron-studio')
+      expect(resolveGatewayRoute('TASKS.TAB')).toBe('/cron-studio')
+    })
+
+    it('routes Mermaid diagram files to /mermaid-studio', () => {
+      expect(resolveGatewayRoute('architecture.mmd')).toBe('/mermaid-studio')
+      expect(resolveGatewayRoute('FLOW.MMD')).toBe('/mermaid-studio')
+      expect(resolveGatewayRoute('system.mermaid')).toBe('/mermaid-studio')
+      expect(resolveGatewayRoute('SEQUENCE.MERMAID')).toBe('/mermaid-studio')
+    })
+
+    it('routes encoding and binary dump files to /encoding-studio', () => {
+      expect(resolveGatewayRoute('payload.b64')).toBe('/encoding-studio')
+      expect(resolveGatewayRoute('EXPORT.B64')).toBe('/encoding-studio')
+      expect(resolveGatewayRoute('memory.hex')).toBe('/encoding-studio')
+      expect(resolveGatewayRoute('BUFFER.HEX')).toBe('/encoding-studio')
+      expect(resolveGatewayRoute('firmware.bin')).toBe('/encoding-studio')
+      expect(resolveGatewayRoute('RAW_DATA.BIN')).toBe('/encoding-studio')
     })
 
     it('routes markdown and plain text notes to /scratchpad', () => {
@@ -74,7 +102,7 @@ describe('File Gateway — Extension Routing & Rejection', () => {
       expect(resolveGatewayRoute('malware.exe')).toBeNull()
       expect(resolveGatewayRoute('system.dll')).toBeNull()
       expect(resolveGatewayRoute('disk.iso')).toBeNull()
-      expect(resolveGatewayRoute('firmware.bin')).toBeNull()
+      expect(resolveGatewayRoute('driver.sys')).toBeNull()
       expect(resolveGatewayRoute('setup.msi')).toBeNull()
     })
 

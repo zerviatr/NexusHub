@@ -1,15 +1,30 @@
+// Copyright 2025 Lee Boonstra
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import React, { useState } from 'react';
-import { Sparkles, Binary, KeyRound, Regex, Database, Unlock, Palette, QrCode, Shuffle, ShieldAlert } from 'lucide-react';
+import { Sparkles, Binary, KeyRound, Regex, Database, Unlock, Palette, QrCode, Shuffle, ShieldAlert, Code2 } from 'lucide-react';
 import { Language } from '../../lib/types';
 import { translations } from '../../lib/translations';
 import { cyberAudio } from '../../lib/cyberAudio';
-import { LiveHashDemo } from './LiveHashDemo';
-import { LivePasswordDemo } from './LivePasswordDemo';
 import { LiveRegexDemo } from './LiveRegexDemo';
+import { LiveHashDemo } from './LiveHashDemo';
+import { LiveBase64Demo } from './LiveBase64Demo';
+import { LiveQrDemo } from './LiveQrDemo';
 import { LiveJwtDemo } from './LiveJwtDemo';
 import { LiveDecrypterDemo } from './LiveDecrypterDemo';
+import { LivePasswordDemo } from './LivePasswordDemo';
 import { LiveColorDemo } from './LiveColorDemo';
-import { LiveQrDemo } from './LiveQrDemo';
 import { LiveFakeDataDemo } from './LiveFakeDataDemo';
 import { LiveShredderDemo } from './LiveShredderDemo';
 
@@ -17,21 +32,22 @@ interface LivePlaygroundProps {
   lang: Language;
 }
 
-type TabKey = 'hash' | 'password' | 'regex' | 'jwt' | 'decoder' | 'color' | 'qr' | 'fakeData' | 'shredder';
+type TabKey = 'regex' | 'hash' | 'base64' | 'qr' | 'jwt' | 'decoder' | 'password' | 'color' | 'fakeData' | 'shredder';
 
 export const LivePlayground: React.FC<LivePlaygroundProps> = ({ lang }) => {
-  const [activeTab, setActiveTab] = useState<TabKey>('hash');
+  const [activeTab, setActiveTab] = useState<TabKey>('regex');
   const t = translations[lang].playground;
 
   const tabList = [
-    { key: 'hash' as TabKey, label: 'HashStudio (SHA-256)', icon: Binary, color: 'text-cyan-400' },
-    { key: 'password' as TabKey, label: 'PasswordGen (Entropi)', icon: KeyRound, color: 'text-purple-400' },
-    { key: 'regex' as TabKey, label: 'RegexStudio (Canlı)', icon: Regex, color: 'text-cyan-400' },
-    { key: 'jwt' as TabKey, label: 'JsonStudio (JWT)', icon: Database, color: 'text-sky-400' },
+    { key: 'regex' as TabKey, label: lang === 'tr' ? 'RegexStudio (Canlı)' : 'RegexStudio (Live)', icon: Regex, color: 'text-cyan-400' },
+    { key: 'hash' as TabKey, label: 'HashStudio (SHA-256)', icon: Binary, color: 'text-purple-400' },
+    { key: 'base64' as TabKey, label: lang === 'tr' ? 'Base64Studio (İki Yönlü)' : 'Base64Studio (Two-Way)', icon: Code2, color: 'text-cyan-300' },
+    { key: 'qr' as TabKey, label: 'QrCodeStudio', icon: QrCode, color: 'text-sky-400' },
+    { key: 'jwt' as TabKey, label: 'JsonStudio (JWT)', icon: Database, color: 'text-sky-300' },
     { key: 'decoder' as TabKey, label: 'UniversalDecrypter', icon: Unlock, color: 'text-emerald-400' },
-    { key: 'color' as TabKey, label: 'ColorStudio (WCAG)', icon: Palette, color: 'text-cyan-300' },
-    { key: 'qr' as TabKey, label: 'QrCodeStudio', icon: QrCode, color: 'text-sky-300' },
-    { key: 'fakeData' as TabKey, label: 'FakeDataStudio', icon: Shuffle, color: 'text-purple-300' },
+    { key: 'password' as TabKey, label: lang === 'tr' ? 'PasswordGen (Entropi)' : 'PasswordGen (Entropy)', icon: KeyRound, color: 'text-purple-300' },
+    { key: 'color' as TabKey, label: 'ColorStudio (WCAG)', icon: Palette, color: 'text-amber-300' },
+    { key: 'fakeData' as TabKey, label: 'FakeDataStudio', icon: Shuffle, color: 'text-teal-300' },
     { key: 'shredder' as TabKey, label: 'DoD 7-Pass Shredder', icon: ShieldAlert, color: 'text-rose-400' }
   ];
 
@@ -74,7 +90,7 @@ export const LivePlayground: React.FC<LivePlaygroundProps> = ({ lang }) => {
           </div>
 
           {/* Tab Selector Bar */}
-          <div className="bg-[#080b16] border-b border-gray-800/80 px-3 py-2 flex items-center gap-2 overflow-x-auto">
+          <div className="bg-[#080b16] border-b border-gray-800/80 px-3 py-2 flex items-center gap-2 overflow-x-auto scrollbar-thin">
             {tabList.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.key;
@@ -85,7 +101,7 @@ export const LivePlayground: React.FC<LivePlaygroundProps> = ({ lang }) => {
                     setActiveTab(tab.key);
                     cyberAudio.playClick();
                   }}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-mono font-medium transition whitespace-nowrap ${
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-mono font-medium transition whitespace-nowrap cursor-pointer ${
                     isActive
                       ? 'bg-cyan-500/15 text-white border border-cyan-500/40 shadow-sm'
                       : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/40'
@@ -100,13 +116,14 @@ export const LivePlayground: React.FC<LivePlaygroundProps> = ({ lang }) => {
 
           {/* Demo Content Area */}
           <div className="p-6 sm:p-8 min-h-[310px] flex flex-col justify-center">
-            {activeTab === 'hash' && <LiveHashDemo />}
-            {activeTab === 'password' && <LivePasswordDemo />}
             {activeTab === 'regex' && <LiveRegexDemo />}
+            {activeTab === 'hash' && <LiveHashDemo />}
+            {activeTab === 'base64' && <LiveBase64Demo />}
+            {activeTab === 'qr' && <LiveQrDemo />}
             {activeTab === 'jwt' && <LiveJwtDemo />}
             {activeTab === 'decoder' && <LiveDecrypterDemo />}
+            {activeTab === 'password' && <LivePasswordDemo />}
             {activeTab === 'color' && <LiveColorDemo />}
-            {activeTab === 'qr' && <LiveQrDemo />}
             {activeTab === 'fakeData' && <LiveFakeDataDemo />}
             {activeTab === 'shredder' && <LiveShredderDemo />}
           </div>

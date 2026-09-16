@@ -22,8 +22,8 @@ export const translations = {
       cleanCodeBadge: 'VirusTotal 0/72 Temiz Kod Raporu',
       stats: {
         tools: '27+ Güçlü Araç',
-        ram: '~35 MB RAM',
-        boot: '0.4s Açılış',
+        ram: '<26 MB RAM',
+        boot: '0.35s Açılış',
         license: 'Ömür Boyu Lisans'
       }
     },
@@ -32,11 +32,13 @@ export const translations = {
       title: 'İndirmeden Önce Tarayıcınızda Canlı Test Edin',
       subtitle: 'ZenDev\'in gücünü doğrudan istemci tarafında Web Crypto API ve yerel JavaScript motoru ile test edin. Sıfır sunucu gecikmesi.',
       tabs: {
-        hash: 'HashStudio (SHA-256)',
-        password: 'PasswordGen (Entropi)',
         regex: 'RegexStudio (Canlı Test)',
+        hash: 'HashStudio (SHA-256)',
+        base64: 'Base64Studio (İki Yönlü UTF-8)',
+        qr: 'QrCodeStudio (Vektör)',
         jwt: 'JsonStudio (JWT Çözücü)',
-        decoder: 'UniversalDecrypter'
+        decoder: 'UniversalDecrypter',
+        password: 'PasswordGen (Entropi)'
       }
     },
     catalog: {
@@ -60,28 +62,28 @@ export const translations = {
       subtitle: 'ZenDev v2.4.3 ile tüm mimariyi baştan aşağı Rust ile yeniden inşa ettik. İşte somut donanım rakamları:',
       metrics: {
         ram: {
-          title: 'Bellek (RAM) Kullanımı',
-          zendev: '35 MB (Tauri v2)',
+          title: 'Bellek (RAM) Tüketimi',
+          zendev: '< 26 MB (Tauri v2)',
           electron: '450+ MB (Klasik Electron)',
-          desc: 'Chromium ve Node.js motorunu taşımak yerine yerel Windows WebView2 ve Rust köprüsü kullanılır.'
+          desc: 'Chromium ve ağır Node.js motorunu taşımak yerine yerel Windows WebView2 ve optimize edilmiş Rust köprüsü kullanılır.'
         },
         size: {
           title: 'Yükleyici & Paket Boyutu',
-          zendev: '15 MB',
-          electron: '180+ MB',
-          desc: 'Gereksiz libvips ve ağır C++ ikilileri arındırıldı. Saniyeler içinde iner ve kurulur.'
+          zendev: '4.6 MB Yükleyici',
+          electron: '120 MB (Klasik Electron)',
+          desc: 'Gereksiz libvips ve ağır C++ ikilileri arındırıldı. Yalnızca 4.6 MB boyutunda ultra kompakt NSIS yükleyici.'
         },
         boot: {
-          title: 'Soğuk Başlatma Hızı',
-          zendev: '0.4 Saniye',
+          title: 'Soğuk Başlatma Gecikmesi',
+          zendev: '0.35 Saniye',
           electron: '3.2 Saniye',
-          desc: 'Uygulama tıklandığı anda hazırdır. Bekleme çarkı veya donma yaşanmaz.'
+          desc: 'Uygulama tıklandığı anda hazırdır. Chromium başlatma kuyrukları ve donmalar tamamen ortadan kaldırıldı.'
         },
         privacy: {
-          title: 'Veri Mahremiyeti',
+          title: 'Veri Mahremiyeti & Telemetri',
           zendev: '%100 Yerel / Çevrimdışı',
-          electron: 'SaaS / Bulut Telemetrisi',
-          desc: 'Hiçbir dosyanız, veritabanınız veya parolanız dışarı sızmaz. Sıfır analitik.'
+          electron: 'Bulut Telemetrisi / Arka Plan İncelemesi',
+          desc: 'Hiçbir dosyanız, veritabanınız veya parolanız dışarı sızmaz. Sıfır sunucu isteği, sıfır arka plan analitiği.'
         }
       }
     },
@@ -153,8 +155,8 @@ export const translations = {
       cleanCodeBadge: 'VirusTotal 0/72 Clean Code Report',
       stats: {
         tools: '27+ Power Tools',
-        ram: '~35 MB RAM',
-        boot: '0.4s Startup',
+        ram: '<26 MB RAM',
+        boot: '0.35s Cold Start',
         license: 'Lifetime License'
       }
     },
@@ -163,11 +165,13 @@ export const translations = {
       title: 'Test Live in Your Browser Before Downloading',
       subtitle: 'Experience ZenDev performance right on the client side with Web Crypto API and native JS. Zero server latency.',
       tabs: {
-        hash: 'HashStudio (SHA-256)',
-        password: 'PasswordGen (Entropy)',
         regex: 'RegexStudio (Live Test)',
+        hash: 'HashStudio (SHA-256)',
+        base64: 'Base64Studio (Two-Way UTF-8)',
+        qr: 'QrCodeStudio (Vector)',
         jwt: 'JsonStudio (JWT Decoder)',
-        decoder: 'UniversalDecrypter'
+        decoder: 'UniversalDecrypter',
+        password: 'PasswordGen (Entropy)'
       }
     },
     catalog: {
@@ -192,27 +196,27 @@ export const translations = {
       metrics: {
         ram: {
           title: 'Memory (RAM) Footprint',
-          zendev: '35 MB (Tauri v2)',
+          zendev: '< 26 MB (Tauri v2)',
           electron: '450+ MB (Standard Electron)',
-          desc: 'Leverages Windows WebView2 and Rust instead of bundling massive Chromium and Node.js binaries.'
+          desc: 'Leverages native Windows WebView2 and optimized Rust bridge instead of bundling massive Chromium and Node.js runtimes.'
         },
         size: {
           title: 'Installer & Binary Size',
-          zendev: '15 MB',
-          electron: '180+ MB',
-          desc: 'Stripped of heavy C++ libvips binaries. Downloads and installs in mere seconds.'
+          zendev: '4.6 MB Installer',
+          electron: '120 MB (Standard Electron)',
+          desc: 'Stripped of heavy C++ binaries. Ultra-compact 4.6 MB NSIS installer downloads and installs in milliseconds.'
         },
         boot: {
-          title: 'Cold Boot Latency',
-          zendev: '0.4 Seconds',
+          title: 'Cold Start Latency',
+          zendev: '0.35 Seconds',
           electron: '3.2 Seconds',
-          desc: 'Instantly launches when clicked. No spinning wheels, no blank screen delays.'
+          desc: 'Instantly launches the moment you click. Zero Chromium process bootstrapping delays or spinning wheels.'
         },
         privacy: {
-          title: 'Data Privacy',
+          title: 'Data Privacy & Telemetry',
           zendev: '100% Offline / Local',
-          electron: 'SaaS / Cloud Telemetry',
-          desc: 'Your files, passwords, and databases never leave your workstation. Zero analytics.'
+          electron: 'Cloud Telemetry / Background Analytics',
+          desc: 'Your files, passwords, and databases never leave your workstation. Zero network pings, zero tracking.'
         }
       }
     },

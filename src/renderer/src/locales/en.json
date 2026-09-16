@@ -31,7 +31,11 @@
       "portKiller": "Port Killer & TCP Watchdog",
       "scratchpad": "Markdown Scratchpad",
       "pdfStudio": "PDF Studio & Documents",
-      "activityFeed": "Activity Feed & Audit Journal"
+      "activityFeed": "Activity Feed & Audit Journal",
+      "jwtStudio": "JWT & Token Studio",
+      "cronStudio": "Cron Expression Studio",
+      "mermaidStudio": "Mermaid & Architecture Canvas",
+      "encodingStudio": "Base64, Hex & Data-URL Studio"
     },
     "account": "Account Settings"
   },
@@ -225,6 +229,18 @@
       },
       "hashStudio": {
         "desc": "Calculate MD5, SHA-1, SHA-256, and SHA-512 hashes for text and files with instant checksum verification."
+      },
+      "jwtStudio": {
+        "desc": "Inspect, decode, verify HMAC-SHA256 signatures, and generate JSON Web Tokens locally."
+      },
+      "cronStudio": {
+        "desc": "Visual cron expression builder with natural language explanations and execution schedules."
+      },
+      "mermaidStudio": {
+        "desc": "Real-time architecture diagrams, sequence flows, and ERD visualizer with SVG/PNG export."
+      },
+      "encodingStudio": {
+        "desc": "Universal text and media converter, Data-URL visualizer, and canonical hex dump inspector."
       }
     }
   },
@@ -397,7 +413,28 @@
     "cancel": "Cancel",
     "confirmKill": "Force Kill Process",
     "toastKilled": "Process Terminated",
-    "toastKilledDesc": "{{name}} (PID {{pid}}) released port {{port}}."
+    "toastKilledDesc": "{{name}} (PID {{pid}}) released port {{port}}.",
+    "autoRefresh": "Auto-Refresh",
+    "autoRefreshActive": "Live Polling (3s)",
+    "autoRefreshPaused": "Auto Refresh Off",
+    "interval": "Interval",
+    "presets": {
+      "all": "All Ports",
+      "web": "Web (80, 443...)",
+      "database": "Database",
+      "dev": "Dev Servers",
+      "gaming": "Gaming"
+    },
+    "webPorts": "Web Ports",
+    "gamingPorts": "Gaming & LAN",
+    "scanError": "Scan Error",
+    "scanFailed": "Could not scan ports.",
+    "scanErrorDesc": "Could not scan active ports: {{error}}",
+    "killError": "Termination Error",
+    "killFailed": "Failed to kill process.",
+    "killErrorDesc": "Could not terminate process PID {{pid}}: {{error}}",
+    "permissionError": "Permission denied. Administrator privileges may be required.",
+    "refreshTooltip": "Refresh listening ports"
   },
   "systemOptimizer": {
     "title": "Windows System Optimizer & Cache Purger",
@@ -741,7 +778,11 @@
       "compromisedDesc": "Hash chain discontinuity detected at block #{{index}}. Potential database modification!",
       "verifying": "Verifying SHA-256 Hash Chain...",
       "reverify": "Re-verify",
-      "genesisBlock": "Cryptographic Ledger Ready"
+      "genesisBlock": "Cryptographic Ledger Ready",
+      "badgeVerified": "Verified Chain",
+      "badgeCompromised": "Chain Discontinuity",
+      "badgeGenesis": "Genesis Ledger",
+      "tooltipVerified": "Cryptographic SHA-256 hash unbroken from previous block"
     },
     "filters": {
       "searchPlaceholder": "Search action, tool, details or SHA-256 hash...",
@@ -806,7 +847,188 @@
       "tamperWarning": "Warning: Hash chain broken at block #{{index}}!",
       "cleared": "Activity journal purged successfully",
       "exported": "Audit log exported to {{format}}"
+    },
+    "presets": {
+      "all": "All Activity",
+      "errors": "Errors & Failures",
+      "security": "Security & Vault",
+      "network": "Network Ops",
+      "recent": "Last Hour",
+      "crypto": "Crypto & Signatures",
+      "system": "System Telemetry",
+      "failures": "Failures & Blocked",
+      "today": "Today"
+    },
+    "shortcuts": {
+      "exportCsv": "Quick CSV Export",
+      "exportJson": "Quick JSON Export"
     }
+  },
+  "jwtStudio": {
+    "title": "JWT & Token Studio",
+    "description": "Inspect, decode, verify HMAC-SHA256 signatures, and generate JSON Web Tokens 100% offline.",
+    "tabs": {
+      "debugger": "JWT Inspector",
+      "generator": "Token Generator",
+      "inspect": "Inspect & Verify",
+      "generate": "Token Generator"
+    },
+    "header": "Header (Algorithm & Type)",
+    "payload": "Payload (Claims)",
+    "signature": "Signature Verification",
+    "secretKey": "HMAC Secret Key",
+    "secretPlaceholder": "Enter secret key to verify signature...",
+    "base64Secret": "Secret is Base64 Encoded",
+    "verified": "Signature Verified",
+    "invalidSignature": "Invalid Signature",
+    "unsigned": "Unsigned / Awaiting Secret",
+    "tokenPlaceholder": "Paste your JWT token here (eyJhbGciOi...)",
+    "rawToken": "Encoded JWT",
+    "rawTokenPlaceholder": "Paste eyJhbGciOiJIUzI1NiIs...",
+    "sigValid": "Signature Verified",
+    "sigInvalid": "Invalid Signature",
+    "sigEmpty": "Awaiting Secret Key",
+    "timeline": {
+      "title": "Token Expiry Timeline",
+      "active": "Active Token",
+      "expired": "Expired",
+      "expiringSoon": "Expiring Soon",
+      "future": "Not Yet Active (nbf)",
+      "expiresIn": "Expires in {{time}}",
+      "expiredAgo": "Expired {{time}} ago",
+      "issuedAt": "Issued At",
+      "expiresAt": "Expires At",
+      "notBefore": "Not Before (nbf)",
+      "remaining": "Remaining"
+    },
+    "claims": {
+      "sub": "Subject",
+      "iss": "Issuer",
+      "aud": "Audience",
+      "exp": "Expiration Time",
+      "nbf": "Not Before",
+      "iat": "Issued At",
+      "jti": "JWT ID"
+    },
+    "generatorLabels": {
+      "algorithm": "Algorithm",
+      "claimsPreset": "Claims Preset",
+      "expiry": "Expiration",
+      "generate": "Generate Signed Token",
+      "generatedToken": "Generated Token",
+      "copyToken": "Copy Token"
+    },
+    "gen": {
+      "algorithm": "Algorithm",
+      "claims": "Payload JSON",
+      "generateBtn": "Generate Signed JWT",
+      "copySuccess": "JWT Copied to Clipboard"
+    }
+  },
+  "cronStudio": {
+    "title": "Cron Expression Studio",
+    "description": "Visual cron builder, natural language explanations, and next 10 execution timestamps.",
+    "expression": "Cron Expression",
+    "humanReadable": "Schedule Explanation",
+    "humanExplanation": "Human-Readable Schedule",
+    "nextExecutions": "Next 10 Scheduled Runs",
+    "runNumber": "Run #",
+    "scheduledTime": "Scheduled Time",
+    "relativeTime": "Countdown",
+    "presetsTitle": "Quick Presets",
+    "invalidExpression": "Invalid cron expression syntax",
+    "copySchedule": "Copy Schedule",
+    "fields": {
+      "minute": "Minute",
+      "hour": "Hour",
+      "dayOfMonth": "Day of Month",
+      "month": "Month",
+      "dayOfWeek": "Day of Week"
+    },
+    "builder": {
+      "minute": "Minute (0-59)",
+      "hour": "Hour (0-23)",
+      "dayOfMonth": "Day of Month (1-31)",
+      "month": "Month (1-12)",
+      "dayOfWeek": "Day of Week (0-6 Sun-Sat)"
+    },
+    "presets": {
+      "title": "Common Presets",
+      "everyMinute": "Every Minute",
+      "every5Min": "Every 5 Minutes",
+      "everyHour": "Every Hour",
+      "dailyMidnight": "Daily at Midnight",
+      "weekdays": "Weekdays at 9:00 AM",
+      "weeklySunday": "Weekly on Sunday",
+      "monthly": "Monthly on 1st"
+    }
+  },
+  "mermaidStudio": {
+    "title": "Mermaid & Architecture Canvas",
+    "description": "Real-time diagram visualizer for flowcharts, sequence diagrams, ERDs, and state machines.",
+    "editor": "Diagram Code",
+    "editorTitle": "Diagram Definition",
+    "preview": "Live Canvas",
+    "previewTitle": "Live Visual Canvas",
+    "copySvg": "Copy SVG",
+    "downloadSvg": "Download SVG",
+    "copyPng": "Copy PNG",
+    "downloadPng": "Download PNG",
+    "exportSvg": "Export SVG",
+    "exportPng": "Export PNG",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
+    "resetZoom": "Reset Zoom",
+    "syntaxError": "Diagram syntax error: {{error}}",
+    "renderSuccess": "Diagram rendered successfully",
+    "templates": {
+      "title": "Diagram Templates",
+      "flowchart": "Flowchart",
+      "sequence": "Sequence Diagram",
+      "erd": "Entity Relationship",
+      "state": "State Machine",
+      "classDiagram": "Class Diagram",
+      "gitGraph": "Git Graph"
+    }
+  },
+  "encodingStudio": {
+    "title": "Base64, Hex & Data-URL Studio",
+    "description": "Multi-mode data encoder, media Data-URL visualizer, and canonical 16-byte hex dump inspector.",
+    "tabs": {
+      "text": "Text Converter",
+      "file": "File & Data-URL",
+      "hexdump": "Hex Dump Viewer",
+      "hexDump": "Hex Dump Inspector"
+    },
+    "inputText": "Input Text",
+    "outputBase64": "Base64 Output",
+    "outputHex": "Hex Output",
+    "outputUrl": "URL Encoded",
+    "dropFile": "Drop file here or click to browse",
+    "mediaPreview": "Media Preview",
+    "mimeType": "MIME Type",
+    "fileSize": "File Size",
+    "copyDataUrl": "Copy Data-URL",
+    "copyHtmlImg": "Copy HTML <img>",
+    "copyCssBg": "Copy CSS background",
+    "offset": "Offset",
+    "hexBytes": "Hex Bytes",
+    "ascii": "ASCII Text",
+    "input": "Input Text / Bytes",
+    "output": "Encoded Output",
+    "mode": {
+      "encode": "Encode",
+      "decode": "Decode"
+    },
+    "format": {
+      "base64": "Base64",
+      "hex": "Hexadecimal",
+      "dataUrl": "Data URL"
+    },
+    "fileDrop": "Drop file here or click to browse",
+    "fileInfo": "File: {{name}} ({{size}}, {{type}})",
+    "preview": "Data-URL Media Preview",
+    "copy": "Copy Result",
+    "copied": "Copied!"
   }
 }
-

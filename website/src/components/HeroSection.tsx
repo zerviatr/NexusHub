@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Download, ShieldCheck, Copy, Check, Terminal, Zap, Cpu, Lock, ChevronRight, ExternalLink } from 'lucide-react';
 import { Language } from '../lib/types';
 import { translations } from '../lib/translations';
+import { cyberAudio } from '../lib/cyberAudio';
+import { ZENDEV_RELEASE_CONFIG } from '../lib/downloadHelper';
 
 interface HeroSectionProps {
   lang: Language;
@@ -52,16 +54,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
           {/* Primary Action Buttons */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="https://github.com/zerviatr/NexusHub/releases/download/v2.4.3/ZenDev-Setup-2.4.3.exe"
-              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 text-sm font-bold font-mono text-black bg-gradient-to-r from-cyan-400 via-sky-400 to-cyan-300 hover:from-cyan-300 hover:to-sky-200 rounded-xl shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/45 transition transform hover:-translate-y-0.5"
+              href={ZENDEV_RELEASE_CONFIG.setupExe}
+              download="ZenDev-Setup-2.4.3.exe"
+              onClick={() => cyberAudio.playSuccess()}
+              title="Download ZenDev v2.4.3 Setup (.exe)"
+              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-4 text-sm font-bold font-mono text-black bg-gradient-to-r from-cyan-400 via-sky-400 to-cyan-300 hover:from-cyan-300 hover:to-sky-200 rounded-xl shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/45 transition transform hover:-translate-y-0.5 cursor-pointer"
             >
               <Download className="w-5 h-5" />
               <span>{t.downloadNsis}</span>
             </a>
 
             <a
-              href="https://github.com/zerviatr/NexusHub/releases/download/v2.4.3/ZenDev-Portable-2.4.3.exe"
-              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-6 py-4 text-sm font-semibold font-mono text-gray-200 bg-[#0d1222] hover:bg-[#12182d] border border-gray-700 hover:border-cyan-500/50 rounded-xl transition"
+              href={ZENDEV_RELEASE_CONFIG.portableExe}
+              download="ZenDev-Portable-2.4.3.exe"
+              onClick={() => cyberAudio.playClick()}
+              title="Download ZenDev v2.4.3 Portable (.exe)"
+              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-6 py-4 text-sm font-semibold font-mono text-gray-200 bg-[#0d1222] hover:bg-[#12182d] border border-gray-700 hover:border-cyan-500/50 rounded-xl transition cursor-pointer"
             >
               <Terminal className="w-4 h-4 text-cyan-400" />
               <span>{t.downloadPortable}</span>
@@ -100,11 +108,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
               <div className="text-xs text-gray-400 font-mono mt-1">{t.stats.tools}</div>
             </div>
             <div className="bg-[#0b0e1b]/80 border border-purple-500/20 rounded-xl p-4 text-center">
-              <div className="text-2xl font-black text-purple-400 font-mono">~35 MB</div>
+              <div className="text-2xl font-black text-purple-400 font-mono">&lt; 26 MB</div>
               <div className="text-xs text-gray-400 font-mono mt-1">{t.stats.ram}</div>
             </div>
             <div className="bg-[#0b0e1b]/80 border border-sky-500/20 rounded-xl p-4 text-center">
-              <div className="text-2xl font-black text-sky-400 font-mono">0.4s</div>
+              <div className="text-2xl font-black text-sky-400 font-mono">0.35s</div>
               <div className="text-xs text-gray-400 font-mono mt-1">{t.stats.boot}</div>
             </div>
             <div className="bg-[#0b0e1b]/80 border border-emerald-500/20 rounded-xl p-4 text-center">

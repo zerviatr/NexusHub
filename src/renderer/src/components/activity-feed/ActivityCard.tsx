@@ -35,6 +35,8 @@ import {
   AlertTriangle,
   Info,
   CheckCircle2,
+  Lock,
+  ShieldCheck,
 } from 'lucide-react'
 import { ActivityCategory, ActivityEntry, ActivityStatus } from './types'
 import { cyberAudio } from '../../lib/cyberAudio'
@@ -203,6 +205,28 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ entry, onInspect, on
             >
               {entry.category.toUpperCase()}
             </span>
+
+            {/* Cryptographic Ledger Block Badges */}
+            {entry.sequence === 1 ||
+            entry.prevHash ===
+              '0000000000000000000000000000000000000000000000000000000000000000' ||
+            !entry.prevHash ? (
+              <span
+                className="flex items-center gap-1 text-[10px] font-bold font-mono tracking-wider uppercase px-2 py-0.5 rounded-full bg-nexus-cyan/20 text-nexus-cyan border border-nexus-cyan/40 shadow-[0_0_8px_rgba(6,182,212,0.2)]"
+                title="Root Genesis Block in Cryptographic Chain"
+              >
+                <ShieldCheck className="w-3 h-3 text-nexus-cyan" />
+                <span>GENESIS BLOCK</span>
+              </span>
+            ) : (
+              <span
+                className="hidden sm:flex items-center gap-1 text-[10px] font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-1.5 py-0.5 rounded"
+                title={`Cryptographically Chained SHA-256 Block (Prev: ${entry.prevHash.substring(0, 8)}...)`}
+              >
+                <Lock className="w-2.5 h-2.5 text-emerald-400" />
+                <span>Chained</span>
+              </span>
+            )}
           </div>
 
           {/* Details string */}

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   ScrollText,
   Pause,
@@ -24,7 +24,11 @@ import {
   Download,
   ArrowDownToLine,
   RefreshCw,
+  FileSpreadsheet,
+  FileJson,
 } from 'lucide-react'
+import { ActivityEntry } from './types'
+import { quickExportCsv, quickExportJson } from './exportUtils'
 import { cyberAudio } from '../../lib/cyberAudio'
 import { useT } from '../../lib/i18n'
 
@@ -38,6 +42,9 @@ interface ActivityFeedHeaderProps {
   autoScroll: boolean
   onToggleAutoScroll: () => void
   totalCount: number
+  onQuickExportCsv?: () => void
+  onQuickExportJson?: () => void
+  entries?: ActivityEntry[]
 }
 
 /**
@@ -54,8 +61,70 @@ export const ActivityFeedHeader: React.FC<ActivityFeedHeaderProps> = ({
   autoScroll,
   onToggleAutoScroll,
   totalCount,
+  onQuickExportCsv,
+  onQuickExportJson,
+  entries,
 }) => {
   const { t } = useT()
+
+  const fetchEntriesForQuickExport = async (): Promise<ActivityEntry[]> => {
+    if (entries && entries.length > 0) return entries
+    if (window.nexusAPI?.journal?.query) {
+      try {
+        const response = await window.nexusAPI.journal.query({ limit: 1000 })
+        const queried = Array.isArray(response) ? response : response?.entries || []
+        if (queried && queried.length > 0) return queried
+      } catch {}
+    }
+    return []
+  }
+
+  const handleQuickCsv = async () => {
+    if (totalCount === 0) return
+    cyberAudio.copySuccess()
+    if (onQuickExportCsv) {
+      onQuickExportCsv()
+      return
+    }
+    const data = await fetchEntriesForQuickExport()
+    if (data.length > 0) {
+      quickExportCsv(data)
+    }
+  }
+
+  const handleQuickJson = async () => {
+    if (totalCount === 0) return
+    cyberAudio.copySuccess()
+    if (onQuickExportJson) {
+      onQuickExportJson()
+      return
+    }
+    const data = await fetchEntriesForQuickExport()
+    if (data.length > 0) {
+      quickExportJson(data)
+    }
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const activeTag = (document.activeElement?.tagName || '').toLowerCase()
+      if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') {
+        return
+      }
+
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
+        e.preventDefault()
+        if (e.shiftKey) {
+          handleQuickJson()
+        } else {
+          handleQuickCsv()
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [totalCount, onQuickExportCsv, onQuickExportJson, entries])
 
   return (
     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-white/5">
@@ -167,6 +236,34 @@ export const ActivityFeedHeader: React.FC<ActivityFeedHeaderProps> = ({
           <span>{t('activityFeed.verifyChain') || 'Verify Audit Chain'}</span>
         </button>
 
+        {/* Quick CSV Export */}
+        <button
+          onClick={handleQuickCsv}
+          disabled={totalCount === 0}
+          title="Direct CSV Export (Ctrl+E)"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-nexus-card/80 text-nexus-text border border-white/10 hover:border-emerald-500/40 hover:text-emerald-300 hover:bg-emerald-500/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+        >
+          <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-400" />
+          <span>CSV</span>
+          <kbd className="hidden sm:inline-block text-[9px] font-mono text-nexus-muted group-hover:text-emerald-300/80 bg-white/5 px-1 py-0.5 rounded border border-white/10">
+            Ctrl+E
+          </kbd>
+        </button>
+
+        {/* Quick JSON Export */}
+        <button
+          onClick={handleQuickJson}
+          disabled={totalCount === 0}
+          title="Direct JSON Export (Ctrl+Shift+E)"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-nexus-card/80 text-nexus-text border border-white/10 hover:border-amber-500/40 hover:text-amber-300 hover:bg-amber-500/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+        >
+          <FileJson className="w-3.5 h-3.5 text-amber-400" />
+          <span>JSON</span>
+          <kbd className="hidden sm:inline-block text-[9px] font-mono text-nexus-muted group-hover:text-amber-300/80 bg-white/5 px-1 py-0.5 rounded border border-white/10">
+            Ctrl+Shift+E
+          </kbd>
+        </button>
+
         {/* Export button */}
         <button
           onClick={() => {
@@ -174,6 +271,7 @@ export const ActivityFeedHeader: React.FC<ActivityFeedHeaderProps> = ({
             onOpenExport()
           }}
           disabled={totalCount === 0}
+          title={t('activityFeed.exportModal.title') || 'Export Options Modal'}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-nexus-card/80 text-nexus-text border border-white/10 hover:border-nexus-cyan/40 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Download className="w-3.5 h-3.5 text-nexus-muted" />

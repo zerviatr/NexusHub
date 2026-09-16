@@ -342,14 +342,14 @@ export const PRICING_PLANS: PricingPlan[] = [
     featuresTr: [
       '8 Temel Yardımcı Araç (Hash, QR, Regex, JSON, Renk vb.)',
       'Tek Bilgisayarda Yerel & Çevrimdışı Kullanım',
-      'Tauri v2 + Rust Ultra Hafif Motor (35 MB RAM)',
+      'Tauri v2 + Rust Ultra Hafif Motor (<26 MB RAM)',
       '%100 Çevrimdışı Çalışma & Sıfır Telemetri',
       'Topluluk Desteği & Açık Dokümantasyon'
     ],
     featuresEn: [
       '8 Essential Utilities (Hash, QR, Regex, JSON, Color, etc.)',
       'Single machine offline usage',
-      'Tauri v2 + Rust ultra-lean engine (35 MB RAM)',
+      'Tauri v2 + Rust ultra-lean engine (<26 MB RAM)',
       '100% offline privacy & zero telemetry',
       'Community Discord & public documentation'
     ],
@@ -393,7 +393,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       'CyberFortress Askeri 7-Pass İmha & AES-256-GCM Kasa',
       '2 Adet Kişisel Bilgisayarda Eşzamanlı Aktivasyon',
       'Sürekli Bulut Senkronizasyonu & Otomatik Yeni Araç Eklentileri',
-      'Tauri v2 + Rust Ultra Düşük Bellek Mimarisi (35 MB RAM)',
+      'Tauri v2 + Rust Ultra Düşük Bellek Mimarisi (<26 MB RAM)',
       '%100 Yerel Veri Gizliliği & Çevrimdışı Çalışabilme Garantisi',
       'Self-Service Donanım Kimliği (HWID) Transfer Portalı',
       'Esnek Faturalandırma & İstediğin Zaman Tek Tıkla İptal'
@@ -404,7 +404,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       'CyberFortress military 7-pass shredder & AES vault',
       'Activate on 2 personal machines simultaneously',
       'Continuous cloud sync & automatic tool drops',
-      'Tauri v2 + Rust ultra-lean engine (35 MB RAM)',
+      'Tauri v2 + Rust ultra-lean engine (<26 MB RAM)',
       '100% offline-first privacy & zero tracking',
       'Self-service HWID machine transfer portal',
       'Flexible billing & 1-click hassle-free cancellation'

@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 export interface FileGatewayDropDetail {
   file: File
@@ -30,7 +30,19 @@ export function resolveGatewayRoute(fileName: string): string | null {
   if (lower.endsWith('.nexusvault')) {
     return '/fortress'
   }
-  if (lower.endsWith('.json') || lower.endsWith('.jwt')) {
+  if (lower.endsWith('.jwt')) {
+    return '/jwt-studio'
+  }
+  if (lower.endsWith('.cron') || lower.endsWith('.tab')) {
+    return '/cron-studio'
+  }
+  if (lower.endsWith('.mmd') || lower.endsWith('.mermaid')) {
+    return '/mermaid-studio'
+  }
+  if (lower.endsWith('.b64') || lower.endsWith('.hex') || lower.endsWith('.bin')) {
+    return '/encoding-studio'
+  }
+  if (lower.endsWith('.json')) {
     return '/json-studio'
   }
   if (/\.(md|markdown|txt)$/i.test(lower)) {

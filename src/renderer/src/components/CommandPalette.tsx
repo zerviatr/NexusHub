@@ -33,6 +33,9 @@ import {
   FileText,
   Radio,
   Clock,
+  KeyRound,
+  GitBranch,
+  Binary,
 } from 'lucide-react'
 
 interface PaletteItem {
@@ -252,6 +255,42 @@ const PALETTE_ITEMS: PaletteItem[] = [
     path: '/fortress',
     icon: ShieldAlert,
     keywords: ['cyber', 'fortress', 'shred', 'shredder', 'wipe', 'dod', 'vault', 'aes', 'encrypt', 'decrypt', 'security']
+  },
+  {
+    id: 'jwt-studio',
+    title: 'JWT & Token Studio',
+    subtitle: 'Inspect, decode, verify HMAC-SHA256 signatures, and generate JSON Web Tokens locally',
+    category: 'Tools',
+    path: '/jwt-studio',
+    icon: KeyRound,
+    keywords: ['jwt', 'token', 'json', 'hmac', 'sha256', 'decode', 'verify', 'bearer', 'auth']
+  },
+  {
+    id: 'cron-studio',
+    title: 'Cron Expression Studio',
+    subtitle: 'Visual cron expression builder with natural language explanations and execution schedules',
+    category: 'Tools',
+    path: '/cron-studio',
+    icon: Clock,
+    keywords: ['cron', 'schedule', 'tab', 'timer', 'crontab', 'builder', 'interval', 'job']
+  },
+  {
+    id: 'mermaid-studio',
+    title: 'Mermaid & Architecture Canvas',
+    subtitle: 'Real-time architecture diagrams, sequence flows, and ERD visualizer with SVG/PNG export',
+    category: 'Tools',
+    path: '/mermaid-studio',
+    icon: GitBranch,
+    keywords: ['mermaid', 'diagram', 'flowchart', 'sequence', 'erd', 'architecture', 'canvas', 'svg', 'png']
+  },
+  {
+    id: 'encoding-studio',
+    title: 'Base64, Hex & Data-URL Studio',
+    subtitle: 'Universal text and media converter, Data-URL visualizer, and canonical hex dump inspector',
+    category: 'Tools',
+    path: '/encoding-studio',
+    icon: Binary,
+    keywords: ['base64', 'hex', 'dataurl', 'encode', 'decode', 'dump', 'binary', 'ascii', 'mime']
   },
   {
     id: 'account',

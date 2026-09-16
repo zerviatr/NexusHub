@@ -18,6 +18,8 @@ import { Language, Currency, PricingPlan, BillingCycle } from '../lib/types';
 import { PRICING_PLANS } from '../lib/toolsData';
 import { translations } from '../lib/translations';
 import { cyberAudio } from '../lib/cyberAudio';
+import { PricingMatrix } from './PricingMatrix';
+import { SimulatedCheckoutModal } from './SimulatedCheckoutModal';
 
 interface PricingSectionProps {
   lang: Language;
@@ -35,6 +37,19 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
   const [discountPercent, setDiscountPercent] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponError, setCouponError] = useState('');
+  const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<PricingPlan>(PRICING_PLANS[1] || PRICING_PLANS[0]);
+
+  const handleOpenCheckout = (planToOpen: PricingPlan) => {
+    cyberAudio.playClick();
+    setSelectedPlan(planToOpen);
+    setCheckoutModalOpen(true);
+  };
+
+  const handleSelectFromMatrix = (planId: 'personal' | 'studio') => {
+    const target = PRICING_PLANS.find((p) => p.id === planId) || PRICING_PLANS[1];
+    handleOpenCheckout(target);
+  };
 
   const t = translations[lang].pricing;
 
@@ -314,10 +329,9 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
                       <span>{lang === 'tr' ? (plan.ctaTr || 'Ücretsiz İndir') : (plan.ctaEn || 'Download Free')}</span>
                     </a>
                   ) : (
-                    <a
-                      href="https://zendev.lemonsqueezy.com"
-                      target="_blank"
-                      rel="noreferrer"
+                    <button
+                      type="button"
+                      onClick={() => handleOpenCheckout(plan)}
                       className={`w-full flex items-center justify-center gap-2 py-3.5 text-xs font-bold font-mono rounded-xl transition cursor-pointer ${
                         isPersonal
                           ? 'text-black bg-gradient-to-r from-cyan-400 via-sky-400 to-cyan-300 hover:from-cyan-300 hover:to-sky-200 shadow-lg shadow-cyan-500/30 font-extrabold'
@@ -326,7 +340,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
                     >
                       <span>{lang === 'tr' ? plan.ctaTr : plan.ctaEn}</span>
                       <ArrowRight className="w-4 h-4" />
-                    </a>
+                    </button>
                   )}
 
                   <div className="mt-3 flex items-center justify-center gap-1.5 text-[10px] font-mono text-gray-500">
@@ -339,6 +353,13 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
           })}
         </div>
 
+        {/* Feature Comparison Matrix Table */}
+        <PricingMatrix
+          lang={lang}
+          currency={currency}
+          onSelectPlan={handleSelectFromMatrix}
+        />
+
         {/* Guarantee Banner */}
         <div className="mt-14 max-w-xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 bg-emerald-950/30 border border-emerald-500/30 px-4 py-2 rounded-full">
@@ -347,6 +368,17 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Simulated License Activation Checkout Modal */}
+      <SimulatedCheckoutModal
+        isOpen={checkoutModalOpen}
+        onClose={() => setCheckoutModalOpen(false)}
+        plan={selectedPlan}
+        billingCycle={billingCycle}
+        currency={currency}
+        discountPercent={couponApplied ? discountPercent : 0}
+        lang={lang}
+      />
     </section>
   );
 };

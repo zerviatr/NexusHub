@@ -17,6 +17,7 @@ import { Download, Globe, Menu, X, Sparkles, Terminal, Volume2, VolumeX, Search,
 import { Language, Currency } from '../lib/types';
 import { translations } from '../lib/translations';
 import { cyberAudio } from '../lib/cyberAudio';
+import { ZENDEV_RELEASE_CONFIG, triggerDirectDownload } from '../lib/downloadHelper';
 
 interface NavbarProps {
   lang: Language;
@@ -208,10 +209,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>{lang.toUpperCase()}</span>
           </button>
 
-          {/* Download CTA */}
+          {/* Direct Download CTA */}
           <a
-            href="#download"
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold font-mono text-black bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 rounded-lg shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition transform hover:-translate-y-0.5 whitespace-nowrap flex-shrink-0"
+            href={ZENDEV_RELEASE_CONFIG.setupExe}
+            download="ZenDev-Setup-2.4.3.exe"
+            onClick={(e) => {
+              cyberAudio.playClick();
+            }}
+            title="Download ZenDev v2.4.3 Setup (.exe)"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold font-mono text-black bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 rounded-lg shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition transform hover:-translate-y-0.5 whitespace-nowrap flex-shrink-0 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>{t.downloadBtn}</span>
@@ -342,9 +348,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           <a
-            href="#download"
-            onClick={() => setMobileOpen(false)}
-            className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold font-mono text-black bg-gradient-to-r from-cyan-400 to-sky-400 rounded-lg shadow-lg shadow-cyan-500/20"
+            href={ZENDEV_RELEASE_CONFIG.setupExe}
+            download="ZenDev-Setup-2.4.3.exe"
+            onClick={() => {
+              cyberAudio.playClick();
+              setMobileOpen(false);
+            }}
+            title="Download ZenDev v2.4.3 Setup (.exe)"
+            className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold font-mono text-black bg-gradient-to-r from-cyan-400 to-sky-400 rounded-lg shadow-lg shadow-cyan-500/20 cursor-pointer"
           >
             <Download className="w-4 h-4" />
             <span>{t.downloadBtn}</span>

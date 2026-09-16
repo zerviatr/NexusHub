@@ -31,6 +31,10 @@ import {
   Radio,
   PanelLeftClose,
   PanelLeftOpen,
+  KeyRound,
+  Clock,
+  GitBranch,
+  Binary,
 } from 'lucide-react'
 import { useT } from '../lib/i18n'
 import { cyberAudio } from '../lib/cyberAudio'
@@ -70,6 +74,10 @@ const NAV_GROUPS: NavGroup[] = [
       { path: '/qr-code',      labelKey: 'nav.tools.qrCode',       icon: QrCode },
       { path: '/json-studio',  labelKey: 'nav.tools.jsonStudio',   icon: Braces },
       { path: '/hash-studio',  labelKey: 'nav.tools.hashStudio',   icon: FileCheck },
+      { path: '/jwt-studio',      labelKey: 'nav.tools.jwtStudio',      icon: KeyRound },
+      { path: '/cron-studio',     labelKey: 'nav.tools.cronStudio',     icon: Clock },
+      { path: '/mermaid-studio',  labelKey: 'nav.tools.mermaidStudio',  icon: GitBranch },
+      { path: '/encoding-studio', labelKey: 'nav.tools.encodingStudio', icon: Binary },
     ],
   },
   {

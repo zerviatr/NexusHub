@@ -1,4 +1,4 @@
-﻿import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import fs from 'fs'
 import path from 'path'
 import {
@@ -53,7 +53,7 @@ describe('File Gateway Integration & Challenger 2 Audit Remediation', () => {
         'trojan.exe',
         'driver.dll',
         'os.iso',
-        'bios.bin',
+        'bios.rom',
         'video.mp4',
         'music.mp3',
         'installer.msi',
@@ -94,6 +94,14 @@ describe('File Gateway Integration & Challenger 2 Audit Remediation', () => {
         { file: 'logo.png', expectedRoute: '/image' },
         { file: 'vault.nexusvault', expectedRoute: '/fortress' },
         { file: 'schema.json', expectedRoute: '/json-studio' },
+        { file: 'auth_token.jwt', expectedRoute: '/jwt-studio' },
+        { file: 'backup.cron', expectedRoute: '/cron-studio' },
+        { file: 'crontab.tab', expectedRoute: '/cron-studio' },
+        { file: 'system.mmd', expectedRoute: '/mermaid-studio' },
+        { file: 'diagram.mermaid', expectedRoute: '/mermaid-studio' },
+        { file: 'payload.b64', expectedRoute: '/encoding-studio' },
+        { file: 'dump.hex', expectedRoute: '/encoding-studio' },
+        { file: 'binary.bin', expectedRoute: '/encoding-studio' },
         { file: 'documentation.md', expectedRoute: '/scratchpad' },
         { file: 'integrity.sha256', expectedRoute: '/hash-studio' },
       ]
