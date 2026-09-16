@@ -61,75 +61,79 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         scrolled
-          ? 'bg-[#070913]/90 backdrop-blur-md border-b border-cyan-500/20 shadow-lg shadow-black/40 py-2.5'
+          ? 'bg-[#070913]/92 backdrop-blur-md border-b border-cyan-500/20 shadow-lg shadow-black/40 py-2.5'
           : 'bg-transparent py-4'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
         {/* Brand / Logo */}
-        <a href="#" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 via-sky-500 to-purple-600 p-[1.5px] shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition">
-            <div className="w-full h-full bg-[#070913] rounded-[10px] flex items-center justify-center">
-              <Terminal className="w-5 h-5 text-cyan-400 group-hover:scale-110 transition duration-300" />
+        <div className="flex items-center gap-2.5 flex-shrink-0">
+          <a href="#" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 via-sky-500 to-purple-600 p-[1.5px] shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition">
+              <div className="w-full h-full bg-[#070913] rounded-[10px] flex items-center justify-center">
+                <Terminal className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition duration-300" />
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-bold tracking-tight text-white font-mono">
-                Zen<span className="text-cyan-400">Dev</span>
-              </span>
-              <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-cyan-950/70 border border-cyan-500/40 text-cyan-300">
-                v2.4.3
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1.5">
+                <span className="text-base sm:text-lg font-bold tracking-tight text-white font-mono">
+                  Zen<span className="text-cyan-400">Dev</span>
+                </span>
+              </div>
+              <span className="text-[9px] text-gray-400 font-mono tracking-wider">
+                TAURI v2 + RUST
               </span>
             </div>
-            <span className="text-[10px] text-gray-400 font-mono tracking-wider">
-              TAURI v2 + RUST
-            </span>
-          </div>
-        </a>
+          </a>
 
-        {/* Desktop Nav Links */}
-        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-gray-300">
-          <a href="#playground" className="hover:text-cyan-400 transition flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            {t.playground}
+          {/* Clickable version badge for changelog */}
+          <button
+            onClick={() => {
+              cyberAudio.playClick();
+              onOpenChangelog();
+            }}
+            className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-purple-950/60 border border-purple-500/40 text-purple-300 hover:border-purple-400 hover:text-white transition cursor-pointer whitespace-nowrap"
+            title={lang === 'tr' ? 'v2.4.3 Yenilikleri Gör' : "View v2.4.3 What's New"}
+          >
+            v2.4.3
+          </button>
+        </div>
+
+        {/* Desktop Nav Links (Streamlined to 5 non-wrapping concise items) */}
+        <nav className="hidden lg:flex items-center gap-5 text-xs sm:text-sm font-medium text-gray-300 font-mono">
+          <a
+            href="#playground"
+            className="hover:text-cyan-400 transition flex items-center gap-1 whitespace-nowrap"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
+            <span>{lang === 'tr' ? 'Demo' : 'Playground'}</span>
           </a>
-          <a href="#arsenal" className="hover:text-cyan-400 transition">
-            {t.tools}
+          <a href="#arsenal" className="hover:text-cyan-400 transition whitespace-nowrap">
+            {lang === 'tr' ? 'Araçlar' : 'Arsenal'}
           </a>
-          <a href="#radar" className="hover:text-cyan-400 transition">
-            {t.performance}
+          <a href="#radar" className="hover:text-cyan-400 transition whitespace-nowrap">
+            {lang === 'tr' ? 'Mimari' : 'Architecture'}
           </a>
-          <a href="#testimonials" className="hover:text-cyan-400 transition">
-            {lang === 'tr' ? 'Referanslar' : 'Reviews'}
+          <a href="#pricing" className="hover:text-cyan-400 transition whitespace-nowrap">
+            {lang === 'tr' ? 'Fiyatlar' : 'Pricing'}
           </a>
-          <a href="#calculator" className="hover:text-cyan-400 transition">
-            {t.calculator}
-          </a>
-          <a href="#pricing" className="hover:text-cyan-400 transition">
-            {t.pricing}
-          </a>
-          <a href="#faq" className="hover:text-cyan-400 transition">
+          <a href="#faq" className="hover:text-cyan-400 transition whitespace-nowrap">
             FAQ
-          </a>
-          <a href="#portal" className="hover:text-cyan-400 transition">
-            {t.portal}
           </a>
         </nav>
 
         {/* Right Action Cluster */}
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
           {/* Global Search Ctrl+K Button */}
           <button
             onClick={() => {
               cyberAudio.playClick();
               onOpenSearch();
             }}
-            className="flex items-center gap-2 text-xs font-mono text-gray-400 hover:text-white px-2.5 py-1.5 rounded-lg bg-[#0d1222] border border-gray-800 hover:border-cyan-500/40 transition cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-mono text-gray-400 hover:text-white px-2.5 py-1.5 rounded-lg bg-[#0d1222] border border-gray-800 hover:border-cyan-500/40 transition cursor-pointer whitespace-nowrap"
             title="Komut Paleti (Ctrl+K)"
           >
             <Search className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden xl:inline">{lang === 'tr' ? 'Ara' : 'Search'}</span>
             <kbd className="text-[10px] bg-[#161d30] px-1.5 py-0.5 rounded border border-gray-700 text-gray-300 font-mono">
               Ctrl K
             </kbd>
@@ -157,8 +161,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
             title={
               audioActive
-                ? (lang === 'tr' ? 'Sesi Kapat (Sessiz Mod)' : 'Mute Sci-Fi Audio')
-                : (lang === 'tr' ? 'Sesi Aç (Siber Efektler)' : 'Enable Sci-Fi Audio')
+                ? (lang === 'tr' ? 'Sesi Kapat' : 'Mute Sci-Fi Audio')
+                : (lang === 'tr' ? 'Sesi Aç' : 'Enable Sci-Fi Audio')
             }
           >
             {audioActive ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -170,20 +174,20 @@ export const Navbar: React.FC<NavbarProps> = ({
               cyberAudio.playClick();
               onOpenWaitlist();
             }}
-            className="flex items-center gap-1.5 text-xs font-mono text-amber-300 hover:text-amber-200 px-2.5 py-1.5 rounded-lg bg-amber-950/40 border border-amber-500/40 hover:border-amber-500/70 transition cursor-pointer animate-pulse"
+            className="flex items-center gap-1 text-xs font-mono text-amber-300 hover:text-amber-200 px-2 py-1.5 rounded-lg bg-amber-950/40 border border-amber-500/40 hover:border-amber-500/70 transition cursor-pointer whitespace-nowrap"
             title={lang === 'tr' ? '%20 Erken Erişim İndirimi' : 'Claim 20% Discount'}
           >
-            <Gift className="w-3.5 h-3.5 text-amber-400" />
+            <Gift className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
             <span>%20 {lang === 'tr' ? 'İndirim' : 'Off'}</span>
           </button>
 
           {/* Currency Switcher */}
-          <div className="flex items-center bg-[#0d1222] border border-gray-800 rounded-lg p-1 text-xs font-mono">
+          <div className="flex items-center bg-[#0d1222] border border-gray-800 rounded-lg p-0.5 text-xs font-mono whitespace-nowrap">
             {(['TRY', 'USD', 'EUR'] as Currency[]).map((c) => (
               <button
                 key={c}
                 onClick={() => setCurrency(c)}
-                className={`px-2 py-0.5 rounded transition ${
+                className={`px-1.5 py-0.5 rounded transition ${
                   currency === c
                     ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/30'
                     : 'text-gray-400 hover:text-white'
@@ -197,27 +201,19 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Language Switcher */}
           <button
             onClick={() => setLang(lang === 'tr' ? 'en' : 'tr')}
-            className="flex items-center gap-1.5 text-xs font-mono text-gray-300 hover:text-cyan-300 px-2.5 py-1.5 rounded-lg bg-[#0d1222] border border-gray-800 hover:border-cyan-500/40 transition cursor-pointer"
+            className="flex items-center gap-1 text-xs font-mono text-gray-300 hover:text-cyan-300 px-2 py-1.5 rounded-lg bg-[#0d1222] border border-gray-800 hover:border-cyan-500/40 transition cursor-pointer whitespace-nowrap"
             title="Dili Değiştir / Switch Language"
           >
-            <Globe className="w-3.5 h-3.5 text-cyan-400" />
+            <Globe className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
             <span>{lang.toUpperCase()}</span>
-          </button>
-
-          {/* What's new modal button */}
-          <button
-            onClick={onOpenChangelog}
-            className="text-xs font-mono text-purple-300 hover:text-purple-200 px-2.5 py-1.5 rounded-lg bg-purple-950/40 border border-purple-500/30 hover:border-purple-500/60 transition cursor-pointer"
-          >
-            {t.whatsNew}
           </button>
 
           {/* Download CTA */}
           <a
             href="#download"
-            className="flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold font-mono text-black bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 rounded-lg shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition transform hover:-translate-y-0.5"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold font-mono text-black bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 rounded-lg shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition transform hover:-translate-y-0.5 whitespace-nowrap flex-shrink-0"
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-3.5 h-3.5" />
             <span>{t.downloadBtn}</span>
           </a>
         </div>
@@ -272,28 +268,28 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="flex items-center gap-2 py-1 text-cyan-400"
             >
               <Sparkles className="w-4 h-4" />
-              {t.playground}
+              {lang === 'tr' ? 'Canlı Demo Simülatörü' : 'Live Playground'}
             </a>
             <a href="#arsenal" onClick={() => setMobileOpen(false)} className="py-1 hover:text-cyan-400">
-              {t.tools}
+              {lang === 'tr' ? '27+ Araç Kataloğu' : '27+ Tools Arsenal'}
             </a>
             <a href="#radar" onClick={() => setMobileOpen(false)} className="py-1 hover:text-cyan-400">
-              {t.performance}
+              {lang === 'tr' ? 'Tauri v2 vs Electron Mimarisi' : 'Architecture Radar'}
             </a>
             <a href="#testimonials" onClick={() => setMobileOpen(false)} className="py-1 hover:text-cyan-400">
-              {lang === 'tr' ? 'Referanslar' : 'Reviews'}
+              {lang === 'tr' ? 'Mühendis İncelemeleri' : 'Customer Reviews'}
             </a>
             <a href="#calculator" onClick={() => setMobileOpen(false)} className="py-1 hover:text-cyan-400">
-              {t.calculator}
+              {lang === 'tr' ? 'Tasarruf Hesaplayıcısı' : 'Savings Calculator'}
             </a>
             <a href="#pricing" onClick={() => setMobileOpen(false)} className="py-1 hover:text-cyan-400">
-              {t.pricing}
+              {lang === 'tr' ? 'Fiyatlandırma & Lisans' : 'Pricing & Licensing'}
             </a>
             <a href="#faq" onClick={() => setMobileOpen(false)} className="py-1 hover:text-cyan-400">
               FAQ
             </a>
             <a href="#portal" onClick={() => setMobileOpen(false)} className="py-1 hover:text-cyan-400">
-              {t.portal}
+              {lang === 'tr' ? 'Müşteri Lisans Portalı' : 'Customer Portal'}
             </a>
           </nav>
 

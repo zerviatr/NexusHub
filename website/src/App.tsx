@@ -113,8 +113,8 @@ export const App: React.FC = () => {
       {/* Footer */}
       <Footer lang={lang} />
 
-      {/* Floating Real-Time Social Proof Ticker (Bottom-Left) */}
-      <LiveActivityTicker lang={lang} />
+      {/* Real-Time Social Proof Ticker (Deactivated per user request until verified real telemetry is gathered) */}
+      {/* <LiveActivityTicker lang={lang} /> */}
 
       {/* Global Command Palette (Ctrl+K) */}
       <CommandPalette
