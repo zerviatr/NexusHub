@@ -1,4 +1,4 @@
-﻿{
+{
   "mcpServers": {
     "notion-mcp-server": {
       "command": "npx",

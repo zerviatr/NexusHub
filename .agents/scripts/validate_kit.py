@@ -107,7 +107,7 @@ def validate_json(root: Path, findings: list[Finding]) -> None:
         if "__pycache__" in path.parts:
             continue
         try:
-            json.loads(path.read_text("utf-8"))
+            json.loads(path.read_text("utf-8-sig"))
         except (OSError, json.JSONDecodeError) as exc:
             line = int(getattr(exc, "lineno", 1))
             add(findings, "error", "json.invalid", path.relative_to(root), str(exc), line)
@@ -146,6 +146,10 @@ def validate_frontmatter(
         names_seen: set[str] = set()
         for path in paths:
             rel = path.relative_to(root)
+            if kind == "rule":
+                raw_fm, _ = extract_frontmatter(path)
+                if raw_fm is None:
+                    continue
             data = parse_frontmatter(path, findings)
             if data is None:
                 continue
