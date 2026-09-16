@@ -69,18 +69,17 @@ jobs:
           $size = (Get-Item $destination).Length
           $releaseDate = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
           
-          $latestYml = @"
-version: $version
-files:
-  - url: $targetName
-    sha512: $hashBytes
-    size: $size
-path: $targetName
-sha512: $hashBytes
-releaseDate: '$releaseDate'
-"@
-          
-          [System.IO.File]::WriteAllText("dist_release/latest.yml", $latestYml.Trim(), [System.Text.Encoding]::UTF8)
+          $lines = @(
+            "version: $version",
+            "files:",
+            "  - url: $targetName",
+            "    sha512: $hashBytes",
+            "    size: $size",
+            "path: $targetName",
+            "sha512: $hashBytes",
+            "releaseDate: '$releaseDate'"
+          )
+          [System.IO.File]::WriteAllLines("dist_release/latest.yml", $lines, [System.Text.Encoding]::UTF8)
           Write-Host "Created dist_release/latest.yml and $targetName successfully."
 
       - name: Create GitHub Release
