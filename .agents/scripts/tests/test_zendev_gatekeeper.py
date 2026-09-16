@@ -249,6 +249,91 @@ class TestZenDevFeatureGatekeeper(unittest.TestCase):
         self.assertEqual("❌", res_tempmail["verdict"])
         self.assertEqual("Reddet", res_tempmail["decision"])
 
+        # Edge Case 5: Trojan disguise - Port termination smuggled behind Workflow Chains
+        res_trojan_chain = self.Evaluator.evaluate("Workflow Chains ve açık portları sonlandırma aracı ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_chain["verdict"])
+        self.assertEqual("Reddet", res_trojan_chain["decision"])
+        self.assertIn("kara liste", res_trojan_chain["rationale"].lower())
+
+        # Edge Case 6: Trojan disguise - Port termination smuggled behind JSON formatter
+        res_trojan_json = self.Evaluator.evaluate("JSON formatter ve açık portları sonlandırıcı ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_json["verdict"])
+        self.assertEqual("Reddet", res_trojan_json["decision"])
+
+        # Edge Case 7: Trojan disguise - Process manager smuggled behind Regex studio
+        res_trojan_regex = self.Evaluator.evaluate("Regex stüdyosu ve process manager ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_regex["verdict"])
+        self.assertEqual("Reddet", res_trojan_regex["decision"])
+
+        # Edge Case 8: Trojan disguise - Memory/RAM cleaner smuggled behind Base64 decoder
+        res_trojan_ram = self.Evaluator.evaluate("Base64 decoder ve bellek/RAM temizleyici ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_ram["verdict"])
+        self.assertEqual("Reddet", res_trojan_ram["decision"])
+
+        # Edge Case 9: Trojan disguise - Silent auto download smuggled behind API client
+        res_trojan_silent = self.Evaluator.evaluate("API client için arkaplanda sessizce otomatik indirme yapalım mı?")
+        self.assertEqual("❌", res_trojan_silent["verdict"])
+        self.assertEqual("Reddet", res_trojan_silent["decision"])
+
+        # Edge Case 10: Trojan disguise - Disposable email smuggled behind API test
+        res_trojan_email = self.Evaluator.evaluate("API test stüdyosu ve tek kullanımlık e-posta servisi ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_email["verdict"])
+        self.assertEqual("Reddet", res_trojan_email["decision"])
+
+        # Edge Case 11: Turkish uppercase normalization
+        res_upper = self.Evaluator.evaluate("AÇIK PORTLARI SONLANDIRMA ARACI EKLEYELİM Mİ?")
+        self.assertEqual("❌", res_upper["verdict"])
+        self.assertEqual("Reddet", res_upper["decision"])
+
+        # Edge Case 12: Trojan disguise - Port close smuggled behind Workflow Chains
+        res_trojan_close = self.Evaluator.evaluate("Workflow Chains ve close port özelliği ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_close["verdict"])
+        self.assertEqual("Reddet", res_trojan_close["decision"])
+
+        # Edge Case 13: Trojan disguise - End task smuggled behind Workflow Chains
+        res_trojan_end = self.Evaluator.evaluate("Workflow Chains ve end task özelliği ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_end["verdict"])
+        self.assertEqual("Reddet", res_trojan_end["decision"])
+
+        # Edge Case 14: Trojan disguise - Stop process smuggled behind Workflow Chains
+        res_trojan_stop = self.Evaluator.evaluate("Workflow Chains ve stop process aracı ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_stop["verdict"])
+        self.assertEqual("Reddet", res_trojan_stop["decision"])
+
+        # Edge Case 15: Trojan disguise - Hosts file editor smuggled behind Workflow Chains
+        res_trojan_hosts = self.Evaluator.evaluate("Workflow Chains ve hosts dosyası düzenleyici ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_hosts["verdict"])
+        self.assertEqual("Reddet", res_trojan_hosts["decision"])
+
+        # Edge Case 16: Trojan disguise - Unapproved update smuggled behind Workflow Chains
+        res_trojan_unapproved = self.Evaluator.evaluate("Workflow Chains ve onaysız güncelleme ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_unapproved["verdict"])
+        self.assertEqual("Reddet", res_trojan_unapproved["decision"])
+
+        # Edge Case 17: Trojan disguise - 10 minute mail smuggled behind Workflow Chains
+        res_trojan_10min = self.Evaluator.evaluate("Workflow Chains ve 10 minute mail servisi ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_10min["verdict"])
+        self.assertEqual("Reddet", res_trojan_10min["decision"])
+
+        # Edge Case 18: Trojan disguise - Trash mail smuggled behind Workflow Chains
+        res_trojan_trash = self.Evaluator.evaluate("Workflow Chains ve trash mail servisi ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_trash["verdict"])
+        self.assertEqual("Reddet", res_trojan_trash["decision"])
+
+        # Edge Case 19: Trojan disguise - OS-native calculator smuggled behind Workflow Chains
+        res_trojan_calc = self.Evaluator.evaluate("Workflow Chains ve hesap makinesi stüdyosu ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_calc["verdict"])
+        self.assertEqual("Reddet", res_trojan_calc["decision"])
+
+        # Edge Case 20: Trojan disguise - OS-native clipboard tool smuggled behind Workflow Chains
+        res_trojan_clip = self.Evaluator.evaluate("Workflow Chains ve clipboard aracı ekleyelim mi?")
+        self.assertEqual("❌", res_trojan_clip["verdict"])
+        self.assertEqual("Reddet", res_trojan_clip["decision"])
+
+        # Edge Case 21: Precision check - Copy to clipboard button in core tool must NOT be falsely blacklisted
+        res_copy_button = self.Evaluator.evaluate("JSON formatter için panoya kopyalama butonu ekleyelim mi?")
+        self.assertNotEqual("❌", res_copy_button["verdict"])
+
     def test_r3_cli_subprocess_execution(self):
         """Verify the gatekeeper CLI executable runs cleanly via subprocess."""
         cmd = [
