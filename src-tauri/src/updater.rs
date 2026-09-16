@@ -276,7 +276,7 @@ pub fn updater_install_now(app: AppHandle) -> Result<(), String> {
             #[cfg(target_os = "windows")]
             {
                 let _ = crate::process_ext::silent_command("cmd")
-                    .args(["/C", "start", "", path.to_str().unwrap_or_default()])
+                    .args(["/C", "start", "", path.to_str().unwrap_or_default(), "/S"])
                     .spawn();
             }
             std::thread::sleep(std::time::Duration::from_millis(500));

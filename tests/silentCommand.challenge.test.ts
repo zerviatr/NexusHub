@@ -233,6 +233,8 @@ describe('Adversarial Challenge: Static Analysis Scanner & Windows Console Suppr
     const updaterPath = path.join(srcTauriSrc, 'updater.rs');
     const updaterContent = fs.readFileSync(updaterPath, 'utf-8');
     expect(updaterContent).toMatch(/silent_command\("cmd"\)/);
+    expect(updaterContent).toMatch(/\/S/);
+    expect(updaterContent).toMatch(/\.args\(\["\/C",\s*"start",\s*"",\s*path\.to_str\(\)\.unwrap_or_default\(\),\s*"\/S"\]\)/);
     expect(updaterContent).not.toContain('Command::new');
 
     const libPath = path.join(srcTauriSrc, 'lib.rs');

@@ -1,6 +1,6 @@
 {
   "name": "zendev",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "description": "ZenDev — Premium Multi-Tool Desktop Application",
   "scripts": {
     "dev": "vite",

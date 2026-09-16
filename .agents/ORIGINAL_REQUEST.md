@@ -127,4 +127,6 @@ Engineer a unified, zero-overhead helper module (e.g. `src-tauri/src/process_ext
 ### Verification Test Suite
 - [ ] An automated static analysis test or unit test in Rust validates that no raw unflagged `Command::new` exists in `src-tauri/src/` without `CREATE_NO_WINDOW` enforcement.
 
+## Follow-up — 2026-09-16T14:16:23Z
 
+Execute the NSIS Silent Update Fix as detailed in prompt_draft.md. Team scale is Full multi-agent team, and Integrity Mode is Clean, safe Rust/Tauri standards without artificial restrictions. Reconfigure the Tauri v2 updater settings (e.g., installMode in tauri.conf.json or /S arguments in updater.rs) to ensure silent background updates on Windows. Build, test, and push to GitHub as v2.5.2.
