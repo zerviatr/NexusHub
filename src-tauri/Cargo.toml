@@ -1,6 +1,6 @@
 [package]
 name = "zendev"
-version = "2.5.3"
+version = "2.5.4"
 description = "ZenDev — Premium Multi-Tool Desktop Application"
 authors = ["ZenDev Team"]
 edition = "2021"
@@ -19,7 +19,7 @@ test = false
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
-embed-manifest = "1.5"
+
 
 [dependencies]
 tauri = { version = "2", features = ["tray-icon"] }
