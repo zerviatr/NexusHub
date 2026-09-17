@@ -14,7 +14,7 @@
 
 - 🛡️ **Zero Telemetry & Local Execution**: All computations, hashings, shreddings, and decryptions execute locally on-device.
 - ⚡ **Tray Memory Sweep & Background Sleep Engine**:
-  - Automatically suspends CPU telemetry (`os.cpus()`), TempMail polling, and auxiliary timers when minimized or hidden in the system tray.
+  - Automatically suspends CPU telemetry (`os.cpus()`) and auxiliary timers when minimized or hidden in the system tray.
   - Triggers V8 Garbage Collection and clears transient session memory caches, shrinking background RAM footprint to ~70–90 MB.
 - 📜 **Tamper-Evident Activity Feed & Audit Journal**:
   - Continuous NIST FIPS 180-4 SHA-256 cryptographic hash chaining (`/activity-feed`).
@@ -23,7 +23,7 @@
 - 🚀 **Hardware-Accelerated Tool Arsenal**:
   - **ApiStudio**: Full-featured HTTP/REST workspace with cURL import/export, environments (`{{var}}`), and SSRF private IP shield.
   - **CyberFortress**: DoD 5220.22-M 7-pass file shredder, AES-256-GCM vault, and LSB image steganography engine.
-  - **SystemOptimizer**: Cross-platform DNS cache purger, safe `%TEMP%` cleaner, ping benchmarking, and 1-click Cyber Turbo Boost.
+  - **JwtStudio**: Offline JWT inspector, HMAC-SHA256 signature verifier, claim validator, and token expiration visualizer.
   - **ResourceSentinel**: Real-time per-core CPU and memory telemetry with one-touch RAM optimization.
   - **SqliteViewer**: In-browser WebAssembly SQL exploration (`sql.js`) with schema visualizer.
   - **BulkOrganizer**: Multi-rule, MIME-aware batch file classifier with atomic single-click undo journal.
@@ -119,7 +119,7 @@ npm run dist:linux
 
 ZenDev implements an intelligent background resource management lifecycle:
 1. **Tray Sleep Mode**: When the user closes or minimizes the window to the system tray, Electron emits `app:visibility-change(false)` and `app:memory-sweep`.
-2. **Interval Suspension**: Heavy intervals (e.g., ResourceSentinel's 1,500ms `os.cpus()` sampler, TempMail's 5,000ms inbox polling, and FloatingOrb's telemetry loops) immediately enter low-power sleep.
+2. **Interval Suspension**: Heavy intervals (e.g., ResourceSentinel's 1,500ms `os.cpus()` sampler and FloatingOrb's telemetry loops) immediately enter low-power sleep.
 3. **V8 Garbage Collection & Cache Flush**: Electron triggers V8 GC and flushes non-essential WebContents session caches.
 4. **Instant Wake**: Restoring or opening ZenDev from the system tray sends `app:visibility-change(true)`, instantly resuming live polling and fetching fresh hardware metrics without UI hitching.
 

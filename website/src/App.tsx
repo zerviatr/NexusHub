@@ -88,7 +88,7 @@ export const App: React.FC = () => {
         {/* 2. Expanded 9-Tool In-Browser WASM/WebCrypto Playground */}
         <LivePlayground lang={lang} />
 
-        {/* 3. Complete 31-Tool Categorized Arsenal */}
+        {/* 3. Complete 27-Tool Categorized Arsenal */}
         <ToolCatalog lang={lang} />
 
         {/* 4. Tauri v2 vs Electron Architecture & Benchmarks Radar */}

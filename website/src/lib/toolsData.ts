@@ -142,21 +142,6 @@ export const ZENDEV_TOOLS: ToolItem[] = [
 
   // ── SİSTEM, SÜREÇ & AĞ MÜHENDİSLİĞİ ─────────────────────────
   {
-    id: 'port-killer',
-    name: 'PortKiller',
-    category: 'system',
-    titleTr: 'Port Çakışma Katili & PID Yöneticisi',
-    titleEn: 'Port Conflict Killer & PID Sentinel',
-    descriptionTr: '"Port 3000 already in use" hatasına tek tıkla son verin. Dinlenen açık TCP/UDP portlarını tarayın, hangi sürecin kilitlediğini anında bulun ve SIGKILL ile sonlandırın.',
-    descriptionEn: 'End "Port 3000 already in use" headaches forever. Scan open listening TCP/UDP ports, identify culprit PIDs, and terminate them instantly with SIGKILL.',
-    badgeTr: 'Geliştirici Kurtarıcı',
-    badgeEn: 'Dev Savior',
-    icon: 'ZapOff',
-    hasInBrowserDemo: false,
-    highlightTag: 'SIGKILL Tek Tıkla',
-    techSpecs: ['TCP/UDP Dinleme Taraması', 'PID Süreç Haritası', 'Yönetici İzni Desteği', 'Otomatik Yenileme']
-  },
-  {
     id: 'network-tools',
     name: 'NetworkTools',
     category: 'system',
@@ -185,21 +170,6 @@ export const ZENDEV_TOOLS: ToolItem[] = [
     hasInBrowserDemo: false,
     highlightTag: '60 FPS Donanım',
     techSpecs: ['Çekirdek Başına CPU', 'RAM Bellek Baskısı', 'Disk Okuma/Yazma', 'Termal Eşik Uyarıları']
-  },
-  {
-    id: 'system-optimizer',
-    name: 'SystemOptimizer',
-    category: 'system',
-    titleTr: 'Sistem Temizleyici & Gizlilik Kalkanı',
-    titleEn: 'System Disk Cleaner & Privacy Shield',
-    descriptionTr: 'npm önbellekleri, geçici log dosyaları, çöp kutusu ve kullanılmayan paket kalıntılarını güvenle tarayıp gigabaytlarca disk alanını tek tıkla geri kazanın.',
-    descriptionEn: 'Safely sweep npm/node_modules caches, temporary compile artifacts, Windows temp directories, and reclaim gigabytes of valuable SSD space.',
-    badgeTr: 'Disk Kurtarıcı',
-    badgeEn: 'Disk Saver',
-    icon: 'Trash2',
-    hasInBrowserDemo: false,
-    highlightTag: 'GB Alan Kurtar',
-    techSpecs: ['Derleyici Önbellek Taraması', 'Güvenli İnceleme Modu', 'Temp Dosya Temizliği', 'SSD Ömür Koruma']
   },
 
   // ── GÜNLÜK İŞ AKIŞI & ÜRETKENLİK ───────────────────────────
@@ -293,36 +263,6 @@ export const ZENDEV_TOOLS: ToolItem[] = [
     highlightTag: 'SVG / PNG Logo Gömme',
     techSpecs: ['Vektörel SVG Çıktı', 'Özel Logo Gömme', 'Hata Düzeltme Seviyesi (H)', 'Görselden QR Okuma']
   },
-  {
-    id: 'temp-mail',
-    name: 'TempMail',
-    category: 'productivity',
-    titleTr: 'Geçici Tek Kullanımlık E-Posta İstemcisi',
-    titleEn: 'Disposable Disposable Email Sentinel',
-    descriptionTr: 'Deneme üyelikleri ve spamdan kaçınmak için anında anonim e-posta adresi oluşturun, gelen doğrulama bağlantılarını yerleşik kutuda canlı görüntüleyin.',
-    descriptionEn: 'Generate instant disposable inboxes for trial accounts and API testing. Receive OTP codes and verification links without spamming personal email.',
-    badgeTr: 'Spam Kalkanı',
-    badgeEn: 'Spam Shield',
-    icon: 'Mail',
-    hasInBrowserDemo: false,
-    highlightTag: 'Anlık Gelen Kutusu',
-    techSpecs: ['Otomatik Yenileme', 'HTML E-posta Önizleme', 'Bağlantı Ayıklayıcı', 'Sıfır Kayıt Şartı']
-  },
-  {
-    id: 'clipboard-manager',
-    name: 'ClipboardManager',
-    category: 'productivity',
-    titleTr: 'Şifreli Pano Geçmişi & Snippet Kasası',
-    titleEn: 'Encrypted Clipboard Journal & Snippet Vault',
-    descriptionTr: 'Kopyaladığınız metinleri, kod parçalarını ve komutları yerel SQLite veritabanında şifreli olarak saklayın. Sık kullandığınız şablonları favorilere ekleyin.',
-    descriptionEn: 'Retain clipboard history locally with AES encryption. Tag frequently used code snippets, SQL queries, and cURL commands for instant retrieval.',
-    badgeTr: 'Pano Geçmişi',
-    badgeEn: 'Clipboard History',
-    icon: 'ClipboardList',
-    hasInBrowserDemo: false,
-    highlightTag: 'Şifreli Saklama',
-    techSpecs: ['Yerel Şifreli SQLite', 'Hızlı Arama & Filtreleme', 'Snippet Koleksiyonu', 'Hassas Veri Temizleme']
-  },
 
   // ── YAZILIM GELİŞTİRİCİ: YENİ ELEVASYON STÜDYOLARI (v2.5.3) ──
   {
@@ -391,7 +331,7 @@ export const ZENDEV_TOOLS: ToolItem[] = [
  * Total active native developer workstations in ZenDev v2.5.3 suite.
  * Synchronized across website Navbar, Hero, Catalog, CommandPalette, and Pricing.
  */
-export const TOTAL_TOOLS_COUNT = 31;
+export const TOTAL_TOOLS_COUNT = 27;
 
 export const PRICING_PLANS: PricingPlan[] = [
   {
@@ -447,8 +387,8 @@ export const PRICING_PLANS: PricingPlan[] = [
     nameEn: 'ZenDev Pro Developer SaaS',
     badgeTr: 'En Popüler / Geliştirici SaaS',
     badgeEn: 'Most Popular / Developer SaaS',
-    descriptionTr: 'Tüm 31+ güce tam erişim. Sürekli yeni araç güncellemeleri, bulut senkronizasyonu ve öncelikli destek.',
-    descriptionEn: 'Full access to all 31+ power tools. Continuous drops, cloud sync, and priority engineering support.',
+    descriptionTr: 'Tüm 27+ güce tam erişim. Sürekli yeni araç güncellemeleri, bulut senkronizasyonu ve öncelikli destek.',
+    descriptionEn: 'Full access to all 27+ power tools. Continuous drops, cloud sync, and priority engineering support.',
     recommended: true,
     prices: {
       TRY: { monthly: 149, yearly: 1190, monthlyEquivalent: 99, symbol: '₺' },
@@ -456,7 +396,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       EUR: { monthly: 8.99, yearly: 69, monthlyEquivalent: 5.75, symbol: '€' }
     },
     featuresTr: [
-      '31+ Geliştirici Stüdyosunun Tamamına Kesintisiz Erişim',
+      '27+ Geliştirici Stüdyosunun Tamamına Kesintisiz Erişim',
       'ApiStudio REST & cURL İstasyonları Kilitsiz',
       'E2EE Uçtan Uca Şifreli Cihazlar Arası Bulut Senkronizasyonu',
       'Workflow Chains & AI Smart Dispatcher Önizleme Erişimi',
@@ -467,7 +407,7 @@ export const PRICING_PLANS: PricingPlan[] = [
       'Esnek Faturalandırma & İstediğin Zaman Tek Tıkla İptal'
     ],
     featuresEn: [
-      'Continuous access to all 31+ developer studios',
+      'Continuous access to all 27+ developer studios',
       'Unlocked ApiStudio REST & cURL bridge',
       'E2EE cross-device cloud synchronization',
       'Workflow Chains & AI Smart Dispatcher preview',

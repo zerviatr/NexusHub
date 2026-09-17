@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Zap, Mail, Hash, Shield, Terminal, ArrowRight, X, Cpu, Globe, Braces } from 'lucide-react'
+import { Search, Zap, Hash, Shield, Terminal, ArrowRight, X, Globe, Braces } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { cyberAudio } from '../lib/cyberAudio'
 import { detectSmartPaste } from '../lib/smartPasteDetector'
@@ -75,9 +75,7 @@ export default function MiniHud() {
     { name: 'JSON & SQLite Studio', path: '/json-studio', icon: Braces, desc: 'JSON format, JWT decode & SQLite tablo inceleme' },
     { name: 'Regex Lab', path: '/regex-studio', icon: Terminal, desc: 'Canlı Regex test ve grup analizi' },
     { name: 'Fake Data', path: '/fake-data', icon: Zap, desc: 'Sahte kimlik & Mock test verisi' },
-    { name: 'System Optimizer', path: '/system-optimizer', icon: Cpu, desc: 'DNS temizleme & Temp disk alanı' },
     { name: 'cURL Runner', path: '/curl-runner', icon: Globe, desc: 'Micro HTTP API istek testi' },
-    { name: 'TempMail', path: '/temp-mail', icon: Mail, desc: 'Anlık tek kullanımlık e-posta' },
     { name: 'Cyber Fortress', path: '/fortress', icon: Shield, desc: 'DoD 7-pass shredder & AES vault' },
   ]
 

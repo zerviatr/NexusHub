@@ -9,7 +9,6 @@
       "network": "Ağ"
     },
     "tools": {
-      "tempMail": "Geçici Mail Üreticisi",
       "decrypter": "Evrensel Link Çözücü & Tracker Temizleyici",
       "passwordGenerator": "Parola Üreticisi",
       "qrCode": "QR Kod Stüdyosu",
@@ -19,16 +18,13 @@
       "fakeData": "Fake Data & Mock Kimlik",
       "apiStudio": "API Studio & Ağ Teşhis",
       "curlRunner": "HTTP & cURL Runner",
-      "systemOptimizer": "Sistem Hızlandırıcı & Önbellek",
       "bulkOrganizer": "Toplu Düzenleyici",
-      "clipboardManager": "Pano Yöneticisi",
       "imageToolkit": "Görsel Araç Seti",
       "networkTools": "Ağ Araçları",
       "sentinel": "Resource Sentinel",
       "devSandbox": "DevSandbox API Stüdyosu",
       "cyberFortress": "Cyber Fortress & Shredder",
       "colorStudio": "Renk & Kontrast Stüdyosu",
-      "portKiller": "Port Killer & TCP Gözlemcisi",
       "scratchpad": "Markdown Scratchpad Not Defteri",
       "pdfStudio": "PDF Stüdyosu & Evrak",
       "activityFeed": "Aktivite Akışı & Denetim Günlüğü",
@@ -200,9 +196,6 @@
       "live": "Canlı"
     },
     "tools": {
-      "tempMail": {
-        "desc": "Spam ve takibi atlamak için anında tek kullanımlık e-posta adresleri. Gelen kutusunu gerçek zamanlı okur."
-      },
       "decrypter": {
         "desc": "Kısaltılmış ve reklamlı linkleri (Aylink, bit.ly vb.) asıl hedefine çözün; gizlilik takipçilerini (UTM, tracker) temizleyin."
       },
@@ -211,9 +204,6 @@
       },
       "passwordGenerator": {
         "desc": "Kriptografik olarak güvenli parolalar, parola ifadeleri ve PIN'ler üretin; güç tahmini yapın."
-      },
-      "clipboardManager": {
-        "desc": "Pano geçmişini 50 girdiye kadar otomatik takip eder. Tek tıklamayla arayın, kopyalayın ve silin."
       },
       "networkTools": {
         "desc": "IP çözümleme, DNS sorgulama, port tarama ve ICMP ping — hepsi doğrudan Node.js üzerinden çalışır."
@@ -256,19 +246,6 @@
     "title": "JSON & JWT Stüdyosu",
     "description": "Anlık sözdizimi doğrulamasıyla JSON'ı biçimlendirin, küçültün ve doğrulayın. JWT belirteçlerini %100 yerel olarak çözümleyin."
   },
-  "clipboard": {
-    "search": "Geçmişte ara...",
-    "clear": "Tümünü Temizle",
-    "total": "Toplam Kayıt",
-    "shown": "Gösterilen",
-    "latest": "En Son",
-    "noSearch": "Aramanızla eşleşen kayıt bulunamadı.",
-    "noHistory": "Henüz pano geçmişi yok. Bir şeyler kopyalayın!",
-    "showMore": "Daha fazla göster ({{count}} karktr)",
-    "showLess": "Daha az göster",
-    "copy": "Panoya kopyala",
-    "delete": "Sil"
-  },
   "organizer": {
     "targetDir": "Hedef Dizin",
     "noFolder": "Klasör seçilmedi",
@@ -288,16 +265,6 @@
     "stripExif": "EXIF Temizle",
     "outputDir": "ÇIKTI DİZİNİ",
     "sameFolder": "Girdi klasörü ile aynı..."
-  },
-  "tempMail": {
-    "generate": "Yeni Adres Üret",
-    "checking": "Gelen kutusu kontrol ediliyor...",
-    "refresh": "Yenile",
-    "inbox": "Gelen Kutusu",
-    "empty": "Gelen kutusu boş. Mailler bekleniyor...",
-    "back": "Gelen Kutusuna Dön",
-    "from": "Gönderen",
-    "subject": "Konu"
   },
   "decrypter": {
     "placeholder": "Kısaltılmış veya reklamlı bağlantıyı yapıştırın (ör. bit.ly, aylink.co, t.co)...",
@@ -387,75 +354,6 @@
     "toastDecryptSuccess": "Kasa Açıldı!",
     "toastDecryptSuccessDesc": "{{name}} başarıyla geri çözümlendi.",
     "toastPassError": "Hatalı parola."
-  },
-  "portKiller": {
-    "title": "Port & Process Watchdog",
-    "description": "Windows üzerinde dinlenen aktif TCP portlarını tarayın, hangi process'in hangi portu kilitlediğini görün ve tek tıkla sonlandırın.",
-    "searchPlaceholder": "Port (örn: 3000) veya process adı...",
-    "allPorts": "Tümü ({{count}})",
-    "devPorts": "Geliştirici Portları",
-    "dbPorts": "Veritabanı Portları",
-    "colPort": "Port",
-    "colProcess": "Process Adı",
-    "colPid": "PID",
-    "colState": "Durum",
-    "colAddress": "Yerel Adres",
-    "colAction": "Eylem",
-    "scanning": "Portlar taranıyor...",
-    "noPorts": "Eşleşen aktif dinleme portu bulunamadı.",
-    "killBtn": "Kill",
-    "modalTitle": "Process'i Sonlandırma Onayı",
-    "modalSubtitle": "Port kilidini kaldırmak üzeresiniz.",
-    "targetPort": "Hedef Port:",
-    "processName": "Process Adı:",
-    "pid": "PID:",
-    "warning": "Bu işlemi sonlandırmak, ilgili yazılımı anında kapatacaktır. Kaydedilmemiş veriler kaybolabilir.",
-    "cancel": "İptal",
-    "confirmKill": "Zorla Kapat (Kill Process)",
-    "toastKilled": "İşlem Sonlandırıldı",
-    "toastKilledDesc": "{{name}} (PID {{pid}}) port {{port}} serbest bırakıldı.",
-    "autoRefresh": "Otomatik Yenileme",
-    "autoRefreshActive": "Canlı İzleme (3 sn)",
-    "autoRefreshPaused": "Otomatik Yenileme Kapalı",
-    "interval": "Aralık",
-    "presets": {
-      "all": "Tüm Portlar",
-      "web": "Web (80, 443...)",
-      "database": "Veritabanı",
-      "dev": "Dev Sunucuları",
-      "gaming": "Oyun & Ses"
-    },
-    "webPorts": "Web Portları",
-    "gamingPorts": "Oyun & LAN",
-    "scanError": "Tarama Hatası",
-    "scanFailed": "Portlar taranamadı.",
-    "scanErrorDesc": "Aktif portlar taranamadı: {{error}}",
-    "killError": "Sonlandırma Hatası",
-    "killFailed": "Process sonlandırılamadı.",
-    "killErrorDesc": "PID {{pid}} işlemi sonlandırılamadı: {{error}}",
-    "permissionError": "Yetki hatası. Yönetici yetkileri gerekebilir.",
-    "refreshTooltip": "Dinlenen portları yenile"
-  },
-  "systemOptimizer": {
-    "title": "Windows System Optimizer & Cache Purger",
-    "description": "Windows yerel önbellek, DNS çözümleyici ve çöp geçici dosyaları güvenle temizleyen performans santrali",
-    "turboBoost": "⚡ TEK TIKLA TURBO BOOST",
-    "turboBoosting": "SİBER HIZLANDIRILIYOR...",
-    "turboComplete": "⚡ Turbo Boost Tamamlandı! {{deleted}} geçici dosya temizlendi ({{freed}} alan açıldı) ve DNS önbelleği sıfırlandı.",
-    "tempCleanerTitle": "Geçici Dosya & Çöp Temizleyici",
-    "scannedJunk": "Taranan Çöp Dosya Sayısı:",
-    "recoverableSpace": "Kazanılabilir Disk Alanı:",
-    "cleaning": "Çöpler Temizleniyor...",
-    "cleanBtn": "Geçici Dosyaları Güvenle Temizle",
-    "cleanSuccess": "Başarıyla {{count}} adet eski geçici dosya temizlendi. Kazanılan Alan: {{freed}}",
-    "dnsPurgerTitle": "Windows DNS Önbellek Boşaltıcı",
-    "dnsDesc": "Bayatlamış DNS kayıtlarını, engellenen alan adlarını ve bozulmuş host yönlendirmelerini tek tıkla yenileyin. Bağlantı tıkanıklıklarını çözer.",
-    "flushing": "DNS Temizleniyor...",
-    "flushBtn": "DNS Önbelleğini Sıfırla (Flush)",
-    "dnsSuccess": "Windows DNS Çözümleyici Önbelleği Başarıyla Temizlendi.",
-    "latencyTitle": "Yerel Ağ & Omurga Gecikme Benchmark'ı",
-    "refreshBenchmark": "Testi Yenile",
-    "timeout": "Zaman aşımı"
   },
   "fakeData": {
     "title": "Fake Data & Mock Kimlik Stüdyosu",
@@ -583,8 +481,6 @@
     "scratchpadSave": "Not / Ayarları Zorla Manuel Kaydet",
     "scratchpadIndent": "Scratchpad Kod / Metin 2 Boşluk Girintileme",
     "gotoDashboard": "Dashboard Ana Sayfasına Dön",
-    "gotoOptimizer": "Windows System Optimizer Santraline Git",
-    "gotoPortKiller": "Port Killer & TCP Gözlemcisine Git",
     "gotoFortress": "Cyber Fortress Kalkanına Git"
   },
   "smartPaste": {

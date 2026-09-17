@@ -33,11 +33,6 @@ const nexusAPI = {
 
   // Tool IPC
   bypassLink: (url: string) => ipcRenderer.invoke('link:bypass', url),
-  tempMail: {
-    generate: () => ipcRenderer.invoke('tempmail:generate'),
-    check: (email: string) => ipcRenderer.invoke('tempmail:check', email),
-    read: (email: string, id: string) => ipcRenderer.invoke('tempmail:read', email, id),
-  },
   decrypter: {
     clean: (url: string) => ipcRenderer.invoke('decrypter:clean', url),
     cleanBatch: (urls: string[]) => ipcRenderer.invoke('decrypter:cleanBatch', urls),
@@ -48,14 +43,6 @@ const nexusAPI = {
     execute: (operations: any[]) => ipcRenderer.invoke('organizer:execute', operations),
     canUndo: () => ipcRenderer.invoke('organizer:canUndo'),
     undo: () => ipcRenderer.invoke('organizer:undo'),
-  },
-
-  // Clipboard Manager
-  clipboard: {
-    getHistory: () => ipcRenderer.invoke('clipboard:getHistory'),
-    clear: () => ipcRenderer.invoke('clipboard:clear'),
-    delete: (id: string) => ipcRenderer.invoke('clipboard:delete', id),
-    write: (text: string) => ipcRenderer.invoke('clipboard:write', text),
   },
 
   // Network Tools
@@ -196,25 +183,10 @@ const nexusAPI = {
   },
   memorySweep: () => ipcRenderer.invoke('app:memorySweep'),
 
-  // System Optimizer
-  system: {
-    flushDns: () => ipcRenderer.invoke('system:flushDns'),
-    scanTemp: () => ipcRenderer.invoke('system:scanTemp'),
-    cleanTemp: () => ipcRenderer.invoke('system:cleanTemp'),
-    pingHost: (host: string) => ipcRenderer.invoke('system:pingHost', host),
-    optimizeAll: () => ipcRenderer.invoke('system:optimizeAll'),
-  },
-
   // System Settings
   settings: {
     getAutoLaunch: () => ipcRenderer.invoke('settings:getAutoLaunch'),
     setAutoLaunch: (enable: boolean) => ipcRenderer.invoke('settings:setAutoLaunch', enable),
-  },
-
-  // Port & Process Watchdog
-  port: {
-    scan: () => ipcRenderer.invoke('port:scanActivePorts'),
-    kill: (pid: number) => ipcRenderer.invoke('port:killProcess', pid),
   },
 
   // Safe Storage (OS Keychain / DPAPI Encryption)

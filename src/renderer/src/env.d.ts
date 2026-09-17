@@ -10,11 +10,6 @@ interface NexusAPI {
     trackersRemoved?: number
     error?: string
   }>
-  tempMail: {
-    generate: () => Promise<{ success: boolean; email?: string; error?: string }>
-    check: (email: string) => Promise<{ success: boolean; messages?: any[]; error?: string }>
-    read: (email: string, id: string) => Promise<{ success: boolean; message?: any; error?: string }>
-  }
   decrypter: {
     clean: (url: string) => Promise<{
       success: boolean
@@ -33,12 +28,6 @@ interface NexusAPI {
     execute: (operations: any[]) => Promise<any>
     canUndo: () => Promise<boolean>
     undo: () => Promise<{ success: boolean; restored: number; errors: string[] }>
-  }
-  clipboard: {
-    getHistory: () => Promise<any[]>
-    clear: () => Promise<void>
-    delete: (id: string) => Promise<void>
-    write: (text: string) => Promise<void>
   }
   network: {
     ipLookup: (host: string) => Promise<any>
@@ -100,31 +89,9 @@ interface NexusAPI {
   onVisibilityChange?: (cb: (visible: boolean) => void) => () => void
   onMemorySweep?: (cb: () => void) => () => void
   memorySweep?: () => Promise<{ success: boolean; freedMem?: number }>
-  system: {
-    flushDns: () => Promise<{ success: boolean; output?: string }>
-    scanTemp: () => Promise<{ path: string; fileCount: number; totalBytes: number; sizeFormatted: string; error?: string }>
-    cleanTemp: () => Promise<{ success: boolean; deletedCount: number; freedBytes: number; freedFormatted: string; error?: string }>
-    pingHost: (host: string) => Promise<{ success: boolean; latency: number | null; host: string }>
-    optimizeAll?: () => Promise<{ success: boolean; dnsFlushed: boolean; deletedFiles: number; freedFormatted: string; freedBytes: number; error?: string }>
-  }
   settings: {
     getAutoLaunch: () => Promise<boolean>
     setAutoLaunch: (enable: boolean) => Promise<boolean>
-  }
-  port?: {
-    scan: () => Promise<{
-      success: boolean
-      ports: {
-        protocol: string
-        localAddress: string
-        port: number
-        state: string
-        pid: number
-        processName: string
-      }[]
-      error?: string
-    }>
-    kill: (pid: number) => Promise<{ success: boolean; message?: string; error?: string }>
   }
   safeStorage?: {
     isAvailable: () => Promise<boolean>

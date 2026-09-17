@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.5.3] - 2026-09-17
 
+### Removed
+- **SaaS Transformation Directive (Principle 2) Feature Purge**:
+  - Completely purged **Port Killer (Port Watchdog)** from React frontend and Rust backend to eliminate OS-level process termination (`taskkill`, `netstat`) and support overhead.
+  - Completely purged **System Optimizer** (`ipconfig /flushdns`, `%TEMP%` cleanup) to align with focused B2B/Pro developer SaaS positioning.
+  - Completely purged **Temp Mail** disposable inbox generator to eliminate spam, abuse, and legal liability risks.
+  - Purged commoditized **Clipboard Manager** from core marketing and tool arsenal in favor of high-value developer workflow studios.
+
 ### Changed
 - **Release Synchronization**:
   - Bumped version to `2.5.3` across all 9 manifest and lockfile targets: `package.json`, `package-lock.json`, `src-tauri/Cargo.toml`, `src-tauri/Cargo.lock`, `src-tauri/tauri.conf.json`, `website/package.json`, `website/package-lock.json`, `.github/workflows/release.yml`, and `website/src/lib/downloadHelper.ts`.

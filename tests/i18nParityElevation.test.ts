@@ -44,9 +44,9 @@ describe('Internationalization (i18n) — 100% Key Parity & Elevation Verificati
   const trKeys = Object.keys(trFlat).sort()
 
   describe('1. Global Dictionary Parity & Cardinality', () => {
-    it('verifies exact total count of 828 keys in both en.json and tr.json', () => {
-      expect(enKeys.length).toBe(828)
-      expect(trKeys.length).toBe(828)
+    it('verifies exact total count of 738 keys in both en.json and tr.json', () => {
+      expect(enKeys.length).toBe(738)
+      expect(trKeys.length).toBe(738)
     })
 
     it('verifies zero missing keys in tr.json relative to en.json', () => {
@@ -113,13 +113,12 @@ describe('Internationalization (i18n) — 100% Key Parity & Elevation Verificati
   })
 
   describe('3. Desktop UX Elevation Modules Namespaces Parity', () => {
-    it('verifies portKiller namespace parity (44 keys)', () => {
+    it('verifies portKiller namespace was purged in v2.5.3 per SaaS Directive Principle 2', () => {
       const enPort = enKeys.filter((k) => k.startsWith('portKiller.'))
       const trPort = trKeys.filter((k) => k.startsWith('portKiller.'))
 
-      expect(enPort.length).toBe(44)
-      expect(trPort.length).toBe(44)
-      expect(enPort).toEqual(trPort)
+      expect(enPort.length).toBe(0)
+      expect(trPort.length).toBe(0)
     })
 
     it('verifies activityFeed namespace parity (87 keys)', () => {
@@ -131,12 +130,12 @@ describe('Internationalization (i18n) — 100% Key Parity & Elevation Verificati
       expect(enFeed).toEqual(trFeed)
     })
 
-    it('verifies nav.tools namespace parity (27 keys including all 4 new tools)', () => {
+    it('verifies nav.tools namespace parity (23 keys including all 4 new tools)', () => {
       const enNav = enKeys.filter((k) => k.startsWith('nav.tools.'))
       const trNav = trKeys.filter((k) => k.startsWith('nav.tools.'))
 
-      expect(enNav.length).toBe(27)
-      expect(trNav.length).toBe(27)
+      expect(enNav.length).toBe(23)
+      expect(trNav.length).toBe(23)
       expect(enNav).toEqual(trNav)
 
       // Ensure 4 new tools exist in navigation
@@ -146,12 +145,12 @@ describe('Internationalization (i18n) — 100% Key Parity & Elevation Verificati
       expect(enNav).toContain('nav.tools.encodingStudio')
     })
 
-    it('verifies dashboard.tools namespace parity (14 keys)', () => {
+    it('verifies dashboard.tools namespace parity (12 keys)', () => {
       const enDash = enKeys.filter((k) => k.startsWith('dashboard.tools.'))
       const trDash = trKeys.filter((k) => k.startsWith('dashboard.tools.'))
 
-      expect(enDash.length).toBe(14)
-      expect(trDash.length).toBe(14)
+      expect(enDash.length).toBe(12)
+      expect(trDash.length).toBe(12)
       expect(enDash).toEqual(trDash)
 
       // Ensure 4 new tools exist in dashboard descriptions
@@ -170,7 +169,6 @@ describe('Internationalization (i18n) — 100% Key Parity & Elevation Verificati
         'cronStudio.',
         'mermaidStudio.',
         'encodingStudio.',
-        'portKiller.',
         'activityFeed.',
       ]
 

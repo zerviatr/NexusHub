@@ -73,12 +73,6 @@ export const tauriNexusAPI = {
     undo: () => safeInvoke('organizer_undo', {}, { success: false, restored: 0, errors: [] }),
   },
 
-    []),
-    clear: () => safeInvoke('clipboard_clear'),
-    delete: (id: string) => safeInvoke('clipboard_delete', { id }),
-    write: (text: string) => safeInvoke('clipboard_write', { text }),
-  },
-
   // ── 6. Network Tools ──
   network: {
     ipLookup: (host: string) => safeInvoke('network_ip_lookup', { host }),
@@ -148,29 +142,10 @@ export const tauriNexusAPI = {
     onApplyingPatch: (cb: () => void) => setupEventListener('updater:applying-patch', cb),
   },
 
-    system: {
-    flushDns: () => safeInvoke('system_flush_dns', {}, { success: true, output: 'DNS Flush OK' }),
-    scanTemp: () => safeInvoke('system_scan_temp', {}, { path: '', fileCount: 0, totalBytes: 0, sizeFormatted: '0 MB' }),
-    cleanTemp: () => safeInvoke('system_clean_temp', {}, { success: true, deletedCount: 0, freedBytes: 0, freedFormatted: '0 MB' }),
-    pingHost: (host: string) => safeInvoke('system_ping_host', { host }, { success: true, latency: 15, host }),
-    optimizeAll: () => safeInvoke('system_optimize_all', {}, {
-      success: true,
-      dnsFlushed: true,
-      deletedFiles: 0,
-      freedFormatted: '0 MB',
-      freedBytes: 0,
-    }),
-  },
-
   // ── 14. Settings ──
   settings: {
     getAutoLaunch: () => safeInvoke('settings_get_auto_launch', {}, false),
     setAutoLaunch: (enable: boolean) => safeInvoke('settings_set_auto_launch', { enable }, true),
-  },
-
-    port: {
-    scan: () => safeInvoke('port_scan_active_ports', {}, { success: true, ports: [] }),
-    kill: (pid: number) => safeInvoke('port_kill_process', { pid }, { success: true, message: `PID ${pid} killed` }),
   },
 
   // ── 16. Safe Storage ──

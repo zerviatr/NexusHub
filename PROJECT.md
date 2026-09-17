@@ -11,9 +11,9 @@ ZenDev is a developer productivity platform built with a high-performance Tauri 
 │    SaaS Landing Website      │      Desktop Application     │
 │         (website/)           │   (src/renderer/ + src-tauri)│
 │  - React 19 + Tailwind v4    │  - React 19 + TypeScript     │
-│  - Animated Benchmark Cards  │  - 31 Core Developer Tools   │
+│  - Animated Benchmark Cards  │  - 27 Core Developer Tools   │
 │  - Direct Release Downloads  │  - Activity Journal w/ Chain │
-│  - Interactive Playground    │  - Port Watchdog & Network   │
+│  - Interactive Playground    │  - Network Recon & API Labs  │
 │  - SaaS Pricing & Checkout   │  - Tauri v2 Rust Backend     │
 └──────────────────────────────┴──────────────────────────────┘
 ```
@@ -26,7 +26,7 @@ ZenDev is a developer productivity platform built with a high-performance Tauri 
 | 3 | Web Playground | Live trial widgets (Regex, Hash, QR, two-way Base64 encoder) | M1 | ORIGINAL_REQUEST §R1 |
 | 4 | SaaS Pricing Matrix | Free, Pro, Team tiers, comparison matrix, simulated checkout modal with confetti | M1 | ORIGINAL_REQUEST §R1 |
 | 5 | Activity Journal Upgrades | Filter presets, CSV/JSON direct export, cryptographic integrity badge | M2 | ORIGINAL_REQUEST §R2 |
-| 6 | Port Watchdog Hardening | Auto-refresh toggle (3s), port presets (Web, DB, Dev, Gaming), kill modal | M2 | ORIGINAL_REQUEST §R2 |
+| 6 | Port Watchdog (Purged) | Purged in v2.5.3 per SaaS Directive Principle 2 (OS process kill decoupled) | M2 | ORIGINAL_REQUEST §R2 |
 | 7 | Cyber SFX & Polish | Refined tactile audio profiles and 60 FPS animation smoothness | M2 | ORIGINAL_REQUEST §R2 |
 | 8 | JWT Studio | Header/payload decode, HMAC-SHA256 verify, expiry timeline, generator | M3 | ORIGINAL_REQUEST §R3 |
 | 9 | Cron Studio | Visual 5-field builder, TR/EN explanations, next 10 executions schedule | M3 | ORIGINAL_REQUEST §R3 |
@@ -44,11 +44,11 @@ ZenDev is a developer productivity platform built with a high-performance Tauri 
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
 | M1 | Website Modernization | `website/`: Benchmarks, release link, Base64 demo, pricing matrix & checkout | none | DONE |
-| M2 | Desktop UX Elevation | `ActivityFeed`, `PortKiller`, audio SFX polish, i18n string replacement | none | DONE |
+| M2 | Desktop UX Elevation | `ActivityFeed`, audio SFX polish, i18n string replacement | none | DONE |
 | M3 | Four New Developer Utilities | `JwtStudio`, `CronStudio`, `MermaidStudio`, `EncodingStudio` page & engine files | none | DONE |
 | M4 | Desktop Navigation & i18n | `App.tsx`, `Sidebar.tsx`, `Dashboard.tsx`, `tr.json`, `en.json`, `package.json` | M2, M3 | DONE |
 | M5 | Comprehensive Verification | `tests/`: 554+ tests + new test suites, `cargo check`, build passes | M1, M2, M3, M4 | DONE |
-| M6 | Silent Command Module & Call-Site Migration | `process_ext.rs`, `lib.rs`, `port_watchdog.rs`, `network.rs`, `optimizer.rs`, `hwid.rs`, `updater.rs` | M5 | DONE |
+| M6 | Silent Command Module & Call-Site Migration | `process_ext.rs`, `lib.rs`, `network.rs`, `hwid.rs`, `updater.rs` (`port_watchdog.rs` & `optimizer.rs` purged in v2.5.3) | M5 | DONE |
 | M7 | Automated Static Analysis & Full Suite Gate | `silent_command_lint_test.rs`, `.cargo/config.toml`, `tests/websiteM1.challenge.test.ts`, `cargo check`, `cargo test`, `npm test`, `npm run build` | M6 | DONE |
 
 ## Interface Contracts
@@ -63,14 +63,8 @@ ZenDev is a developer productivity platform built with a high-performance Tauri 
 - Export Shortcuts: Instant trigger for CSV and JSON format downloads
 - Integrity Badge: Cryptographic chain validation status indicator (Clean chained hash / Genesis / Tamper alert)
 
-### Port Watchdog Contract (`src/renderer/src/pages/PortKiller.tsx`)
-- Auto-refresh: Toggle button with active pulse, interval 3000ms
-- Presets:
-  - `web`: `[80, 443, 8080, 8443, 3000, 5000, 5173]`
-  - `db`: `[1433, 1521, 3306, 5432, 6379, 8086, 9200, 27017]`
-  - `dev`: `[3000, 3001, 4200, 5173, 8000, 8080, 8888, 9000]`
-  - `gaming`: `[7777, 25565, 27015, 27016]`
-- Confirmation Modal: Process name, PID, port, kill button with Enter hotkey and Escape dismiss
+### Port Watchdog Contract (Purged in v2.5.3)
+- Deprecated & Purged: Decoupled in v2.5.3 per SaaS Transformation Directive Principle 2 (OS process manipulation and support debt eliminated).
 
 ### Developer Utilities Contracts (`src/renderer/src/pages/`)
 1. `JwtStudio.tsx`:
@@ -88,7 +82,7 @@ ZenDev is a developer productivity platform built with a high-performance Tauri 
 
 ### i18n Localization Contract (`src/renderer/src/locales/`)
 - `tr.json` and `en.json` must maintain strict 1:1 key parity at all times.
-- Required namespaces: `activityJournal`, `portKiller`, `jwtStudio`, `cronStudio`, `mermaidStudio`, `encodingStudio`, `nav.tools.*`.
+- Required namespaces: `activityJournal`, `jwtStudio`, `cronStudio`, `mermaidStudio`, `encodingStudio`, `nav.tools.*`.
 
 ### Silent Command Subprocess Contract (`src-tauri/src/process_ext.rs`)
 - Win32 Process Creation Flag: `pub const CREATE_NO_WINDOW: u32 = 0x0800_0000;`
@@ -105,9 +99,7 @@ ZenDev is a developer productivity platform built with a high-performance Tauri 
 - `src-tauri/src/`:
   - `process_ext.rs` (centralized silent command builder and extension trait)
   - `lib.rs` (module export and URL launcher)
-  - `port_watchdog.rs` (async commands: tasklist, netstat, taskkill)
   - `network.rs` (async commands: ping.exe, nslookup)
-  - `optimizer.rs` (blocking commands: ipconfig, ping)
   - `hwid.rs` (fallback registry query: REG.exe)
   - `updater.rs` (installer execution: cmd.exe)
 - `src-tauri/tests/`:
@@ -125,7 +117,6 @@ ZenDev is a developer productivity platform built with a high-performance Tauri 
 - `src/renderer/src/components/activity-feed/`:
   - `ActivityFilterToolbar.tsx`, `ActivityFeedHeader.tsx`, `IntegrityBanner.tsx`
 - `src/renderer/src/pages/`:
-  - `PortKiller.tsx`
   - `JwtStudio.tsx`
   - `CronStudio.tsx`
   - `MermaidStudio.tsx`

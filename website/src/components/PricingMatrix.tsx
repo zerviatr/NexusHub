@@ -97,8 +97,8 @@ export const PricingMatrix: React.FC<PricingMatrixProps> = ({
           nameTr: 'Temel Yardımcı Araçlar (Hash, QR, Regex, Base64, JSON vb.)',
           nameEn: 'Essential Tools (Hash, QR, Regex, Base64, JSON etc.)',
           free: '8 Temel Araç',
-          personal: '31+ Tüm Araçlar',
-          studio: '31+ Tüm Araçlar'
+          personal: '27+ Tüm Araçlar',
+          studio: '27+ Tüm Araçlar'
         },
         {
           nameTr: 'Workflow Chains Pipeline Motoru (cURL → JSON → HMAC)',

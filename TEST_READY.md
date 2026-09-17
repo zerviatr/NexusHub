@@ -85,17 +85,13 @@ cargo check --manifest-path src-tauri/Cargo.toml
   - Direct RFC-4180 CSV export generation (`generateCsv`).
   - Certified tamper-evident Markdown audit report generation (`generateReport`).
   - Direct download utility simulation (`quickExportCsv`, `quickExportJson`).
-- **Port Watchdog Hardening (`tests/desktopElevation.test.ts`)**:
-  - 4-category port presets (`web`, `database`, `dev`, `gaming`, `all`).
-  - Sockets filtering against active port lists.
-  - Live auto-refresh polling interval (3000ms / 3s).
-  - System-critical process detection (`pid <= 4` and core Windows system processes).
-  - Modal keyboard shortcuts (`Enter` confirm, `Escape` cancel).
+- **Port Watchdog Hardening (Purged in v2.5.3)**:
+  - Purged from active test coverage in v2.5.3 per SaaS Directive Principle 2 (decoupling OS-level process manipulation).
 - **Internationalization Parity (`tests/i18nParityElevation.test.ts`)**:
   - Automated recursive key parity proving `en.json` and `tr.json` have identical 828 keys.
   - Zero missing keys in either locale.
   - Zero empty strings or undefined values.
-  - Exact key parity across all elevated namespaces (`jwtStudio`: 49, `cronStudio`: 30, `mermaidStudio`: 24, `encodingStudio`: 32, `portKiller`: 44, `activityFeed`: 87, `nav.tools`: 27, `dashboard.tools`: 14).
+  - Exact key parity across all elevated namespaces (`jwtStudio`: 49, `cronStudio`: 30, `mermaidStudio`: 24, `encodingStudio`: 32, `activityFeed`: 87, `nav.tools`: 27, `dashboard.tools`: 14).
   - Variable placeholder parity (`{{count}}`, `{{time}}`, `{{error}}`, `{{pid}}`, `{{port}}`).
 
 ### Tier 2: Boundary & Corner Cases
@@ -123,7 +119,7 @@ cargo check --manifest-path src-tauri/Cargo.toml
 - **File Gateway -> Workstation On-Mount Ingestion**:
   - Dragging files into the desktop window caches the file in `window.__nexus_pending_drop`, dispatches `nexus:file-gateway-drop`, navigates to the target workstation route, and consumes the pending payload.
 - **Activity Journal Chain Verification**:
-  - Sequence monotonicity across multi-tool executions (Cyber Fortress -> Port Watchdog -> Hash Studio).
+  - Sequence monotonicity across multi-tool executions (Cyber Fortress -> Api Studio -> Hash Studio).
   - Genesis block identification (`sequence === 1` and 64-zero `prevHash`).
   - Tamper alert triggering when a block hash discontinuity occurs at sequence `brokenIndex`.
 - **Desktop Navigation & Command Palette**:
@@ -149,7 +145,7 @@ cargo check --manifest-path src-tauri/Cargo.toml
 | 3 | **Web Playground** | **VERIFIED** | `website/src/components/LivePlayground/`: Regex, Hash, QR, and two-way UTF-8 Base64 encoder (`LiveBase64Demo.tsx`); `websiteM1.challenge.test.ts` |
 | 4 | **SaaS Pricing Matrix** | **VERIFIED** | `website/src/components/PricingMatrix.tsx` & `SimulatedCheckoutModal.tsx`: Free/Pro/Team comparison matrix and simulated checkout with confetti |
 | 5 | **Activity Journal Upgrades** | **VERIFIED** | `src/renderer/src/components/activity-feed/`: 7 filter presets, quick CSV/JSON export shortcuts (`Ctrl+E`, `Ctrl+Shift+E`), and cryptographic integrity badges; `desktopElevation.test.ts` |
-| 6 | **Port Watchdog Hardening** | **VERIFIED** | `src/renderer/src/pages/PortKiller.tsx`: 3s auto-refresh toggle, 4-category port presets (Web, DB, Dev, Gaming), system-critical warning, and kill confirmation modal; `desktopElevation.test.ts` |
+| 6 | **Port Watchdog (Purged)** | **PURGED** | Purged in v2.5.3 per SaaS Directive Principle 2 (decoupling OS process termination); superseded by developer workflow focus |
 | 7 | **Cyber SFX & Polish** | **VERIFIED** | `src/renderer/src/lib/cyberAudio.ts`: Non-blocking procedural Web Audio synthesis, 4 tactile sound profiles, 60 FPS transitions |
 | 8 | **JWT & Token Studio** | **VERIFIED** | `src/renderer/src/pages/JwtStudio.tsx` & `jwtEngine.ts`: Header/payload decode, HMAC-SHA256 signing/verification, expiry timeline, generator; `jwtStudio.test.ts` |
 | 9 | **Cron Expression Studio** | **VERIFIED** | `src/renderer/src/pages/CronStudio.tsx` & `cronEngine.ts`: Visual 5-field builder, human-readable explanations (TR/EN), next 10 execution timestamps; `cronStudio.test.ts` |

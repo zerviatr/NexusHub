@@ -176,21 +176,9 @@ describe('Adversarial Challenge: Static Analysis Scanner & Windows Console Suppr
   // CHALLENGE 4: VERIFICATION OF COMMAND COVERAGE ACROSS TARGET MODULES
   // ───────────────────────────────────────────────────────────────────────────
 
-  it('verifies Port Watchdog commands (tasklist, netstat, taskkill) use silent execution', () => {
+  it('verifies Port Watchdog (port_watchdog.rs) has been purged per SaaS Directive Principle 2', () => {
     const portWatchdogPath = path.join(srcTauriSrc, 'port_watchdog.rs');
-    const content = fs.readFileSync(portWatchdogPath, 'utf-8');
-
-    // Tasklist polling
-    expect(content).toMatch(/silent_async_command\("tasklist"\)/);
-    // Netstat polling (Windows & Unix)
-    expect(content).toMatch(/silent_async_command\("netstat"\)/);
-    // Taskkill execution (Windows)
-    expect(content).toMatch(/silent_async_command\("taskkill"\)/);
-    // Kill execution (Unix)
-    expect(content).toMatch(/silent_async_command\("kill"\)/);
-
-    // Verify no raw unflagged Command calls
-    expect(content).not.toContain('Command::new');
+    expect(fs.existsSync(portWatchdogPath)).toBe(false);
   });
 
   it('verifies Network tools commands (ping.exe, ping, nslookup) use silent execution', () => {
@@ -207,19 +195,9 @@ describe('Adversarial Challenge: Static Analysis Scanner & Windows Console Suppr
     expect(content).not.toContain('Command::new');
   });
 
-  it('verifies System Optimizer commands (ipconfig, ping, dscacheutil, resolvectl) use silent execution', () => {
+  it('verifies System Optimizer (optimizer.rs) has been purged per SaaS Directive Principle 2', () => {
     const optimizerPath = path.join(srcTauriSrc, 'optimizer.rs');
-    const content = fs.readFileSync(optimizerPath, 'utf-8');
-
-    // DNS flush
-    expect(content).toMatch(/silent_command\("ipconfig"\)/);
-    expect(content).toMatch(/silent_command\("dscacheutil"\)/);
-    expect(content).toMatch(/silent_command\("resolvectl"\)/);
-    // System Ping
-    expect(content).toMatch(/silent_command\("ping"\)/);
-
-    // Verify no raw unflagged Command calls
-    expect(content).not.toContain('Command::new');
+    expect(fs.existsSync(optimizerPath)).toBe(false);
   });
 
   it('verifies Hardware ID (REG.exe, ioreg, hostname) and Updater (cmd) use silent execution', () => {

@@ -98,7 +98,7 @@ class CyberAudioEngine {
     }
   }
 
-  /** Laser zap sound on PortKiller SIGKILL or Shredder execution */
+  /** Laser zap sound on Shredder execution */
   public playZap() {
     if (!this.enabled) return;
     this.initContext();

@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Activity,
   Cpu,
-  Mail,
   Zap,
   Check,
   Copy,
@@ -21,9 +20,6 @@ export default function FloatingOrb() {
   const [isOpen, setIsOpen] = useState(false)
   const [cpuPercent, setCpuPercent] = useState<number>(14)
   const [memPercent, setMemPercent] = useState<number>(42)
-  const [tempMail, setTempMail] = useState<string | null>(null)
-  const [copiedMail, setCopiedMail] = useState(false)
-  const [isGeneratingMail, setIsGeneratingMail] = useState(false)
   const [isOptimizing, setIsOptimizing] = useState(false)
   const [optSuccess, setOptSuccess] = useState(false)
 
@@ -86,27 +82,6 @@ export default function FloatingOrb() {
       }
     }
   }, [isOpen, isVisible])
-
-  // 1-Click Fast TempMail
-  const handleQuickMail = async () => {
-    if (isGeneratingMail) return
-    setIsGeneratingMail(true)
-    try {
-      if (window.nexusAPI?.tempMail?.generate) {
-        const res = await window.nexusAPI.tempMail.generate()
-        if (res?.email) {
-          setTempMail(res.email)
-          await navigator.clipboard.writeText(res.email)
-          setCopiedMail(true)
-          setTimeout(() => setCopiedMail(false), 2500)
-        }
-      }
-    } catch {
-      // ignore
-    } finally {
-      setIsGeneratingMail(false)
-    }
-  }
 
   // Quick RAM Optimizer
   const handleQuickOptimize = async () => {
@@ -198,39 +173,7 @@ export default function FloatingOrb() {
               </div>
             </div>
 
-            {/* Fast Action 1: 1-Click TempMail */}
-            <div className="mb-2 p-2 rounded-xl bg-nexus-bg/40 border border-nexus-border/40 flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 overflow-hidden">
-                <div className="w-7 h-7 rounded-lg bg-nexus-cyan/10 border border-nexus-cyan/20 flex items-center justify-center shrink-0">
-                  <Mail className="w-3.5 h-3.5 text-nexus-cyan" />
-                </div>
-                <div className="truncate">
-                  <div className="text-[10px] text-nexus-muted font-medium">Hızlı Geçici Posta</div>
-                  <div className="text-[11px] font-mono text-nexus-text truncate select-all">
-                    {tempMail || 'Henüz üretilmedi'}
-                  </div>
-                </div>
-              </div>
-              <button
-                onClick={handleQuickMail}
-                disabled={isGeneratingMail}
-                className="shrink-0 px-2.5 py-1 rounded-lg bg-nexus-cyan/15 hover:bg-nexus-cyan/25 border border-nexus-cyan/30 text-nexus-cyan font-mono text-[10px] flex items-center gap-1 transition-all active:scale-95"
-              >
-                {copiedMail ? (
-                  <>
-                    <Check className="w-3 h-3 text-emerald-400" /> Kopyalandı
-                  </>
-                ) : isGeneratingMail ? (
-                  '...'
-                ) : (
-                  <>
-                    <Copy className="w-3 h-3" /> Üret & Kopyala
-                  </>
-                )}
-              </button>
-            </div>
-
-            {/* Fast Action 2: RAM Optimizer & Palette Launcher */}
+            {/* Fast Action: RAM Optimizer & Palette Launcher */}
             <div className="grid grid-cols-2 gap-2 mb-2">
               <button
                 onClick={handleQuickOptimize}

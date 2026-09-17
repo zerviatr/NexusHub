@@ -238,5 +238,31 @@ Requested team: Small, focused team
 
 Execute the SaaS Transformation Directive (Principle 2) feature purge as detailed in prompt_draft.md. Team scale is Full multi-agent team, and Integrity Mode is Clean, safe Rust/Tauri & React standards. You must completely remove Port Killer, System Optimizer, Temp Mail, and Clipboard Manager from both the React frontend and Rust backend. Fix all routing, sidebar menus, and API bridges so that the app builds successfully. Build, test, and push to GitHub as v2.5.3 (or just commit if version is not specified, wait the user mentioned v2.5.3 in a previous request). Wait, just focus on removing these features and making sure the build passes. Commit the changes.
 
+## Follow-up — 2026-09-17T00:53:47Z
 
+This is a single self-contained fix; keep it small and focused.
 
+Projenin B2B SaaS dönüşümü (Principle 2) kapsamında kod tabanından tamamen çıkartılan "Port Killer", "System Optimizer", "Temp Mail" ve "Clipboard Manager" özelliklerinin, projenin tüm İngilizce/Türkçe dokümantasyonlarından (`README.md`, `CHANGELOG.md`, `PROJECT.md` vb.) ve pazarlandığı web sitesinden tamamen temizlenmesi.
+
+Working directory: c:\Users\futbo\Desktop\AI Projeleri\NexusHub
+Integrity mode: development
+
+## Requirements
+
+### R1. Repository Dokümantasyonlarının Güncellenmesi
+- `README.md`, `PROJECT.md`, `YAPILACAKLAR.md` ve `.agents/` içerisindeki analiz/hafıza dosyalarında eski modüllerin (Port Watchdog, System Optimizer, Temp Mail, vb.) tanıtımından ve özellik listelerinden arındırılması.
+- Çıkarılan özelliklerin yerine yeni SaaS vizyonunun (Workflow Chains, Team Collections, API Studio) ana odak olarak yansıtılması. Hem Türkçe hem İngilizce içeriklerin taranması.
+
+### R2. Web Sitesinin Güncellenmesi
+- Web sitesi klasöründe (`website/`) arta kalan `PortKiller`, `SystemOptimizer`, `Temp Mail`, `Clipboard Manager` referanslarının (örneğin dil dosyalarında, JSON yapılarında) temizlenmesi.
+- Gerekirse `npm run build` ile web sitesinin yeniden derlenerek statik dosyaların `server/public/` altına aktarılması.
+
+### R3. Changelog Güncellemesi
+- `CHANGELOG.md` dosyasına v2.5.3 (Unreleased) için bu 4 modülün "SaaS Directive Principle 2" gereği kod tabanından tamamen söküldüğüne (Purged) dair şeffaf bir not eklenmesi.
+
+## Acceptance Criteria
+
+### Doküman ve Web Sitesi Tutarlılığı
+- [ ] Proje genelinde (dokümanlar ve web klasörü) `PortKiller`, `SystemOptimizer`, `Temp Mail`, `Clipboard Manager` kelimeleri için regex araması yapıldığında, pazarlama veya aktif özellik listelerinde hiçbir sonuç çıkmamalı.
+- [ ] `CHANGELOG.md` sürüm notları, silinme (removal) işlemini şeffafça belgelemeli.
+- [ ] Düzenlenen Markdown ve metin dosyaları linter'dan geçmeli, website projesi başarıyla build edilmeli ve güncellemeler Git'e commit'lenmeli.

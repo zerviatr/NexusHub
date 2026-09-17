@@ -85,6 +85,14 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({ isOpen, onClose,
                     : 'SaaS Roadmap: E2EE Cross-device Cloud Sync, Multi-tenant Workspaces & RBAC, and Workflow Chains pipeline engine.'}
                 </span>
               </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                <span>
+                  {isTr
+                    ? 'SaaS Direktifi İlke 2 Temizliği: Port Killer, System Optimizer, Temp Mail ve Clipboard Manager modülleri kod tabanından ve pazarlamadan tamamen tasfiye edildi (27 stüdyoya sadeleşme).'
+                    : 'SaaS Directive Principle 2 Purge: Decoupled and purged Port Killer, System Optimizer, Temp Mail, and Clipboard Manager from codebase and catalog (streamlined to 27 active studios).'}
+                </span>
+              </li>
             </ul>
           </div>
 

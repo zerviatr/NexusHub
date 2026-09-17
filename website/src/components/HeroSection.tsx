@@ -104,7 +104,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
           {/* Quick Metrics Bar */}
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             <div className="bg-[#0b0e1b]/80 border border-cyan-500/20 rounded-xl p-4 text-center">
-              <div className="text-2xl font-black text-cyan-400 font-mono">31+</div>
+              <div className="text-2xl font-black text-cyan-400 font-mono">27+</div>
               <div className="text-xs text-gray-400 font-mono mt-1">{t.stats.tools}</div>
             </div>
             <div className="bg-[#0b0e1b]/80 border border-purple-500/20 rounded-xl p-4 text-center">
@@ -360,7 +360,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
                     href="#arsenal"
                     className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 font-bold"
                   >
-                    <span>31 Aracın Tümünü Gör</span>
+                    <span>27 Aracın Tümünü Gör</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </a>
                 </div>

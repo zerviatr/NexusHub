@@ -108,9 +108,11 @@ describe('Empirical Challenge: Tauri Bridge Fallback, Idempotency, & Argument Re
       const undoRes = await tauriNexusAPI.organizer.undo()
       expect(undoRes).toEqual({ success: false, restored: 0, errors: [] })
 
-      // Clipboard fallback
-      const clipHistory = await tauriNexusAPI.clipboard.getHistory()
-      expect(clipHistory).toEqual([])
+      // Principle 2 Purged modules are undefined on tauriNexusAPI
+      expect((tauriNexusAPI as any).clipboard).toBeUndefined()
+      expect((tauriNexusAPI as any).tempMail).toBeUndefined()
+      expect((tauriNexusAPI as any).system).toBeUndefined()
+      expect((tauriNexusAPI as any).port).toBeUndefined()
 
       // Image & PDF fallbacks
       const imgFiles = await tauriNexusAPI.image.selectFiles()
@@ -135,27 +137,6 @@ describe('Empirical Challenge: Tauri Bridge Fallback, Idempotency, & Argument Re
       // Updater checkNow fallback
       const updaterInfo = await tauriNexusAPI.updater.checkNow()
       expect(updaterInfo).toEqual({ hasUpdate: false, isLatest: true, currentVersion: '2.4.2' })
-
-      // System fallbacks
-      const dnsRes = await tauriNexusAPI.system.flushDns()
-      expect(dnsRes.success).toBe(true)
-
-      const tempScan = await tauriNexusAPI.system.scanTemp()
-      expect(tempScan.totalBytes).toBe(0)
-
-      const tempClean = await tauriNexusAPI.system.cleanTemp()
-      expect(tempClean.success).toBe(true)
-
-      const pingHost = await tauriNexusAPI.system.pingHost('1.1.1.1')
-      expect(pingHost.success).toBe(true)
-      expect(pingHost.host).toBe('1.1.1.1')
-
-      // Port watchdog fallbacks
-      const portScan = await tauriNexusAPI.port.scan()
-      expect(portScan).toEqual({ success: true, ports: [] })
-
-      const portKill = await tauriNexusAPI.port.kill(9999)
-      expect(portKill.success).toBe(true)
 
       // SafeStorage fallbacks
       expect(await tauriNexusAPI.safeStorage.isAvailable()).toBe(true)
@@ -195,16 +176,10 @@ describe('Empirical Challenge: Tauri Bridge Fallback, Idempotency, & Argument Re
       delete (globalThis as any).window.__TAURI__
 
       expect(await tauriNexusAPI.bypassLink('http://foo.com')).toBeUndefined()
-      expect(await tauriNexusAPI.tempMail.generate()).toBeUndefined()
-      expect(await tauriNexusAPI.tempMail.check('x@y.com')).toBeUndefined()
-      expect(await tauriNexusAPI.tempMail.read('x@y.com', '1')).toBeUndefined()
       expect(await tauriNexusAPI.decrypter.clean('http://foo.com')).toBeUndefined()
       expect(await tauriNexusAPI.decrypter.cleanBatch(['http://foo.com'])).toBeUndefined()
       expect(await tauriNexusAPI.organizer.scan('/test')).toBeUndefined()
       expect(await tauriNexusAPI.organizer.execute([])).toBeUndefined()
-      expect(await tauriNexusAPI.clipboard.clear()).toBeUndefined()
-      expect(await tauriNexusAPI.clipboard.delete('123')).toBeUndefined()
-      expect(await tauriNexusAPI.clipboard.write('text')).toBeUndefined()
       expect(await tauriNexusAPI.network.ipLookup('example.com')).toBeUndefined()
       expect(await tauriNexusAPI.network.dnsQuery('example.com', 'A')).toBeUndefined()
       expect(await tauriNexusAPI.network.portScan('example.com', [80])).toBeUndefined()
@@ -361,10 +336,6 @@ describe('Empirical Challenge: Tauri Bridge Fallback, Idempotency, & Argument Re
       // 1. bypassLink
       await expect(tauriNexusAPI.bypassLink(undefined as any)).resolves.toBeUndefined()
 
-      // 2. tempMail
-      await expect(tauriNexusAPI.tempMail.check(undefined as any)).resolves.toBeUndefined()
-      await expect(tauriNexusAPI.tempMail.read(undefined as any, undefined as any)).resolves.toBeUndefined()
-
       // 3. decrypter
       await expect(tauriNexusAPI.decrypter.clean(undefined as any)).resolves.toBeUndefined()
       await expect(tauriNexusAPI.decrypter.cleanBatch(undefined as any)).resolves.toBeUndefined()
@@ -372,10 +343,6 @@ describe('Empirical Challenge: Tauri Bridge Fallback, Idempotency, & Argument Re
       // 4. organizer
       await expect(tauriNexusAPI.organizer.scan(undefined as any)).resolves.toBeUndefined()
       await expect(tauriNexusAPI.organizer.execute(undefined as any)).resolves.toBeUndefined()
-
-      // 5. clipboard
-      await expect(tauriNexusAPI.clipboard.delete(undefined as any)).resolves.toBeUndefined()
-      await expect(tauriNexusAPI.clipboard.write(undefined as any)).resolves.toBeUndefined()
 
       // 6. network
       await expect(tauriNexusAPI.network.ipLookup(undefined as any)).resolves.toBeUndefined()
@@ -445,14 +412,8 @@ describe('Empirical Challenge: Tauri Bridge Fallback, Idempotency, & Argument Re
       // 11. license
       await expect(tauriNexusAPI.license.activate(undefined as any)).resolves.toBeDefined()
 
-      // 13. system
-      await expect(tauriNexusAPI.system.pingHost(undefined as any)).resolves.toBeDefined()
-
       // 14. settings
       await expect(tauriNexusAPI.settings.setAutoLaunch(undefined as any)).resolves.toBeDefined()
-
-      // 15. port
-      await expect(tauriNexusAPI.port.kill(undefined as any)).resolves.toBeDefined()
 
       // 16. safeStorage
       await expect(tauriNexusAPI.safeStorage.store(undefined as any, undefined as any)).resolves.toBe(true)

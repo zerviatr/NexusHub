@@ -136,8 +136,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             onChange={(e) => setQuery(e.target.value)}
             placeholder={
               lang === 'tr'
-                ? '31+ araç veya aksiyon ara (örn: sqlite, port, sha256)...'
-                : 'Search 31+ tools or actions (e.g., sqlite, port, sha256)...'
+                ? '27+ araç veya aksiyon ara (örn: sqlite, jwt, sha256)...'
+                : 'Search 27+ tools or actions (e.g., sqlite, jwt, sha256)...'
             }
             className="w-full bg-transparent text-white text-sm outline-none placeholder-gray-500"
           />
@@ -152,7 +152,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           {filteredTools.length > 0 && (
             <div>
               <div className="px-3 py-1 text-[10px] uppercase font-bold text-gray-500 tracking-wider">
-                {lang === 'tr' ? 'Masaüstü Araçları (31)' : 'Desktop Workstations (31)'}
+                {lang === 'tr' ? 'Masaüstü Araçları (27)' : 'Desktop Workstations (27)'}
               </div>
               <div className="space-y-1 mt-1">
                 {filteredTools.map((tool, i) => {

@@ -33,7 +33,7 @@ interface ShortcutItem {
 const SHORTCUTS: ShortcutItem[] = [
   { keys: ['Ctrl', 'K'], actionTr: 'Küresel Omni-Arama Konsolu (Tüm Araçlar)', actionEn: 'Global Omni-Launcher Console (All Tools)', category: 'global' },
   { keys: ['Alt', 'Space'], actionTr: 'MiniHud Yüzen Pencere (Hızlı Dönüştürücü)', actionEn: 'MiniHud Floating Widget (Instant Converter)', category: 'global' },
-  { keys: ['Ctrl', 'Shift', 'P'], actionTr: 'PortKiller Anında Tetikleyici', actionEn: 'PortKiller Direct Invocation', category: 'tools' },
+  { keys: ['Ctrl', 'Shift', 'J'], actionTr: 'JWT Studio Hızlı Başlatıcı', actionEn: 'JWT Studio Direct Invocation', category: 'tools' },
   { keys: ['Ctrl', 'Shift', 'L'], actionTr: 'Acil Kilit (CyberFortress AES-256 Kasa)', actionEn: 'Emergency Lock (CyberFortress AES Vault)', category: 'tools' },
   { keys: ['Ctrl', 'Shift', 'H'], actionTr: 'Pano Verisini Anında Hashle (SHA-256)', actionEn: 'Instant Clipboard Hash (SHA-256)', category: 'tools' },
   { keys: ['Ctrl', 'Shift', 'N'], actionTr: 'Yeni Scratchpad Sekmesi Aç', actionEn: 'Open New Scratchpad Note Tab', category: 'tools' },
@@ -45,7 +45,7 @@ const SHORTCUTS: ShortcutItem[] = [
 
 const CLI_COMMANDS = [
   { cmd: 'zendev --version', descTr: 'ZenDev Rust derleme sürümünü ve telemetrisini gösterir', descEn: 'Show ZenDev Rust build version and telemetry' },
-  { cmd: 'zendev kill --port 3000', descTr: '3000 portunu işgal eden süreci anında SIGKILL ile sonlandırır', descEn: 'Instantly SIGKILL process locking port 3000' },
+  { cmd: 'zendev jwt --verify <token>', descTr: 'JWT token imzasını ve süre aşımını terminalde doğrular', descEn: 'Verify JWT signature and token expiration from terminal' },
   { cmd: 'zendev shred ./secrets.env --passes 7', descTr: 'DoD 5220.22-M uyumlu 7 aşamalı kalıcı veri imhası', descEn: 'Permanent 7-pass DoD 5220.22-M data eradication' },
   { cmd: 'zendev hash --sha256 ./setup.exe', descTr: 'Dosyanın SHA-256 doğrulama özetini terminale basar', descEn: 'Print SHA-256 verification digest to stdout' },
   { cmd: 'zendev license --status', descTr: 'Yerel lisans durumu ve HWID yuva bilgisini görüntüler', descEn: 'Inspect local offline license status & HWID slot' }

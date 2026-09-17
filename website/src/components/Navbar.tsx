@@ -277,7 +277,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {lang === 'tr' ? 'Canlı Demo Simülatörü' : 'Live Playground'}
             </a>
             <a href="#arsenal" onClick={() => setMobileOpen(false)} className="py-1 hover:text-cyan-400">
-              {lang === 'tr' ? '31+ Araç Kataloğu' : '31+ Tools Arsenal'}
+              {lang === 'tr' ? '27+ Araç Kataloğu' : '27+ Tools Arsenal'}
             </a>
             <a href="#radar" onClick={() => setMobileOpen(false)} className="py-1 hover:text-cyan-400">
               {lang === 'tr' ? 'Tauri v2 vs Electron Mimarisi' : 'Architecture Radar'}

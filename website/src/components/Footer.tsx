@@ -78,7 +78,7 @@ export const Footer: React.FC<FooterProps> = ({ lang }) => {
                 <a href="#playground" className="hover:text-cyan-400 transition">Canlı Simülatör</a>
               </li>
               <li>
-                <a href="#arsenal" className="hover:text-cyan-400 transition">31+ Araç Kataloğu</a>
+                <a href="#arsenal" className="hover:text-cyan-400 transition">27+ Araç Kataloğu</a>
               </li>
               <li>
                 <a href="#radar" className="hover:text-cyan-400 transition">Tauri v2 Hız Testi</a>

@@ -21,15 +21,12 @@ import {
   quickExportCsv,
   quickExportJson,
 } from '../src/renderer/src/components/activity-feed/exportUtils'
+import * as fs from 'fs'
+import * as path from 'path'
 import {
   FILTER_PRESETS,
   FilterPresetId,
 } from '../src/renderer/src/components/activity-feed/ActivityFilterToolbar'
-import {
-  PORT_PRESETS,
-  PortPreset,
-  PortItem,
-} from '../src/renderer/src/pages/PortKiller'
 import {
   ActivityEntry,
   ActivityFilter,
@@ -58,15 +55,15 @@ describe('Desktop Elevation & UX Hardening Test Suite (Milestone M2)', () => {
       id: 'act_002',
       sequence: 2,
       timestamp: 1700000010000,
-      toolId: 'port-killer',
-      toolName: 'Port Watchdog',
-      action: 'kill_process',
-      category: 'system',
+      toolId: 'api-studio',
+      toolName: 'API Studio',
+      action: 'send_request',
+      category: 'api',
       status: 'failure',
       durationMs: 15,
       hash: 'block_2_chained_sha256_hash_22222222222222222222222222222222',
       prevHash: 'genesis_block_sha256_hash_11111111111111111111111111111111',
-      details: 'Permission denied killing PID 4',
+      details: 'GET https://api.zendev.run failed with 401',
     },
     {
       id: 'act_003',
@@ -124,7 +121,7 @@ describe('Desktop Elevation & UX Hardening Test Suite (Milestone M2)', () => {
       expect(report).toContain('PASSED (0 Discrepancies)')
       expect(report).toContain('genesis_block_sha256_hash_11111111111111111111111111111111')
       expect(report).toContain('**SECURITY**: 1 operations')
-      expect(report).toContain('**SYSTEM**: 1 operations')
+      expect(report).toContain('**API**: 1 operations')
       expect(report).toContain('**CRYPTO**: 1 operations')
       expect(report).toContain('Cyber Fortress')
     })
@@ -293,55 +290,28 @@ describe('Desktop Elevation & UX Hardening Test Suite (Milestone M2)', () => {
     })
   })
 
-  // ─── 4. Port Watchdog 4-Category Port Ranges ─────────────────────────────────
+  // ─── 4. Port Watchdog SaaS Directive Principle 2 Purge Verification ──────────
 
-  describe('4. Port Watchdog 4-Category Presets (PORT_PRESETS)', () => {
-    it('contains all 5 expected presets (all, web, database, dev, gaming)', () => {
-      const keys = Object.keys(PORT_PRESETS) as PortPreset[]
-      expect(keys).toContain('all')
-      expect(keys).toContain('web')
-      expect(keys).toContain('database')
-      expect(keys).toContain('dev')
-      expect(keys).toContain('gaming')
+  describe('4. Port Watchdog Purge Verification (SaaS Directive Principle 2)', () => {
+    it('confirms PortKiller.tsx page has been completely removed from desktop pages', () => {
+      const portKillerPage = path.resolve(__dirname, '../src/renderer/src/pages/PortKiller.tsx')
+      expect(fs.existsSync(portKillerPage)).toBe(false)
     })
 
-    it('configures exact industry port ranges matching architectural requirements', () => {
-      expect(PORT_PRESETS.web.ports).toEqual([80, 443, 8080, 8443, 3000, 5000, 5173])
-      expect(PORT_PRESETS.database.ports).toEqual([1433, 1521, 3306, 5432, 6379, 8086, 9200, 27017])
-      expect(PORT_PRESETS.dev.ports).toEqual([3000, 3001, 4200, 5173, 8000, 8080, 8888, 9000])
-      expect(PORT_PRESETS.gaming.ports).toEqual([7777, 25565, 27015, 27016])
-      expect(PORT_PRESETS.all.ports).toEqual([])
+    it('confirms port_watchdog.rs has been purged from Rust backend', () => {
+      const portWatchdogRust = path.resolve(__dirname, '../src-tauri/src/port_watchdog.rs')
+      expect(fs.existsSync(portWatchdogRust)).toBe(false)
     })
 
-    it('filters active port items accurately according to active preset', () => {
-      const activeSockets: PortItem[] = [
-        { protocol: 'tcp', localAddress: '127.0.0.1', port: 5173, state: 'LISTENING', pid: 100, processName: 'vite.exe' },
-        { protocol: 'tcp', localAddress: '127.0.0.1', port: 5432, state: 'LISTENING', pid: 200, processName: 'postgres.exe' },
-        { protocol: 'tcp', localAddress: '127.0.0.1', port: 25565, state: 'LISTENING', pid: 300, processName: 'minecraft.exe' },
-        { protocol: 'tcp', localAddress: '127.0.0.1', port: 9999, state: 'LISTENING', pid: 400, processName: 'custom_daemon.exe' },
-      ]
-
-      // Web filter (5173 is in web)
-      const webMatches = activeSockets.filter((s) => PORT_PRESETS.web.ports.includes(s.port))
-      expect(webMatches.map((s) => s.port)).toEqual([5173])
-
-      // Database filter (5432 is in database)
-      const dbMatches = activeSockets.filter((s) => PORT_PRESETS.database.ports.includes(s.port))
-      expect(dbMatches.map((s) => s.port)).toEqual([5432])
-
-      // Gaming filter (25565 is in gaming)
-      const gameMatches = activeSockets.filter((s) => PORT_PRESETS.gaming.ports.includes(s.port))
-      expect(gameMatches.map((s) => s.port)).toEqual([25565])
-
-      // All filter
-      const allMatches = activeSockets.filter(() => true)
-      expect(allMatches.length).toBe(4)
+    it('confirms port killer bridge is removed from tauriNexusAPI', async () => {
+      const { tauriNexusAPI } = await import('../src/renderer/src/lib/tauriBridge')
+      expect((tauriNexusAPI as any).port).toBeUndefined()
     })
   })
 
-  // ─── 5. Port Watchdog Auto-Refresh Engine & Modal Hardening ──────────────────
+  // ─── 5. Process Hardening & System Safety Specifications ──────────────────────
 
-  describe('5. Port Watchdog Auto-Refresh & Kill Modal Hardening', () => {
+  describe('5. Process Hardening & System Safety Specifications', () => {
     it('verifies 3000ms polling interval specification for live auto-refresh', () => {
       const defaultInterval = 3000
       expect(defaultInterval).toBe(3000)
@@ -388,22 +358,12 @@ describe('Desktop Elevation & UX Hardening Test Suite (Milestone M2)', () => {
       expect(trFeed.integrity?.badgeVerified).toBeTruthy()
     })
 
-    it('verifies portKiller namespace has all elevation keys in en.json and tr.json', () => {
-      const enPort = (enJson as any).portKiller || {}
-      const trPort = (trJson as any).portKiller || {}
+    it('verifies portKiller namespace is completely purged from en.json and tr.json', () => {
+      const enPort = (enJson as any).portKiller
+      const trPort = (trJson as any).portKiller
 
-      expect(enPort.autoRefresh).toBeTruthy()
-      expect(trPort.autoRefresh).toBeTruthy()
-      expect(enPort.presets?.web).toBeTruthy()
-      expect(trPort.presets?.web).toBeTruthy()
-      expect(enPort.presets?.database).toBeTruthy()
-      expect(trPort.presets?.database).toBeTruthy()
-      expect(enPort.presets?.dev).toBeTruthy()
-      expect(trPort.presets?.dev).toBeTruthy()
-      expect(enPort.presets?.gaming).toBeTruthy()
-      expect(trPort.presets?.gaming).toBeTruthy()
-      expect(enPort.confirmKill).toBeTruthy()
-      expect(trPort.confirmKill).toBeTruthy()
+      expect(enPort).toBeUndefined()
+      expect(trPort).toBeUndefined()
     })
   })
 })

@@ -10,18 +10,18 @@
 ### Faz 1 — Modül Temizliği, Güvenlik & Ayrıştırma (Deprecation & Hardening)
 *Amaç: SaaS kimliğiyle çelişen, güvenlik yazılımlarında şüphe doğuran ve yüksek OS bakım maliyeti getiren modüllerin çekirdekten tasfiyesi ve şeffaflaştırılması.*
 
-- [ ] **Port Killer (Port Watchdog) Tasfiyesi:**
+- [x] **Port Killer (Port Watchdog) Tasfiyesi:**
   - İşletim sistemi süreçlerini sonlandırma (`taskkill`, `kill`) ve yerel soket müdahale mekanizmasının çekirdekten çıkarılması.
   - UI ve API rotalarından kaldırılması veya harici, izole bir opsiyonel yardımcıya ayrıştırılması.
-- [ ] **System Optimizer Tasfiyesi:**
+- [x] **System Optimizer Tasfiyesi:**
   - DNS önbellek temizliği (`ipconfig /flushdns`) ve `%TEMP%` disk temizleme mantığının çekirdekten tasfiyesi.
 - [ ] **Sessiz Otonom Güncelleyicinin Şeffaf / Kullanıcı Onaylı Akışa Dönüştürülmesi:**
   - Arka planda `CREATE_NO_WINDOW` ile kullanıcının haberi olmadan çalışan otonom NSIS güncelleme akışının durdurulması.
   - Antivirüs ve EDR (Endpoint Detection and Response) sistemlerinde false-positive malware şüphesi yaratmayacak şeffaf modal akışına geçilmesi.
   - Yeni sürüm bulunduğunda changelog modalı gösterilmesi; indirme ve kurulumun yalnızca **açık kullanıcı onayı** ile başlatılması.
-- [ ] **Temp Mail Tasfiyesi:**
+- [x] **Temp Mail Tasfiyesi:**
   - Tek kullanımlık e-posta üreticisinin yasal riskler, abuse ve spam tehditleri nedeniyle SaaS çekirdeğinden kaldırılması.
-- [ ] **Düşük Diferansiyasyonlu OS Araçlarının Arka Plana Alınması:**
+- [x] **Düşük Diferansiyasyonlu OS Araçlarının Arka Plana Alınması:**
   - `Clipboard Manager` ve basit scratchpad'in ana yol haritası ve pazarlama vitrininden düşürülmesi.
 
 ---
@@ -81,7 +81,7 @@
 
 ## 🏛️ Mevcut Durum & Çekirdek Stüdyo Envanteri (v2.5.3)
 
-ZenDev, **Tauri v2 + Rust + React 19** mimarisi üzerinde çalışan ve 31 stüdyo içeren güçlü bir çekirdeğe sahiptir:
+ZenDev, **Tauri v2 + Rust + React 19** mimarisi üzerinde çalışan ve 27 stüdyo içeren güçlü bir çekirdeğe sahiptir:
 
 ### Aktif Çekirdek Geliştirici Stüdyoları
 - **JSON Studio:** Formatlama, küçültme, ayrıştırma ve JSON diff.

@@ -67,16 +67,6 @@ export default function Dashboard() {
 
   const tools = [
     {
-      id: 'temp-mail',
-      path: '/temp-mail',
-      title: t('nav.tools.tempMail') || 'TempMail Generator',
-      description: t('dashboard.tools.tempMail.desc') || 'Instant disposable email addresses to bypass spam and tracking. Reads inbox in real-time.',
-      icon: Mail,
-      gradient: 'from-cyan-600 to-blue-600',
-      glowColor: 'rgba(6, 182, 212, 0.3)',
-      status: t('dashboard.status.online') || 'Online',
-    },
-    {
       id: 'universal-decrypter',
       path: '/decrypter',
       title: t('nav.tools.decrypter') || 'Universal Decrypter',
@@ -105,16 +95,6 @@ export default function Dashboard() {
       gradient: 'from-amber-500 to-orange-600',
       glowColor: 'rgba(245, 158, 11, 0.3)',
       status: t('dashboard.status.ready') || 'Ready',
-    },
-    {
-      id: 'clipboard-manager',
-      path: '/clipboard',
-      title: t('nav.tools.clipboardManager') || 'Clipboard Manager',
-      description: t('dashboard.tools.clipboardManager.desc') || 'Auto-tracks clipboard history up to 50 entries. Search, copy back, and delete with one click.',
-      icon: Clipboard,
-      gradient: 'from-sky-500 to-indigo-600',
-      glowColor: 'rgba(14, 165, 233, 0.3)',
-      status: t('dashboard.status.live') || 'Live',
     },
     {
       id: 'network-tools',
@@ -227,16 +207,6 @@ export default function Dashboard() {
       status: 'Yeni',
     },
     {
-      id: 'system-optimizer',
-      path: '/system-optimizer',
-      title: 'Windows System Optimizer',
-      description: 'Windows DNS önbelleğini temizleme (flushdns) ve geçici disk çöplerini güvenle temizleyerek alan kazanma.',
-      icon: Cpu,
-      gradient: 'from-emerald-600 to-cyan-600',
-      glowColor: 'rgba(16, 185, 129, 0.3)',
-      status: 'Yeni',
-    },
-    {
       id: 'color-studio',
       path: '/color-studio',
       title: t('nav.tools.colorStudio') || 'Color Studio & Contrast',
@@ -244,16 +214,6 @@ export default function Dashboard() {
       icon: Palette,
       gradient: 'from-purple-600 to-pink-500',
       glowColor: 'rgba(236, 72, 153, 0.3)',
-      status: 'Yeni',
-    },
-    {
-      id: 'port-killer',
-      path: '/port-killer',
-      title: t('nav.tools.portKiller') || 'Port & Process Watchdog',
-      description: t('dashboard.tools.portKiller.desc') || 'Aktif dinlenen portları tarayın, portu hangi process kilitlemiş görün ve tek tıkla sonlandırın.',
-      icon: Activity,
-      gradient: 'from-rose-600 to-amber-600',
-      glowColor: 'rgba(244, 63, 94, 0.3)',
       status: 'Yeni',
     },
     {

@@ -77,15 +77,6 @@ const PALETTE_ITEMS: PaletteItem[] = [
     keywords: ['color', 'contrast', 'wcag', 'hex', 'rgb', 'hsl', 'cmyk', 'eyedropper', 'palette', 'gradient']
   },
   {
-    id: 'port-killer',
-    title: 'Port Killer & TCP Watchdog',
-    subtitle: 'Active TCP listeners, PID lookup, process inspector & one-click termination',
-    category: 'Tools',
-    path: '/port-killer',
-    icon: Radio,
-    keywords: ['port', 'killer', 'tcp', 'listener', 'pid', 'process', 'kill', 'watchdog', 'netstat']
-  },
-  {
     id: 'scratchpad',
     title: 'Markdown Scratchpad',
     subtitle: 'Instant live markdown editor with split preview, metrics & export',
@@ -131,15 +122,6 @@ const PALETTE_ITEMS: PaletteItem[] = [
     keywords: ['curl', 'http', 'api', 'postman', 'fetch', 'rest', 'request']
   },
   {
-    id: 'system-optimizer',
-    title: 'Windows System Optimizer',
-    subtitle: 'Flush DNS resolver cache and purge temporary junk disk files',
-    category: 'Tools',
-    path: '/system-optimizer',
-    icon: Cpu,
-    keywords: ['optimizer', 'dns', 'flush', 'temp', 'cleaner', 'purge', 'disk', 'ram', 'speed']
-  },
-  {
     id: 'hash-studio',
     title: 'Hash & Checksum Studio',
     subtitle: 'Compute MD5, SHA-1, SHA-256, and SHA-512 hashes',
@@ -167,15 +149,6 @@ const PALETTE_ITEMS: PaletteItem[] = [
     keywords: ['json', 'jwt', 'token', 'format', 'minify', 'beautify', 'decode', 'sqlite', 'sql', 'db', 'table', 'database']
   },
   {
-    id: 'temp-mail',
-    title: 'TempMail Generator',
-    subtitle: 'Instant disposable mailboxes to bypass spam',
-    category: 'Tools',
-    path: '/temp-mail',
-    icon: Mail,
-    keywords: ['email', 'temp', 'fake', 'inbox', 'disposable', 'spam']
-  },
-  {
     id: 'decrypter',
     title: 'Universal Decrypter',
     subtitle: 'Bypass shortlinks (Aylink, bit.ly) and strip trackers',
@@ -201,15 +174,6 @@ const PALETTE_ITEMS: PaletteItem[] = [
     path: '/organizer',
     icon: FolderArchive,
     keywords: ['files', 'folder', 'organize', 'sort', 'clean', 'desktop']
-  },
-  {
-    id: 'clipboard',
-    title: 'Clipboard Manager',
-    subtitle: 'Search and restore local clipboard history',
-    category: 'Tools',
-    path: '/clipboard',
-    icon: Clipboard,
-    keywords: ['copy', 'paste', 'history', 'clipboard', 'text']
   },
   {
     id: 'network',

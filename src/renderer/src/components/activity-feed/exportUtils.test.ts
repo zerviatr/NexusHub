@@ -17,7 +17,6 @@
 import { describe, it, expect } from 'vitest'
 import { generateCsv, generateReport } from './exportUtils'
 import { FILTER_PRESETS } from './ActivityFilterToolbar'
-import { PORT_PRESETS } from '../../pages/PortKiller'
 import { ActivityEntry, ActivityFilter } from './types'
 
 describe('Worker M2 Desktop UX & Hardening Unit Tests', () => {
@@ -118,16 +117,6 @@ describe('Worker M2 Desktop UX & Hardening Unit Tests', () => {
       expect(report).toContain('VALID & UNBROKEN')
       expect(report).toContain('Total Audited Events: 2')
       expect(report).toContain('Verified Blocks: 2')
-    })
-  })
-
-  describe('Port Watchdog Presets', () => {
-    it('has exact port numbers matching specification', () => {
-      expect(PORT_PRESETS.web.ports).toEqual([80, 443, 8080, 8443, 3000, 5000, 5173])
-      expect(PORT_PRESETS.database.ports).toEqual([1433, 1521, 3306, 5432, 6379, 8086, 9200, 27017])
-      expect(PORT_PRESETS.dev.ports).toEqual([3000, 3001, 4200, 5173, 8000, 8080, 8888, 9000])
-      expect(PORT_PRESETS.gaming.ports).toEqual([7777, 25565, 27015, 27016])
-      expect(PORT_PRESETS.all.ports).toEqual([])
     })
   })
 })

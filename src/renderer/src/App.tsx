@@ -125,12 +125,6 @@ export default function App() {
         if (k === 'd') {
           e.preventDefault()
           navigate('/')
-        } else if (k === 'o') {
-          e.preventDefault()
-          navigate('/system-optimizer')
-        } else if (k === 'p') {
-          e.preventDefault()
-          navigate('/port-killer')
         } else if (k === 'f') {
           e.preventDefault()
           navigate('/fortress')

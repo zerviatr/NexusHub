@@ -537,7 +537,7 @@ export default function Sidebar() {
             </button>
           </div>
           <p className="text-[10px] text-nexus-muted leading-relaxed">
-            PortKiller, ApiStudio ve 10+ ileri araca 149 ₺/ay'dan başlayan esnek SaaS planlarıyla abone olun.
+            ApiStudio, WorkflowChains ve 10+ ileri araca 149 ₺/ay'dan başlayan esnek SaaS planlarıyla abone olun.
           </p>
         </div>
       )}

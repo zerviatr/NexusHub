@@ -7,3 +7,4 @@ Version 2.5.3 synchronizes all release manifests, website download helpers, test
 - Synchronized download helper endpoints for Windows NSIS Setup (`ZenDev-Setup-2.5.3.exe`) and Portable binaries (`ZenDev-Portable-2.5.3.exe`).
 - Updated test assertions in regression and challenge suites.
 - Aligned all website components (Navbar, HeroSection, Footer, CommandPalette, ChangelogModal, LivePlaygrounds, and Translations) with v2.5.3.
+- Executed SaaS Transformation Directive (Principle 2) feature purge: removed Port Killer, System Optimizer, Temp Mail, and Clipboard Manager from codebase, documentation, and marketing assets (active developer studios refactored from 31 to 27).

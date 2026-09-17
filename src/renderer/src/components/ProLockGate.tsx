@@ -34,13 +34,13 @@ export default function ProLockGate({ toolName, toolDesc }: ProLockGateProps) {
 
   const perks = isTr ? [
     '27+ Geliştirici ve Siber Güvenlik Aracının Tamamı',
-    'PortKiller, ApiStudio, ResourceSentinel & PdfStudio',
+    'ApiStudio, JwtStudio, ResourceSentinel & PdfStudio',
     'Sürekli Yeni Araç Güncellemeleri & Eklenti Paketleri',
     '2 Kişisel Bilgisayarda Eşzamanlı Kullanım',
     'Taahhütsüz İstediğin Zaman Tek Tıkla İptal'
   ] : [
     'Complete access to all 27+ developer & cyber tools',
-    'Unlocked PortKiller, ApiStudio, ResourceSentinel & PdfStudio',
+    'Unlocked ApiStudio, JwtStudio, ResourceSentinel & PdfStudio',
     'Continuous tool updates & automatic feature drops',
     'Activate on 2 personal machines simultaneously',
     'Cancel anytime with zero long-term commitment'

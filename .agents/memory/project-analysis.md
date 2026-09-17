@@ -97,7 +97,6 @@ NexusHub/
 │   │   ├── updater.ts                    # electron-updater diferansiyel arka plan güncelleme mantığı
 │   │   ├── ipc/                          # 18 Adet Tip Güvenlikli IPC Uç Noktası
 │   │   │   ├── activityJournal.ts        # Kriptografik hash-chain denetim günlüğü IPC'si
-│   │   │   ├── clipboard.ts              # Pano geçmişi okuma/yazma ve PII maskeleme
 │   │   │   ├── cyberFortressIPC.ts       # DoD 5220.22-M 7-pass dosya yok edici ve AES-256 kasa
 │   │   │   ├── fileOrganizer.ts          # Kural ve zamana dayalı dosya düzenleme ve geri alma
 │   │   │   ├── imageToolkit.ts           # Sharp tabanlı toplu görsel dönüştürme ve EXIF temizleme
@@ -108,12 +107,9 @@ NexusHub/
 │   │   │   ├── netDispatcherSecurity.ts  # SSRF kalkanı, özel IP aralığı engelleme ve başlık temizliği
 │   │   │   ├── networkTools.ts           # Yerel ping, DNS sorgusu, port tarama ve TLS sertifika analizi
 │   │   │   ├── pdfToolkit.ts             # pdf-lib tabanlı belge birleştirme, bölme ve sayfa çıkarma
-│   │   │   ├── portWatchdog.ts           # Netstat ayrıştırıcı ve PID tabanlı süreç sonlandırma
 │   │   │   ├── pubsub.ts                 # Ana süreç içi olay yayınlama/abone olma veri yolu
 │   │   │   ├── safeStorage.ts            # İşletim sistemi anahtarlık (DPAPI/Keychain) şifreleme köprüsü
-│   │   │   ├── sentinelIPC.ts            # Donanım kaynak metrikleri (CPU/RAM) ve V8 GC tetikleyici
-│   │   │   ├── systemOptimizer.ts        # DNS önbellek temizliği, %TEMP% tasfiyesi ve ağ gecikme testi
-│   │   │   └── tempMail.ts               # Tek kullanımlık 1secmail API entegrasyonu
+│   │   │   └── sentinelIPC.ts            # Donanım kaynak metrikleri (CPU/RAM) ve V8 GC tetikleyici
 │   │   └── services/                     # Ana Süreç Hesaplama ve Veri Servisleri
 │   │       ├── activityJournal.service.ts# Değiştirilemez SHA-256 hash zincirli yerel denetim günlüğü
 │   │       ├── organizerCore.ts          # Dosya sınıflandırma, MIME eşleştirme ve işlem kayıt defteri
@@ -196,27 +192,27 @@ NexusHub/
 │               ├── ActivityFeed.tsx      # Değiştirilemez kriptografik işlem denetim akışı
 │               ├── ApiStudio.tsx         # Postman kalitesinde tam teşekküllü HTTP/REST test stüdyosu
 │               ├── BulkOrganizer.tsx     # Akıllı dosya düzenleme, zaman tüneli gruplama ve geri alma
-│               ├── ClipboardManager.tsx  # Pano yöneticisi, hassas veri maskeleme, sabitleme
 │               ├── ColorStudio.tsx       # HEX/RGB/HSL dönüştürücü, WCAG 2.1 kontrast kontrolü
+│               ├── CronStudio.tsx        # Görsel 5 alanlı cron ifadesi stüdyosu
 │               ├── CurlRunner.tsx        # Hızlı mikro cURL ve HTTP test aracı
 │               ├── CyberFortress.tsx     # DoD 7-pass silici, AES-256 kasa ve LSB steganografi
 │               ├── Dashboard.tsx         # Ana kontrol paneli, favori araçlar ve sistem özeti
 │               ├── DevSandbox.tsx        # Geliştirici çoklu araç kumhavuzu
+│               ├── EncodingStudio.tsx    # Base64/Hex/URL ve Data-URL görselleştirici
 │               ├── EulaGate.tsx          # Kullanıcı sözleşmesi ve gizlilik kabul kapısı
 │               ├── FakeDataStudio.tsx    # Gerçekçi test verisi üretici (TR isim, telefon, TC/CC, UUID)
 │               ├── HashStudio.tsx        # Kriptografik hash ve kodlayıcı stüdyosu (MD5, SHA, bcrypt, Base64)
 │               ├── ImageToolkit.tsx      # Sharp destekli toplu görsel işleme ve EXIF temizleyici
 │               ├── JsonStudio.tsx        # JSON/JWT biçimlendirici, diff, jq sorgulayıcı ve JWT doğrulayıcı
+│               ├── JwtStudio.tsx         # Çevrimdışı JWT inceleyici, HMAC imzalayıcı ve süre sonu zaman tüneli
+│               ├── MermaidStudio.tsx     # Gerçek zamanlı mimari ve akış diyagramı stüdyosu
 │               ├── NetworkTools.tsx      # DNS, Ping, Port tarama, SSL sertifika denetimi ve IP sorgusu
 │               ├── PasswordGenerator.tsx # Yüksek entropili parola ve parola öbeği üretici
 │               ├── PdfStudio.tsx         # PDF birleştirme, sayfa bölme ve belge analiz stüdyosu
-│               ├── PortKiller.tsx        # Açık portları tarama, PID bulma ve süreç sonlandırıcı
 │               ├── QrCodeStudio.tsx      # QR kod üretici (URL, WiFi, vCard), stilist ve QR okuyucu
 │               ├── RegexStudio.tsx       # Canlı regex test laboratuvarı, adlandırılmış gruplar, kopya kağıdı
 │               ├── ResourceSentinel.tsx  # Canlı donanım (CPU/RAM) monitörü ve bellek optimizasyonu
 │               ├── Scratchpad.tsx        # Gelişmiş Markdown defteri, şifreli kasa modu, anlık akış şemaları
-│               ├── SystemOptimizer.tsx   # Windows sistem temizleyici (DNS flush, %TEMP% temizleme, gecikme)
-│               ├── TempMail.tsx          # 1secmail tek kullanımlık güvenli geçici e-posta kutusu
 │               └── UniversalDecrypter.tsx# URL takip temizleyici, punycode dedektörü ve yönlendirme çözücü
 ├── tests/                                # Masaüstü Test Altyapısı (32 Test Dosyası, 616 Test)
 │   ├── activityFeedUI.test.ts            # Denetim günlüğü React arayüz testleri
@@ -313,14 +309,12 @@ NexusHub/
 
 ## ✅ Mevcut Özellikler (Çalışan)
 
-### 1. Masaüstü Araç Seti (25+ Fonksiyonel Araç)
+### 1. Masaüstü Araç Seti (27 Çekirdek Geliştirici Stüdyosu)
 - **ApiStudio:** Postman kalitesinde REST/HTTP istek çalıştırıcı; Koleksiyonlar, Ortam değişkenleri (`{{var}}`), Bearer/API Key/Basic yetkilendirme, Headers, Body (JSON, Form, Raw), Yanıt paneli, cURL içe/dışa aktarma ve SSRF korumalı güvenli ağ geçidi.
 - **ActivityFeed:** Değiştirilemez (tamper-evident) SHA-256 hash zinciriyle korunan denetim günlüğü. Arama, tarih ve seviye filtreleme, zincir bütünlük denetimi (`verifyChain`) ve JSON/CSV dışa aktarma.
 - **CyberFortress:** DoD 5220.22-M uyumlu 7 turlu güvenli dosya silici (shredder), PBKDF2 + AES-256-GCM şifreli dosya kasası ve PNG görselleri içine LSB steganografi ile gizli mesaj gömme/okuma.
 - **UniversalDecrypter:** URL takip (tracking/UTM/fbclid vb.) parametrelerini temizleme, çoklu bağlantı çözme, punycode ve phishing tespiti.
 - **NetworkTools:** DNS sorgulama (A, AAAA, MX, TXT), ICMP Ping testi, TCP port taraması, SSL/TLS sertifika süresi ve detayları denetimi, genel/özel IP sorgulama.
-- **PortKiller:** Aktif TCP/UDP dinleyen portları listeleme, PID tespiti ve tek tıkla süreç sonlandırma.
-- **SystemOptimizer:** Windows DNS önbellek temizleme (flush), `%TEMP%` tasfiyesi, internet gecikme testi ve tek tıkla "Siber Turbo Boost" optimizasyonu.
 - **Scratchpad:** Çift panelli canlı Markdown not defteri, Bul & Değiştir (`Ctrl+F`), satır numaraları, AES-256-GCM şifreli not kasası, otomatik anlık görüntü (snapshot) zaman tüneli ve Mermaid/Flowchart görselleştirme.
 - **BulkOrganizer:** Uzantı ve MIME türlerine göre toplu dosya düzenleme, YYYY-AA zaman tüneli klasörleme ve tek tıkla geri alma (undo) günlüğü.
 - **ImageToolkit:** Sharp destekli toplu görsel format dönüştürme (PNG, JPEG, WebP, AVIF), kalite ayarlama ve EXIF/metaveri temizleme.
@@ -331,14 +325,13 @@ NexusHub/
 - **ColorStudio:** HEX/RGB/HSL/CMYK anlık dönüştürücü, WCAG 2.1 erişilebilirlik kontrast skoru, sistem renk seçici (EyeDropper) ve CSS gradyan oluşturucu.
 - **QrCodeStudio:** Metin, URL, WiFi ve vCard için renk ve logo özelleştirmeli QR kod üretici; PNG/SVG çıktısı ve tersine QR okuyucu.
 - **HashStudio:** MD5, SHA-1, SHA-256, SHA-512, bcrypt hash üretimi ve doğrulaması; Base64, URL ve Hex kodlama/kod çözme.
-- **TempMail:** 1secmail API entegrasyonlu tek kullanımlık geçici e-posta oluşturucu, otomatik gelen kutusu yoklama ve HTML e-posta okuyucu.
 - **PasswordGenerator:** Karakter havuzları, entropi puanı, Diceware parola öbeği (passphrase) modu ve güvenlik kuralları denetimi.
 - **ResourceSentinel:** Gerçek zamanlı CPU ve RAM kullanım göstergeleri, V8 çöp toplayıcı (GC) tetikleme ve bellek boşaltma.
 - **SqliteViewer:** WebAssembly sql.js ile tarayıcı içi SQLite veritabanı açma, tablo şemalarını görüntüleme ve SQL sorguları çalıştırma.
 - **Dashboard:** Favori araçları sabitleme (pinning), son kullanılan araçlar geçmişi, sistem durum kartları ve tek tıkla araç çalıştırma.
 
 ### 2. İstemci Sistem & Kabuk Özellikleri
-- **Kısayollar & Navigasyon:** Raycast benzeri Mini-HUD (`Ctrl+Shift+Space`), Hızlı Komut Paleti (`Ctrl+K`), Evrensel Kısayollar (`F1` / `?`, `Ctrl+Shift+T` raptiye modu, `Ctrl+Shift+S` ses aç/kapat, `Alt+D`, `Alt+O`, `Alt+P`, `Alt+F`).
+- **Kısayollar & Navigasyon:** Raycast benzeri Mini-HUD (`Ctrl+Shift+Space`), Hızlı Komut Paleti (`Ctrl+K`), Evrensel Kısayollar (`F1` / `?`, `Ctrl+Shift+T` raptiye modu, `Ctrl+Shift+S` ses aç/kapat, `Alt+D`, `Alt+F`).
 - **Akıllı Pano (SmartPaste):** Panoya kopyalanan içeriğin tipini (JSON, URL, Hash, Base64) anında algılayıp ilgili araca yönlendiren akıllı öneri kartı.
 - **Siber Temalar:** Matrix Emerald, Cyberpunk 2077, Synthwave 80s, Crimson Protocol ve Classic Purple dinamik CSS temaları.
 - **Siber Ses Motoru:** Saf Web Audio ile üretilen mekanik tıklama ve işlem sesleri, ses seviyesi ayarı ve sessiz mod.
@@ -395,7 +388,7 @@ NexusHub/
 2. **Klavye Navigasyonu ve Odaklama (Focus Ring) İyileştirmeleri:**
    - Araç listelerinde (`Sidebar.tsx`, `Dashboard.tsx`) klavyenin `Tab` ve ok tuşlarıyla dolaşırken odak çizgileri (focus outline) bazı temalarda görünürlük kontrastını kaybetmektedir. Tüm etkileşimli elemanlara `focus-visible:ring-2 focus-visible:ring-[var(--nexus-accent)]` kuralı zorunlu kılınmalıdır.
 3. **Boş Durum (Empty State) İllüstrasyonları:**
-   - `ActivityFeed`, `TempMail` ve `ClipboardManager` sayfalarında henüz veri yokken gösterilen boş durumlar düz metinden ibarettir. Siber temaya uygun özel SVG illüstrasyonları ve "Örnek Veri Yükle" veya "İşlem Başlat" hızlı aksiyon butonları eklenmelidir.
+   - `ActivityFeed` sayfasında henüz veri yokken gösterilen boş durumlar düz metinden ibarettir. Siber temaya uygun özel SVG illüstrasyonları ve "Örnek Veri Yükle" veya "İşlem Başlat" hızlı aksiyon butonları eklenmelidir.
 4. **Görsel Önizleme Yakınlaştırma (Lightbox/Zoom):**
    - `ImageToolkit` ve `QrCodeStudio` içinde üretilen veya dönüştürülen görseller küçük bir kutu içinde gösterilmektedir. Tıklandığında tam ekran veya modal içinde büyütülebilir bir görsel inceleyici (lightbox) sunulmalıdır.
 

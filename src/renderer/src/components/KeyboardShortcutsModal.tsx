@@ -23,8 +23,6 @@ const SHORTCUTS: ShortcutItem[] = [
   { keys: ['Tab'], keyName: 'scratchpadIndent', category: 'editor' },
 
   { keys: ['Alt', 'D'], keyName: 'gotoDashboard', category: 'tools' },
-  { keys: ['Alt', 'O'], keyName: 'gotoOptimizer', category: 'tools' },
-  { keys: ['Alt', 'P'], keyName: 'gotoPortKiller', category: 'tools' },
   { keys: ['Alt', 'F'], keyName: 'gotoFortress', category: 'tools' },
 ]
 

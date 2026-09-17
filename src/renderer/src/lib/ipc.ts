@@ -49,17 +49,6 @@ export interface OrganizerExecutionResult {
   errors: string[]
 }
 
-
-
-[]
-  body: string
-  textBody: string
-  htmlBody: string
-}
-
-
-
-
 // ── Network Tools ────────────────────────────────────────────────────────────
 
 export interface IpLookupResult {
@@ -324,17 +313,6 @@ export const nexusAPI = {
     split: (payload: { filePath: string; pageRange: string }) => window.nexusAPI.pdf.split(payload),
   },
 
-    system: {
-    flushDns: (): Promise<{ success: boolean; output?: string }> => window.nexusAPI.system.flushDns(),
-    scanTemp: (): Promise<{ path: string; fileCount: number; totalBytes: number; sizeFormatted: string; error?: string }> =>
-      window.nexusAPI.system.scanTemp(),
-    cleanTemp: (): Promise<{ success: boolean; deletedCount: number; freedBytes: number; freedFormatted: string; error?: string }> =>
-      window.nexusAPI.system.cleanTemp(),
-    pingHost: (host: string): Promise<{ success: boolean; latency: number | null; host: string }> =>
-      window.nexusAPI.system.pingHost(host),
-    optimizeAll: () => window.nexusAPI.system.optimizeAll?.() || Promise.resolve({ success: false, dnsFlushed: false, deletedFiles: 0, freedFormatted: '0 B', freedBytes: 0, error: 'Not supported' }),
-  },
-
   // ── Settings & Startup ──────────────────────────────────────────────────────
   settings: {
     getAutoLaunch: (): Promise<boolean> => window.nexusAPI.settings.getAutoLaunch(),
@@ -346,12 +324,6 @@ export const nexusAPI = {
     checkNow: (): Promise<any> => window.nexusAPI.updater.checkNow(),
     installNow: (): void => window.nexusAPI.updater.installNow(),
     onApplyingPatch: (cb: () => void): (() => void) | undefined => window.nexusAPI.updater.onApplyingPatch?.(cb),
-  },
-
-  // ── Port & Process Watchdog ──────────────────────────────────────────────────
-  port: {
-    scan: () => window.nexusAPI.port?.scan() || Promise.resolve({ success: false, ports: [], error: 'Port IPC unavailable' }),
-    kill: (pid: number) => window.nexusAPI.port?.kill(pid) || Promise.resolve({ success: false, error: 'Port IPC unavailable' }),
   },
 
   // ── Tamper-Evident Activity Feed & Audit Journal ───────────────────────────

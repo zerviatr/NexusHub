@@ -9,7 +9,6 @@
       "network": "Network"
     },
     "tools": {
-      "tempMail": "TempMail Generator",
       "decrypter": "Universal Link Decrypter & Cleaner",
       "passwordGenerator": "Password Generator",
       "qrCode": "QR Code Studio",
@@ -19,16 +18,13 @@
       "fakeData": "Fake Data & Mock Identity",
       "apiStudio": "API Studio & Diagnostics",
       "curlRunner": "HTTP & cURL Runner",
-      "systemOptimizer": "System Optimizer & Purger",
       "bulkOrganizer": "Bulk Organizer",
-      "clipboardManager": "Clipboard Manager",
       "imageToolkit": "Image Toolkit",
       "networkTools": "Network Tools",
       "sentinel": "Resource Sentinel",
       "devSandbox": "DevSandbox API Studio",
       "cyberFortress": "Cyber Fortress & Shredder",
       "colorStudio": "Color & Contrast Studio",
-      "portKiller": "Port Killer & TCP Watchdog",
       "scratchpad": "Markdown Scratchpad",
       "pdfStudio": "PDF Studio & Documents",
       "activityFeed": "Activity Feed & Audit Journal",
@@ -200,9 +196,6 @@
       "live": "Live"
     },
     "tools": {
-      "tempMail": {
-        "desc": "Instant disposable email addresses to bypass spam and tracking. Reads inbox in real-time."
-      },
       "decrypter": {
         "desc": "Resolve shortened and monetized redirect links (Aylink, bit.ly, etc.) to their true destination and strip privacy trackers."
       },
@@ -211,9 +204,6 @@
       },
       "passwordGenerator": {
         "desc": "Generate cryptographically secure passwords, passphrases, and PINs with strength estimation."
-      },
-      "clipboardManager": {
-        "desc": "Auto-tracks clipboard history up to 50 entries. Search, copy back, and delete with one click."
       },
       "networkTools": {
         "desc": "IP resolution, DNS querying, port scanning, and ICMP ping — all running natively via Node.js."
@@ -256,19 +246,6 @@
     "title": "JSON & JWT Studio",
     "description": "Format, validate, and minify JSON with real-time error detection. Decode and inspect JWT claims 100% client-side."
   },
-  "clipboard": {
-    "search": "Search history...",
-    "clear": "Clear All",
-    "total": "Total Entries",
-    "shown": "Shown",
-    "latest": "Latest",
-    "noSearch": "No entries match your search.",
-    "noHistory": "No clipboard history yet. Copy something!",
-    "showMore": "Show more ({{count}} chars)",
-    "showLess": "Show less",
-    "copy": "Copy to clipboard",
-    "delete": "Delete"
-  },
   "organizer": {
     "targetDir": "Target Directory",
     "noFolder": "No folder selected",
@@ -288,16 +265,6 @@
     "stripExif": "Strip EXIF",
     "outputDir": "OUTPUT DIRECTORY",
     "sameFolder": "Same folder as input..."
-  },
-  "tempMail": {
-    "generate": "Generate New Address",
-    "checking": "Checking inbox...",
-    "refresh": "Refresh",
-    "inbox": "Inbox",
-    "empty": "Inbox is empty. Waiting for emails...",
-    "back": "Back to Inbox",
-    "from": "From",
-    "subject": "Subject"
   },
   "decrypter": {
     "placeholder": "Paste shortened or redirect link here (e.g. bit.ly, aylink.co, t.co)...",
@@ -387,75 +354,6 @@
     "toastDecryptSuccess": "Vault Unlocked!",
     "toastDecryptSuccessDesc": "{{name}} decrypted successfully.",
     "toastPassError": "Incorrect passphrase."
-  },
-  "portKiller": {
-    "title": "Port & Process Watchdog",
-    "description": "Scan active TCP listening ports on Windows, see which process locks which port, and kill troublesome processes with one click.",
-    "searchPlaceholder": "Port (e.g. 3000) or process name...",
-    "allPorts": "All ({{count}})",
-    "devPorts": "Dev Ports",
-    "dbPorts": "Database Ports",
-    "colPort": "Port",
-    "colProcess": "Process Name",
-    "colPid": "PID",
-    "colState": "State",
-    "colAddress": "Local Address",
-    "colAction": "Action",
-    "scanning": "Scanning ports...",
-    "noPorts": "No matching active listening ports found.",
-    "killBtn": "Kill",
-    "modalTitle": "Kill Process Confirmation",
-    "modalSubtitle": "You are about to release this port lock.",
-    "targetPort": "Target Port:",
-    "processName": "Process Name:",
-    "pid": "PID:",
-    "warning": "Terminating this process will immediately close the associated software. Any unsaved data may be lost.",
-    "cancel": "Cancel",
-    "confirmKill": "Force Kill Process",
-    "toastKilled": "Process Terminated",
-    "toastKilledDesc": "{{name}} (PID {{pid}}) released port {{port}}.",
-    "autoRefresh": "Auto-Refresh",
-    "autoRefreshActive": "Live Polling (3s)",
-    "autoRefreshPaused": "Auto Refresh Off",
-    "interval": "Interval",
-    "presets": {
-      "all": "All Ports",
-      "web": "Web (80, 443...)",
-      "database": "Database",
-      "dev": "Dev Servers",
-      "gaming": "Gaming"
-    },
-    "webPorts": "Web Ports",
-    "gamingPorts": "Gaming & LAN",
-    "scanError": "Scan Error",
-    "scanFailed": "Could not scan ports.",
-    "scanErrorDesc": "Could not scan active ports: {{error}}",
-    "killError": "Termination Error",
-    "killFailed": "Failed to kill process.",
-    "killErrorDesc": "Could not terminate process PID {{pid}}: {{error}}",
-    "permissionError": "Permission denied. Administrator privileges may be required.",
-    "refreshTooltip": "Refresh listening ports"
-  },
-  "systemOptimizer": {
-    "title": "Windows System Optimizer & Cache Purger",
-    "description": "Performance powerhub safely purging Windows local caches, DNS resolver buffers, and junk temp files.",
-    "turboBoost": "⚡ ONE-CLICK TURBO BOOST",
-    "turboBoosting": "CYBER BOOSTING...",
-    "turboComplete": "⚡ Turbo Boost Complete! {{deleted}} temp files purged ({{freed}} freed) and DNS cache flushed.",
-    "tempCleanerTitle": "Temp Files & Junk Purger",
-    "scannedJunk": "Scanned Junk Files:",
-    "recoverableSpace": "Recoverable Disk Space:",
-    "cleaning": "Purging Junk...",
-    "cleanBtn": "Safely Clean Temp Files",
-    "cleanSuccess": "Successfully cleaned {{count}} junk temp files. Recovered space: {{freed}}",
-    "dnsPurgerTitle": "Windows DNS Cache Resolver",
-    "dnsDesc": "Instantly refresh stale DNS records, unblock cached domains, and reset corrupted host routes with native ipconfig /flushdns.",
-    "flushing": "Flushing DNS...",
-    "flushBtn": "Flush DNS Cache",
-    "dnsSuccess": "Windows IP Configuration: Successfully flushed the DNS Resolver Cache.",
-    "latencyTitle": "Local Network & Backbone Latency Benchmark",
-    "refreshBenchmark": "Refresh Benchmark",
-    "timeout": "Timeout"
   },
   "fakeData": {
     "title": "Fake Data & Mock Identity Studio",
@@ -583,8 +481,6 @@
     "scratchpadSave": "Force Manual Save Note / Settings",
     "scratchpadIndent": "Scratchpad Code / Text 2 Space Indent",
     "gotoDashboard": "Return to Dashboard Home",
-    "gotoOptimizer": "Go to Windows System Optimizer",
-    "gotoPortKiller": "Go to Port Killer & TCP Watchdog",
     "gotoFortress": "Go to Cyber Fortress Shield"
   },
   "smartPaste": {

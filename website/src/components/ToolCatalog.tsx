@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import {
   Search, ShieldAlert, Binary, KeyRound, Unlock, Send, Database, Regex,
-  Terminal, Shuffle, ZapOff, Network, Activity, Trash2, FileText, FolderSync,
-  FileCheck2, Image, Palette, QrCode, Mail, ClipboardList, Sparkles, X, Check,
+  Terminal, Shuffle, Network, Activity, FileText, FolderSync,
+  FileCheck2, Image, Palette, QrCode, Sparkles, X, Check,
   Clock, Workflow
 } from 'lucide-react';
 import { ToolItem, ToolCategory, Language } from '../lib/types';
@@ -15,8 +15,8 @@ interface ToolCatalogProps {
 
 const ICON_MAP: Record<string, any> = {
   ShieldAlert, Binary, KeyRound, Unlock, Send, Database, Regex,
-  Terminal, Shuffle, ZapOff, Network, Activity, Trash2, FileText,
-  FolderSync, FileCheck2, Image, Palette, QrCode, Mail, ClipboardList,
+  Terminal, Shuffle, Network, Activity, FileText,
+  FolderSync, FileCheck2, Image, Palette, QrCode,
   Clock, Workflow
 };
 
