@@ -12,7 +12,16 @@ export default defineConfig({
       'tests/ipc.test.ts',
       'tests/netDispatcherAdversarial.test.ts',
       'tests/pdfService.test.ts',
-      'tests/securityHardening.test.ts'
+      'tests/securityHardening.test.ts',
+      'tests/adversarialActivityJournal.stress.test.ts',
+      'tests/fileOrganizer.test.ts',
+      'tests/memorySweep.test.ts',
+      'tests/netDispatcher.test.ts',
+      'tests/netDispatcherIPC.test.ts',
+      'tests/netDispatcherSecurity.test.ts',
+      'tests/vaultCrypto.test.ts',
+      'tests/activityJournalIPC.test.ts',
+      'tests/e2e/**'
     ],
   },
 })

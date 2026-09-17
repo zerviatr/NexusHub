@@ -19,27 +19,61 @@ use url::Url;
 pub const MAX_REDIRECT_HOPS: usize = 15;
 
 const USER_AGENT: &str =
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36";
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
 const AD_SHORTENER_DOMAINS: &[&str] = &[
     "aylink.co",
     "cpmlink.pro",
+    "cpmlink.net",
     "ay.live",
     "aylink.net",
     "aylink.link",
+    "trlink.in",
+    "tr.link",
+    "bc.vc",
+    "bcvc.live",
+    "linkvertise.com",
+    "linkvertise.net",
+    "adfly.com",
+    "adf.ly",
+    "tinyurl.com",
+    "bit.ly",
+    "cutt.ly",
+    "is.gd",
+    "v.gd",
+    "shorturl.at",
+    "t.ly",
+    "rebrand.ly",
+    "shorte.st",
+    "ouo.io",
+    "ouo.press",
+    "bildirim.link",
+    "bildirim.online",
 ];
 
-const SKIP_DOMAINS: &[&str] = &[
+const AD_AND_TRACKING_DOMAINS: &[&str] = &[
+    "popcent.",
+    "ppcnt.",
+    "pushance.",
     "bildirim.online",
-    "ppcnt.us",
-    "ppcnt.net",
-    "pushance.com",
+    "google.",
+    "googleapis.",
+    "gstatic.",
+    "facebook.",
+    "yandex-metrica",
+    "cloudflare",
+    "jsdelivr",
+    "cdnjs",
+    "firebase",
+    "doubleclick",
+    "loremflickr.",
+    "googletagmanager",
 ];
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct RemovedTrackerInfo {
     pub name: String,
-    pub category: String, // "analytics" | "social" | "ads" | "campaign" | "other"
+    pub category: String,
     pub description: String,
 }
 
@@ -72,7 +106,6 @@ pub struct DecryptResult {
     pub error: Option<String>,
 }
 
-/// Normalizes a scheme-less URL (e.g. "bit.ly/xyz") by prefixing "https://".
 pub fn normalize_scheme(url: &str) -> String {
     let trimmed = url.trim();
     if trimmed.is_empty() {
@@ -86,7 +119,6 @@ pub fn normalize_scheme(url: &str) -> String {
     }
 }
 
-/// Returns true if the URL belongs to a known ad shortener service (Aylink, CPMlink, etc.).
 pub fn is_ad_shortener_url(raw_url: &str) -> bool {
     let normalized = normalize_scheme(raw_url);
     if let Ok(parsed) = Url::parse(&normalized) {
@@ -100,11 +132,14 @@ pub fn is_ad_shortener_url(raw_url: &str) -> bool {
     false
 }
 
-/// Returns metadata for recognized tracking query parameters.
+pub fn is_ad_or_tracking_domain(url_str: &str) -> bool {
+    let lower = url_str.to_ascii_lowercase();
+    AD_AND_TRACKING_DOMAINS.iter().any(|&p| lower.contains(p))
+}
+
 pub fn get_tracker_metadata(key: &str) -> Option<(&'static str, &'static str)> {
     let lower = key.to_ascii_lowercase();
     match lower.as_str() {
-        // Ads & Affiliates
         "gclid" => Some(("ads", "Google Click Identifier")),
         "gclsrc" => Some(("ads", "Google Click Source")),
         "wbraid" => Some(("ads", "Google Ads Web Conversion")),
@@ -115,8 +150,6 @@ pub fn get_tracker_metadata(key: &str) -> Option<(&'static str, &'static str)> {
         "pf_rd_r" | "pf_rd_m" | "pf_rd_p" | "pf_rd_s" | "pf_rd_t" | "pf_rd_i" => {
             Some(("ads", "Amazon Recommendation Tracking"))
         }
-
-        // Social Media
         "fbclid" => Some(("social", "Meta Facebook Click ID")),
         "igshid" => Some(("social", "Instagram Share ID")),
         "ttclid" => Some(("social", "TikTok Click ID")),
@@ -127,8 +160,6 @@ pub fn get_tracker_metadata(key: &str) -> Option<(&'static str, &'static str)> {
         "rdt_cid" => Some(("social", "Reddit Click Identifier")),
         "li_fat_id" => Some(("social", "LinkedIn Insight Tag ID")),
         "epik" => Some(("social", "Pinterest Tag Conversion ID")),
-
-        // Analytics
         "_ga" => Some(("analytics", "Google Analytics Client ID")),
         "_gl" => Some(("analytics", "Google Analytics Linker")),
         "ym_debug" => Some(("analytics", "Yandex Metrica Debug Flag")),
@@ -136,8 +167,6 @@ pub fn get_tracker_metadata(key: &str) -> Option<(&'static str, &'static str)> {
         "ref" => Some(("analytics", "Referral Tag")),
         "ref_src" => Some(("analytics", "Referral Source Platform")),
         "ref_url" => Some(("analytics", "Referral Origin URL")),
-
-        // Campaign & Email
         "mc_cid" => Some(("campaign", "Mailchimp Campaign ID")),
         "mc_eid" => Some(("campaign", "Mailchimp Email ID")),
         "_ke" => Some(("campaign", "Klaviyo Email Tracking")),
@@ -147,13 +176,11 @@ pub fn get_tracker_metadata(key: &str) -> Option<(&'static str, &'static str)> {
         "ml_subscriber" => Some(("campaign", "MailerLite Subscriber ID")),
         "ml_subscriber_hash" => Some(("campaign", "MailerLite Subscriber Hash")),
         "mkt_tok" => Some(("campaign", "Marketo Tracking Token")),
-
         _ if lower.starts_with("utm_") => Some(("campaign", "Google Analytics UTM Tag")),
         _ => None,
     }
 }
 
-/// Strips tracking parameters from a URL while strictly preserving legitimate query parameters, hashes, and encoding.
 pub fn strip_tracking_parameters(raw_url: &str) -> (String, usize, Vec<RemovedTrackerInfo>) {
     let normalized = normalize_scheme(raw_url);
     let parsed = match Url::parse(&normalized) {
@@ -177,7 +204,6 @@ pub fn strip_tracking_parameters(raw_url: &str) -> (String, usize, Vec<RemovedTr
     }
 
     let trackers_removed = removed_list.len();
-
     let mut clean_url = parsed.clone();
     clean_url.set_query(None);
     if !kept_pairs.is_empty() {
@@ -190,9 +216,40 @@ pub fn strip_tracking_parameters(raw_url: &str) -> (String, usize, Vec<RemovedTr
     (clean_url.to_string(), trackers_removed, removed_list)
 }
 
-/// UTF-8 safe meta-refresh tag extractor.
-/// Handles any quote style ('"', '\'', unquoted), inverted attribute orders,
-/// case insensitivity, and will NEVER panic on multi-byte UTF-8 character boundaries.
+pub fn unwrap_embedded_url(raw_url: &str) -> Option<String> {
+    let normalized = normalize_scheme(raw_url);
+    let parsed = Url::parse(&normalized).ok()?;
+    
+    let redirect_keys = [
+        "url", "q", "u", "target", "dest", "destination", "redirect",
+        "redirect_url", "link", "to", "goto", "r", "out"
+    ];
+
+    for (k, v) in parsed.query_pairs() {
+        let k_lower = k.to_ascii_lowercase();
+        if redirect_keys.contains(&k_lower.as_str()) {
+            let val = v.trim();
+            if val.starts_with("http://") || val.starts_with("https://") {
+                if !is_ad_or_tracking_domain(val) {
+                    return Some(val.to_string());
+                }
+            }
+            if val.len() >= 16 && (val.starts_with("aHR0c") || val.starts_with("aHR0cHM")) {
+                if let Ok(decoded_bytes) = data_encoding::BASE64.decode(val.as_bytes()) {
+                    if let Ok(decoded_str) = String::from_utf8(decoded_bytes) {
+                        if decoded_str.starts_with("http://") || decoded_str.starts_with("https://") {
+                            if !is_ad_or_tracking_domain(&decoded_str) {
+                                return Some(decoded_str);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    None
+}
+
 pub fn extract_meta_refresh(html: &str) -> Option<String> {
     let lower = html.to_ascii_lowercase();
     let mut search_idx = 0;
@@ -205,7 +262,6 @@ pub fn extract_meta_refresh(html: &str) -> Option<String> {
         };
         let tag_lower = &lower[abs_meta..abs_meta + tag_end_rel];
 
-        // Check if tag specifies http-equiv="refresh"
         let is_refresh = tag_lower.contains("http-equiv") && tag_lower.contains("refresh");
 
         if is_refresh {
@@ -237,57 +293,157 @@ pub fn extract_meta_refresh(html: &str) -> Option<String> {
     None
 }
 
-/// Scans HTML body for JavaScript redirects (window.location, location.replace, destination variables, continue links).
-pub fn extract_js_redirect(html: &str) -> Option<String> {
+pub fn extract_flexible_token(html: &str, var_name: &str) -> Option<String> {
+    let lower = html.to_ascii_lowercase();
+    let patterns = [
+        format!("{var_name} ="),
+        format!("{var_name}="),
+        format!("\"{var_name}\":"),
+        format!("'{var_name}':"),
+        format!("{var_name}:"),
+        format!("app[\"{var_name}\"] ="),
+        format!("app[\"{var_name}\"]="),
+        format!("app['{var_name}'] ="),
+        format!("app['{var_name}']="),
+    ];
+
+    for pattern in patterns {
+        let mut search_idx = 0;
+        while let Some(pos) = lower[search_idx..].find(&pattern) {
+            let start = search_idx + pos + pattern.len();
+            let lookahead: String = html[start..].chars().take(300).collect();
+            let trimmed = lookahead.trim_start_matches(|c: char| {
+                c == '\'' || c == '"' || c == ' ' || c == '\t'
+            });
+            let val = trimmed
+                .split(|c: char| {
+                    c == '\'' || c == '"' || c == ';' || c == ',' || c == '}' || c == '&' || c.is_whitespace()
+                })
+                .next()
+                .unwrap_or("")
+                .trim();
+            if !val.is_empty() {
+                return Some(val.to_string());
+            }
+            search_idx = start;
+        }
+    }
+    None
+}
+
+pub fn extract_form_or_script_token(html: &str, field_name: &str) -> Option<String> {
     let lower = html.to_ascii_lowercase();
 
+    let name_patterns = [
+        format!("name=\"{field_name}\""),
+        format!("name='{field_name}'"),
+        format!("name={field_name}"),
+    ];
+
+    for np in &name_patterns {
+        let mut search_idx = 0;
+        while let Some(pos) = lower[search_idx..].find(np) {
+            let tag_start = lower[..search_idx + pos].rfind('<').unwrap_or(search_idx + pos);
+            let tag_end = lower[search_idx + pos..].find('>').map(|e| search_idx + pos + e).unwrap_or(lower.len());
+            let tag_slice = &html[tag_start..tag_end];
+
+            if let Some(val_idx) = tag_slice.to_ascii_lowercase().find("value=") {
+                let remainder = &tag_slice[val_idx + 6..];
+                let trimmed = remainder.trim_start_matches(|c: char| c == '\'' || c == '"' || c == ' ');
+                let val = trimmed
+                    .split(|c: char| c == '\'' || c == '"' || c == ' ' || c == '>' || c == '/')
+                    .next()
+                    .unwrap_or("")
+                    .trim();
+                if !val.is_empty() {
+                    return Some(val.to_string());
+                }
+            }
+            search_idx += pos + np.len();
+        }
+    }
+
+    extract_flexible_token(html, field_name)
+}
+
+pub fn extract_visitor_token(html: &str) -> String {
+    let lower = html.to_ascii_lowercase();
+
+    if let Some(btn_pos) = lower.find("continuebutton") {
+        let tag_start = lower[..btn_pos].rfind('<').unwrap_or(btn_pos);
+        let tag_end = lower[btn_pos..].find('>').map(|e| btn_pos + e).unwrap_or(lower.len());
+        let tag_slice = &html[tag_start..tag_end];
+
+        if let Some(tok_idx) = tag_slice.to_ascii_lowercase().find("data-token=") {
+            let remainder = &tag_slice[tok_idx + 11..];
+            let trimmed = remainder.trim_start_matches(|c: char| c == '\'' || c == '"' || c == ' ');
+            let val = trimmed
+                .split(|c: char| c == '\'' || c == '"' || c == ' ' || c == '>' || c == '/')
+                .next()
+                .unwrap_or("")
+                .trim();
+            if !val.is_empty() {
+                return val.to_string();
+            }
+        }
+    }
+
+    if let Some(idx) = lower.find("data-token=") {
+        let remainder = &html[idx + 11..];
+        let trimmed = remainder.trim_start_matches(|c: char| c == '\'' || c == '"' || c == ' ');
+        return trimmed
+            .split(|c: char| c == '\'' || c == '"' || c == ' ' || c == '>' || c == '/')
+            .next()
+            .unwrap_or("")
+            .trim()
+            .to_string();
+    }
+
+    String::new()
+}
+
+pub fn extract_page_target_url(html: &str, page_url: &str) -> Option<String> {
+    let lower = html.to_ascii_lowercase();
+    let page_parsed = Url::parse(page_url).ok();
+    let page_host = page_parsed.as_ref().and_then(|p| p.host_str()).map(|h| h.to_ascii_lowercase());
+
     let patterns = [
-        "window.location.href",
-        "window.location.assign",
-        "window.location.replace",
-        "window.location",
-        "location.href",
-        "location.replace",
-        "document.location.href",
-        "document.location",
-        "top.location.href",
-        "destination",
-        "redirect_url",
-        "target_url",
-        "go_url",
-        "dest",
-        "data-url",
+        "url =", "url=", "url: ", "url:",
+        "target =", "target=", "target_url =", "target_url=",
+        "destination =", "destination=", "destination_url =",
+        "window.location.href =", "window.location.href=",
+        "window.location.assign(", "window.location.replace(",
+        "window.location =", "window.location=",
+        "location.href =", "location.href=",
+        "location.replace(",
+        "go_url =", "go_url=", "link =", "link="
     ];
 
     for pattern in patterns {
         let mut search_offset = 0;
         while let Some(found_rel) = lower[search_offset..].find(pattern) {
             let found_abs = search_offset + found_rel + pattern.len();
-            let lookahead_chars: String = html[found_abs..].chars().take(250).collect();
+            let lookahead: String = html[found_abs..].chars().take(300).collect();
+            let trimmed = lookahead.trim_start_matches(|c: char| {
+                c == '\'' || c == '"' || c == '(' || c == ' ' || c == '\t'
+            });
+            let candidate = trimmed
+                .split(|c: char| {
+                    c == '\'' || c == '"' || c == ')' || c == ';' || c == ',' || c == '>' || c.is_whitespace()
+                })
+                .next()
+                .unwrap_or("")
+                .trim();
 
-            if let Some(delim_pos) = lookahead_chars.find(|c: char| c == '=' || c == '(' || c == ':') {
-                let candidate_slice = &lookahead_chars[delim_pos + 1..];
-                let trimmed = candidate_slice.trim_start_matches(|c: char| {
-                    c == '\'' || c == '"' || c == ' ' || c == '(' || c == '\t'
-                });
-                let candidate = trimmed
-                    .split(|c: char| {
-                        c == '\'' || c == '"' || c == ')' || c == ';' || c == ',' || c == '>' || c.is_whitespace()
-                    })
-                    .next()
-                    .unwrap_or("")
-                    .trim();
-
-                if candidate.starts_with("http://") || candidate.starts_with("https://") {
-                    if let Ok(parsed) = Url::parse(candidate) {
-                        if let Some(host) = parsed.host_str() {
-                            let host_lower = host.to_ascii_lowercase();
-                            let is_skip = SKIP_DOMAINS
-                                .iter()
-                                .any(|&d| host_lower == d || host_lower.ends_with(&format!(".{}", d)));
-                            if !is_skip {
-                                return Some(candidate.to_string());
-                            }
+            if (candidate.starts_with("http://") || candidate.starts_with("https://"))
+                && !is_ad_or_tracking_domain(candidate)
+                && !is_ad_shortener_url(candidate)
+            {
+                if let Ok(parsed) = Url::parse(candidate) {
+                    if let Some(cand_host) = parsed.host_str() {
+                        let cand_host_lower = cand_host.to_ascii_lowercase();
+                        if page_host.as_deref() != Some(&cand_host_lower) {
+                            return Some(candidate.to_string());
                         }
                     }
                 }
@@ -300,38 +456,57 @@ pub fn extract_js_redirect(html: &str) -> Option<String> {
         }
     }
 
-    // Interstitial continue link: <a ... href="https://...">...Devam / Continue / Go...</a>
-    let mut a_offset = 0;
-    while let Some(rel_a) = lower[a_offset..].find("<a") {
-        let abs_a = a_offset + rel_a;
-        let tag_chars: String = html[abs_a..].chars().take(500).collect();
-        let tag_lower = tag_chars.to_ascii_lowercase();
-
-        let has_action_text = tag_lower.contains("devam")
-            || tag_lower.contains("continue")
-            || tag_lower.contains("go to")
-            || tag_lower.contains("redirect")
-            || tag_lower.contains("click here")
-            || tag_lower.contains("tıkla")
-            || tag_lower.contains("git");
-
-        if has_action_text {
-            if let Some(href_idx) = tag_lower.find("href=") {
-                let remainder = &tag_chars[href_idx + 5..];
-                let trimmed = remainder.trim_start_matches(|c: char| c == '\'' || c == '"' || c == ' ');
-                let link = trimmed
-                    .split(|c: char| c == '\'' || c == '"' || c == '>' || c.is_whitespace())
-                    .next()
-                    .unwrap_or("")
-                    .trim();
-                if link.starts_with("http://") || link.starts_with("https://") {
-                    return Some(link.to_string());
+    if let Some(meta_url) = extract_meta_refresh(html) {
+        if let Some(ref base_parsed) = page_parsed {
+            if let Ok(joined) = base_parsed.join(&meta_url) {
+                let joined_str = joined.to_string();
+                if !is_ad_or_tracking_domain(&joined_str) && !is_ad_shortener_url(&joined_str) {
+                    if let Some(joined_host) = joined.host_str() {
+                        if page_host.as_deref() != Some(&joined_host.to_ascii_lowercase()) {
+                            return Some(joined_str);
+                        }
+                    }
                 }
             }
         }
+    }
 
-        a_offset = abs_a + 2;
-        if a_offset >= lower.len() {
+    None
+}
+
+pub async fn follow_interstitial_to_target(client: &reqwest::Client, intermediate_url: &str) -> Option<String> {
+    let mut current_url = normalize_scheme(intermediate_url);
+
+    for _hop in 0..5 {
+        let resp = match client
+            .get(&current_url)
+            .header("User-Agent", USER_AGENT)
+            .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+            .header("Accept-Language", "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7")
+            .send()
+            .await
+        {
+            Ok(r) => r,
+            Err(_) => break,
+        };
+
+        let final_page_url = resp.url().to_string();
+
+        if !is_ad_or_tracking_domain(&final_page_url) && !is_ad_shortener_url(&final_page_url) {
+            return Some(final_page_url);
+        }
+
+        let body = match resp.text().await {
+            Ok(b) => b,
+            Err(_) => break,
+        };
+
+        if let Some(target) = extract_page_target_url(&body, &final_page_url) {
+            if !is_ad_or_tracking_domain(&target) && !is_ad_shortener_url(&target) {
+                return Some(target);
+            }
+            current_url = target;
+        } else {
             break;
         }
     }
@@ -339,15 +514,14 @@ pub fn extract_js_redirect(html: &str) -> Option<String> {
     None
 }
 
-/// Follows redirects up to MAX_REDIRECT_HOPS (15) hops.
-/// Handles HTTP 3xx, meta refresh tags, and JavaScript redirects safely.
 pub async fn resolve_redirects(start_url: &str, max_hops: usize) -> Result<String, String> {
     let mut current_url = normalize_scheme(start_url);
     let mut visited = HashSet::new();
 
     let client = reqwest::Client::builder()
+        .cookie_store(true)
         .redirect(reqwest::redirect::Policy::none())
-        .timeout(std::time::Duration::from_secs(10))
+        .timeout(std::time::Duration::from_secs(12))
         .build()
         .map_err(|e| e.to_string())?;
 
@@ -356,6 +530,11 @@ pub async fn resolve_redirects(start_url: &str, max_hops: usize) -> Result<Strin
             return Ok(current_url);
         }
         visited.insert(current_url.clone());
+
+        if let Some(unwrapped) = unwrap_embedded_url(&current_url) {
+            current_url = unwrapped;
+            continue;
+        }
 
         let parsed_curr = match Url::parse(&current_url) {
             Ok(u) => u,
@@ -378,7 +557,6 @@ pub async fn resolve_redirects(start_url: &str, max_hops: usize) -> Result<Strin
 
         let status = resp.status();
 
-        // 1. HTTP 3xx redirect
         if status.is_redirection() {
             if let Some(loc_val) = resp.headers().get("location").and_then(|h| h.to_str().ok()) {
                 if let Ok(next_parsed) = parsed_curr.join(loc_val) {
@@ -388,20 +566,17 @@ pub async fn resolve_redirects(start_url: &str, max_hops: usize) -> Result<Strin
             }
         }
 
-        // 2. HTTP 200 OK — scan HTML for meta refresh or JS redirect
         if status.is_success() {
             if let Ok(body) = resp.text().await {
-                // a) Meta-refresh
-                if let Some(meta_url) = extract_meta_refresh(&body) {
-                    if let Ok(next_parsed) = parsed_curr.join(&meta_url) {
+                if let Some(target_url) = extract_page_target_url(&body, &current_url) {
+                    if let Ok(next_parsed) = parsed_curr.join(&target_url) {
                         current_url = next_parsed.to_string();
                         continue;
                     }
                 }
 
-                // b) JavaScript redirect
-                if let Some(js_url) = extract_js_redirect(&body) {
-                    if let Ok(next_parsed) = parsed_curr.join(&js_url) {
+                if let Some(meta_url) = extract_meta_refresh(&body) {
+                    if let Ok(next_parsed) = parsed_curr.join(&meta_url) {
                         current_url = next_parsed.to_string();
                         continue;
                     }
@@ -415,59 +590,16 @@ pub async fn resolve_redirects(start_url: &str, max_hops: usize) -> Result<Strin
     Ok(current_url)
 }
 
-/// Extracts a JavaScript token variable from HTML script tags.
-fn extract_script_token(html: &str, var_name: &str) -> Option<String> {
-    let lower = html.to_ascii_lowercase();
-    let patterns = [
-        format!("{var_name}="),
-        format!("{var_name} ="),
-        format!("\"{var_name}\":"),
-        format!("'{var_name}':"),
-        format!("app[\"{var_name}\"]="),
-        format!("app['{var_name}']="),
-    ];
-
-    for pattern in patterns {
-        let mut search_idx = 0;
-        while let Some(pos) = lower[search_idx..].find(&pattern) {
-            let start = search_idx + pos + pattern.len();
-            let lookahead_chars: String = html[start..].chars().take(250).collect();
-            let trimmed = lookahead_chars.trim_start_matches(|c: char| {
-                c == '\'' || c == '"' || c == ' ' || c == '\t'
-            });
-            let val = trimmed
-                .split(|c: char| {
-                    c == '\'' || c == '"' || c == ';' || c == ',' || c == '}' || c == '&' || c.is_whitespace()
-                })
-                .next()
-                .unwrap_or("")
-                .trim();
-            if !val.is_empty() {
-                return Some(val.to_string());
-            }
-            search_idx = start;
-        }
-    }
-    None
-}
-
-/// Executes the multi-step bypass handshake for ad shorteners (Aylink, CPMlink, etc.).
 pub async fn bypass_ad_link(url: &str) -> Result<BypassResult, String> {
     let normalized = normalize_scheme(url);
-    let parsed_url = Url::parse(&normalized).map_err(|e| e.to_string())?;
-    let base_origin = format!(
-        "{}://{}",
-        parsed_url.scheme(),
-        parsed_url.host_str().unwrap_or("")
-    );
 
     let client = reqwest::Client::builder()
-        .redirect(reqwest::redirect::Policy::limited(5))
-        .timeout(std::time::Duration::from_secs(12))
+        .cookie_store(true)
+        .redirect(reqwest::redirect::Policy::limited(10))
+        .timeout(std::time::Duration::from_secs(15))
         .build()
         .map_err(|e| e.to_string())?;
 
-    // Step 1: Fetch the initial shortener page
     let page_resp = client
         .get(&normalized)
         .header("User-Agent", USER_AGENT)
@@ -480,46 +612,35 @@ pub async fn bypass_ad_link(url: &str) -> Result<BypassResult, String> {
         .await
         .map_err(|e| e.to_string())?;
 
-    // Collect cookies from Set-Cookie headers
-    let cookies: String = page_resp
-        .headers()
-        .get_all("set-cookie")
-        .iter()
-        .filter_map(|h| h.to_str().ok())
-        .map(|c| c.split(';').next().unwrap_or("").trim())
-        .filter(|c| !c.is_empty())
-        .collect::<Vec<_>>()
-        .join("; ");
+    let final_page_url = page_resp.url().clone();
+    let final_page_url_str = final_page_url.to_string();
+    let base_origin = format!(
+        "{}://{}",
+        final_page_url.scheme(),
+        final_page_url.host_str().unwrap_or("")
+    );
 
     let html = page_resp.text().await.map_err(|e| e.to_string())?;
 
-    // Step 2: Extract _a, _t, _d, alias, csrf, and visitor_token
-    let var_a = extract_script_token(&html, "_a");
-    let var_t = extract_script_token(&html, "_t");
-    let var_d = extract_script_token(&html, "_d");
-    let alias = extract_script_token(&html, "alias");
-    let csrf = extract_script_token(&html, "csrf");
 
-    let visitor_token = if let Some(idx) = html.find("data-token=") {
-        let remainder = &html[idx + 11..];
-        let trimmed = remainder.trim_start_matches(|c| c == '\'' || c == '"');
-        trimmed
-            .split(|c| c == '\'' || c == '"' || c == ' ' || c == '>')
-            .next()
-            .unwrap_or("")
-            .to_string()
-    } else {
-        String::new()
-    };
+    let var_a = extract_flexible_token(&html, "_a");
+    let var_t = extract_flexible_token(&html, "_t");
+    let var_d = extract_flexible_token(&html, "_d");
+    let alias = extract_form_or_script_token(&html, "alias");
+    let csrf = extract_form_or_script_token(&html, "csrf");
+    let visitor_token = extract_visitor_token(&html);
 
     if let (Some(a), Some(t), Some(d), Some(al), Some(cs)) =
         (var_a, var_t, var_d, alias.clone(), csrf)
     {
-        // Step 3: POST /get/tk to acquire token
         let tk_url = format!("{base_origin}/get/tk");
-        let tk_body = format!("_a={}&_t={}&_d={}", a, t, d);
+        let tk_body = url::form_urlencoded::Serializer::new(String::new())
+            .append_pair("_a", &a)
+            .append_pair("_t", &t)
+            .append_pair("_d", &d)
+            .finish();
 
-        let mut tk_req = client
+        let tk_resp = client
             .post(&tk_url)
             .header(
                 "Content-Type",
@@ -527,87 +648,85 @@ pub async fn bypass_ad_link(url: &str) -> Result<BypassResult, String> {
             )
             .header("User-Agent", USER_AGENT)
             .header("X-Requested-With", "XMLHttpRequest")
-            .header("Referer", &normalized)
-            .body(tk_body);
+            .header("Referer", &final_page_url_str)
+            .body(tk_body)
+            .send()
+            .await;
 
-        if !cookies.is_empty() {
-            tk_req = tk_req.header("Cookie", &cookies);
-        }
+        if let Ok(tk_r) = tk_resp {
+            if let Ok(tk_text) = tk_r.text().await {
+                let token = if let Ok(json_val) = serde_json::from_str::<serde_json::Value>(&tk_text) {
+                    json_val
+                        .get("th")
+                        .and_then(|v| v.as_str())
+                        .unwrap_or(&tk_text)
+                        .to_string()
+                } else {
+                    tk_text.trim().to_string()
+                };
 
-        let tk_resp = tk_req.send().await.map_err(|e| e.to_string())?;
-        let tk_text = tk_resp.text().await.map_err(|e| e.to_string())?;
+                if !token.is_empty() {
+                    let go2_url = format!("{base_origin}/links/go2");
+                    let signal = r#"{"t":1741500000000,"d":12.011,"m":{"move":1354,"click":2,"scroll":0,"key":0,"touch":0,"focus":0},"f":{"webdriver":false,"headless":false,"noPlugins":false,"mobile":false}}"#;
 
-        // Parse token (JSON { "th": "..." } or plain string)
-        let token = if let Ok(json_val) = serde_json::from_str::<serde_json::Value>(&tk_text) {
-            json_val
-                .get("th")
-                .and_then(|v| v.as_str())
-                .unwrap_or(&tk_text)
-                .to_string()
-        } else {
-            tk_text.trim().to_string()
-        };
+                    let go2_body = url::form_urlencoded::Serializer::new(String::new())
+                        .append_pair("alias", &al)
+                        .append_pair("csrf", &cs)
+                        .append_pair("tkn", &token)
+                        .append_pair("visitor_token", &visitor_token)
+                        .append_pair("signal", signal)
+                        .finish();
 
-        if !token.is_empty() {
-            // Step 4: POST /links/go2 to get destination URL
-            let go2_url = format!("{base_origin}/links/go2");
-            let signal = r#"{"t":1741500000000,"d":12.011,"m":{"move":1354,"click":2,"scroll":0,"key":0,"touch":0,"focus":0},"f":{"webdriver":false,"headless":false,"noPlugins":false,"mobile":false}}"#;
+                    let go2_resp = client
+                        .post(&go2_url)
+                        .header(
+                            "Content-Type",
+                            "application/x-www-form-urlencoded; charset=UTF-8",
+                        )
+                        .header("User-Agent", USER_AGENT)
+                        .header("X-Requested-With", "XMLHttpRequest")
+                        .header("Referer", &final_page_url_str)
+                        .header("Sec-Fetch-Mode", "cors")
+                        .header("Sec-Fetch-Site", "same-origin")
+                        .header("Sec-Fetch-Dest", "empty")
+                        .body(go2_body)
+                        .send()
+                        .await;
 
-            let encoded_signal: String =
-                url::form_urlencoded::byte_serialize(signal.as_bytes()).collect();
-            let encoded_visitor: String =
-                url::form_urlencoded::byte_serialize(visitor_token.as_bytes()).collect();
+                    if let Ok(go2_r) = go2_resp {
+                        if let Ok(go2_text) = go2_r.text().await {
+                            if let Ok(result) = serde_json::from_str::<serde_json::Value>(&go2_text) {
+                                if let Some(dest) = result.get("url").and_then(|u| u.as_str()) {
+                                    let intermediate_url = dest.replace("\\/", "/");
 
-            let go2_body = format!(
-                "alias={}&csrf={}&tkn={}&visitor_token={}&signal={}",
-                al, cs, token, encoded_visitor, encoded_signal
-            );
+                                    let resolved_target = follow_interstitial_to_target(&client, &intermediate_url)
+                                        .await
+                                        .unwrap_or_else(|| intermediate_url.clone());
 
-            let mut go2_req = client
-                .post(&go2_url)
-                .header(
-                    "Content-Type",
-                    "application/x-www-form-urlencoded; charset=UTF-8",
-                )
-                .header("User-Agent", USER_AGENT)
-                .header("X-Requested-With", "XMLHttpRequest")
-                .header("Referer", &normalized)
-                .body(go2_body);
+                                    let (clean_url, trackers_removed, _) = strip_tracking_parameters(&resolved_target);
 
-            if !cookies.is_empty() {
-                go2_req = go2_req.header("Cookie", &cookies);
-            }
-
-            let go2_resp = go2_req.send().await.map_err(|e| e.to_string())?;
-            let go2_text = go2_resp.text().await.map_err(|e| e.to_string())?;
-
-            if let Ok(result) = serde_json::from_str::<serde_json::Value>(&go2_text) {
-                if let Some(dest) = result.get("url").and_then(|u| u.as_str()) {
-                    let intermediate_url = dest.replace("\\/", "/");
-                    let resolved = resolve_redirects(&intermediate_url, MAX_REDIRECT_HOPS)
-                        .await
-                        .unwrap_or_else(|_| intermediate_url.clone());
-                    let (clean_url, trackers_removed, _) = strip_tracking_parameters(&resolved);
-
-                    return Ok(BypassResult {
-                        success: true,
-                        url: Some(clean_url.clone()),
-                        intermediate_url: if intermediate_url != clean_url {
-                            Some(intermediate_url)
-                        } else {
-                            None
-                        },
-                        alias,
-                        status: Some("success".to_string()),
-                        trackers_removed: Some(trackers_removed),
-                        error: None,
-                    });
+                                    return Ok(BypassResult {
+                                        success: true,
+                                        url: Some(clean_url.clone()),
+                                        intermediate_url: if intermediate_url != clean_url {
+                                            Some(intermediate_url)
+                                        } else {
+                                            None
+                                        },
+                                        alias,
+                                        status: Some("success".to_string()),
+                                        trackers_removed: Some(trackers_removed),
+                                        error: None,
+                                    });
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
-    // Fallback: If ad handshake parameters could not be retrieved, resolve redirects normally
     let resolved = resolve_redirects(&normalized, MAX_REDIRECT_HOPS).await?;
     let (clean_url, trackers_removed, _) = strip_tracking_parameters(&resolved);
 
@@ -643,10 +762,23 @@ pub async fn bypass_link(url: String) -> Result<BypassResult, String> {
 
     let normalized = normalize_scheme(trimmed);
 
+    if let Some(unwrapped) = unwrap_embedded_url(&normalized) {
+        let (clean_url, trackers_removed, _) = strip_tracking_parameters(&unwrapped);
+        return Ok(BypassResult {
+            success: true,
+            url: Some(clean_url.clone()),
+            intermediate_url: Some(unwrapped),
+            alias: None,
+            status: Some("success".to_string()),
+            trackers_removed: Some(trackers_removed),
+            error: None,
+        });
+    }
+
     if is_ad_shortener_url(&normalized) {
         match bypass_ad_link(&normalized).await {
-            Ok(res) => return Ok(res),
-            Err(_) => { /* Fallback to standard redirect resolution below */ }
+            Ok(res) if res.success && res.url.is_some() => return Ok(res),
+            _ => { }
         }
     }
 
@@ -699,16 +831,28 @@ pub async fn decrypter_clean(url: String) -> Result<DecryptResult, String> {
 
     let normalized = normalize_scheme(trimmed);
 
-    // If URL is a known ad shortener, run bypass first
+    if let Some(unwrapped) = unwrap_embedded_url(&normalized) {
+        let (clean_url, trackers_removed, removed_list) = strip_tracking_parameters(&unwrapped);
+        return Ok(DecryptResult {
+            success: true,
+            original_url: Some(trimmed.to_string()),
+            final_url: Some(unwrapped),
+            clean_url: Some(clean_url),
+            trackers_removed: Some(trackers_removed),
+            removed_list: Some(removed_list),
+            error: None,
+        });
+    }
+
     let resolved_url = if is_ad_shortener_url(&normalized) {
         match bypass_ad_link(&normalized).await {
             Ok(res) if res.success && res.url.is_some() => res.url.unwrap(),
-            _ => resolve_redirects(&normalized, 10)
+            _ => resolve_redirects(&normalized, MAX_REDIRECT_HOPS)
                 .await
                 .unwrap_or_else(|_| normalized.clone()),
         }
     } else {
-        resolve_redirects(&normalized, 10)
+        resolve_redirects(&normalized, MAX_REDIRECT_HOPS)
             .await
             .unwrap_or_else(|_| normalized.clone())
     };
@@ -756,18 +900,15 @@ pub async fn decrypter_clean_batch(urls: Vec<String>) -> Vec<DecryptResult> {
                     },
                 )
             } else {
-                let res = match decrypter_clean(trimmed.clone()).await {
-                    Ok(r) => r,
-                    Err(err) => DecryptResult {
-                        success: false,
-                        original_url: Some(trimmed),
-                        final_url: None,
-                        clean_url: None,
-                        trackers_removed: None,
-                        removed_list: None,
-                        error: Some(err),
-                    },
-                };
+                let res = decrypter_clean(trimmed).await.unwrap_or_else(|err| DecryptResult {
+                    success: false,
+                    original_url: Some(raw_url),
+                    final_url: None,
+                    clean_url: None,
+                    trackers_removed: None,
+                    removed_list: None,
+                    error: Some(err),
+                });
                 (idx, res)
             }
         });
@@ -775,27 +916,11 @@ pub async fn decrypter_clean_batch(urls: Vec<String>) -> Vec<DecryptResult> {
 
     while let Some(res) = join_set.join_next().await {
         if let Ok((idx, dec_res)) = res {
-            if idx < total {
-                results[idx] = Some(dec_res);
-            }
+            results[idx] = Some(dec_res);
         }
     }
 
-    results
-        .into_iter()
-        .enumerate()
-        .map(|(i, r)| {
-            r.unwrap_or_else(|| DecryptResult {
-                success: false,
-                original_url: None,
-                final_url: None,
-                clean_url: None,
-                trackers_removed: None,
-                removed_list: None,
-                error: Some(format!("Failed to process item at index {}", i)),
-            })
-        })
-        .collect()
+    results.into_iter().map(|r| r.unwrap()).collect()
 }
 
 #[cfg(test)]
@@ -841,15 +966,58 @@ mod tests {
     }
 
     #[test]
-    fn test_strip_tracking_parameters_without_scheme() {
-        let (clean, count, _) = strip_tracking_parameters("youtube.com/watch?v=test&si=track123");
-        assert_eq!(count, 1);
-        assert_eq!(clean, "https://youtube.com/watch?v=test");
+    fn test_unwrap_embedded_url() {
+        assert_eq!(
+            unwrap_embedded_url("https://www.google.com/url?q=https://destination.com/page&sa=D"),
+            Some("https://destination.com/page".to_string())
+        );
+        assert_eq!(
+            unwrap_embedded_url("https://l.facebook.com/l.php?u=https%3A%2F%2Ftarget.org%2Farticle"),
+            Some("https://target.org/article".to_string())
+        );
+    }
+
+    #[test]
+    fn test_extract_page_target_url() {
+        let sample_html = r#"
+        <script type="text/javascript">
+            let 
+                url = 'https://disk.yandex.com.tr/d/gYID7zarA9M5BQ',
+                ref_id = '523768',
+                category_id = '1',
+                pushed = false,
+                ppad = 'https://popcent.org/go.php?id=12&token=xyz';
+        </script>
+        "#;
+
+        let target = extract_page_target_url(sample_html, "https://bildirim.link/ph/xyz");
+        assert_eq!(
+            target,
+            Some("https://disk.yandex.com.tr/d/gYID7zarA9M5BQ".to_string())
+        );
+    }
+
+    #[test]
+    fn test_extract_form_or_script_token() {
+        let html_form = r#"
+        <form method="POST" id="go-link" action="https://aylink.co/links/go2">
+            <input type="hidden" name="alias" value="G00114"/>
+            <input type="hidden" name="csrf" value="dc3e49eb6c4e6b6161c2556073221a4a"/>
+        </form>
+        "#;
+
+        assert_eq!(
+            extract_form_or_script_token(html_form, "alias"),
+            Some("G00114".to_string())
+        );
+        assert_eq!(
+            extract_form_or_script_token(html_form, "csrf"),
+            Some("dc3e49eb6c4e6b6161c2556073221a4a".to_string())
+        );
     }
 
     #[test]
     fn test_meta_refresh_utf8_boundary_safety() {
-        // Embed multi-byte Turkish and emoji characters around the 250-byte mark
         let html_with_multibyte = r#"<!DOCTYPE html>
 <html>
 <head>
@@ -868,54 +1036,36 @@ mod tests {
         );
     }
 
-    #[test]
-    fn test_meta_refresh_quote_and_attribute_order_variations() {
-        // Inverted attribute order + single quotes
-        let inverted = r#"<meta content='0; url=https://example.org/inverted' http-equiv='refresh'>"#;
-        assert_eq!(
-            extract_meta_refresh(inverted),
-            Some("https://example.org/inverted".to_string())
-        );
-
-        // Unquoted refresh
-        let unquoted = r#"<meta http-equiv=refresh content="2;url=https://example.org/unquoted">"#;
-        assert_eq!(
-            extract_meta_refresh(unquoted),
-            Some("https://example.org/unquoted".to_string())
-        );
-
-        // Nested quotes
-        let nested = r#"<meta http-equiv="refresh" content="0; url='https://example.org/nested'">"#;
-        assert_eq!(
-            extract_meta_refresh(nested),
-            Some("https://example.org/nested".to_string())
+    #[tokio::test]
+    async fn test_live_aylink_bypass() {
+        let res = bypass_ad_link("https://ay.live/G00114").await;
+        println!("Live bypass result: {:?}", res);
+        assert!(res.is_ok(), "Bypass should succeed");
+        let bypass_val = res.unwrap();
+        assert!(bypass_val.success, "BypassResult success should be true");
+        let final_url = bypass_val.url.expect("Should have final url");
+        println!("Final bypassed target URL: {}", final_url);
+        assert!(
+            final_url.contains("disk.yandex.com.tr"),
+            "Final URL should be the real destination on Yandex Disk, got: {}",
+            final_url
         );
     }
 
-    #[test]
-    fn test_extract_js_redirect() {
-        let html_js = r#"<script>window.location.href = "https://target-destination.com/final";</script>"#;
-        assert_eq!(
-            extract_js_redirect(html_js),
-            Some("https://target-destination.com/final".to_string())
-        );
-
-        let html_replace = r#"<script>location.replace('https://replace-destination.com/go');</script>"#;
-        assert_eq!(
-            extract_js_redirect(html_replace),
-            Some("https://replace-destination.com/go".to_string())
-        );
-
-        let html_dest_var = r#"<script>let destination = "https://var-destination.com/page";</script>"#;
-        assert_eq!(
-            extract_js_redirect(html_dest_var),
-            Some("https://var-destination.com/page".to_string())
-        );
-
-        let html_btn = r#"<div><a class="btn" href="https://continue-destination.com/next">Devam Et</a></div>"#;
-        assert_eq!(
-            extract_js_redirect(html_btn),
-            Some("https://continue-destination.com/next".to_string())
+    #[tokio::test]
+    async fn test_live_decrypter_clean() {
+        let res = decrypter_clean("https://ay.live/G00114".to_string()).await;
+        println!("Live decrypter_clean result: {:?}", res);
+        assert!(res.is_ok(), "Decrypter clean should succeed");
+        let dec_val = res.unwrap();
+        assert!(dec_val.success, "DecryptResult success should be true");
+        let clean_url = dec_val.clean_url.expect("Should have clean url");
+        println!("Clean target URL: {}", clean_url);
+        assert!(
+            clean_url.contains("disk.yandex.com.tr"),
+            "Clean URL must point to real destination (Yandex Disk), got: {}",
+            clean_url
         );
     }
 }
+

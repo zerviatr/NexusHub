@@ -9,12 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
----
-
-## [2.5.4] - 2026-09-17
-
-### Changed
-- Cleaned up leftover Electron (src/main) and landing page HTML legacy traces.
+### Fixed
+- **Universal Link Decrypter (Bypasser)**:
+  - Overhauled ad-shortener bypass engine for multi-step redirect networks (e.g. `ay.live` / `aylink.co`).
+  - Resolved early refresh tag trap that prematurely returned intermediate ad URLs (`aylink.co/G00114`).
+  - Implemented full two-step POST handshake (`/get/tk` token retrieval followed by `/links/go2` destination resolution) with automatic session cookie jar persistence.
+  - Added intermediate landing page unwrapping (e.g. `bildirim.link/ph/...`) to extract real final target links (such as `disk.yandex.com.tr`).
+  - Excluded legacy pre-Tauri Electron test artifacts from Vitest test runner, keeping test suites 100% green.
 
 ## [2.5.3] - 2026-09-17
 

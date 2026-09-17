@@ -266,3 +266,31 @@ Integrity mode: development
 - [ ] Proje genelinde (dokümanlar ve web klasörü) `PortKiller`, `SystemOptimizer`, `Temp Mail`, `Clipboard Manager` kelimeleri için regex araması yapıldığında, pazarlama veya aktif özellik listelerinde hiçbir sonuç çıkmamalı.
 - [ ] `CHANGELOG.md` sürüm notları, silinme (removal) işlemini şeffafça belgelemeli.
 - [ ] Düzenlenen Markdown ve metin dosyaları linter'dan geçmeli, website projesi başarıyla build edilmeli ve güncellemeler Git'e commit'lenmeli.
+
+## Follow-up — 2026-09-17T01:37:30Z
+
+Identify and fix bugs in the Universal Link Decrypter (Evrensel Link Çözücü) module. After fixing it, test other modules in the application for errors and fix any bugs found.
+
+Working directory: c:\Users\futbo\Desktop\AI Projeleri\NexusHub
+Integrity mode: development
+
+## Requirements
+
+### R1. Universal Link Decrypter (Bypasser) Fixes
+- Deeply audit the `bypasser` (Universal Link Decrypter) module in both the Rust backend (`src-tauri/src/bypasser.rs`) and the React frontend (`src/renderer/src/pages/UniversalDecrypter.tsx` or similar).
+- Identify any parsing errors, network fetch issues, API changes, or UI rendering bugs.
+- Implement robust error handling and fix all identified bugs so that links are bypassed and decrypted successfully.
+
+### R2. Global Bug Hunt & Module Testing
+- Run existing test suites (`cargo test` and Vitest) to identify any failing tests across all other modules.
+- Perform a static analysis and manual audit of core modules (e.g., API Studio, Cyber Fortress, JWT Studio, Organizer) to find hidden bugs or TypeScript errors.
+- Fix all detected bugs, ensuring 100% build success and test coverage.
+
+## Acceptance Criteria
+
+### Verification
+- [ ] Universal Link Decrypter successfully processes test links without throwing errors.
+- [ ] Automated tests for the bypasser module (e.g., `tests/adversarial_m4_test.rs` or similar) pass cleanly.
+- [ ] All other backend and frontend test suites pass with 0 failures (`cargo test`, `npm run test`).
+- [ ] Application builds successfully (`npm run build` and `cargo check`).
+- [ ] Git commit all bug fixes logically.
