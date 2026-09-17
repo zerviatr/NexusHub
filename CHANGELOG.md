@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.5.4] - 2026-09-17
+
+### Changed
+- Cleaned up leftover Electron (src/main) and landing page HTML legacy traces.
+
 ## [2.5.3] - 2026-09-17
 
 ### Removed
