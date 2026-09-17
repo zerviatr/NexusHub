@@ -17,9 +17,9 @@
  */
 
 export const ZENDEV_RELEASE_CONFIG = {
-  version: '2.5.3',
-  setupExe: 'https://github.com/zerviatr/NexusHub/releases/download/v2.5.3/ZenDev-Setup-2.5.3.exe',
-  portableExe: 'https://github.com/zerviatr/NexusHub/releases/download/v2.5.3/ZenDev-Portable-2.5.3.exe',
+  version: '2.5.4',
+  setupExe: 'https://github.com/zerviatr/NexusHub/releases/download/v2.5.4/ZenDev-Setup-2.5.4.exe',
+  portableExe: 'https://github.com/zerviatr/NexusHub/releases/download/v2.5.4/ZenDev-Portable-2.5.4.exe',
   fallbackLatestRelease: 'https://github.com/zerviatr/NexusHub/releases/latest',
   repoUrl: 'https://github.com/zerviatr/NexusHub'
 } as const;
