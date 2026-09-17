@@ -24,7 +24,7 @@ export function renderLandingPage(): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="meta-title">ZenDev — Abonelik Tuzağına Son. 20+ Siber Güç Tek Yazılımda.</title>
-  <meta name="description" content="Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD 7-Pass Dosya İmha Kalkanı, Canlı Donanım Teşhisi ve Şifreleme Kasası. Tek seferlik ödeme, sıfır abonelik.">
+  <meta name="description" content="Scratchpad Ultimate, Color Studio, Workflow Chains, Team Collections, DoD 7-Pass Dosya İmha Kalkanı, Canlı Donanım Teşhisi ve Şifreleme Kasası. Tek seferlik ödeme, sıfır abonelik.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2307080f'/%3E%3Crect x='2' y='2' width='60' height='60' rx='14' fill='none' stroke='%2306b6d4' stroke-width='1.5' stroke-opacity='0.4'/%3E%3Cpath d='M14 16 L48 16 C50 16 51 17 50 19 L40 30 L48 44 C49 46 48 48 46 48 L14 48 C12 48 11 47 12 45 L22 34 L14 20 C13 18 14 16 16 16 Z' fill='url(%23g)' stroke='%2300f2fe' stroke-width='3' stroke-linejoin='round'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2300f2fe'/%3E%3Cstop offset='60%25' stop-color='%2306b6d4'/%3E%3Cstop offset='100%25' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='3.5' fill='%23ffffff'/%3E%3C/svg%3E">
   <link rel="canonical" href="https://zendev-production-4a5b.up.railway.app/">
   <meta property="og:image" content="https://zendev-production-4a5b.up.railway.app/og-banner.png">
@@ -32,7 +32,7 @@ export function renderLandingPage(): string {
   <meta property="og:image:height" content="630">
   <meta name="twitter:image" content="https://zendev-production-4a5b.up.railway.app/og-banner.png">
   <meta property="og:title" content="ZenDev — Abonelik Tuzağına Son. 20+ Siber Güç Tek Yazılımda.">
-  <meta property="og:description" content="Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD 7-Pass Shredder ve Şifreli Kasa. Tek seferlik ödeme, %100 yerel ve offline-first.">
+  <meta property="og:description" content="Scratchpad Ultimate, Color Studio, Workflow Chains, Team Collections, DoD 7-Pass Shredder ve Şifreli Kasa. Tek seferlik ödeme, %100 yerel ve offline-first.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://zendev-production-4a5b.up.railway.app">
   <meta name="twitter:card" content="summary_large_image">
@@ -273,7 +273,7 @@ export function renderLandingPage(): string {
       <div class="flex justify-center mb-8">
         <div onclick="openChangelogModal()" class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full card-glass border border-nexus-cyan/30 text-xs font-mono text-nexus-cyan shadow-[0_0_15px_rgba(var(--c-cyan),0.2)] cursor-pointer hover:border-nexus-cyan transition-all">
           <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-ping"></span>
-          <span>v2.4.2 Yayında</span>
+          <span>v2.5.3 Yayında</span>
           <span class="text-nexus-border">|</span>
           <span class="text-white" data-i18n="hero.pill.tools">20+ Siber Güç</span>
           <span class="text-nexus-border">|</span>
@@ -289,7 +289,7 @@ export function renderLandingPage(): string {
           <span data-i18n="hero.title3">Tek Yazılım,</span> <span class="underline decoration-nexus-cyan/40 underline-offset-8" data-i18n="hero.title4">20+ Siber Güç.</span>
         </h1>
         <p class="text-base sm:text-lg md:text-xl text-nexus-muted leading-relaxed max-w-2xl mx-auto font-sans" data-i18n="hero.desc">
-          Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD askeri veri imha kalkanı, donanım monitörü ve şifreli kasa. Her araca ayrı para ödemeyi bırakın.
+          Scratchpad Ultimate, Color Studio, Workflow Chains, Team Collections, DoD askeri veri imha kalkanı, donanım monitörü ve şifreli kasa. Her araca ayrı para ödemeyi bırakın.
         </p>
       </div>
 
@@ -298,7 +298,7 @@ export function renderLandingPage(): string {
         <div onclick="openCmdPalette()" class="group p-2 sm:p-2.5 rounded-2xl card-glass border border-nexus-border/80 hover:border-nexus-cyan/60 flex items-center justify-between gap-3 cursor-pointer shadow-[0_10px_35px_rgba(0,0,0,0.5)] hover:shadow-[0_0_35px_rgba(var(--c-cyan),0.25)] transition-all">
           <div class="flex items-center gap-3 pl-2 truncate">
             <span class="text-nexus-cyan text-sm sm:text-base animate-pulse">⚡</span>
-            <span class="text-xs sm:text-sm text-nexus-muted group-hover:text-white transition-colors truncate">Bir araç arayın veya simüle edin... (Örn: scratchpad, port, color, tempmail)</span>
+            <span class="text-xs sm:text-sm text-nexus-muted group-hover:text-white transition-colors truncate">Bir araç arayın veya simüle edin... (Örn: scratchpad, port, color, Team Collections)</span>
           </div>
           <div class="flex items-center gap-1.5 pr-1 shrink-0">
             <kbd class="px-2 py-1 rounded-lg bg-nexus-surface border border-nexus-border text-[11px] font-mono text-nexus-cyan font-bold shadow-sm group-hover:border-nexus-cyan/50">Ctrl + K</kbd>
@@ -308,10 +308,10 @@ export function renderLandingPage(): string {
 
       <!-- Hero Action Buttons -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
-        <button onclick="window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.2.exe', '_blank')" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border/80 hover:border-nexus-cyan/50 text-white font-heading font-bold text-base flex items-center justify-center gap-3 transition-all cursor-pointer shadow-lg group">
+        <button onclick="window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.5.3.exe', '_blank')" class="w-full sm:w-auto px-7 py-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border/80 hover:border-nexus-cyan/50 text-white font-heading font-bold text-base flex items-center justify-center gap-3 transition-all cursor-pointer shadow-lg group">
           <svg class="w-5 h-5 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
           <span data-i18n="hero.btnDownload">Windows için İndir</span>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider" data-i18n="hero.btnSoon">v2.4.2 Yayında</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider" data-i18n="hero.btnSoon">v2.5.3 Yayında</span>
         </button>
         <a href="#pricing" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-nexus-cyan via-sky-400 to-nexus-accent hover:brightness-110 active:scale-95 text-nexus-bg font-heading font-black text-base flex items-center justify-center gap-2 shadow-[0_0_35px_rgba(var(--c-cyan),0.5)] transition-all">
           <span data-i18n="hero.btnPro">Ömür Boyu Pro Lisans</span>
@@ -409,8 +409,8 @@ export function renderLandingPage(): string {
           
           <!-- Mock Sidebar -->
           <div class="border-b md:border-b-0 md:border-r border-nexus-border/60 bg-nexus-bg/60 p-4 flex md:flex-col gap-1.5 overflow-x-auto md:overflow-y-auto max-h-[560px]">
-            <button onclick="switchMockTool('tempmail')" id="mock-btn-tempmail" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 bg-nexus-cyan/15 text-nexus-cyan border border-nexus-cyan/30 transition-all cursor-pointer shrink-0">
-              <span>📬</span> <span data-i18n="sim.tools.tempmail">TempMail Posta</span>
+            <button onclick="switchMockTool('Team Collections')" id="mock-btn-Team Collections" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 bg-nexus-cyan/15 text-nexus-cyan border border-nexus-cyan/30 transition-all cursor-pointer shrink-0">
+              <span>📬</span> <span data-i18n="sim.tools.Team Collections">Team Collections Posta</span>
             </button>
             <button onclick="switchMockTool('scratchpad')" id="mock-btn-scratchpad" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0">
               <span>📝</span> <span data-i18n="sim.tools.scratchpad">Scratchpad & Flow</span>
@@ -419,7 +419,7 @@ export function renderLandingPage(): string {
               <span>🎨</span> <span data-i18n="sim.tools.color">Color & WCAG</span>
             </button>
             <button onclick="switchMockTool('portkiller')" id="mock-btn-portkiller" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0">
-              <span>⚡</span> <span data-i18n="sim.tools.portkiller">Port Killer</span>
+              <span>⚡</span> <span data-i18n="sim.tools.portkiller">Workflow Chains</span>
             </button>
             <button onclick="switchMockTool('decrypter')" id="mock-btn-decrypter" class="w-full text-left px-3.5 py-2.5 rounded-xl font-mono text-xs font-semibold flex items-center gap-2.5 text-nexus-muted hover:text-white hover:bg-nexus-surface transition-all cursor-pointer shrink-0">
               <span>🔗</span> <span data-i18n="sim.tools.decrypter">Link Decrypter</span>
@@ -444,12 +444,12 @@ export function renderLandingPage(): string {
           <!-- Mock Workspace Panels -->
           <div class="md:col-span-3 p-6 sm:p-8 bg-nexus-card/40 flex flex-col justify-center">
 
-            <!-- Panel 1: TempMail Preview -->
-            <div id="mock-panel-tempmail" class="space-y-4">
+            <!-- Panel 1: Team Collections Preview -->
+            <div id="mock-panel-Team Collections" class="space-y-4">
               <div class="flex items-center justify-between">
                 <div>
                   <h3 class="font-heading font-black text-xl text-white flex items-center gap-2">
-                    TempMail & Real-Time Inbox <span class="px-2 py-0.5 text-[10px] rounded bg-emerald-500/20 text-emerald-400 font-mono">CANLI</span>
+                    Team Collections & Real-Time Inbox <span class="px-2 py-0.5 text-[10px] rounded bg-emerald-500/20 text-emerald-400 font-mono">CANLI</span>
                   </h3>
                   <p class="text-xs text-nexus-muted mt-0.5">Spam korumalı, anında tek kullanımlık e-posta.</p>
                 </div>
@@ -507,7 +507,7 @@ export function renderLandingPage(): string {
 
 - [x] DoD 7-Pass Shredder
 - [x] Mermaid Akış Motoru
-- [x] Port Killer & Telemetry
+- [x] Workflow Chains & Telemetry
 
 \`\`\`mermaid
 graph LR
@@ -527,7 +527,7 @@ graph LR
                     <ul class="text-[11px] space-y-1 text-emerald-400 font-mono">
                       <li>✓ DoD 7-Pass Shredder</li>
                       <li>✓ Mermaid Akış Motoru</li>
-                      <li>✓ Port Killer & Telemetry</li>
+                      <li>✓ Workflow Chains & Telemetry</li>
                     </ul>
                     <div class="mt-2 p-2 rounded-lg bg-nexus-bg border border-nexus-cyan/30 flex items-center justify-center gap-2 font-mono text-[10px]">
                       <span class="px-2 py-1 rounded bg-nexus-surface border border-nexus-border text-white">Client</span>
@@ -597,12 +597,12 @@ graph LR
               </div>
             </div>
 
-            <!-- Panel: Port Killer Preview (NEW) -->
+            <!-- Panel: Workflow Chains Preview (NEW) -->
             <div id="mock-panel-portkiller" class="space-y-4 hidden">
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h3 class="font-heading font-black text-xl text-white flex items-center gap-2">
-                    Port Killer & TCP/UDP Watchdog <span class="px-2 py-0.5 text-[10px] rounded bg-red-500/20 text-red-400 font-mono font-bold">CANLI SONLANDIRICI</span>
+                    Workflow Chains & TCP/UDP Watchdog <span class="px-2 py-0.5 text-[10px] rounded bg-red-500/20 text-red-400 font-mono font-bold">CANLI SONLANDIRICI</span>
                   </h3>
                   <p class="text-xs text-nexus-muted mt-0.5">Çakışan yerel portları ve asılı kalan geliştirici sunucularını anında yok edin.</p>
                 </div>
@@ -758,7 +758,7 @@ graph LR
                 <div class="max-w-xs space-y-1.5 text-xs text-nexus-muted">
                   <div class="text-white font-bold">HUD Özellikleri:</div>
                   <div>• Canlı CPU & RAM durum halkası</div>
-                  <div>• 1-Tıkla anında TempMail üret & kopyala</div>
+                  <div>• 1-Tıkla anında Team Collections üret & kopyala</div>
                   <div>• 1-Tıkla Windows önbelleğini boşalt</div>
                   <div>• Ctrl + K Komut Paletini tek tıkla aç</div>
                 </div>
@@ -959,7 +959,7 @@ graph LR
           </div>
 
           <!-- Item 4: Burner Mail / Inboxes Pro -->
-          <div id="card-roi-tempmail" onclick="toggleRoiCard('roi-tempmail')" class="roi-item p-4 rounded-2xl border border-red-500/30 bg-red-500/5 hover:border-red-500/60 transition-all cursor-pointer select-none group flex flex-col justify-between relative overflow-hidden">
+          <div id="card-roi-workflow" onclick="toggleRoiCard('roi-workflow')" class="roi-item p-4 rounded-2xl border border-red-500/30 bg-red-500/5 hover:border-red-500/60 transition-all cursor-pointer select-none group flex flex-col justify-between relative overflow-hidden">
             <div class="flex items-start justify-between gap-2">
               <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 text-sm shrink-0">
@@ -970,11 +970,11 @@ graph LR
                   <div class="text-[10px] text-nexus-muted font-mono">Kullan-At Geçici Posta</div>
                 </div>
               </div>
-              <input type="checkbox" id="roi-tempmail" data-usd="8" data-try="295" checked onclick="event.stopPropagation(); calcRoi();" class="w-4 h-4 accent-red-500 rounded cursor-pointer mt-1">
+              <input type="checkbox" id="roi-workflow" data-usd="8" data-try="295" checked onclick="event.stopPropagation(); calcRoi();" class="w-4 h-4 accent-red-500 rounded cursor-pointer mt-1">
             </div>
             <div class="mt-3 pt-2.5 border-t border-nexus-border/30 flex items-center justify-between text-[11px]">
               <span class="font-mono text-red-400 font-bold">$8.00 / ay</span>
-              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">→ TempMail Studio</span>
+              <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">→ Team Collections Studio</span>
             </div>
           </div>
 
@@ -1373,13 +1373,13 @@ graph LR
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="arsenal-grid">
 
-        <!-- Tool 1: TempMail -->
-        <div onclick="openToolDrawer('tempmail', 'TempMail & Gelen Kutusu', 'Spam ve kayıt tuzaklarından kurtulun. Tek tıkla rastgele e-posta üretir, gelen doğrulama kodlarını anlık olarak okur.', 'GİZLİLİK & GÜVENLİK')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="privacy">
+        <!-- Tool 1: Team Collections -->
+        <div onclick="openToolDrawer('Team Collections', 'Team Collections & Gelen Kutusu', 'Spam ve kayıt tuzaklarından kurtulun. Tek tıkla rastgele e-posta üretir, gelen doğrulama kodlarını anlık olarak okur.', 'GİZLİLİK & GÜVENLİK')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="privacy">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-nexus-cyan/10 border border-nexus-cyan/30 flex items-center justify-center text-nexus-cyan mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </div>
-            <h3 class="font-heading font-bold text-xl text-white mb-2">TempMail & Gelen Kutusu</h3>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Team Collections & Gelen Kutusu</h3>
             <p class="text-xs text-nexus-muted leading-relaxed">
               Spam ve kayıt tuzaklarından kurtulun. Tek tıkla rastgele e-posta üretir, gelen doğrulama kodlarını anlık olarak okur.
             </p>
@@ -1555,13 +1555,13 @@ graph LR
           <span class="mt-6 text-[11px] font-mono text-purple-400 flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
         </div>
 
-        <!-- Tool 14: Port Killer -->
-        <div onclick="openToolDrawer('portkiller', 'Port Killer (TCP/UDP Watchdog)', '3000, 8080 veya kilitlenen herhangi bir portu işgal eden çakışan süreçleri tek tıkla zorla sonlandırır.', 'SİSTEM & AĞ')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="system">
+        <!-- Tool 14: Workflow Chains -->
+        <div onclick="openToolDrawer('portkiller', 'Workflow Chains (TCP/UDP Watchdog)', '3000, 8080 veya kilitlenen herhangi bir portu işgal eden çakışan süreçleri tek tıkla zorla sonlandırır.', 'SİSTEM & AĞ')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="system">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
             </div>
-            <h3 class="font-heading font-bold text-xl text-white mb-2">Port Killer (TCP/UDP Watchdog)</h3>
+            <h3 class="font-heading font-bold text-xl text-white mb-2">Workflow Chains (TCP/UDP Watchdog)</h3>
             <p class="text-xs text-nexus-muted leading-relaxed">
               "Port 3000 already in use" kabusuna son! Dinlenen tüm yerel portları listeler, PID ve süreçleri tek tıkla zorla sonlandırır.
             </p>
@@ -1598,14 +1598,14 @@ graph LR
         </div>
 
         <!-- Tool 17: Desktop Floating Orb -->
-        <div onclick="openToolDrawer('orb', 'Desktop Floating Orb (HUD)', 'Masaüstünüzde sessizce süzülen sibernetik mini widget. Tek tıkla TempMail kopyalayın, RAM boşaltın.', 'SİSTEM & HUD')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="system">
+        <div onclick="openToolDrawer('orb', 'Desktop Floating Orb (HUD)', 'Masaüstünüzde sessizce süzülen sibernetik mini widget. Tek tıkla API Payload Kopyalayın, RAM boşaltın.', 'SİSTEM & HUD')" class="arsenal-card p-6 rounded-3xl card-glass flex flex-col justify-between group transition-all cursor-pointer hover:border-nexus-cyan/70 hover:shadow-[0_0_30px_rgba(var(--c-cyan),0.18)]" data-category="system">
           <div>
             <div class="w-12 h-12 rounded-2xl bg-nexus-cyan/10 border border-nexus-cyan/30 flex items-center justify-center text-nexus-cyan mb-5 group-hover:scale-110 transition-transform">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
             <h3 class="font-heading font-bold text-xl text-white mb-2">Desktop Floating Orb (HUD)</h3>
             <p class="text-xs text-nexus-muted leading-relaxed">
-              Masaüstünüzde sessizce süzülen sibernetik mini widget. Tek tıkla TempMail kopyalayın, RAM boşaltın ve komut paletini çağırın.
+              Masaüstünüzde sessizce süzülen sibernetik mini widget. Tek tıkla API Payload Kopyalayın, RAM boşaltın ve komut paletini çağırın.
             </p>
           </div>
           <span class="mt-6 text-[11px] font-mono text-nexus-cyan flex items-center gap-1 group-hover:underline">Teknik Röntgeni İncele →</span>
@@ -1697,7 +1697,7 @@ graph LR
             <button onclick="selectQuizRole('power')" class="p-4 rounded-2xl bg-nexus-surface/80 border border-nexus-border hover:border-nexus-cyan/60 hover:bg-nexus-cyan/5 text-left transition-all group cursor-pointer">
               <div class="text-2xl mb-1">⚡</div>
               <div class="font-bold text-white group-hover:text-nexus-cyan text-sm">Güç Kullanıcısı & Öğrenci</div>
-              <div class="text-xs text-nexus-muted mt-1">Toplu dosya düzenleme, tempmail, sistem optimizasyonu.</div>
+              <div class="text-xs text-nexus-muted mt-1">Toplu dosya düzenleme, Team Collections, sistem optimizasyonu.</div>
             </button>
           </div>
         </div>
@@ -1840,13 +1840,13 @@ graph LR
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> QR Code Studio</li>
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Hash & JSON Studio</li>
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Temel Ağ Ping & IP Tespiti</li>
-              <li class="flex items-center gap-2.5 text-nexus-muted line-through"><span class="w-4 h-4 shrink-0 text-nexus-border">✕</span> TempMail & Inbox Reader</li>
+              <li class="flex items-center gap-2.5 text-nexus-muted line-through"><span class="w-4 h-4 shrink-0 text-nexus-border">✕</span> Team Collections & Inbox Reader</li>
               <li class="flex items-center gap-2.5 text-nexus-muted line-through"><span class="w-4 h-4 shrink-0 text-nexus-border">✕</span> Cyber Fortress Shredder & Vault</li>
             </ul>
           </div>
-          <button onclick="window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.2.exe', '_blank')" class="w-full py-3.5 rounded-xl border border-nexus-border/80 bg-nexus-surface/50 hover:border-nexus-cyan/40 text-nexus-muted hover:text-white text-xs font-mono font-bold text-center transition-all cursor-pointer flex items-center justify-center gap-2" data-i18n="plan1.btn">
+          <button onclick="window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.5.3.exe', '_blank')" class="w-full py-3.5 rounded-xl border border-nexus-border/80 bg-nexus-surface/50 hover:border-nexus-cyan/40 text-nexus-muted hover:text-white text-xs font-mono font-bold text-center transition-all cursor-pointer flex items-center justify-center gap-2" data-i18n="plan1.btn">
             <span>Ücretsiz İndir</span>
-            <span class="px-1.5 py-0.5 rounded text-[9px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase font-bold">v2.4.2</span>
+            <span class="px-1.5 py-0.5 rounded text-[9px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase font-bold">v2.5.3</span>
           </button>
         </div>
 
@@ -1868,7 +1868,7 @@ graph LR
             </p>
             <ul class="space-y-3.5 text-xs text-nexus-text font-medium mb-8">
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> <b>TÜM 20+ Siber Araç (Limitsiz)</b></li>
-              <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> TempMail & Canlı Gelen Kutusu</li>
+              <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Team Collections</li>
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Evrensel Link & Reklam Çözücü</li>
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Cyber Fortress (DoD 7-Pass İmha & Kasa)</li>
               <li class="flex items-center gap-2.5"><svg class="w-4 h-4 text-nexus-cyan shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Desktop Floating Orb Mini Widget</li>
@@ -1935,7 +1935,7 @@ graph LR
                   <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Limitsiz</td>
                 </tr>
                 <tr>
-                  <td class="py-3 px-4 font-bold text-white">TempMail & Gerçek Zamanlı Gelen Kutusu</td>
+                  <td class="py-3 px-4 font-bold text-white">Team Collections</td>
                   <td class="py-3 px-4 text-center text-red-400 font-bold">✕</td>
                   <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Limitsiz</td>
                   <td class="py-3 px-4 text-center text-emerald-400 font-bold">✓ Limitsiz</td>
@@ -2118,7 +2118,7 @@ graph LR
           <div class="space-y-3">
             <div class="flex text-amber-400 text-sm">★★★★★</div>
             <p class="text-xs text-nexus-text leading-relaxed font-sans">
-              "RAM flush ve Sentinel donanım monitörü arka planda sıfır yük bindiriyor. Floating Orb ile tek tıkla TempMail üretip kopyalamak günlük akışımı inanılmaz hızlandırdı."
+              "RAM flush ve Sentinel donanım monitörü arka planda sıfır yük bindiriyor. Floating Orb ile tek tıkla Team Collections üretip kopyalamak günlük akışımı inanılmaz hızlandırdı."
             </p>
           </div>
           <div class="mt-6 pt-4 border-t border-nexus-border/60 flex items-center gap-3">
@@ -2385,13 +2385,13 @@ graph LR
     <div class="flex items-center gap-3 truncate">
       <div class="w-3 h-3 rounded-full bg-nexus-cyan animate-pulse shrink-0"></div>
       <div class="truncate">
-        <div class="text-xs font-bold text-white truncate">ZenDev v2.4.2 Suite</div>
+        <div class="text-xs font-bold text-white truncate">ZenDev v2.5.3 Suite</div>
         <div class="text-[10px] font-mono text-nexus-muted truncate">Ömür Boyu Tek Ödeme • Sıfır Abonelik</div>
       </div>
     </div>
     <div class="flex items-center gap-2 shrink-0">
       <a href="https://github.com/zerviatr/NexusHub/releases/latest" class="px-3.5 py-1.5 rounded-xl bg-nexus-surface hover:bg-nexus-border text-nexus-cyan hover:text-white font-mono text-xs transition-colors cursor-pointer flex items-center gap-1.5 border border-nexus-cyan/30">
-        <span>İndir (v2.4.2)</span>
+        <span>İndir (v2.5.3)</span>
       </a>
       <a href="#pricing" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent hover:brightness-110 text-nexus-bg font-heading font-black text-xs shadow-[0_0_15px_rgba(var(--c-cyan),0.4)] transition-all cursor-pointer">
         Lisans Al
@@ -2432,8 +2432,8 @@ graph LR
       <button onclick="triggerQuickRamFlush()" class="w-full text-left p-2 rounded-xl hover:bg-purple-500/20 text-purple-300 flex items-center gap-2.5 transition-all cursor-pointer">
         <span>⚡</span> <span>1-Tık RAM Boşalt</span>
       </button>
-      <button onclick="triggerQuickTempMail()" class="w-full text-left p-2 rounded-xl hover:bg-nexus-cyan/20 text-nexus-cyan flex items-center gap-2.5 transition-all cursor-pointer">
-        <span>📬</span> <span>TempMail Kopyala</span>
+      <button onclick="triggerQuickWorkflow()" class="w-full text-left p-2 rounded-xl hover:bg-nexus-cyan/20 text-nexus-cyan flex items-center gap-2.5 transition-all cursor-pointer">
+        <span>📬</span> <span>API Payload Kopyala</span>
       </button>
       <button onclick="openCmdPalette(); toggleFloatingOrbMenu();" class="w-full text-left p-2 rounded-xl hover:bg-nexus-surface text-white flex items-center gap-2.5 transition-all cursor-pointer">
         <span>🔍</span> <span>Komut Paleti (Ctrl+K)</span>
@@ -2458,18 +2458,18 @@ graph LR
       <!-- Search Input Header -->
       <div class="p-4 sm:p-5 border-b border-nexus-border/80 flex items-center gap-3 bg-nexus-surface/50">
         <span class="text-nexus-cyan text-lg">⚡</span>
-        <input type="text" id="cmd-search-input" oninput="filterCmdActions(this.value)" placeholder="Bir araç, eylem veya komut arayın... (Örn: tempmail, ram, lisans, ses)" class="w-full bg-transparent text-sm sm:text-base font-mono text-white outline-none placeholder:text-nexus-muted">
+        <input type="text" id="cmd-search-input" oninput="filterCmdActions(this.value)" placeholder="Bir araç, eylem veya komut arayın... (Örn: json, api, cron, regex)" class="w-full bg-transparent text-sm sm:text-base font-mono text-white outline-none placeholder:text-nexus-muted">
         <kbd class="px-2 py-1 rounded bg-nexus-bg border border-nexus-border text-[10px] font-mono text-nexus-muted shrink-0">ESC</kbd>
       </div>
 
       <!-- Action Items List -->
       <div id="cmd-items-list" class="max-h-96 overflow-y-auto p-3 space-y-1.5 font-mono text-xs">
         
-        <div onclick="executeCmd('tempmail')" class="cmd-item p-3 rounded-xl hover:bg-nexus-cyan/15 hover:border-nexus-cyan/40 border border-transparent cursor-pointer flex items-center justify-between transition-all group" data-keywords="tempmail gecici e-posta fake mail burner">
+        <div onclick="executeCmd('Team Collections')" class="cmd-item p-3 rounded-xl hover:bg-nexus-cyan/15 hover:border-nexus-cyan/40 border border-transparent cursor-pointer flex items-center justify-between transition-all group" data-keywords="workflow api chain">
           <div class="flex items-center gap-3">
             <span class="p-2 rounded-lg bg-nexus-cyan/10 text-nexus-cyan group-hover:scale-110 transition-transform">✉️</span>
             <div>
-              <div class="font-bold text-white group-hover:text-nexus-cyan transition-colors">TempMail Oluştur & Kopyala</div>
+              <div class="font-bold text-white group-hover:text-nexus-cyan transition-colors">Mock Payload Oluştur</div>
               <div class="text-[11px] text-nexus-muted">Anında rastgele tek kullanımlık e-posta türetir ve panoya alır</div>
             </div>
           </div>
@@ -2520,11 +2520,11 @@ graph LR
           <span class="text-nexus-cyan opacity-0 group-hover:opacity-100 transition-opacity">İncele ↵</span>
         </div>
 
-        <div onclick="executeCmd('tool:portkiller')" class="cmd-item p-3 rounded-xl hover:bg-red-500/15 hover:border-red-500/40 border border-transparent cursor-pointer flex items-center justify-between transition-all group" data-keywords="port killer tcp udp watchdog localhost 3000 8080 process kill">
+        <div onclick="executeCmd('tool:workflow')" class="cmd-item p-3 rounded-xl hover:bg-red-500/15 hover:border-red-500/40 border border-transparent cursor-pointer flex items-center justify-between transition-all group" data-keywords="workflow visual builder">
           <div class="flex items-center gap-3">
             <span class="p-2 rounded-lg bg-red-500/10 text-red-400 group-hover:scale-110 transition-transform">⚡</span>
             <div>
-              <div class="font-bold text-white group-hover:text-red-400 transition-colors">Port Killer (TCP/UDP Watchdog)</div>
+              <div class="font-bold text-white group-hover:text-red-400 transition-colors">Workflow Chains (TCP/UDP Watchdog)</div>
               <div class="text-[11px] text-nexus-muted">Kilitlenen portları tespit edip PID üzerinden tek tıkla sonlandırın</div>
             </div>
           </div>
@@ -2641,13 +2641,13 @@ graph LR
         <span class="w-2 h-2 rounded-full bg-nexus-cyan animate-ping"></span>
         <span>SÜRÜM RADARI</span>
       </div>
-      <h3 class="font-heading font-black text-2xl text-white mb-4">ZenDev v2.4.2 Yenilikleri</h3>
+      <h3 class="font-heading font-black text-2xl text-white mb-4">ZenDev v2.5.3 Yenilikleri</h3>
 
       <div class="space-y-3.5 text-xs text-nexus-muted font-sans max-h-80 overflow-y-auto pr-2">
         <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-cyan/40 shadow-sm">
           <div class="text-white font-bold mb-1 flex items-center gap-2">
             <span>✨ Yeni ZenDev Sibernetik İkon & Marka Kimliği</span>
-            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-nexus-cyan/20 text-nexus-cyan font-bold">v2.4.2</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-nexus-cyan/20 text-nexus-cyan font-bold">v2.5.3</span>
           </div>
           <div>Fütüristik "Z" monogramı, çoklu çözünürlük desteği (16px'ten 512px'e kristal netlik) ve yenilenen web sitesi estetiği.</div>
         </div>
@@ -2665,7 +2665,7 @@ graph LR
             <span>⚡ Arka Plan Uyku Modu & Sıfır CPU Tüketimi</span>
             <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-nexus-cyan/20 text-nexus-cyan font-bold">YENİ</span>
           </div>
-          <div>Pencere gizlendiğinde FloatingOrb, TempMail ve Clipboard periyodik sorguları durdurularak batarya ve işlemci korunur.</div>
+          <div>Pencere gizlendiğinde FloatingOrb, Workspace ve Team Collections periyodik sorguları durdurularak batarya ve işlemci korunur.</div>
         </div>
         <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
           <div class="text-white font-bold mb-1 flex items-center gap-2">
@@ -2677,7 +2677,7 @@ graph LR
 
         <div class="p-3 rounded-xl bg-nexus-surface/60 border border-nexus-border/60">
           <div class="text-white font-bold mb-1 flex items-center gap-2">
-            <span>⚡ Port Killer (TCP/UDP Watchdog)</span>
+            <span>⚡ Workflow Chains (TCP/UDP Watchdog)</span>
             <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-red-500/20 text-red-400">YENİ</span>
           </div>
           <div>Yerel port çakışmalarına tek tıkla son! localhost portlarını dinleyen asılı Node/Python/Java süreçlerini PID üzerinden anında zorla öldürün.</div>
@@ -2704,7 +2704,7 @@ graph LR
             <span>🔮 Floating Orb Mini-Widget</span>
             <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-400">HUD</span>
           </div>
-          <div>Masaüstünde yüzen canlı HUD: 1-Tık TempMail kopyalama, canlı CPU/RAM göstergesi ve anında Windows bellek önbelleği boşaltma.</div>
+          <div>Masaüstünde yüzen canlı HUD: 1-Tık API Payload Kopyalama, canlı CPU/RAM göstergesi ve anında Windows bellek önbelleği boşaltma.</div>
         </div>
       </div>
 
@@ -2939,7 +2939,7 @@ graph LR
         'hero.title2': 'Son.',
         'hero.title3': 'Tek Yazılım,',
         'hero.title4': '20+ Siber Güç.',
-        'hero.desc': 'Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD askeri veri imha kalkanı, donanım monitörü ve şifreli kasa. Her araca ayrı para ödemeyi bırakın.',
+        'hero.desc': 'Scratchpad Ultimate, Color Studio, Workflow Chains, Team Collections, DoD askeri veri imha kalkanı, donanım monitörü ve şifreli kasa. Her araca ayrı para ödemeyi bırakın.',
         'hero.btnDownload': 'Windows için İndir',
         'hero.btnSoon': 'Çok Yakında',
         'hero.btnPro': 'Ömür Boyu Pro Lisans',
@@ -2947,10 +2947,10 @@ graph LR
         'sim.themeLabel': 'Siber Tema Seçici:',
         'sim.title': 'ZenDev Masaüstünüzde Nasıl Görünür?',
         'sim.desc': 'İndirmeden önce aşağıdaki sekmelere tıklayarak ZenDev’ın sibernetik araçlarını ve pürüzsüz arayüzünü canlı test edin.',
-        'sim.tools.tempmail': 'TempMail Posta',
+        'sim.tools.Team Collections': 'Team Collections Posta',
         'sim.tools.scratchpad': 'Scratchpad & Flow',
         'sim.tools.color': 'Color & WCAG',
-        'sim.tools.portkiller': 'Port Killer',
+        'sim.tools.portkiller': 'Workflow Chains',
         'sim.tools.decrypter': 'Link Decrypter',
         'sim.tools.password': 'Parola & Kırılma',
         'sim.tools.fortress': 'Cyber Fortress',
@@ -2998,7 +2998,7 @@ graph LR
         'hero.title2': 'Subscriptions.',
         'hero.title3': 'One Suite,',
         'hero.title4': '20+ Cyber Tools.',
-        'hero.desc': 'Scratchpad Ultimate, Color Studio, Port Killer, TempMail, DoD military shredder, live hardware sentinel, and encrypted vault. Stop paying separate fees for simple utilities.',
+        'hero.desc': 'Scratchpad Ultimate, Color Studio, Workflow Chains, Team Collections, DoD military shredder, live hardware sentinel, and encrypted vault. Stop paying separate fees for simple utilities.',
         'hero.btnDownload': 'Download for Windows',
         'hero.btnSoon': 'Coming Soon',
         'hero.btnPro': 'Lifetime Pro License',
@@ -3006,10 +3006,10 @@ graph LR
         'sim.themeLabel': 'Cyber Theme Engine:',
         'sim.title': 'How ZenDev Looks on Your Desktop',
         'sim.desc': 'Click the tabs below to test drive ZenDev’s cybernetic tools and smooth interface before downloading.',
-        'sim.tools.tempmail': 'TempMail Inbox',
+        'sim.tools.Team Collections': 'Team Collections Inbox',
         'sim.tools.scratchpad': 'Scratchpad & Flow',
         'sim.tools.color': 'Color & WCAG',
-        'sim.tools.portkiller': 'Port Killer',
+        'sim.tools.portkiller': 'Workflow Chains',
         'sim.tools.decrypter': 'Link Decrypter',
         'sim.tools.password': 'Password Analyzer',
         'sim.tools.fortress': 'Cyber Fortress',
@@ -3094,7 +3094,7 @@ graph LR
     } catch {}
 
     // ─── Interactive Mockup Tool Switcher ──────────────────────────────────
-    const tools = ['tempmail', 'scratchpad', 'color', 'portkiller', 'decrypter', 'password', 'fortress', 'sentinel', 'orb', 'hash'];
+    const tools = ['Team Collections', 'scratchpad', 'color', 'portkiller', 'decrypter', 'password', 'fortress', 'sentinel', 'orb', 'hash'];
     function switchMockTool(toolId) {
       tools.forEach(t => {
         const p = document.getElementById('mock-panel-' + t);
@@ -3133,19 +3133,19 @@ graph LR
           '> ZenDev v2.4.0 Yerel Güvenlik Kalkanı\\n\\n' +
           '- [x] DoD 5220.22-M 7-Pass Shredder\\n' +
           '- [x] AES-256-GCM Kasa\\n' +
-          '- [x] TCP/UDP Port Killer\\n\\n' +
+          '- [x] TCP/UDP Workflow Chains\\n\\n' +
           b3 + 'mermaid\\n' +
           'graph TD\\n' +
           '  User([Kullanıcı]) --> App[ZenDev Core]\\n' +
           '  App --> Vault[(Şifreli Kasa)]\\n' +
-          '  App --> NetGuard[Port Killer]\\n' +
+          '  App --> NetGuard[Workflow Chains]\\n' +
           b3;
         preview.innerHTML = '<h4 class="font-heading font-bold text-white text-sm border-b border-nexus-border/60 pb-1">🏗️ Sistem Mimarisi Şeması</h4>' +
           '<p class="text-[11px] text-nexus-muted italic border-l-2 border-nexus-cyan pl-2">ZenDev v2.4.0 Yerel Güvenlik Kalkanı</p>' +
           '<ul class="text-[11px] space-y-1 text-emerald-400 font-mono">' +
             '<li>✓ DoD 5220.22-M 7-Pass Shredder</li>' +
             '<li>✓ AES-256-GCM Kasa</li>' +
-            '<li>✓ TCP/UDP Port Killer</li>' +
+            '<li>✓ TCP/UDP Workflow Chains</li>' +
           '</ul>' +
           '<div class="mt-2 p-2 rounded-lg bg-nexus-bg border border-nexus-cyan/30 flex items-center justify-center gap-2 font-mono text-[10px]">' +
             '<span class="px-2 py-1 rounded bg-nexus-surface border border-nexus-border text-white">User</span>' +
@@ -3217,7 +3217,7 @@ graph LR
       playCyberSound('success');
     }
 
-    // ─── Port Killer Mockup Handlers ───────────────────────────────────────
+    // ─── Workflow Chains Mockup Handlers ───────────────────────────────────────
     function killSimPort(port) {
       const row = document.getElementById('sim-port-row-' + port);
       if (row) {
@@ -3312,7 +3312,7 @@ graph LR
     }
 
     function toggleAllRoi(checkAll) {
-      ['roi-1password', 'roi-postman', 'roi-cleaner', 'roi-tempmail', 'roi-paste', 'roi-organizer', 'roi-color', 'roi-decrypter'].forEach(id => {
+      ['roi-1password', 'roi-postman', 'roi-cleaner', 'roi-workflow', 'roi-paste', 'roi-organizer', 'roi-color', 'roi-decrypter'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.checked = checkAll;
       });
@@ -3325,7 +3325,7 @@ graph LR
         'roi-1password',
         'roi-postman',
         'roi-cleaner',
-        'roi-tempmail',
+        'roi-workflow',
         'roi-paste',
         'roi-organizer',
         'roi-color',
@@ -3492,7 +3492,7 @@ graph LR
     let downloadNoticeTimer = null;
     function handleDownloadClick() {
       playCyberSound('click');
-      window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.2.exe', '_blank');
+      window.open('https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.5.3.exe', '_blank');
     }
 
     function dismissDownloadNotice() {
@@ -3552,8 +3552,8 @@ graph LR
 
     // ─── Tool Spec Deep-Dive Drawer Logic ───────────────────────────────────
     const toolSpecsDb = {
-      tempmail: {
-        name: 'TempMail Pro & Live Inbox',
+      Team Collections: {
+        name: 'Team Collections',
         cat: 'GİZLİLİK & GÜVENLİK',
         icon: '📬',
         desc: 'Spam, bülten ve tek kullanımlık kayıt tuzaklarından koruyan sınırsız geçici gelen kutusu motoru.',
@@ -3561,7 +3561,7 @@ graph LR
         ram: '~14 MB Heap',
         shortcut: 'Ctrl + Alt + T',
         privacy: 'Kişisel veri veya kimlik loglanmaz. Oturum kapandığında tüm mailler bellekten silinir.',
-        code: '// TempMail API Entegrasyonu\\nconst mail = await window.api.tempMail.generate();\\nconsole.log(mail.address); // -> phantom912@tempdrop.io'
+        code: '// Team Collections API Entegrasyonu\\nconst mail = await window.api.Team Collections.generate();\\nconsole.log(mail.address); // -> phantom912@tempdrop.io'
       },
       decrypter: {
         name: 'Evrensel Link Decrypter',
@@ -3608,7 +3608,7 @@ graph LR
         code: 'calcContrastRatio("#06b6d4", "#08090d");\\n// -> 14.8:1 (AAA Pass)'
       },
       portkiller: {
-        name: 'Port Killer (TCP/UDP Watchdog)',
+        name: 'Workflow Chains (TCP/UDP Watchdog)',
         cat: 'SİSTEM & AĞ',
         icon: '⚡',
         desc: '3000, 8080 veya kilitlenen herhangi bir portu işgal eden çakışan süreçleri anında tespit eder ve tek tıkla sonlandırır.',
@@ -4170,7 +4170,7 @@ graph LR
         }
       } else if (action === 'privacy') {
         openPrivacyModal();
-      } else if (action === 'tempmail') {
+      } else if (action === 'Team Collections') {
         const fakeMail = 'temp_' + Math.random().toString(36).substring(2, 8) + '@zendev.cloud';
         await safeCopyToClipboard(fakeMail);
         alert('⚡ Tek Kullanımlık Posta Üretildi ve Kopyalandı:\\n' + fakeMail);
@@ -4481,12 +4481,12 @@ graph LR
       alert('⚡ [ZenDev Orb] Sistem RAM Belleği Boşaltıldı!\\n1,840 MB geçici bellek önbelleği başarıyla temizlendi.');
     }
 
-    async function triggerQuickTempMail() {
+    async function triggerQuickWorkflow() {
       toggleFloatingOrbMenu();
       const fakeMail = 'orb_' + Math.random().toString(36).substring(2, 7) + '@zendevmail.org';
       await safeCopyToClipboard(fakeMail);
       playCyberSound('success');
-      alert('📬 [ZenDev Orb] Tek Kullanımlık TempMail Panoya Kopyalandı:\\n' + fakeMail);
+      alert('📬 [ZenDev Orb] Tek Kullanımlık Team Collections Panoya Kopyalandı:\\n' + fakeMail);
     }
 
     // ─── FAQ Accordion Controls ─────────────────────────────────────────────
@@ -4599,7 +4599,7 @@ graph LR
         title: "Full-Stack & Cloud Geliştirici Paketi",
         desc: "API ve derleme döngülerinizi hızlandıracak 3 temel silahınız:",
         tools: [
-          { icon: "⚡", name: "Port Killer", tag: "EADDRINUSE Çözücü" },
+          { icon: "⚡", name: "Workflow Chains", tag: "EADDRINUSE Çözücü" },
           { icon: "🔑", name: "Hash & Base64 Studio", tag: "Sıfır Gecikmeli Kripto" },
           { icon: "📝", name: "Scratchpad Flow", tag: "Canlı Mermaid & Markdown" }
         ]
@@ -4626,7 +4626,7 @@ graph LR
         title: "Maksimum Verimlilik Güç Paketi",
         desc: "Masaüstünüzü hızlandıracak ve spamı engelleyecek araçlar:",
         tools: [
-          { icon: "📬", name: "TempMail In-App Inbox", tag: "Spamsız Tek Kullanımlık" },
+          { icon: "📬", name: "Team Collections", tag: "Spamsız Tek Kullanımlık" },
           { icon: "⚡", name: "Resource Sentinel", tag: "RAM & CPU Koruması" },
           { icon: "🔮", name: "Cyber Floating Orb", tag: "Masaüstü Mini HUD" }
         ]
@@ -4717,8 +4717,8 @@ graph LR
     </nav>
   </div>
   <div class="flex flex-col gap-3">
-    <a href="https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.2.exe" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg font-heading font-black text-center shadow-lg">
-      Windows İçin İndir (v2.4.2)
+    <a href="https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.5.3.exe" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg font-heading font-black text-center shadow-lg">
+      Windows İçin İndir (v2.5.3)
     </a>
     <a href="#pricing" onclick="toggleMobileDrawer()" class="w-full py-3 rounded-xl border border-nexus-cyan/40 bg-nexus-surface text-white font-bold text-center">
       Pro Lisans Al (₺349)
@@ -4752,8 +4752,8 @@ graph LR
       <a href="#pricing" onclick="closeExitIntent()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-nexus-cyan to-nexus-accent text-nexus-bg font-heading font-black text-sm shadow-lg hover:brightness-110 transition-all">
         İndirimi Kullan & Lisans Al →
       </a>
-      <a href="https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.4.2.exe" class="w-full py-2.5 rounded-xl text-xs text-nexus-muted hover:text-white transition-colors">
-        Veya doğrudan ücretsiz indir (v2.4.2)
+      <a href="https://github.com/zerviatr/NexusHub/releases/latest/download/ZenDev-Setup-2.5.3.exe" class="w-full py-2.5 rounded-xl text-xs text-nexus-muted hover:text-white transition-colors">
+        Veya doğrudan ücretsiz indir (v2.5.3)
       </a>
     </div>
   </div>
