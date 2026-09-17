@@ -11,20 +11,20 @@ export const translations = {
       whatsNew: 'v2.5.3 Yenilikler'
     },
     hero: {
-      tag: '🔥 TAURI v2 & RUST İLE SIFIRDAN YAZILDI',
-      titleHighlight: 'Abonelik Tuzağına Son.',
-      titleMain: '31+ Siber Geliştirici Gücü Tek Masaüstü Yazılımında.',
-      subtitle: 'Postman, SQLite tarayıcıları, PDF araçları, parola yöneticileri ve dosya imha yazılımları için her ay yüzlerce dolar ödemeyi bırakın. Tek seferlik lisans, %100 yerel gizlilik, sıfır bulut izi.',
+      tag: '⚡ API & YAZILIM EKİPLERİ İÇİN MASAÜSTÜ GELİŞTİRİCİ SAAS',
+      titleHighlight: 'Dağınık Web Araçlarına Son.',
+      titleMain: 'API, JSON, JWT, Cron & Diyagram Gücü Tek Masaüstü SaaS Platformunda.',
+      subtitle: 'cURL/REST istemcisi, JSON ağaç editörü, JWT imzalayıcı, görsel Cron mimarı, Mermaid şema tuvali ve çok modlu encoding stüdyoları. %100 yerel gizlilik, ultra hızlı Rust motoru ve takımlar arası kesintisiz koleksiyon senkronizasyonu.',
       downloadNsis: 'Windows Yükleyici İndir (x64)',
       downloadPortable: 'Portable .exe İndir',
       checksumLabel: 'SHA-256 Doğrulama',
       copied: 'Kopyalandı!',
       cleanCodeBadge: 'VirusTotal 0/72 Temiz Kod Raporu',
       stats: {
-        tools: '31+ Güçlü Araç',
+        tools: '31+ Geliştirici Stüdyosu',
         ram: '<26 MB RAM',
         boot: '0.35s Açılış',
-        license: 'Ömür Boyu Lisans'
+        license: 'Geliştirici & Takım SaaS'
       }
     },
     playground: {
@@ -43,14 +43,14 @@ export const translations = {
     },
     catalog: {
       tag: 'TAM CEPHANELİK',
-      title: 'Geliştiricinin ve Güvenlik Uzmanının İhtiyacı Olan Her Şey',
-      subtitle: 'Birbirinden bağımsız çalışan, arayüzü tek tip ve siberpunk hızında tasarlanmış 31 profesyonel istasyon.',
+      title: 'Geliştiricinin ve Mühendislik Ekiplerinin İhtiyacı Olan Her Şey',
+      subtitle: 'Birbirinden bağımsız çalışan, arayüzü tek tip ve siberpunk hızında tasarlanmış 31 profesyonel geliştirici stüdyosu.',
       categories: {
         all: 'Tümü (31)',
-        security: 'Siber Güvenlik & Kasa',
-        developer: 'Yazılım & API Geliştirici',
-        system: 'Sistem & Ağ Mühendisliği',
-        productivity: 'Üretkenlik & İş Akışı'
+        developer: 'API & Geliştirici Stüdyoları',
+        security: 'Kriptografi & Güvenlik',
+        productivity: 'İş Akışı & Diyagram',
+        system: 'Ağ & Sistem Teşhisi'
       },
       searchPlaceholder: 'Araç adı veya özellik ara (örn: sqlite, port, sha256, pdf)...',
       inBrowserBadge: 'Canlı Demo',
@@ -127,7 +127,7 @@ export const translations = {
       secureCheckout: 'Stripe & LemonSqueezy 256-bit SSL Güvenli SaaS Ödemesi'
     },
     footer: {
-      tagline: 'ZenDev — Geliştiriciler İçin Askeri Standartta Güç & Yerel Gizlilik Paketi.',
+      tagline: 'ZenDev — API Odaklı Geliştiriciler ve Mühendislik Ekipleri İçin Masaüstü Developer SaaS Platformu.',
       allRights: 'Tüm hakları saklıdır.',
       disclaimer: 'ZenDev bağımsız bir yazılımdır. Bahsi geçen üçüncü taraf markalar (Postman, TablePlus vb.) yalnızca kıyaslama amacıyla kullanılmıştır.'
     }
@@ -144,20 +144,20 @@ export const translations = {
       whatsNew: 'v2.5.3 What\'s New'
     },
     hero: {
-      tag: '🔥 REBUILT FROM SCRATCH WITH TAURI v2 & RUST',
-      titleHighlight: 'Stop Subscription Fatigue.',
-      titleMain: '31+ Cyber Developer Powers in One Desktop Suite.',
-      subtitle: 'Stop paying hundreds of dollars every month for Postman, SQLite viewers, PDF utilities, and password managers. One-time license, 100% offline-first privacy, zero telemetry.',
+      tag: '⚡ DESKTOP DEVELOPER SAAS FOR API & ENGINEERING TEAMS',
+      titleHighlight: 'Stop Fragmented Web Tools.',
+      titleMain: 'API, JSON, JWT, Cron & Diagrams Unified in One Desktop SaaS.',
+      subtitle: 'Offline REST & cURL client, JSON tree editor, JWT signer & inspector, visual Cron builder, Mermaid architecture canvas, and multi-modal encoding labs. Ultra-fast Rust engine with team workspace sync.',
       downloadNsis: 'Download Windows Setup (x64)',
       downloadPortable: 'Download Portable .exe',
       checksumLabel: 'Verify SHA-256',
       copied: 'Copied!',
       cleanCodeBadge: 'VirusTotal 0/72 Clean Code Report',
       stats: {
-        tools: '31+ Power Tools',
+        tools: '31+ Developer Studios',
         ram: '<26 MB RAM',
         boot: '0.35s Cold Start',
-        license: 'Lifetime License'
+        license: 'Dev & Team SaaS'
       }
     },
     playground: {
@@ -176,14 +176,14 @@ export const translations = {
     },
     catalog: {
       tag: 'THE FULL ARSENAL',
-      title: 'Everything Developers & Security Engineers Need',
+      title: 'Everything Software Engineers & Dev Teams Need',
       subtitle: '31 specialized developer workstations designed with unified cyberpunk aesthetics and lightning responsiveness.',
       categories: {
-        all: 'All Tools (31)',
-        security: 'Security & Cryptography',
-        developer: 'Developer & API Suite',
-        system: 'System & Network Recon',
-        productivity: 'Workflow & Productivity'
+        all: 'All Studios (31)',
+        developer: 'API & Developer Studios',
+        security: 'Cryptography & Security',
+        productivity: 'Workflow & Diagrams',
+        system: 'Network & System Recon'
       },
       searchPlaceholder: 'Search tools or features (e.g., sqlite, port, sha256, pdf)...',
       inBrowserBadge: 'Live Demo',
@@ -260,7 +260,7 @@ export const translations = {
       secureCheckout: 'Stripe & LemonSqueezy 256-Bit SSL Encrypted SaaS Checkout'
     },
     footer: {
-      tagline: 'ZenDev — Military-Grade Power & Offline-First Privacy Suite for Engineers.',
+      tagline: 'ZenDev — Desktop Developer SaaS Platform for API-Heavy Engineers & Teams.',
       allRights: 'All rights reserved.',
       disclaimer: 'ZenDev is an independent software suite. Third-party brand names (Postman, TablePlus etc.) are used solely for comparative purposes.'
     }

@@ -41,16 +41,16 @@ const SAAS_TOOLS: SaaSToolOption[] = [
     replacesZendev: 'PasswordGenerator & CyberFortress'
   },
   {
-    id: 'cleaner',
-    name: 'CleanMyPC / Disk Space Manager',
-    monthlyCost: { TRY: 120, USD: 4, EUR: 3.5 },
-    replacesZendev: 'SystemOptimizer & BulkOrganizer'
+    id: 'diagram_tool',
+    name: 'Lucidchart / Mermaid Cloud SaaS',
+    monthlyCost: { TRY: 320, USD: 10, EUR: 9 },
+    replacesZendev: 'MermaidStudio (Vector Architecture Canvas)'
   },
   {
-    id: 'network',
-    name: 'Network & Port Diagnostic Tool',
-    monthlyCost: { TRY: 150, USD: 5, EUR: 4.5 },
-    replacesZendev: 'PortKiller & NetworkTools'
+    id: 'jwt_tool',
+    name: 'JWT Debugger & Auth Token Cloud',
+    monthlyCost: { TRY: 240, USD: 8, EUR: 7 },
+    replacesZendev: 'JwtStudio & EncodingStudio'
   }
 ];
 

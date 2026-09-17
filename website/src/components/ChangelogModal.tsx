@@ -57,9 +57,35 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({ isOpen, onClose,
             </div>
             <p className="text-gray-300 font-sans text-xs leading-relaxed">
               {isTr
-                ? 'ZenDev SaaS Dönüşüm Direktifi kurumsal kurallara entegre edildi. Tüm dağıtım ve ikili indirme kanalları v2.5.3 ile senkronize edildi.'
-                : 'ZenDev SaaS Transformation Directive codified across repository rules. Synchronized all release binary distribution channels to v2.5.3.'}
+                ? 'ZenDev SaaS Dönüşüm Direktifi kurumsal kurallara entegre edildi. B2B / Pro Desktop Developer SaaS konumlandırması doğrultusunda API, JSON, JWT, Cron, Mermaid ve Encoding stüdyoları çekirdeğe alındı; E2EE Takım Koleksiyonları ve Workflow Chains yol haritası netleştirildi. Dağıtım kanalları v2.5.3 ile senkronize edildi.'
+                : 'ZenDev SaaS Transformation Directive codified across repository rules. Elevated core API developer studios (ApiStudio, JsonStudio, JwtStudio, CronStudio, MermaidStudio, EncodingStudio) and defined the E2EE Team Collections and Workflow Chains roadmap. Release distribution channels synchronized to v2.5.3.'}
             </p>
+            <ul className="space-y-1.5 pt-1 text-gray-300">
+              <li className="flex items-start gap-2">
+                <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                <span>
+                  {isTr
+                    ? 'B2B/Pro Masaüstü Developer SaaS vizyonu: Dağınık web araçları yerine tek, ultra hızlı, offline-first istemci.'
+                    : 'B2B/Pro Desktop Developer SaaS positioning: Replaces fragmented browser tabs with one ultra-fast, offline-first client.'}
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                <span>
+                  {isTr
+                    ? 'Şeffaf ve Kullanıcı Onaylı Güncelleme Protokolü: Güvenlik / EDR uyumluluğu için sürüm notları ve açık kullanıcı onayı ile güncelleme standardı.'
+                    : 'Transparent, User-Approved Update Standard: Changelog modal and explicit user confirmation flow to prevent heuristic false positives.'}
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                <span>
+                  {isTr
+                    ? 'SaaS Yol Haritası: E2EE Uçtan Uca Şifreli Bulut Senkronizasyonu, Çoklu Çalışma Alanı & RBAC, Workflow Chains pipeline motoru.'
+                    : 'SaaS Roadmap: E2EE Cross-device Cloud Sync, Multi-tenant Workspaces & RBAC, and Workflow Chains pipeline engine.'}
+                </span>
+              </li>
+            </ul>
           </div>
 
           {/* v2.5.2 - Silent Subprocess & NSIS Background Updater */}

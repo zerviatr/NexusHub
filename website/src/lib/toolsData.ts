@@ -408,34 +408,34 @@ export const PRICING_PLANS: PricingPlan[] = [
       EUR: { monthly: 0, yearly: 0, monthlyEquivalent: 0, symbol: '€' }
     },
     featuresTr: [
-      '8 Temel Yardımcı Araç (Hash, QR, Regex, JSON, Renk vb.)',
+      '8 Temel Geliştirici Stüdyosu (Hash, QR, Regex, Base64 vb.)',
       'Tek Bilgisayarda Yerel & Çevrimdışı Kullanım',
       'Tauri v2 + Rust Ultra Hafif Motor (<26 MB RAM)',
       '%100 Çevrimdışı Çalışma & Sıfır Telemetri',
       'Topluluk Desteği & Açık Dokümantasyon'
     ],
     featuresEn: [
-      '8 Essential Utilities (Hash, QR, Regex, JSON, Color, etc.)',
+      '8 Essential Developer Studios (Hash, QR, Regex, Base64 etc.)',
       'Single machine offline usage',
       'Tauri v2 + Rust ultra-lean engine (<26 MB RAM)',
       '100% offline privacy & zero telemetry',
       'Community Discord & public documentation'
     ],
     limitationsTr: [
-      'PortKiller & Anında SIGKILL (Kilitli)',
-      'ApiStudio REST & GraphQL İstemcisi (Kilitli)',
-      'ResourceSentinel Canlı Donanım Radarı (Kilitli)',
-      'CyberFortress Askeri AES-256-GCM Kasa (Kilitli)',
-      'PdfStudio Yerel Filigran & Düzenleyici (Kilitli)',
-      'SystemOptimizer & Bellek Temizleyici (Kilitli)'
+      'ApiStudio REST & cURL Köprüsü (Kilitli)',
+      'E2EE Uçtan Uca Şifreli Bulut Senkronizasyonu (Kilitli)',
+      'Workflow Chains Pipeline Motoru (Kilitli)',
+      'Paylaşılabilir Takım Koleksiyonları (Kilitli)',
+      'Mermaid & Cron İfade Stüdyoları (Kilitli)',
+      'Çoklu Çalışma Alanları & Koltuk Yönetimi (Kilitli)'
     ],
     limitationsEn: [
-      'PortKiller & Instant SIGKILL (Locked)',
-      'ApiStudio REST & GraphQL Client (Locked)',
-      'ResourceSentinel Hardware Radar (Locked)',
-      'CyberFortress Military AES Vault (Locked)',
-      'PdfStudio Encrypted Watermarker (Locked)',
-      'SystemOptimizer & Memory Defrag (Locked)'
+      'ApiStudio REST & cURL Bridge (Locked)',
+      'E2EE Cross-Device Cloud Sync (Locked)',
+      'Workflow Chains Pipeline Engine (Locked)',
+      'Shareable Team Collections (Locked)',
+      'Mermaid & Cron Architecture Studios (Locked)',
+      'Multi-tenant Workspaces & Seat Admin (Locked)'
     ],
     ctaTr: 'Ücretsiz İndir',
     ctaEn: 'Download Free',
@@ -456,22 +456,22 @@ export const PRICING_PLANS: PricingPlan[] = [
       EUR: { monthly: 8.99, yearly: 69, monthlyEquivalent: 5.75, symbol: '€' }
     },
     featuresTr: [
-      '31+ Araç ve Stüdyonun Tamamına Kesintisiz Erişim',
-      'PortKiller, ApiStudio, ResourceSentinel & PdfStudio Kilitsiz',
-      'CyberFortress Askeri 7-Pass İmha & AES-256-GCM Kasa',
+      '31+ Geliştirici Stüdyosunun Tamamına Kesintisiz Erişim',
+      'ApiStudio REST & cURL İstasyonları Kilitsiz',
+      'E2EE Uçtan Uca Şifreli Cihazlar Arası Bulut Senkronizasyonu',
+      'Workflow Chains & AI Smart Dispatcher Önizleme Erişimi',
       '2 Adet Kişisel Bilgisayarda Eşzamanlı Aktivasyon',
-      'Sürekli Bulut Senkronizasyonu & Otomatik Yeni Araç Eklentileri',
       'Tauri v2 + Rust Ultra Düşük Bellek Mimarisi (<26 MB RAM)',
       '%100 Yerel Veri Gizliliği & Çevrimdışı Çalışabilme Garantisi',
       'Self-Service Donanım Kimliği (HWID) Transfer Portalı',
       'Esnek Faturalandırma & İstediğin Zaman Tek Tıkla İptal'
     ],
     featuresEn: [
-      'Continuous access to all 31+ cyber tools & studios',
-      'Unlocked PortKiller, ApiStudio, Sentinel & PdfStudio',
-      'CyberFortress military 7-pass shredder & AES vault',
+      'Continuous access to all 31+ developer studios',
+      'Unlocked ApiStudio REST & cURL bridge',
+      'E2EE cross-device cloud synchronization',
+      'Workflow Chains & AI Smart Dispatcher preview',
       'Activate on 2 personal machines simultaneously',
-      'Continuous cloud sync & automatic tool drops',
       'Tauri v2 + Rust ultra-lean engine (<26 MB RAM)',
       '100% offline-first privacy & zero tracking',
       'Self-service HWID machine transfer portal',
@@ -498,16 +498,18 @@ export const PRICING_PLANS: PricingPlan[] = [
       'Pro plandaki her şey + 5 Adet Geliştirici Koltuğu Dahil',
       'Ticari ve Kurumsal Projelerde Sınırsız Kullanım İzni',
       'Merkezi Takım Lisans Yönetim Paneli ve Koltuk Tahsisi',
-      'Ekip Ortak Şifreli Snippet & API Koleksiyonu Senkronizasyonu',
+      'E2EE Şifreli Takım Koleksiyonları (API, regex, mock, şemalar)',
+      'Çoklu Çalışma Alanı (Multi-tenant Workspace) ve Rol Yönetimi',
       'Kurumsal E-Fatura ve Şirket Gider Makbuzu Desteği',
-      'Doğrudan Mühendislik Desteği & SLA Garantisi',
+      'Doğrudan Mühendislik Desteği & Kurumsal SLA Garantisi',
       'Gelecek Eklenti (Plugin SDK) Erken Erişim Hakkı'
     ],
     featuresEn: [
       'Everything in Pro + 5 simultaneous developer seats included',
       'Commercial usage rights for agency and enterprise projects',
       'Centralized team license management portal & seat allocation',
-      'Shared team encrypted snippet & API preset synchronization',
+      'E2EE encrypted shared team collections (API, regex, mock, schemas)',
+      'Multi-tenant workspaces & role-based access management',
       'Official company VAT/Tax invoice support',
       'Direct engineering support & enterprise SLA',
       'Early access to upcoming Plugin SDK ecosystem'
@@ -526,9 +528,9 @@ export const TESTIMONIALS: Testimonial[] = [
     company: 'Fintech Hub',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
     rating: 5,
-    toolUsed: 'PortKiller + ApiStudio',
-    textTr: 'Postman ve Insomnia aboneliklerini şirket genelinde iptal edip ZenDev\'e geçtik. PortKiller ve ApiStudio inanılmaz hafif. Tauri v2 ile 30 MB RAM harcaması Electron kabusundan sonra büyüleyici.',
-    textEn: 'We cancelled team Postman subscriptions and switched to ZenDev. PortKiller and ApiStudio are blazing fast. Seeing only 30 MB RAM usage after Electron bloat is astonishing.'
+    toolUsed: 'ApiStudio + Workflow Chains',
+    textTr: 'Postman ve dağınık web araçları yerine ZenDev Team SaaS\'a geçtik. ApiStudio, JsonStudio ve Workflow zincirleri ekibimizin API geliştirme hızını ikiye katladı. Üstelik Tauri v2 ile yalnızca 30 MB RAM tüketiyor.',
+    textEn: 'We cancelled team Postman subscriptions and switched to ZenDev Team SaaS. ApiStudio, JsonStudio, and Workflow Chains doubled our engineering velocity, consuming just 30 MB RAM.'
   },
   {
     id: '2',
@@ -537,9 +539,9 @@ export const TESTIMONIALS: Testimonial[] = [
     company: 'CyberShield EU',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
     rating: 5,
-    toolUsed: 'CyberFortress + HashStudio',
-    textTr: 'DoD 7-pass shredder ve AES-256-GCM kasanın tamamen yerel çalışması gizlilik standartlarımız için biçilmiş kaftan. Müşteri verilerini sızdırma korkusu olmadan çevrimdışı çalışabiliyoruz.',
-    textEn: 'The offline DoD 7-pass shredder and AES-256-GCM vault are indispensable for our audit team. Zero network requests, 100% offline-first security.'
+    toolUsed: 'JwtStudio + CyberFortress',
+    textTr: 'Takım koleksiyonları ve JWT/Cron stüdyolarının %100 yerel ve E2EE şifreli çalışması kurumsal güvenlik politikalarımız için kusursuz. Müşteri API anahtarlarını ve tokenlarını güvenle inceliyoruz.',
+    textEn: 'The offline-first architecture, JwtStudio, and E2EE Team Collections align seamlessly with our strict enterprise audit standards. Zero network leaks, 100% offline-first security.'
   },
   {
     id: '3',
@@ -548,9 +550,9 @@ export const TESTIMONIALS: Testimonial[] = [
     company: 'Freelance & Indie',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
     rating: 5,
-    toolUsed: 'SqliteViewer + Scratchpad',
-    textTr: 'WASM SQLite görüntüleyici tek kelimeyle kusursuz. Büyük DB dosyalarını anında açıyor, sorguları milisaniyede koşturuyor. Scratchpad ise markdown notlarım için vazgeçilmezim oldu.',
-    textEn: 'The WASM SQLite reader is pure perfection. Loads massive local DBs instantly. Scratchpad has replaced all my messy notepad tabs.'
+    toolUsed: 'MermaidStudio + SqliteViewer',
+    textTr: 'Mermaid mimari şemaları, WASM SQLite konsolu ve Encoding laboratuvarı tek uygulamada elimin altında. Tarayıcıda 20 sekme açıp RAM tüketme derdi bitti.',
+    textEn: 'Mermaid architectural diagrams, WASM SQLite explorer, and Encoding lab right at my fingertips in one ultra-fast client. No more 20 browser tabs draining my workstation RAM.'
   }
 ];
 
@@ -558,10 +560,10 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: 'faq-1',
     category: 'general',
-    questionTr: 'ZenDev nedir ve neden abonelik modeli yerine tek seferlik ödeme?',
-    questionEn: 'What is ZenDev and why one-time payment instead of subscription?',
-    answerTr: 'ZenDev, geliştiriciler ve güvenlik uzmanları için 31+ profesyonel aracı tek bir masaüstü uygulamasında birleştiren Tauri v2 tabanlı bir güç paketidir. Yazılımcıların her ay onlarca araca yüzlerce dolar abonelik ödemesinden (SaaS yorgunluğu) bıktık. ZenDev bir kez satın alınır, ömür boyu sizin olur.',
-    answerEn: 'ZenDev combines 31+ professional tools into a single desktop suite powered by Tauri v2 and Rust. We are fundamentally against SaaS subscription fatigue. You buy ZenDev once, own it forever.'
+    questionTr: 'ZenDev nedir ve masaüstü geliştirici SaaS modeli nasıl çalışır?',
+    questionEn: 'What is ZenDev and how does the desktop developer SaaS model work?',
+    answerTr: 'ZenDev, API-ağırlıklı çalışan yazılım geliştiriciler ve mühendislik ekipleri için dağınık web araçlarını (JSON, cURL, Regex, JWT, Cron, Mermaid, Encoding) tek çatı altında toplayan ultra hızlı ve offline-first bir Masaüstü SaaS platformudur. Verileriniz asla yabancı bulutlara sızmaz, yerel olarak Rust ile işlenir ve ekipler arası şifreli senkronizasyonla iş birliği sunar.',
+    answerEn: 'ZenDev is an ultra-fast, offline-first Desktop Developer SaaS platform designed for API-heavy developers and software engineering teams. It consolidates scattered web tools (JSON, cURL, Regex, JWT, Cron, Mermaid, Encoding) into one unified desktop client with end-to-end encrypted team collaboration and zero cloud data leaks.'
   },
   {
     id: 'faq-2',

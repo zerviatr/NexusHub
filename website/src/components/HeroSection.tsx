@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Download, ShieldCheck, Copy, Check, Terminal, Zap, Cpu, Lock, ChevronRight, ExternalLink } from 'lucide-react';
+import { Download, ShieldCheck, Copy, Check, Terminal, Zap, Cpu, Lock, ChevronRight, ExternalLink, Workflow } from 'lucide-react';
 import { Language } from '../lib/types';
 import { translations } from '../lib/translations';
 import { cyberAudio } from '../lib/cyberAudio';
@@ -12,7 +12,7 @@ interface HeroSectionProps {
 export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
   const t = translations[lang].hero;
   const [copiedSha, setCopiedSha] = useState(false);
-  const [activeSimulatorTab, setActiveSimulatorTab] = useState<'port' | 'vault' | 'api' | 'sqlite'>('port');
+  const [activeSimulatorTab, setActiveSimulatorTab] = useState<'api' | 'chains' | 'vault' | 'sqlite'>('api');
 
   const sampleSha = 'a8f4c2e9b1d7f6a3c5e8b0d2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e4b6d8f0a2';
 
@@ -151,15 +151,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
                   İSTASYONLAR
                 </div>
                 <button
-                  onClick={() => setActiveSimulatorTab('port')}
+                  onClick={() => setActiveSimulatorTab('api')}
                   className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition ${
-                    activeSimulatorTab === 'port'
-                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold'
+                    activeSimulatorTab === 'api'
+                      ? 'bg-sky-500/20 text-sky-300 border border-sky-500/30 font-bold'
                       : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/30'
                   }`}
                 >
-                  <Zap className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>PortKiller</span>
+                  <Terminal className="w-3.5 h-3.5 text-sky-400" />
+                  <span>ApiStudio</span>
+                </button>
+
+                <button
+                  onClick={() => setActiveSimulatorTab('chains')}
+                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition ${
+                    activeSimulatorTab === 'chains'
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold'
+                      : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/30'
+                  }`}
+                >
+                  <Workflow className="w-3.5 h-3.5 text-amber-400" />
+                  <span>WorkflowChains</span>
                 </button>
 
                 <button
@@ -175,18 +187,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
                 </button>
 
                 <button
-                  onClick={() => setActiveSimulatorTab('api')}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition ${
-                    activeSimulatorTab === 'api'
-                      ? 'bg-sky-500/20 text-sky-300 border border-sky-500/30 font-bold'
-                      : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/30'
-                  }`}
-                >
-                  <Terminal className="w-3.5 h-3.5 text-sky-400" />
-                  <span>ApiStudio</span>
-                </button>
-
-                <button
                   onClick={() => setActiveSimulatorTab('sqlite')}
                   className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition ${
                     activeSimulatorTab === 'sqlite'
@@ -199,66 +199,59 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ lang }) => {
                 </button>
 
                 <div className="pt-4 px-3 text-[11px] text-gray-500">
-                  + 23 Diğer Araç Masaüstünde Hazır!
+                  + 27 Diğer Stüdyo Masaüstünde!
                 </div>
               </div>
 
               {/* Simulator Main Content */}
               <div className="md:col-span-3 p-6 flex flex-col justify-between bg-[#0b0e1b]">
-                {activeSimulatorTab === 'port' && (
+                {activeSimulatorTab === 'chains' && (
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between border-b border-gray-800 pb-3">
+                    <div className="border-b border-gray-800 pb-3 flex items-center justify-between">
                       <div>
-                        <h4 className="text-sm font-bold text-white font-mono">
-                          PortKiller — Dinlenen Port Analizcisi
+                        <h4 className="text-sm font-bold text-amber-300 font-mono">
+                          Workflow Chains — Görsel Pipeline Motoru
                         </h4>
                         <p className="text-xs text-gray-400 font-mono">
-                          Dinlenen 3 port tespit edildi. Çakışan süreçleri SIGKILL ile anında sonlandırın.
+                          Stüdyoları zincirleyin: cURL → JSON Extract → HMAC SHA-256 → Webhook
                         </p>
                       </div>
-                      <span className="text-[11px] text-rose-400 font-mono bg-rose-950/40 border border-rose-500/30 px-2 py-0.5 rounded">
-                        1 Çakışma
+                      <span className="text-[11px] text-amber-400 font-mono bg-amber-950/40 border border-amber-500/30 px-2 py-0.5 rounded">
+                        4 Adım Aktif
                       </span>
                     </div>
 
                     <div className="space-y-2 font-mono text-xs">
-                      <div className="flex items-center justify-between bg-[#080b16] p-3 rounded-lg border border-gray-800">
-                        <div className="flex items-center gap-3">
-                          <span className="text-cyan-400 font-bold">PORT 3000</span>
-                          <span className="text-gray-400">PID: 14820 (node.exe)</span>
-                          <span className="text-rose-400 text-[10px] bg-rose-950/50 px-1.5 py-0.5 rounded">
-                            BLOCKED
-                          </span>
+                      <div className="flex items-center justify-between bg-[#080b16] p-2.5 rounded-lg border border-gray-800">
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-[10px] font-bold">1</span>
+                          <span className="text-gray-300">ApiStudio: cURL İsteği Gönder (GET /orders/latest)</span>
                         </div>
-                        <button className="px-3 py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold transition">
-                          SIGKILL Sonlandır
-                        </button>
+                        <span className="text-emerald-400 text-[10px] bg-emerald-950/50 px-2 py-0.5 rounded">200 OK</span>
                       </div>
 
-                      <div className="flex items-center justify-between bg-[#080b16] p-3 rounded-lg border border-gray-800">
-                        <div className="flex items-center gap-3">
-                          <span className="text-cyan-400 font-bold">PORT 5173</span>
-                          <span className="text-gray-400">PID: 9144 (vite.exe)</span>
-                          <span className="text-emerald-400 text-[10px] bg-emerald-950/50 px-1.5 py-0.5 rounded">
-                            ACTIVE
-                          </span>
+                      <div className="flex items-center justify-between bg-[#080b16] p-2.5 rounded-lg border border-gray-800">
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-[10px] font-bold">2</span>
+                          <span className="text-gray-300">JsonStudio: JSONPath (.data.token) ile Değeri Ayıkla</span>
                         </div>
-                        <button className="px-3 py-1 rounded bg-gray-800 hover:bg-rose-600 text-gray-300 hover:text-white transition">
-                          Kapat
-                        </button>
+                        <span className="text-purple-400 text-[10px] bg-purple-950/50 px-2 py-0.5 rounded">EXTRACTED</span>
                       </div>
 
-                      <div className="flex items-center justify-between bg-[#080b16] p-3 rounded-lg border border-gray-800">
-                        <div className="flex items-center gap-3">
-                          <span className="text-cyan-400 font-bold">PORT 8080</span>
-                          <span className="text-gray-400">PID: 23110 (docker-proxy.exe)</span>
-                          <span className="text-emerald-400 text-[10px] bg-emerald-950/50 px-1.5 py-0.5 rounded">
-                            ACTIVE
-                          </span>
+                      <div className="flex items-center justify-between bg-[#080b16] p-2.5 rounded-lg border border-gray-800">
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-[10px] font-bold">3</span>
+                          <span className="text-gray-300">EncodingStudio: HMAC-SHA256 ile İmzala</span>
                         </div>
-                        <button className="px-3 py-1 rounded bg-gray-800 hover:bg-rose-600 text-gray-300 hover:text-white transition">
-                          Kapat
-                        </button>
+                        <span className="text-amber-400 text-[10px] bg-amber-950/50 px-2 py-0.5 rounded">SIGNED</span>
+                      </div>
+
+                      <div className="flex items-center justify-between bg-[#080b16] p-2.5 rounded-lg border border-gray-800">
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px] font-bold">4</span>
+                          <span className="text-gray-300">Webhook: Şifreli İmzayı Hedef Sunucuya İlet</span>
+                        </div>
+                        <span className="text-emerald-400 text-[10px] bg-emerald-950/50 px-2 py-0.5 rounded">DELIVERED</span>
                       </div>
                     </div>
                   </div>

@@ -101,8 +101,8 @@ export const PricingMatrix: React.FC<PricingMatrixProps> = ({
           studio: '31+ Tüm Araçlar'
         },
         {
-          nameTr: 'PortKiller & Anında SIGKILL Süreç Sonlandırıcı',
-          nameEn: 'PortKiller & Instant SIGKILL Process Manager',
+          nameTr: 'Workflow Chains Pipeline Motoru (cURL → JSON → HMAC)',
+          nameEn: 'Workflow Chains Pipeline Engine (cURL → JSON → HMAC)',
           free: false,
           personal: true,
           studio: true
