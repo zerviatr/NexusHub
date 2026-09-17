@@ -5,7 +5,7 @@ export const LiveRegexDemo: React.FC = () => {
   const [pattern, setPattern] = useState('\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,7}\\b');
   const [flags, setFlags] = useState('gi');
   const [testString, setTestString] = useState(
-    'ZenDev v2.5.2 ile iletisim@zendev.io ve security@nexushub.dev adreslerine ulasabilirsiniz. Port: 3000.'
+    'ZenDev v2.5.3 ile iletisim@zendev.io ve security@nexushub.dev adreslerine ulasabilirsiniz. Port: 3000.'
   );
 
   const { matches, error } = useMemo(() => {

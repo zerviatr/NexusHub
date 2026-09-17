@@ -94,9 +94,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               onOpenChangelog();
             }}
             className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-purple-950/60 border border-purple-500/40 text-purple-300 hover:border-purple-400 hover:text-white transition cursor-pointer whitespace-nowrap"
-            title={lang === 'tr' ? 'v2.5.2 Yenilikleri Gör' : "View v2.5.2 What's New"}
+            title={lang === 'tr' ? 'v2.5.3 Yenilikleri Gör' : "View v2.5.3 What's New"}
           >
-            v2.5.2
+            v2.5.3
           </button>
         </div>
 
@@ -212,11 +212,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Direct Download CTA */}
           <a
             href={ZENDEV_RELEASE_CONFIG.setupExe}
-            download="ZenDev-Setup-2.5.2.exe"
+            download="ZenDev-Setup-2.5.3.exe"
             onClick={(e) => {
               cyberAudio.playClick();
             }}
-            title="Download ZenDev v2.5.2 Setup (.exe)"
+            title="Download ZenDev v2.5.3 Setup (.exe)"
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold font-mono text-black bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 rounded-lg shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition transform hover:-translate-y-0.5 whitespace-nowrap flex-shrink-0 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
@@ -349,12 +349,12 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <a
             href={ZENDEV_RELEASE_CONFIG.setupExe}
-            download="ZenDev-Setup-2.5.2.exe"
+            download="ZenDev-Setup-2.5.3.exe"
             onClick={() => {
               cyberAudio.playClick();
               setMobileOpen(false);
             }}
-            title="Download ZenDev v2.5.2 Setup (.exe)"
+            title="Download ZenDev v2.5.3 Setup (.exe)"
             className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-bold font-mono text-black bg-gradient-to-r from-cyan-400 to-sky-400 rounded-lg shadow-lg shadow-cyan-500/20 cursor-pointer"
           >
             <Download className="w-4 h-4" />

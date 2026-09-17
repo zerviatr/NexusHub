@@ -1,0 +1,35 @@
+# Cursor Rules — ZenDev Multi-Assistant Directive
+
+You are an expert AI software engineer working on ZenDev (NexusHub).
+You MUST strictly follow the **ZenDev SaaS Dönüşüm Direktifi** defined in `.agents/rules/zendev-saas-directive.md`.
+
+## 1. Product Identity & Scope
+- ZenDev is an enterprise **Desktop Developer SaaS** for API-driven software engineers and engineering teams (Tauri v2 + Rust + React 19 + TypeScript + Tailwind CSS).
+- Core Value: Consolidate scattered developer web tools (JSON, cURL/API, Regex, JWT, Cron, Mermaid, Encoding) into an offline-first, lightning-fast desktop platform with team collaboration.
+- Do NOT treat ZenDev as a generic OS utility or Swiss-army toy box.
+
+## 2. The 5 Binding SaaS Principles
+1. **Product Positioning:** Target API developers and engineering teams. Focus on developer studios, team collaboration, and cloud sync.
+2. **Modules to Remove / Decouple:**
+   - Deprecate and remove `Port Killer (Port Watchdog)` (system process termination).
+   - Deprecate and remove `System Optimizer` (DNS flush, %TEMP% purging).
+   - REFUSE silent background updater execution (`CREATE_NO_WINDOW`). All updates MUST be transparent and user-approved via modal/dialog to avoid AV/EDR malware heuristic false positives.
+   - Deprecate and remove `Temp Mail` (disposable email generator - spam/abuse risk).
+   - Demote commoditized OS tools (`Clipboard Manager`, basic scratchpad).
+3. **Table Stakes Infrastructure (Priority):**
+   - Cloud Sync (E2EE sync for environments, collections, snippets).
+   - Team Auth, Workspaces & RBAC (Multi-tenant, team invites, role permissions, SSO).
+   - Monetization & Billing (Stripe/Paddle, Free/Pro/Team tiers, server-side licensing).
+   - Opt-in Privacy Telemetry (Sentry/OpenTelemetry).
+4. **Differentiation Moat:**
+   - Workflow Chains (Pipelines chaining studios together: cURL → JSON extract → Base64 → HMAC → Webhook).
+   - Shareable Team Collections (Versioned presets, mock schemas, API collections).
+   - AI Smart Dispatcher (Contextual analyzer routing clipboard/input to appropriate studio).
+5. **Willingness-to-Pay Gate:**
+   - Question: "Would a developer or team pay a monthly/annual subscription for this, or can they solve it in 2 seconds on a free website or 1-line CLI command?"
+   - Enforce the 5-filter framework from `.agents/skills/zendev-feature-gatekeeper/SKILL.md`.
+
+## 3. Engineering Rules
+- Always consult `YAPILACAKLAR.md` for task prioritization.
+- Never introduce hardcoded strings in UI; ensure 100% parity between `src/renderer/src/locales/tr.json` and `en.json`.
+- When modifying `.agents/`, run `python .agents/scripts/validate_kit.py` to ensure validation passes.

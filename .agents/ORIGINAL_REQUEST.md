@@ -197,4 +197,42 @@ Requested team: Small, focused team
 - [ ] `.agents/rules/quick-reference.md` ve `.agents/skills/zendev/SKILL.md` çapraz referansları bağlandı.
 - [ ] Örnek bir özellik sorgulaması ile gatekeeper filtre mekanizması test edilerek doğrulandı.
 
+## Follow-up — 2026-09-16T21:45:53Z
+
+This is a single self-contained fix; keep it small and focused.
+
+Entegrasyon Hedefi: ZenDev → SaaS Dönüşüm Direktifi'ni projenin tüm asistan kurallarına (`.agents/rules/`, `AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `.cursorrules`), sistem hafızasına (`MEMORY.md`), yetenek kılavuzlarına (`zendev`, `zendev-feature-gatekeeper`) ve yol haritası/backlog dosyasına (`YAPILACAKLAR.md`) üst düzey değişmez talimat seti olarak entegre etmek; tüm kod, mimari ve ürün kararlarında bu 5 ilkeyi (Konumlandırma, Kaldırılacak Modüller, Table Stakes Altyapı, Diferansiyasyon, Ödeme Testi) bağlayıcı kılmak.
+
+Working directory: c:\Users\futbo\Desktop\AI Projeleri\NexusHub
+Integrity mode: development
+Requested team: Small, focused team
+
+## Requirements
+
+### R1. Direktif Dokümanı ve Evrensel Asistan Kuralları (Universal Agent Directives)
+- `.agents/rules/zendev-saas-directive.md` ve `~/.gemini/config/rules/zendev-saas-directive.md` oluşturulmalı; direktifteki 5 madde (Konumlandırma, Kaldırılacak/Ayrıştırılacak Modüller, Table Stakes Altyapı, Diferansiyasyon, Ödeme Testi) eksiksiz kodlanmalıdır.
+- Çoklu asistan desteği için repo kök dizininde `AGENTS.md`, `GEMINI.md`, `CLAUDE.md` ve `.cursorrules` dosyaları bu direktifi bağlayıcı üst kural olarak içerecek şekilde oluşturulmalı / güncellenmelidir (Antigravity, Cursor, Claude Code ve diğer asistanların doğrudan okuyacağı şekilde).
+
+### R2. Sistem Hafızası ve Backlog (Memory & Product Roadmap)
+- `.agents/memory/MEMORY.md` güncellenerek "ZenDev SaaS Dönüşüm Direktifi" kurumsal kararı kalıcılaştırılmalıdır.
+- Proje kökünde `YAPILACAKLAR.md` (Roadmap & Backlog) oluşturulmalı; kaldırılacak modüller (Port Killer, System Optimizer, Sessiz Güncelleyici vb.), eklenecek table stakes altyapı (Cloud Sync, Team Auth, Stripe/Paddle vb.) ve diferansiyasyon özellikleri (Workflow Chains, Team Collections, AI Smart Dispatcher) öncelik sırasıyla listelenmelidir.
+
+### R3. Skill ve Gatekeeper Senkronizasyonu
+- `.agents/skills/zendev/SKILL.md` ve `.agents/skills/zendev-feature-gatekeeper/SKILL.md` güncellenerek direktifin maddeleriyle tam uyumlu hale getirilmelidir.
+- Sessiz otonom güncelleyicinin şeffaf ve kullanıcı onaylı akışa geçirilmesi gerekliliği belgelenmeli ve mimari uyarılara eklenmelidir.
+
+### R4. Otomatik Doğrulama ve Bütünlük Denetimi
+- Tüm yeni direktif dosyaları, kurallar ve yetenekler lint/syntax ve AG Kit doğrulamalarından (`validate_kit.py`, Python testleri) geçirilerek doğrulanmalıdır.
+
+## Acceptance Criteria
+
+### Doğrulama Kriterleri
+- [ ] `.agents/rules/zendev-saas-directive.md` ve global kopya eksiksiz oluşturuldu.
+- [ ] Kök dizindeki `AGENTS.md`, `GEMINI.md`, `CLAUDE.md`, `.cursorrules` dosyaları direktifi bağlayıcı üst kural olarak tanımlıyor.
+- [ ] `.agents/memory/MEMORY.md` güncellendi.
+- [ ] Kök dizinde `YAPILACAKLAR.md` roadmap belgesi direktifin tüm aşamalarını içerecek şekilde oluşturuldu.
+- [ ] `.agents/skills/zendev/SKILL.md` ve `zendev-feature-gatekeeper` direktifle senkronize edildi.
+- [ ] `validate_kit.py` ve ilgili regresyon testleri sıfır hata/uyarı ile [PASS] verdi.
+
+
 

@@ -467,6 +467,12 @@
       "priority": "P0",
       "trigger": "always_on",
       "version": "1.0.0"
+    },
+    "zendev-saas-directive": {
+      "path": "rules/zendev-saas-directive.md",
+      "priority": "P0",
+      "trigger": "always_on",
+      "version": "1.0.0"
     }
   },
   "runtimes": {

@@ -220,7 +220,7 @@ export const ToolCatalog: React.FC<ToolCatalogProps> = ({ lang }) => {
             </div>
 
             <div className="mt-8 pt-4 border-t border-gray-800 flex items-center justify-between">
-              <span className="text-xs font-mono text-emerald-400">● ZenDev v2.5.2 ile Yerleşik Gelir</span>
+              <span className="text-xs font-mono text-emerald-400">● ZenDev v2.5.3 ile Yerleşik Gelir</span>
               <a
                 href="#download"
                 onClick={() => setSelectedTool(null)}

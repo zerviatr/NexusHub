@@ -112,8 +112,8 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({
               </h3>
               <p className="text-sm text-gray-300 mt-2 leading-relaxed">
                 {isTr
-                  ? 'E-posta adresinizi bırakın, ZenDev v2.5.2 ömür boyu lisansında geçerli anlık %20 indirim kupon kodunu hemen kazanın.'
-                  : 'Enter your email to receive an instant 20% off coupon code redeemable at checkout for ZenDev v2.5.2 lifetime license.'}
+                  ? 'E-posta adresinizi bırakın, ZenDev v2.5.3 ömür boyu lisansında geçerli anlık %20 indirim kupon kodunu hemen kazanın.'
+                  : 'Enter your email to receive an instant 20% off coupon code redeemable at checkout for ZenDev v2.5.3 lifetime license.'}
               </p>
             </div>
 

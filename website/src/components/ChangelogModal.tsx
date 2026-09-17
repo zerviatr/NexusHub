@@ -25,7 +25,7 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({ isOpen, onClose,
                 {isTr ? 'ZenDev Sürüm Günlüğü & Yenilikler' : 'ZenDev Changelog & Release Notes'}
               </h3>
               <span className="text-xs text-gray-400 font-mono">
-                {isTr ? 'En son resmi sürüm: v2.5.2' : 'Latest official release: v2.5.2'}
+                {isTr ? 'En son resmi sürüm: v2.5.3' : 'Latest official release: v2.5.3'}
               </span>
             </div>
           </div>
@@ -40,16 +40,35 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({ isOpen, onClose,
 
         {/* Modal Body Scroll */}
         <div className="p-6 overflow-y-auto space-y-8 font-mono text-xs">
-          {/* v2.5.2 - Silent Subprocess & NSIS Background Updater */}
+          {/* v2.5.3 - Maintenance & Stability Release */}
           <div className="border-l-2 border-cyan-400 pl-4 space-y-2">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-sm font-bold text-cyan-300">
                 {isTr
-                  ? 'v2.5.2 — Sessiz Komut Alt-İşlem Mimarisi & NSIS Arka Plan Güncelleyici'
-                  : 'v2.5.2 — Silent Subprocess Architecture & Silent NSIS Updater'}
+                  ? 'v2.5.3 — Kararlılık, SaaS Dönüşüm Direktifi & Sürüm Senkronizasyonu'
+                  : 'v2.5.3 — Stability, SaaS Transformation Directive & Release Sync'}
               </span>
               <span className="px-2 py-0.5 rounded bg-cyan-950/70 border border-cyan-500/40 text-cyan-300 text-[10px]">
                 {isTr ? 'GÜNCEL SÜRÜM' : 'LATEST RELEASE'}
+              </span>
+              <span className="text-[10px] text-gray-500">
+                {isTr ? '17 Eylül 2026' : 'September 17, 2026'}
+              </span>
+            </div>
+            <p className="text-gray-300 font-sans text-xs leading-relaxed">
+              {isTr
+                ? 'ZenDev SaaS Dönüşüm Direktifi kurumsal kurallara entegre edildi. Tüm dağıtım ve ikili indirme kanalları v2.5.3 ile senkronize edildi.'
+                : 'ZenDev SaaS Transformation Directive codified across repository rules. Synchronized all release binary distribution channels to v2.5.3.'}
+            </p>
+          </div>
+
+          {/* v2.5.2 - Silent Subprocess & NSIS Background Updater */}
+          <div className="border-l-2 border-gray-700 pl-4 space-y-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-sm font-bold text-gray-300">
+                {isTr
+                  ? 'v2.5.2 — Sessiz Komut Alt-İşlem Mimarisi & NSIS Arka Plan Güncelleyici'
+                  : 'v2.5.2 — Silent Subprocess Architecture & Silent NSIS Updater'}
               </span>
               <span className="text-[10px] text-gray-500">
                 {isTr ? '16 Eylül 2026' : 'September 16, 2026'}

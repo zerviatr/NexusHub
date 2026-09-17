@@ -5,4 +5,4 @@
 - [project] AG Kit only supports Gemini CLI and Google Antigravity (not other AI coding tools) → project-conventions.md
 - [project] Component metadata uses SemVer while toolkit releases use CalVer → tech-decisions.md
 - [project] ZenDev için önerilen her yeni özellikte (feature bloat riskini önlemek için) 5 aşamalı filtrenin (Ödeme Testi, Kişisel vs Genel İhtiyaç, Çekirdekle İlişki, Risk/Güven, Bakım Maliyeti) ve kalıcı kara liste denetiminin zorunlu işletilmesi (`zendev-feature-gatekeeper`) → zendev-feature-gatekeeper.md
-
+- [project] ZenDev SaaS Dönüşüm Direktifi: 5 bağlayıcı ilke ile ticari SaaS dönüşümü (Konumlandırma, Modül Temizliği, Table Stakes, Diferansiyasyon, Ödeme Testi) → zendev-saas-directive.md

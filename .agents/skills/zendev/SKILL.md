@@ -1,86 +1,54 @@
 ---
 name: zendev
 description: >-
-  ZenDev Electron uygulamasina ait mimari bilgi, i18n kaliplari,
-  IPC conventions, teknoloji stack ve backlog. ZenDev'da degisiklik
-  yapilacagi zaman bu skill'i oku.
-when_to_use: "ZenDev Electron uygulamasında mimari, i18n, IPC, sayfa ve araç geliştirmeleri veya değişiklikleri yapılırken kullanılır."
+  ZenDev Tauri v2 + Rust masaustu SaaS uygulamasina ait mimari bilgi,
+  SaaS Donusum Direktifi, i18n kaliplari, IPC konvansiyonlari,
+  teknoloji stack ve backlog. ZenDev'da degisiklik yapilacagi zaman bu skill'i oku.
+when_to_use: "ZenDev veya NexusHub uygulamasında mimari, i18n, IPC, sayfa ve araç geliştirmeleri veya yol haritası değişiklikleri yapılırken kullanılır."
 allowed-tools: Read, Edit, Write, Glob, Grep
 version: 1.0.0
 ---
 
-# ZenDev Proje Skill
+# ZenDev Proje Skill & Mimari Kılavuz
 
-## Stack
-- **Runtime:** Electron (main) + Vite + React 18 + TypeScript (renderer)
-- **Styling:** Vanilla CSS + custom design tokens (no Tailwind — custom utility classes)
+> **ÜST DİREKTİF (P0):** Bu skill'i uygulayan asistan, her türlü kod ve mimari kararında `.agents/rules/zendev-saas-directive.md` (ZenDev SaaS Dönüşüm Direktifi) kurallarına, `YAPILACAKLAR.md` yol haritasına ve [zendev-feature-gatekeeper](../zendev-feature-gatekeeper/SKILL.md) kurallarına uymakla yükümlüdür.
+
+---
+
+## 1. Teknoloji Yığını (Tech Stack)
+- **Masaüstü Çerçevesi:** Tauri v2 (`src-tauri/`)
+- **Arka Plan (Backend):** Rust (tokio, reqwest, aes-gcm, lopdf, image)
+- **Ön Yüz (Frontend / Renderer):** React 19 + TypeScript + Vite (`src/renderer/`)
+- **Stil & Tasarım:** Tailwind CSS + Özel Tasarım Tokenları (`nexus-*` renk sistemi)
 - **Animasyon:** Framer Motion
-- **Ikonlar:** Lucide React
-- **i18n:** Custom `lib/i18n.tsx` — `useT()` hook, `I18nProvider`, `en.json` / `tr.json`
-- **Lisans:** Offline-first HMAC + `safeStorage` (Electron OS keychain)
-- **Build:** `electron-builder`, `dist:win` target
+- **İkonlar:** Lucide React
+- **Çift Dil Desteği (i18n):** `src/renderer/src/lib/i18n.tsx` — `useT()` hook, `I18nProvider`, `tr.json` / `en.json` (Tam 1-e-1 anahtar eşliği)
+- **IPC Köprüsü:** `src/renderer/src/lib/ipc.ts` (Tauri `invoke` API'sini sarmalayan tip-güvenli `nexusAPI`)
+- **Derleme & Doğrulama:** `npm run build` (Vite derlemesi), `cargo check` / `cargo test` (`src-tauri`)
 
-## Mimari Akis
-```
-App.tsx
-  └─ EulaGate          (localStorage: eula_accepted)
-       └─ LicenseCheck  (safeStorage: license key + HMAC)
-            └─ OnboardingTour (localStorage: tour_complete)
-                 └─ Layout
-                      ├─ Sidebar (nav)
-                      └─ Dashboard / Tool Pages (React Router)
-```
+---
 
-## Dizin Yapisi (Onemli)
-```
-src/
-  main/
-    index.ts          — IPC handlers, Electron app lifecycle
-  renderer/src/
-    pages/            — Tool sayfalari (Dashboard, TempMail, vb.)
-    components/       — Sidebar, BaseToolTemplate, EulaGate, vb.
-    lib/
-      i18n.tsx        — I18nProvider, useT hook
-      ipc.ts          — nexusAPI tip tanimlari + window.nexusAPI bridge
-      LicenseContext.tsx
-    locales/
-      en.json
-      tr.json
-.agents/
-  rules/
-    zendev-project-map.md   — Canli proje haritasi
-    update-project-map.md     — Haritayi ne zaman guncelle kurali
-  skills/
-    zendev/SKILL.md         — Bu dosya
-    zendev-feature-gatekeeper/SKILL.md — Zorunlu ozellik kapi bekcisi (5 asamali filtre)
-YAPILACAKLAR.md               — Backlog (proje kokunde)
+## 2. ZenDev SaaS Dönüşüm Direktifi (5 Bağlayıcı İlke)
 
-```
+Tüm geliştirmelerde aşağıdaki 5 ilke en üst düzey kural olarak uygulanır:
 
-## i18n Kalibi — Yeni Sayfa Eklerken
-1. `import { useT } from '../lib/i18n'`
-2. Component icinde `const { t } = useT()`
-3. Tum hardcoded string'leri `t('namespace.key') || 'fallback'` yap
-4. `en.json` ve `tr.json`'a ayni key'i ekle
-5. Namespace = arac adi (tempMail, decrypter, aylink, network, image, organizer, clipboard, password, vb.)
-6. `nav.tools.toolAdi` key'ini de ekle (sidebar + dashboard icin)
-7. `dashboard.tools.toolAdi.desc` key'ini de ekle
+1. **Konumlandırma (B2B/Pro Developer SaaS):**
+   - ZenDev genel bir hobi kutusu veya OS kurcalama aracı değildir.
+   - API-ağırlıklı geliştiriciler ve yazılım ekipleri için dağınık web araçlarını tek bir güvenli, offline-first masaüstü platformunda toplayan kurumsal SaaS'tır.
+2. **Kaldırılacak / Ayrıştırılacak Modüller:**
+   - `Port Killer (Port Watchdog)` ve `System Optimizer` çekirdekten kaldırılacaktır.
+   - `Temp Mail` spam ve kötüye kullanım riski nedeniyle çekirdekten çıkarılacaktır.
+   - `Clipboard Manager` ve basit not araçları ana pazarlama ve yol haritasından düşürülmüştür.
+3. **Table Stakes Altyapı:**
+   - Cloud Sync (E2EE senkronizasyon), Team Auth & Workspaces (RBAC, SSO), Stripe/Paddle abonelik ve faturalandırma, sunucu lisanslama.
+4. **Diferansiyasyon:**
+   - Workflow Chains (araçları birbirine bağlama), Takım Koleksiyonları (paylaşımlı API ve şablon depoları), AI Akıllı Ayrıştırıcı (format tanıma ve yönlendirme).
+5. **Ödeme Testi:**
+   - Her özellik için "Bir geliştirici/ekip buna aylık para öder mi, yoksa ücretsiz web/CLI aracı yeterli mi?" sorgusu zorunludur.
 
-## IPC Kalibi
-```typescript
-// Renderer tarafi (nexusAPI)
-const result = await nexusAPI.toolName.methodName(args)
+---
 
-// Main tarafi (index.ts)
-ipcMain.handle('channel-name', async (_, ...args) => {
-  // is
-  return result
-})
-
-// Tip tanimlari: src/renderer/src/lib/ipc.ts
-```
-
-## Özellik ve Araç Kabul Kuralı (Feature Gatekeeper Entegrasyonu)
+## 3. Özellik ve Araç Kabul Kuralı (Feature Gatekeeper Entegrasyonu)
 
 > 🛑 **ZORUNLU ÖN KOŞUL:** ZenDev için önerilen HER YENİ ÖZELLİK, ARAÇ veya BACKLOG MADDESİ öncelikle [`zendev-feature-gatekeeper`](../zendev-feature-gatekeeper/SKILL.md) 5 aşamalı filtresinden geçirilmek zorundadır. Yüzeysel veya otomatik onay kesinlikle verilemez.
 
@@ -93,77 +61,86 @@ ipcMain.handle('channel-name', async (_, ...args) => {
 
 ### Kalıcı Kara Liste (Asla Kabul Edilmeyecekler)
 - Sistem seviyesi müdahale araçları (port/process öldürme, DNS flush, önbellek temizleme)
-- Kullanıcı onaysız sessiz arka plan güncelleyicileri/işlemleri
+- Kullanıcı onaysız sessiz arka plan güncelleyicileri/işlemleri (`CREATE_NO_WINDOW` arka plan güncelleyicileri EDR/antivirüs tarafından zararlı yazılım davranışı sayılır)
 - Kötüye kullanıma açık anonimlik araçları (temp mail vb.)
 - Düşük diferansiyasyonlu OS-native araçlar (clipboard manager, not defteri vb.)
 
-## Yeni Tool Ekleme — Adim Adim
+---
+
+## 4. Mimari Uyarılar ve Güvenlik Standartları
+
+### 🛑 Sessiz Otonom Güncelleyici Uyarısı (CRITICAL)
+- **Kural:** Arka planda kullanıcının bilgisi dışında çalışan (`CREATE_NO_WINDOW`) otonom NSIS güncelleme akışı KESİNLİKLE YASAKTIR.
+- **Mimari Gerekçe:** Kurumsal ortamlarda Windows Defender, CrowdStrike, SentinelOne gibi EDR ve antivirüs sistemleri sessiz arka plan yükleyicilerini zararlı yazılım (malware/dropper) davranışı olarak işaretler.
+- **Zorunlu Akış:** Güncellemeler kontrol edilir, yeni sürüm varsa kullanıcıya sürüm notları (changelog) ile bir bildirim veya modal sunulur. İndirme ve kurulum yalnızca **açık kullanıcı onayı** (`Şimdi Güncelle` butonu) alındığında başlatılır.
+
+### 🛑 Sistem Müdahalesi Uyarısı
+- İşletim sistemi seviyesinde süreç sonlandırma (`taskkill`), DNS flush veya sistem dosyalarını silme gibi tehlikeli kodlar çekirdeğe eklenemez.
+
+---
+
+## 5. Dizin Yapısı
+```
+NexusHub/
+├── src-tauri/                 ← Rust Arka Planı (Tauri v2)
+│   ├── src/
+│   │   ├── lib.rs            ← Tauri komut kayıtları ve eklentiler
+│   │   ├── main.rs           ← Uygulama giriş noktası
+│   │   ├── process_ext.rs    ← Windows CREATE_NO_WINDOW yardımcıları
+│   │   ├── hwid.rs           ← Donanım kimliği (node-machine-id uyumlu)
+│   │   └── ...               ← Ağ, kripto, pdf, görsel modülleri
+│   ├── Cargo.toml
+│   └── tauri.conf.json
+│
+├── src/renderer/src/          ← React 19 Frontend
+│   ├── pages/                ← Stüdyo sayfaları (JsonStudio, JwtStudio, vb.)
+│   ├── components/           ← Sidebar, BaseToolTemplate, TitleBar, vb.
+│   ├── lib/
+│   │   ├── ipc.ts            ← Typed nexusAPI köprüsü
+│   │   ├── i18n.tsx          ← useT() hook ve I18nProvider
+│   │   └── cyberAudio.ts     ← Web Audio haptik ses motoru
+│   └── locales/
+│       ├── tr.json           ← Türkçe çeviriler
+│       └── en.json           ← İngilizce çeviriler
+│
+├── .agents/                   ← Agent Kit, Kurallar ve Hafıza
+│   ├── rules/
+│   │   └── zendev-saas-directive.md  ← Bağlayıcı SaaS kuralları
+│   ├── memory/
+│   │   └── MEMORY.md                 ← Kalıcı sistem hafızası
+│   └── skills/
+│       ├── zendev/SKILL.md           ← Bu kılavuz
+│       └── zendev-feature-gatekeeper/ ← 5 aşamalı özellik filtresi
+│
+├── AGENTS.md / GEMINI.md / CLAUDE.md / .cursorrules ← Asistan direktifleri
+└── YAPILACAKLAR.md            ← Tek yetkili ürün yol haritası ve backlog
+```
+
+---
+
+## 6. Yeni Tool Ekleme — Adım Adım
 0. **Gatekeeper Değerlendirmesi:** Özelliği/aracı `@zendev-feature-gatekeeper` 5 filtre testinden geçir ve gerekçeli onay al. Kalıcı kara liste maddeleri doğrudan elenir.
-1. `src/renderer/src/pages/YeniTool.tsx` olustur
+1. `src/renderer/src/pages/YeniTool.tsx` oluştur.
+2. `BaseToolTemplate` kullan (icon, title, description, gradient props).
+3. `useT()` ile i18n ekle — hiç hardcoded string kalmamalı.
+4. `src/renderer/src/App.tsx` rotasına ekle.
+5. `src/renderer/src/components/Sidebar.tsx` navigasyonuna ekle.
+6. `src/renderer/src/pages/Dashboard.tsx` araç kartlarına ekle.
+7. `tr.json` ve `en.json` dosyalarına anahtarları tam eşlikle ekle.
+8. Rust IPC gerektiriyorsa `src-tauri/src/` içinde komut yaz, `lib.rs` içine kaydet ve `ipc.ts` içine tip ekle.
 
-2. `BaseToolTemplate` kullan (icon, title, description, gradient props)
-3. `useT()` ile i18n ekle — hic hardcoded string kalmamali
-4. `src/renderer/src/App.tsx`'e route ekle
-5. `src/renderer/src/components/Sidebar.tsx`'e nav item ekle
-6. `src/renderer/src/pages/Dashboard.tsx`'e tool card ekle (tools array)
-7. `en.json` + `tr.json`'a:
-   - `nav.tools.toolAdi` 
-   - `dashboard.tools.toolAdi.desc`
-   - Tool-specific namespace block
-8. IPC gerektiriyorsa `src/main/index.ts`'e handler, `ipc.ts`'e tip ekle
-9. `.agents/rules/zendev-project-map.md` guncelle
+---
 
-## Tasarim Tokenlari
-```
-nexus-bg        — Ana arkaplan
-nexus-surface   — Yuzeylerin arkaplan
-nexus-card      — Kart arkaplan
-nexus-border    — Kenar rengi
-nexus-text      — Ana metin
-nexus-muted     — Soluk metin
-nexus-accent    — #8b5cf6 (violet)
-nexus-cyan      — #22d3ee
-nexus-success   — #10b981
-nexus-error     — #ef4444
-```
-
-## Kritik Notlar
-- **YAPILACAKLAR.md** proje kokunde — backlog icin tek referans
-- Project map otomatik guncelleniyor (`.agents/rules/update-project-map.md` kurali)
-- Lisans persistence: `safeStorage` (OS keychain)
-- EULA / Tour status: `localStorage`
-- Dev ortaminda auto-updater loglar: `app.isPackaged` check ile suppress edildi
-- CSP: dev'de gevsetilmis, prod'da hardened (dinamik switch)
-
-## Mevcut Toollar
-| Tool | Sayfa | IPC |
-|------|-------|-----|
-| TempMail Generator | TempMail.tsx | nexusAPI.tempMail.* |
-| Universal Link Decrypter | UniversalDecrypter.tsx | nexusAPI.decrypter.* |
-| Aylink Bypasser | AylinkBypasser.tsx | nexusAPI.bypassLink() |
-| Password Generator | PasswordGenerator.tsx | Client-side |
-| Bulk File Organizer | BulkOrganizer.tsx | nexusAPI.organizer.* |
-| Clipboard Manager | ClipboardManager.tsx | nexusAPI.clipboard.* |
-| Image Toolkit | ImageToolkit.tsx | nexusAPI.image.* |
-| Network Tools | NetworkTools.tsx | nexusAPI.network.* |
-
-## Backlog (YAPILACAKLAR.md ile senkron)
-
-### Siradaki Featurelar (Oncelik Sirasi)
-1. **Hash & Encode Suite** — MD5, SHA-*, bcrypt, Base64, URL, Hex — client-side
-2. **QR Code Studio** — Uret (metin/URL/WiFi/vCard) + Oku, PNG/SVG export — client-side
-3. **JSON / JWT Toolkit** — decode, format, minify, diff, path query
-4. **Regex Tester** — live highlight, named groups, flag toggle, test bank
-5. **Fake Data Generator** — bulk JSON/CSV, TR locale
-6. **Color Toolkit** — HEX/RGB/HSL converter, palette extractor, WCAG
-
-### Phase 3 — Monetization
-- LemonSqueezy / Paddle webhook endpoint
-- Sunucu tarafi lisans dogrulama
-- Otomatik key generation servisi
-- Cihaz basi aktivasyon limiti (1-2)
-
-### Production
-- Code signing (`dist:win`)
-- Auto-update server endpoint
-- Installer branding finalize
+## 7. Yol Haritası ve Backlog (YAPILACAKLAR.md ile Senkron)
+1. **Faz 1 — Modül Temizliği & Güvenlik:**
+   - Port Killer ve System Optimizer'ın çekirdekten kaldırılması.
+   - Sessiz güncelleyicinin şeffaf, onaylı modal akışına refactor edilmesi.
+   - Temp Mail'in yasal/abuse riskleri nedeniyle tasfiyesi.
+2. **Faz 2 — Table Stakes SaaS Altyapısı:**
+   - E2EE Cloud Sync (çalışma alanları ve koleksiyonlar).
+   - Team Auth, Workspaces ve RBAC.
+   - Stripe / Paddle ödeme, abonelik yönetimi ve sunucu lisanslama.
+3. **Faz 3 — Diferansiyasyon & Moat:**
+   - Workflow Chains (stüdyo zincirleme motoru).
+   - Paylaşılabilir Takım Koleksiyonları.
+   - AI Akıllı Ayrıştırıcı (Smart Dispatcher).

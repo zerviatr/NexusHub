@@ -15,6 +15,7 @@ description: Apply when you need a fast lookup of which agents, skills, or valid
 - **Masters**: `orchestrator`, `project-planner`, `security-auditor` (Cyber/Audit), `backend-specialist` (API/DB), `frontend-specialist` (UI/UX), `mobile-developer`, `debugger`, `game-developer`
 - **Key Skills**: `clean-code`, `brainstorming`, `app-builder`, `frontend-design`, `mobile-design`, `plan-writing`, `behavioral-modes`, `zendev-feature-gatekeeper`
 - **ZenDev Gatekeeper**: `zendev-feature-gatekeeper` — ZenDev için önerilen her yeni özellikte (feature bloat riskini önlemek için) 5 aşamalı filtrenin (Ödeme Testi, Kişisel vs Genel İhtiyaç, Çekirdekle İlişki, Risk/Güven, Bakım Maliyeti) ve kalıcı kara liste denetiminin zorunlu işletilmesi.
+- **ZenDev SaaS Direktifi**: `zendev-saas-directive` — ZenDev'i masaüstü SaaS'a dönüştüren 5 bağlayıcı ilke (Konumlandırma, Modül Temizliği, Table Stakes, Diferansiyasyon, Ödeme Testi).
 
 ## Key Scripts
 

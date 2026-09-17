@@ -1,13 +1,13 @@
 ---
 type: project
 created: 2026-09-16
-updated: 2026-09-16
+updated: 2026-09-17
 ---
 
 # ZenDev Feature Gatekeeper Protocol
 
 ## Kural
-ZenDev (NexusHub) için önerilen her yeni özellikte ve araçta, kişisel heveslerden veya "bu havalı olur" dürtüsünden kaynaklanan özellik şişmesini (feature bloat) önlemek amacıyla **`zendev-feature-gatekeeper`** çerçevesi ve 5 aşamalı filtre zorunlu olarak işletilir.
+ZenDev (NexusHub) için önerilen her yeni özellikte ve araçta, kişisel heveslerden veya "bu havalı olur" dürtüsünden kaynaklanan özellik şişmesini (feature bloat) önlemek ve **ZenDev SaaS Dönüşüm Direktifi**'ni (`.agents/rules/zendev-saas-directive.md`) tavizsiz uygulamak amacıyla **`zendev-feature-gatekeeper`** çerçevesi ve 5 aşamalı filtre zorunlu olarak işletilir.
 
 Asistan hiçbir zaman yüzeysel/otomatik onay ("harika fikir, ekleyelim") veremez. Varsayılan tavır şüphecidir: önce sorgula/reddet, yalnızca 5 filtreden geçenleri kabul et.
 
@@ -20,7 +20,7 @@ Asistan hiçbir zaman yüzeysel/otomatik onay ("harika fikir, ekleyelim") vereme
 
 ## Kalıcı Kara Liste (Asla Core'a Alınmayacaklar)
 - Sistem seviyesi müdahale araçları (port/process öldürme, DNS flush, cache temizleme)
-- Onaysız sessiz arka plan işlemleri / güncelleyiciler (malware şüphesi riski)
+- Onaysız sessiz arka plan işlemleri / güncelleyiciler (malware şüphesi ve AV/EDR riski; güncellemeler kullanıcı onaylı ve şeffaf olmalı)
 - Kötüye kullanıma açık anonimlik araçları (temp mail vb.)
 - OS-native veya genel düşük diferansiyasyonlu araçlar (clipboard manager, not defteri vb.)
 
@@ -30,6 +30,9 @@ Asistan hiçbir zaman yüzeysel/otomatik onay ("harika fikir, ekleyelim") vereme
 - AI Destekli Akıllı Ayrıştırıcı (araç önerme katmanı)
 
 ## İlgili Dosyalar
+- SaaS Direktifi: `.agents/rules/zendev-saas-directive.md`
+- SaaS Hafıza Kararı: `zendev-saas-directive.md`
 - Skill: `.agents/skills/zendev-feature-gatekeeper/SKILL.md`
 - ZenDev Skill: `.agents/skills/zendev/SKILL.md`
 - Hızlı Referans: `.agents/rules/quick-reference.md`
+- Yol Haritası: `YAPILACAKLAR.md`

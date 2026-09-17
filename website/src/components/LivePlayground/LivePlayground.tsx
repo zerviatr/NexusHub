@@ -80,7 +80,7 @@ export const LivePlayground: React.FC<LivePlaygroundProps> = ({ lang }) => {
               <div className="w-3 h-3 rounded-full bg-amber-500/80" />
               <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
               <span className="text-xs font-mono text-gray-400 ml-2 hidden sm:inline">
-                ZenDev Simulator v2.5.2 (WebAssembly & WebCrypto Core)
+                ZenDev Simulator v2.5.3 (WebAssembly & WebCrypto Core)
               </span>
             </div>
 
