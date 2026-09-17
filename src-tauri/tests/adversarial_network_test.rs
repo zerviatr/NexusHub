@@ -26,7 +26,6 @@
 use std::collections::HashMap;
 use zendev_tauri_lib::net_dispatcher::*;
 use zendev_tauri_lib::network::*;
-use zendev_tauri_lib::port_watchdog::*;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. ADVERSARIAL SSRF FILTER CHALLENGES
@@ -399,72 +398,3 @@ async fn test_adversarial_ping_command_injection_defense() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 5. ADVERSARIAL PORT WATCHDOG PID BOUNDARY CHALLENGES
-// ─────────────────────────────────────────────────────────────────────────────
-
-#[test]
-fn test_adversarial_port_watchdog_pid_boundaries() {
-    // 1. System Idle (PID 0)
-    assert!(
-        validate_killable_pid(0).is_err(),
-        "Must reject PID 0 (System Idle)"
-    );
-
-    // 2. Kernel and protected system processes (PID <= 4)
-    assert!(
-        validate_killable_pid(1).is_err(),
-        "Must reject PID 1 (Init / System)"
-    );
-    assert!(
-        validate_killable_pid(2).is_err(),
-        "Must reject PID 2 (Protected)"
-    );
-    assert!(
-        validate_killable_pid(3).is_err(),
-        "Must reject PID 3 (Protected)"
-    );
-    assert!(
-        validate_killable_pid(4).is_err(),
-        "Must reject PID 4 (System Kernel)"
-    );
-
-    // 3. Negative PIDs
-    assert!(
-        validate_killable_pid(-1).is_err(),
-        "Must reject negative PID -1"
-    );
-    assert!(
-        validate_killable_pid(-9999).is_err(),
-        "Must reject negative PID -9999"
-    );
-    assert!(
-        validate_killable_pid(i64::MIN).is_err(),
-        "Must reject minimum i64"
-    );
-
-    // 4. Self PID
-    let current_pid = std::process::id() as i64;
-    assert!(
-        validate_killable_pid(current_pid).is_err(),
-        "Must reject ZenDev own PID ({})",
-        current_pid
-    );
-
-    // 5. Exceeding 32-bit positive integer (2,147,483,647)
-    assert!(
-        validate_killable_pid(2_147_483_648).is_err(),
-        "Must reject PID 2^31"
-    );
-    assert!(
-        validate_killable_pid(4_294_967_295).is_err(),
-        "Must reject PID 2^32 - 1"
-    );
-    assert!(
-        validate_killable_pid(i64::MAX).is_err(),
-        "Must reject maximum i64"
-    );
-
-    // 6. Legitimate user PID within legal bounds
-    assert_eq!(validate_killable_pid(12345), Ok(12345));
-    assert_eq!(validate_killable_pid(65535), Ok(65535));
-}

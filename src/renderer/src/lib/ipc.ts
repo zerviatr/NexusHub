@@ -49,28 +49,16 @@ export interface OrganizerExecutionResult {
   errors: string[]
 }
 
-export interface TempMailMessage {
-  id: string
-  from: string
-  subject: string
-  date: string
-}
 
-export interface TempMailMessageDetails extends TempMailMessage {
-  attachments: { filename: string; contentType: string; size: number }[]
+
+[]
   body: string
   textBody: string
   htmlBody: string
 }
 
-// ── Clipboard Manager ────────────────────────────────────────────────────────
 
-export interface ClipboardEntry {
-  id: string
-  text: string
-  timestamp: number
-  preview: string
-}
+
 
 // ── Network Tools ────────────────────────────────────────────────────────────
 
@@ -262,12 +250,6 @@ export const nexusAPI = {
     return window.nexusAPI.bypassLink(url)
   },
 
-  tempMail: {
-    generate: () => window.nexusAPI.tempMail.generate(),
-    check: (email: string) => window.nexusAPI.tempMail.check(email),
-    read: (email: string, id: string) => window.nexusAPI.tempMail.read(email, id),
-  },
-
   decrypter: {
     clean: (url: string): Promise<DecryptResult> => window.nexusAPI.decrypter.clean(url),
     cleanBatch: (urls: string[]): Promise<DecryptResult[]> => window.nexusAPI.decrypter.cleanBatch(urls),
@@ -294,15 +276,7 @@ export const nexusAPI = {
   close: (): void => window.nexusAPI.close(),
   isMaximized: (): Promise<boolean> => window.nexusAPI.isMaximized(),
 
-  // ── Clipboard Manager ──────────────────────────────────────────────────────
-  clipboard: {
-    getHistory: (): Promise<ClipboardEntry[]> => window.nexusAPI.clipboard.getHistory(),
-    clear: (): Promise<void> => window.nexusAPI.clipboard.clear(),
-    delete: (id: string): Promise<void> => window.nexusAPI.clipboard.delete(id),
-    write: (text: string): Promise<void> => window.nexusAPI.clipboard.write(text),
-  },
-
-  // ── Network Tools ──────────────────────────────────────────────────────────
+    // ── Network Tools ──────────────────────────────────────────────────────────
   network: {
     ipLookup: (host: string): Promise<IpLookupResult> => window.nexusAPI.network.ipLookup(host),
     dnsQuery: (host: string, type: DnsType): Promise<DnsQueryResult> =>
@@ -350,8 +324,7 @@ export const nexusAPI = {
     split: (payload: { filePath: string; pageRange: string }) => window.nexusAPI.pdf.split(payload),
   },
 
-  // ── System Optimizer ────────────────────────────────────────────────────────
-  system: {
+    system: {
     flushDns: (): Promise<{ success: boolean; output?: string }> => window.nexusAPI.system.flushDns(),
     scanTemp: (): Promise<{ path: string; fileCount: number; totalBytes: number; sizeFormatted: string; error?: string }> =>
       window.nexusAPI.system.scanTemp(),

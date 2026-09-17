@@ -3,16 +3,16 @@ pub mod safe_storage;
 pub mod license;
 pub mod crypto;
 pub mod network;
-pub mod port_watchdog;
+
 pub mod net_dispatcher;
 pub mod pdf;
 pub mod image;
 pub mod organizer;
-pub mod clipboard;
-pub mod tempmail;
+
+
 pub mod bypasser;
 pub mod sentinel;
-pub mod optimizer;
+
 pub mod journal;
 pub mod updater;
 pub mod process_ext;
@@ -156,9 +156,9 @@ pub fn run() {
             network::network_dns_query,
             network::network_ssl_inspect,
             // Port Watchdog Commands
-            port_watchdog::port_scan_active,
-            port_watchdog::port_scan_active_ports,
-            port_watchdog::port_kill_process,
+            
+            
+            
             // API Studio / Net Dispatcher Commands
             net_dispatcher::net_dispatch_request,
             net_dispatcher::net_dispatcher_send,
@@ -184,14 +184,14 @@ pub fn run() {
             organizer::organizer_can_undo,
             organizer::organizer_undo,
             // Clipboard Manager Commands
-            clipboard::clipboard_get_history,
-            clipboard::clipboard_clear,
-            clipboard::clipboard_delete,
-            clipboard::clipboard_write,
+            
+            
+            
+            
             // TempMail Commands
-            tempmail::tempmail_generate,
-            tempmail::tempmail_check,
-            tempmail::tempmail_read,
+            
+            
+            
             // Link Bypasser & Decrypter Commands
             bypasser::bypass_link,
             bypasser::decrypter_clean,
@@ -200,11 +200,11 @@ pub fn run() {
             sentinel::sentinel_get_stats,
             sentinel::sentinel_optimize_memory,
             // System Optimizer Commands
-            optimizer::system_flush_dns,
-            optimizer::system_scan_temp,
-            optimizer::system_clean_temp,
-            optimizer::system_ping_host,
-            optimizer::system_optimize_all,
+            
+            
+            
+            
+            
             // Activity Journal Commands
             journal::journal_record,
             journal::journal_query,

@@ -57,8 +57,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     labelKey: 'nav.groups.privacy',
     items: [
-      { path: '/temp-mail',  labelKey: 'nav.tools.tempMail',          icon: Mail, isPro: true },
-      { path: '/decrypter',  labelKey: 'nav.tools.decrypter',         icon: ShieldCheck, isPro: true },
+             { path: '/decrypter',  labelKey: 'nav.tools.decrypter',         icon: ShieldCheck, isPro: true },
       { path: '/password',   labelKey: 'nav.tools.passwordGenerator',  icon: Key },
       { path: '/fortress',   labelKey: 'nav.tools.cyberFortress',     icon: ShieldAlert, isPro: true },
     ],
@@ -85,16 +84,13 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { path: '/pdf-studio', labelKey: 'nav.tools.pdfStudio',        icon: FileText, isPro: true },
       { path: '/organizer',  labelKey: 'nav.tools.bulkOrganizer',    icon: FolderArchive, isPro: true },
-      { path: '/clipboard',  labelKey: 'nav.tools.clipboardManager', icon: Clipboard, isPro: true },
-      { path: '/image',      labelKey: 'nav.tools.imageToolkit',     icon: ImageIcon, isPro: true },
+             { path: '/image',      labelKey: 'nav.tools.imageToolkit',     icon: ImageIcon, isPro: true },
     ],
   },
   {
     labelKey: 'nav.groups.network',
     items: [
-      { path: '/port-killer',      labelKey: 'nav.tools.portKiller',      icon: Radio, isPro: true },
-      { path: '/system-optimizer', labelKey: 'nav.tools.systemOptimizer', icon: Cpu, isPro: true },
-      { path: '/network',          labelKey: 'nav.tools.networkTools',     icon: Globe, isPro: true },
+                    { path: '/network',          labelKey: 'nav.tools.networkTools',     icon: Globe, isPro: true },
       { path: '/sentinel',         labelKey: 'nav.tools.sentinel',         icon: Activity, isPro: true },
     ],
   },
@@ -616,3 +612,4 @@ export default function Sidebar() {
     </motion.aside>
   )
 }
+

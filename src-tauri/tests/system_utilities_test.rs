@@ -15,14 +15,9 @@
 use std::fs;
 use std::path::PathBuf;
 use zendev_tauri_lib::bypasser::{strip_tracking_parameters, MAX_REDIRECT_HOPS};
-use zendev_tauri_lib::clipboard::{
-    add_clipboard_entry, clipboard_clear, clipboard_delete, get_in_memory_history,
-    MAX_BYTES, MAX_HISTORY,
-};
 use zendev_tauri_lib::journal::{
     canonical_stringify, compute_entry_hash, verify_audit_chain, ActivityEntry, GENESIS_PREV_HASH,
 };
-use zendev_tauri_lib::optimizer::{format_bytes_to_mb, system_scan_temp};
 use zendev_tauri_lib::organizer::{
     get_category, get_unique_path, organizer_can_undo, organizer_execute, organizer_scan,
     organizer_undo, FileOperation, CATEGORY_ARCHIVES, CATEGORY_AUDIO, CATEGORY_CODE,
@@ -176,50 +171,6 @@ async fn test_organizer_scan_execute_and_undo_cycle() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 2. Clipboard Manager Tests
-// ─────────────────────────────────────────────────────────────────────────────
-
-#[test]
-fn test_clipboard_ring_buffer_limits_and_rejection() {
-    clipboard_clear();
-
-    // 1. Push 60 small items -> must cap at MAX_HISTORY (50)
-    for i in 0..60 {
-        let added = add_clipboard_entry(&format!("clip item {}", i));
-        assert!(added);
-    }
-    let history = get_in_memory_history();
-    assert_eq!(history.len(), MAX_HISTORY);
-    // Newest is at index 0
-    assert_eq!(history[0].text, "clip item 59");
-
-    // 2. Reject entry exceeding MAX_BYTES (50KB)
-    let huge_string = "A".repeat(MAX_BYTES + 100);
-    let rejected = add_clipboard_entry(&huge_string);
-    assert!(!rejected);
-    assert_eq!(get_in_memory_history().len(), MAX_HISTORY);
-
-    // 3. Reject empty or whitespace-only
-    assert!(!add_clipboard_entry("   "));
-    assert!(!add_clipboard_entry(""));
-
-    // 4. Deduplication
-    let item_to_dupe = "clip item 45";
-    assert!(add_clipboard_entry(item_to_dupe));
-    let history_after_dupe = get_in_memory_history();
-    assert_eq!(history_after_dupe.len(), MAX_HISTORY);
-    assert_eq!(history_after_dupe[0].text, item_to_dupe);
-
-    // 5. Delete by ID
-    let first_id = history_after_dupe[0].id.clone();
-    clipboard_delete(first_id);
-    let history_after_del = get_in_memory_history();
-    assert_eq!(history_after_del.len(), MAX_HISTORY - 1);
-
-    // 6. Clear
-    clipboard_clear();
-    assert_eq!(get_in_memory_history().len(), 0);
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 3. Link Bypasser & Tracking Stripper Tests
@@ -276,22 +227,6 @@ fn test_sentinel_optimize_memory_execution() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 5. System Optimizer Tests
-// ─────────────────────────────────────────────────────────────────────────────
-
-#[tokio::test]
-async fn test_optimizer_scan_temp_invariants() {
-    let scan_res = system_scan_temp().await.unwrap();
-    assert!(!scan_res.path.is_empty());
-    assert!(scan_res.size_formatted.ends_with("MB"));
-}
-
-#[test]
-fn test_optimizer_format_bytes() {
-    assert_eq!(format_bytes_to_mb(1024 * 1024), "1.00 MB");
-    assert_eq!(format_bytes_to_mb(5 * 1024 * 1024), "5.00 MB");
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
 // 6. Activity Journal Cryptographic Blockchain Tests
 // ─────────────────────────────────────────────────────────────────────────────

@@ -58,12 +58,6 @@ export const tauriNexusAPI = {
   bypassLink: (url: string) => safeInvoke('bypass_link', { url }),
 
   // ── 2. Temp Mail ──
-  tempMail: {
-    generate: () => safeInvoke('tempmail_generate'),
-    check: (email: string) => safeInvoke('tempmail_check', { email }),
-    read: (email: string, id: string) => safeInvoke('tempmail_read', { email, id }),
-  },
-
   // ── 3. Link Decrypter ──
   decrypter: {
     clean: (url: string) => safeInvoke('decrypter_clean', { url }),
@@ -79,9 +73,7 @@ export const tauriNexusAPI = {
     undo: () => safeInvoke('organizer_undo', {}, { success: false, restored: 0, errors: [] }),
   },
 
-  // ── 5. Clipboard Manager ──
-  clipboard: {
-    getHistory: () => safeInvoke('clipboard_get_history', {}, []),
+    []),
     clear: () => safeInvoke('clipboard_clear'),
     delete: (id: string) => safeInvoke('clipboard_delete', { id }),
     write: (text: string) => safeInvoke('clipboard_write', { text }),
@@ -156,8 +148,7 @@ export const tauriNexusAPI = {
     onApplyingPatch: (cb: () => void) => setupEventListener('updater:applying-patch', cb),
   },
 
-  // ── 13. System Optimizer ──
-  system: {
+    system: {
     flushDns: () => safeInvoke('system_flush_dns', {}, { success: true, output: 'DNS Flush OK' }),
     scanTemp: () => safeInvoke('system_scan_temp', {}, { path: '', fileCount: 0, totalBytes: 0, sizeFormatted: '0 MB' }),
     cleanTemp: () => safeInvoke('system_clean_temp', {}, { success: true, deletedCount: 0, freedBytes: 0, freedFormatted: '0 MB' }),
@@ -177,8 +168,7 @@ export const tauriNexusAPI = {
     setAutoLaunch: (enable: boolean) => safeInvoke('settings_set_auto_launch', { enable }, true),
   },
 
-  // ── 15. Port Watchdog ──
-  port: {
+    port: {
     scan: () => safeInvoke('port_scan_active_ports', {}, { success: true, ports: [] }),
     kill: (pid: number) => safeInvoke('port_kill_process', { pid }, { success: true, message: `PID ${pid} killed` }),
   },

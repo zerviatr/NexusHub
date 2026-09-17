@@ -19,7 +19,6 @@ use std::collections::HashMap;
 use tokio::net::TcpListener;
 use zendev_tauri_lib::net_dispatcher::*;
 use zendev_tauri_lib::network::*;
-use zendev_tauri_lib::port_watchdog::*;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. PING PARSER & METRIC EXTRACTION TESTS
@@ -133,68 +132,6 @@ fn test_lookup_service_name_mapping() {
     assert_eq!(lookup_service_name(6379), "Redis");
     assert_eq!(lookup_service_name(8080), "HTTP-Alt");
     assert_eq!(lookup_service_name(9999), "Unknown");
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 3. PORT WATCHDOG & PROCESS KILL GUARD TESTS
-// ─────────────────────────────────────────────────────────────────────────────
-
-#[test]
-fn test_pid_kill_guard_safety_boundaries() {
-    // Protected kernel & system idle PIDs
-    assert!(validate_killable_pid(0).is_err(), "Must reject PID 0 (System Idle)");
-    assert!(validate_killable_pid(1).is_err(), "Must reject PID 1 (Init/System)");
-    assert!(validate_killable_pid(4).is_err(), "Must reject PID 4 (System Kernel)");
-
-    // Negative PIDs
-    assert!(validate_killable_pid(-1).is_err(), "Must reject negative PID -1");
-    assert!(validate_killable_pid(-999).is_err(), "Must reject negative PID -999");
-
-    // Self PID
-    let self_pid = std::process::id() as i64;
-    assert!(validate_killable_pid(self_pid).is_err(), "Must reject self PID");
-
-    // Integer overflow boundaries (> 2,147,483,647)
-    assert!(validate_killable_pid(2_147_483_648).is_err(), "Must reject PID > 2^31 - 1");
-    assert!(validate_killable_pid(9_999_999_999).is_err(), "Must reject large PID");
-
-    // Legitimate user PID
-    let valid_user_pid = 12345;
-    assert_eq!(validate_killable_pid(valid_user_pid), Ok(12345));
-}
-
-#[test]
-fn test_parse_netstat_output_parsing() {
-    let sample_netstat = r#"
-Active Connections
-
-  Proto  Local Address          Foreign Address        State           PID
-  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING       984
-  TCP    127.0.0.1:3000         0.0.0.0:0              LISTENING       14320
-  TCP    127.0.0.1:5432         127.0.0.1:51234        ESTABLISHED     5432
-  UDP    0.0.0.0:5353           *:*                                    1100
-"#;
-
-    let mut pid_map = HashMap::new();
-    pid_map.insert(984, "svchost.exe".to_string());
-    pid_map.insert(14320, "node.exe".to_string());
-    pid_map.insert(5432, "postgres.exe".to_string());
-
-    let entries = parse_netstat_output(sample_netstat, &pid_map);
-    assert_eq!(entries.len(), 4);
-
-    let port_135 = entries.iter().find(|e| e.local_port == 135).unwrap();
-    assert_eq!(port_135.protocol, "TCP");
-    assert_eq!(port_135.state, "LISTENING");
-    assert_eq!(port_135.pid, 984);
-    assert_eq!(port_135.process_name, "svchost.exe");
-
-    let port_3000 = entries.iter().find(|e| e.local_port == 3000).unwrap();
-    assert_eq!(port_3000.process_name, "node.exe");
-
-    let port_5432 = entries.iter().find(|e| e.local_port == 5432).unwrap();
-    assert_eq!(port_5432.state, "ESTABLISHED");
-    assert_eq!(port_5432.foreign_port, 51234);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

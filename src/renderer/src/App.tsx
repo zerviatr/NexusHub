@@ -22,11 +22,11 @@ import { useT } from './lib/i18n'
 import { resolveGatewayRoute, dispatchGatewayDrop, FileGatewayDropDetail } from './lib/fileGateway'
 
 // Code-split heavy tool pages for blazing fast app launch & minimal RAM footprint
-const TempMail = lazy(() => import('./pages/TempMail'))
+
 const UniversalDecrypter = lazy(() => import('./pages/UniversalDecrypter'))
 const BulkOrganizer = lazy(() => import('./pages/BulkOrganizer'))
 const PasswordGenerator = lazy(() => import('./pages/PasswordGenerator'))
-const ClipboardManager = lazy(() => import('./pages/ClipboardManager'))
+
 const NetworkTools = lazy(() => import('./pages/NetworkTools'))
 const ImageToolkit = lazy(() => import('./pages/ImageToolkit'))
 const QrCodeStudio = lazy(() => import('./pages/QrCodeStudio'))
@@ -37,11 +37,11 @@ const DevSandbox = lazy(() => import('./pages/DevSandbox'))
 const CyberFortress = lazy(() => import('./pages/CyberFortress'))
 const RegexStudio = lazy(() => import('./pages/RegexStudio'))
 const FakeDataStudio = lazy(() => import('./pages/FakeDataStudio'))
-const SystemOptimizer = lazy(() => import('./pages/SystemOptimizer'))
+
 const CurlRunner = lazy(() => import('./pages/CurlRunner'))
 const ApiStudio = lazy(() => import('./pages/ApiStudio'))
 const ColorStudio = lazy(() => import('./pages/ColorStudio'))
-const PortKiller = lazy(() => import('./pages/PortKiller'))
+
 const Scratchpad = lazy(() => import('./pages/Scratchpad'))
 const PdfStudio = lazy(() => import('./pages/PdfStudio'))
 const ActivityFeed = lazy(() => import('./pages/ActivityFeed'))
@@ -340,10 +340,7 @@ export default function App() {
                 >
                   <Routes location={location}>
                     <Route path="/" element={<Dashboard />} />
-                    <Route
-                      path="/temp-mail"
-                      element={isPro ? <TempMail /> : <ProLockGate toolName="TempMail Generator" toolDesc="Instant disposable email addresses to bypass spam and tracking. Reads inbox in real-time." />}
-                    />
+                    
                     <Route
                       path="/decrypter"
                       element={isPro ? <UniversalDecrypter /> : <ProLockGate toolName="Universal Decrypter" toolDesc="Resolve shortened and monetized redirect links to their true destination and strip privacy trackers." />}
@@ -354,10 +351,7 @@ export default function App() {
                     />
                     <Route path="/aylink" element={<Navigate to="/decrypter" replace />} />
                     <Route path="/password" element={<PasswordGenerator />} />
-                    <Route
-                      path="/clipboard"
-                      element={isPro ? <ClipboardManager /> : <ProLockGate toolName="Clipboard Manager" toolDesc="Auto-tracks local clipboard history up to 50 entries with global shortcut summon." />}
-                    />
+                    
                     <Route
                       path="/network"
                       element={isPro ? <NetworkTools /> : <ProLockGate toolName="Network Tools" toolDesc="Public IP detection, DNS querying, port scanning, and native ICMP ping." />}
@@ -376,15 +370,9 @@ export default function App() {
                       element={isPro ? <ApiStudio /> : <ProLockGate toolName="API Studio Pro" toolDesc="Full REST & GraphQL client with automated test suites, environment vaults, and cURL exporters." />}
                     />
                     <Route path="/curl-runner" element={<Navigate to="/api-studio" replace />} />
-                    <Route
-                      path="/system-optimizer"
-                      element={isPro ? <SystemOptimizer /> : <ProLockGate toolName="System Optimizer Pro" toolDesc="Deep-clean compiler caches, npm build artifacts, Windows temp bloat, and reclaim valuable SSD space." />}
-                    />
+                    
                     <Route path="/color-studio" element={<ColorStudio />} />
-                    <Route
-                      path="/port-killer"
-                      element={isPro ? <PortKiller /> : <ProLockGate toolName="PortKiller Pro" toolDesc="Instant SIGKILL process terminator, conflicting TCP/UDP socket scanner, and hardware port inspector." />}
-                    />
+                    
                     <Route path="/scratchpad" element={<Scratchpad />} />
                     <Route
                       path="/pdf-studio"

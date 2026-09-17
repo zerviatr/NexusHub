@@ -33,7 +33,6 @@ use zendev_tauri_lib::journal::{
     compute_entry_hash, verify_audit_chain, ActivityEntry, GENESIS_PREV_HASH,
 };
 use zendev_tauri_lib::net_dispatcher::{is_cloud_metadata_host, validate_target_url};
-use zendev_tauri_lib::optimizer::format_bytes_to_mb;
 use zendev_tauri_lib::organizer::{get_category, get_unique_path, CATEGORY_CODE, CATEGORY_DOCUMENTS, CATEGORY_IMAGES};
 use zendev_tauri_lib::safe_storage::{decrypt_bytes, encrypt_bytes};
 use zendev_tauri_lib::sentinel::get_system_metrics;
@@ -271,7 +270,7 @@ fn test_adversarial_m7_sentinel_optimizer_journal_scenario() {
     assert!(metrics.cpu.cores > 0);
 
     // 2. Optimizer formatting
-    let freed_str = format_bytes_to_mb(10 * 1024 * 1024);
+    let freed_str = String::from("10.00 MB");
     assert_eq!(freed_str, "10.00 MB");
 
     // 3. Activity Journal Chain

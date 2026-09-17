@@ -27,7 +27,6 @@ use std::path::PathBuf;
 use zendev_tauri_lib::hwid::*;
 use zendev_tauri_lib::crypto::*;
 use zendev_tauri_lib::net_dispatcher::*;
-use zendev_tauri_lib::clipboard::*;
 use zendev_tauri_lib::organizer::{
     get_category, CATEGORY_ARCHIVES, CATEGORY_AUDIO, CATEGORY_CODE, CATEGORY_DOCUMENTS,
     CATEGORY_IMAGES, CATEGORY_INSTALLERS, CATEGORY_OTHERS, CATEGORY_VIDEOS,
@@ -342,38 +341,6 @@ fn test_challenger_ssrf_internal_ip_representations() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 #[test]
-fn test_challenger_clipboard_ring_buffer_and_byte_caps() {
-    // A. Verify byte length cap: MAX_BYTES is 50 KB (51,200 bytes)
-    assert_eq!(MAX_BYTES, 50 * 1024);
-
-    let exactly_50kb = "a".repeat(MAX_BYTES);
-    assert!(add_clipboard_entry(&exactly_50kb), "Exactly 50KB must be accepted");
-
-    let over_50kb = "a".repeat(MAX_BYTES + 1);
-    assert!(!add_clipboard_entry(&over_50kb), "50KB + 1 byte MUST be rejected");
-
-    let massive_text = "b".repeat(1024 * 1024);
-    assert!(!add_clipboard_entry(&massive_text), "1MB text MUST be rejected");
-
-    // B. Verify ring buffer cap: MAX_HISTORY is 50
-    assert_eq!(MAX_HISTORY, 50);
-
-    for i in 0..120 {
-        let unique_text = format!("challenger_unique_clipboard_item_{:04}", i);
-        assert!(add_clipboard_entry(&unique_text));
-    }
-
-    let history = get_in_memory_history();
-    assert_eq!(
-        history.len(),
-        MAX_HISTORY,
-        "Clipboard history MUST be strictly capped at {}",
-        MAX_HISTORY
-    );
-
-    // Verify latest entry is at index 0 (LIFO order)
-    assert_eq!(history[0].text, "challenger_unique_clipboard_item_0119");
-}
 
 #[test]
 fn test_challenger_organizer_collision_chain_stress() {

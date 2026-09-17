@@ -234,5 +234,9 @@ Requested team: Small, focused team
 - [ ] `.agents/skills/zendev/SKILL.md` ve `zendev-feature-gatekeeper` direktifle senkronize edildi.
 - [ ] `validate_kit.py` ve ilgili regresyon testleri sıfır hata/uyarı ile [PASS] verdi.
 
+## Follow-up — 2026-09-17T00:31:58Z
+
+Execute the SaaS Transformation Directive (Principle 2) feature purge as detailed in prompt_draft.md. Team scale is Full multi-agent team, and Integrity Mode is Clean, safe Rust/Tauri & React standards. You must completely remove Port Killer, System Optimizer, Temp Mail, and Clipboard Manager from both the React frontend and Rust backend. Fix all routing, sidebar menus, and API bridges so that the app builds successfully. Build, test, and push to GitHub as v2.5.3 (or just commit if version is not specified, wait the user mentioned v2.5.3 in a previous request). Wait, just focus on removing these features and making sure the build passes. Commit the changes.
+
 
 
