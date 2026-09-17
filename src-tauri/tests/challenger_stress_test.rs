@@ -341,8 +341,6 @@ fn test_challenger_ssrf_internal_ip_representations() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 #[test]
-
-#[test]
 fn test_challenger_organizer_collision_chain_stress() {
     let (sandbox, cleanup) = create_temp_sandbox("org_collision");
 

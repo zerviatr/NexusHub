@@ -224,7 +224,7 @@ export default function EncodingStudio() {
       const bytes = parsedDataUrl.isBase64
         ? base64ToBytes(parsedDataUrl.data)
         : textToBytes(decodeURIComponent(parsedDataUrl.data))
-      const blob = new Blob([bytes], { type: parsedDataUrl.mimeType })
+      const blob = new Blob([bytes as unknown as BlobPart], { type: parsedDataUrl.mimeType })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url

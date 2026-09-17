@@ -58,10 +58,6 @@ function getToolRoutePath(toolId: string): string | null {
     case 'network-tools':
     case 'network':
       return '/network'
-    case 'port-killer':
-      return '/port-killer'
-    case 'system-optimizer':
-      return '/system-optimizer'
     case 'regex-studio':
       return '/regex-studio'
     case 'json-studio':
@@ -70,16 +66,26 @@ function getToolRoutePath(toolId: string): string | null {
       return '/pdf-studio'
     case 'scratchpad':
       return '/scratchpad'
-    case 'clipboard':
-      return '/clipboard'
     case 'image':
       return '/image'
     case 'organizer':
+    case 'bulk-organizer':
       return '/organizer'
     case 'qr-code':
       return '/qr-code'
     case 'fake-data':
       return '/fake-data'
+    case 'jwt-studio':
+      return '/jwt-studio'
+    case 'cron-studio':
+      return '/cron-studio'
+    case 'mermaid-studio':
+      return '/mermaid-studio'
+    case 'encoding-studio':
+      return '/encoding-studio'
+    case 'decrypter':
+    case 'universal-decrypter':
+      return '/decrypter'
     default:
       return null
   }

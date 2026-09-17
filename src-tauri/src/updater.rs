@@ -45,6 +45,7 @@ pub struct UpdateCheckResult {
 }
 
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 struct GitHubAsset {
     name: String,
     browser_download_url: String,
@@ -188,15 +189,6 @@ pub async fn updater_check_now(app: AppHandle) -> Result<UpdateCheckResult, Stri
             }),
         );
 
-        // Arka planda indirme başlat
-        if let Some(asset) = exe_asset {
-            let app_clone = app.clone();
-            let remote_v = remote_version.clone();
-            tauri::async_runtime::spawn(async move {
-                let _ = download_update_asset(app_clone, asset.browser_download_url, asset.size, remote_v).await;
-            });
-        }
-
         Ok(result)
     } else {
         let _ = app.emit(
@@ -218,6 +210,7 @@ pub async fn updater_check_now(app: AppHandle) -> Result<UpdateCheckResult, Stri
     }
 }
 
+#[allow(dead_code)]
 async fn download_update_asset(
     app: AppHandle,
     url: String,
@@ -273,12 +266,8 @@ pub fn updater_install_now(app: AppHandle) -> Result<(), String> {
     let path_opt = DOWNLOADED_PATH.lock().unwrap().clone();
     if let Some(path) = path_opt {
         if path.exists() {
-            #[cfg(target_os = "windows")]
-            {
-                let _ = crate::process_ext::silent_command("cmd")
-                    .args(["/C", "start", "", path.to_str().unwrap_or_default(), "/S"])
-                    .spawn();
-            }
+            // SaaS Directive Principle 2: Launch installer transparently without silent /S flag
+            let _ = crate::open_external(path.to_string_lossy().to_string());
             std::thread::sleep(std::time::Duration::from_millis(500));
             std::process::exit(0);
         }
@@ -287,4 +276,14 @@ pub fn updater_install_now(app: AppHandle) -> Result<(), String> {
     // Fallback: Releases sayfasına git
     let _ = crate::open_external("https://github.com/zerviatr/NexusHub/releases/latest".to_string());
     Ok(())
+}
+
+#[allow(dead_code)]
+fn _legacy_silent_install_reference(path: &std::path::Path) {
+    #[cfg(target_os = "windows")]
+    {
+        let _ = crate::process_ext::silent_command("cmd")
+            .args(["/C", "start", "", path.to_str().unwrap_or_default(), "/S"])
+            .spawn();
+    }
 }

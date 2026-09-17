@@ -21,7 +21,6 @@
 //! 3. Concurrent TCP port scanning reachability, timeout limits, and input guardrails.
 //! 4. TLS certificate inspection, SHA-256 fingerprint extraction, and handshake failure resilience.
 
-use std::collections::HashMap;
 use std::time::Duration;
 use tokio::net::TcpListener;
 use zendev_tauri_lib::network::*;

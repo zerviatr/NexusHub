@@ -295,14 +295,19 @@ export async function verifyHmacSha256(
     const subtle = getSubtleCrypto()
     const cryptoKey = await subtle.importKey(
       'raw',
-      keyBytes,
+      keyBytes as unknown as BufferSource,
       { name: 'HMAC', hash: 'SHA-256' },
       false,
       ['verify']
     )
 
     const sigBytes = base64UrlToBytes(b64Sig)
-    const isValid = await subtle.verify('HMAC', cryptoKey, sigBytes, dataBytes)
+    const isValid = await subtle.verify(
+      'HMAC',
+      cryptoKey,
+      sigBytes as unknown as BufferSource,
+      dataBytes as unknown as BufferSource
+    )
 
     return {
       valid: isValid,
@@ -346,13 +351,13 @@ export async function signHmacSha256(
   const subtle = getSubtleCrypto()
   const cryptoKey = await subtle.importKey(
     'raw',
-    keyBytes,
+    keyBytes as unknown as BufferSource,
     { name: 'HMAC', hash: 'SHA-256' },
     false,
     ['sign']
   )
 
-  const sigBuffer = await subtle.sign('HMAC', cryptoKey, dataBytes)
+  const sigBuffer = await subtle.sign('HMAC', cryptoKey, dataBytes as unknown as BufferSource)
   const b64Sig = bytesToBase64Url(new Uint8Array(sigBuffer))
   return `${data}.${b64Sig}`
 }

@@ -181,6 +181,14 @@ export default function BulkOrganizer() {
     }
   }
 
+  // Cross-platform path joining helper
+  const joinPath = (base: string, ...parts: string[]): string => {
+    const separator = base.includes('\\') ? '\\' : '/'
+    const cleanBase = base.endsWith('\\') || base.endsWith('/') ? base.slice(0, -1) : base
+    const cleanParts = parts.map((p) => p.replace(/^[/\\]+|[/\\]+$/g, '')).filter(Boolean)
+    return [cleanBase, ...cleanParts].join(separator)
+  }
+
   // Generate Preview operations
   const generatePreview = (): (FileOperation & { index: number; originalFile: ScannedFile })[] => {
     if (!selectedDir) return []
@@ -198,16 +206,16 @@ export default function BulkOrganizer() {
 
       let targetDir = selectedDir
       if (groupByTimeline) {
-        targetDir = `${selectedDir}\\${timelineFolder}`
+        targetDir = joinPath(selectedDir, timelineFolder)
       } else if (organizeByCategory) {
-        targetDir = `${selectedDir}\\${file.suggestedCategory}`
+        targetDir = joinPath(selectedDir, file.suggestedCategory)
       }
 
       return {
         index,
         originalFile: file,
         oldPath: file.originalPath,
-        newPath: `${targetDir}\\${newName}`,
+        newPath: joinPath(targetDir, newName),
       }
     })
   }

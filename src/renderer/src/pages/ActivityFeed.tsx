@@ -55,10 +55,6 @@ function getToolDisplayName(toolId: string): string {
     case 'network-tools':
     case 'network':
       return 'Network Tools'
-    case 'port-killer':
-      return 'Port Killer'
-    case 'system-optimizer':
-      return 'System Optimizer'
     case 'regex-studio':
       return 'Regex Studio'
     case 'json-studio':
@@ -67,11 +63,10 @@ function getToolDisplayName(toolId: string): string {
       return 'PDF Studio'
     case 'scratchpad':
       return 'Scratchpad'
-    case 'clipboard':
-      return 'Clipboard Manager'
     case 'image':
       return 'Image Toolkit'
     case 'organizer':
+    case 'bulk-organizer':
       return 'Bulk Organizer'
     case 'qr-code':
       return 'QR Code Studio'
@@ -79,6 +74,17 @@ function getToolDisplayName(toolId: string): string {
       return 'Fake Data Studio'
     case 'sentinel':
       return 'Resource Sentinel'
+    case 'jwt-studio':
+      return 'JWT Studio'
+    case 'cron-studio':
+      return 'Cron Studio'
+    case 'mermaid-studio':
+      return 'Mermaid Studio'
+    case 'encoding-studio':
+      return 'Encoding Studio'
+    case 'decrypter':
+    case 'universal-decrypter':
+      return 'Universal Decrypter'
     default:
       return toolId
         ? toolId

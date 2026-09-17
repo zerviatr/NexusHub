@@ -44,9 +44,9 @@ describe('Internationalization (i18n) — 100% Key Parity & Elevation Verificati
   const trKeys = Object.keys(trFlat).sort()
 
   describe('1. Global Dictionary Parity & Cardinality', () => {
-    it('verifies exact total count of 738 keys in both en.json and tr.json', () => {
-      expect(enKeys.length).toBe(738)
-      expect(trKeys.length).toBe(738)
+    it('verifies exact total count of 784 keys in both en.json and tr.json', () => {
+      expect(enKeys.length).toBe(784)
+      expect(trKeys.length).toBe(784)
     })
 
     it('verifies zero missing keys in tr.json relative to en.json', () => {

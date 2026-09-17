@@ -20,7 +20,6 @@ import {
   Key,
   ShieldAlert,
   Globe,
-  Radio,
   FileText,
   Terminal,
   Braces,
@@ -37,6 +36,9 @@ import {
   CheckCircle2,
   Lock,
   ShieldCheck,
+  KeyRound,
+  GitBranch,
+  Binary,
 } from 'lucide-react'
 import { ActivityCategory, ActivityEntry, ActivityStatus } from './types'
 import { cyberAudio } from '../../lib/cyberAudio'
@@ -66,10 +68,6 @@ function getToolIcon(toolId: string, category: ActivityCategory) {
     case 'network-tools':
     case 'network':
       return Globe
-    case 'port-killer':
-      return Radio
-    case 'system-optimizer':
-      return Cpu
     case 'regex-studio':
       return Terminal
     case 'json-studio':
@@ -77,6 +75,17 @@ function getToolIcon(toolId: string, category: ActivityCategory) {
     case 'pdf-studio':
     case 'scratchpad':
       return FileText
+    case 'jwt-studio':
+      return KeyRound
+    case 'cron-studio':
+      return Clock
+    case 'mermaid-studio':
+      return GitBranch
+    case 'encoding-studio':
+      return Binary
+    case 'decrypter':
+    case 'universal-decrypter':
+      return ShieldCheck
     default:
       if (category === 'security') return ShieldAlert
       if (category === 'network') return Globe

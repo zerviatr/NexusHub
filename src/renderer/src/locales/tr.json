@@ -926,5 +926,71 @@
     "preview": "Data-URL Medya Önizlemesi",
     "copy": "Sonucu Kopyala",
     "copied": "Kopyalandı!"
+  },
+  "decrypter": {
+    "title": "Evrensel Link Çözücü & Tracker Temizleyici",
+    "description": "Kısaltılmış linklerin gerçek hedefini bulun, gizlilik istilacısı Google/Meta/TikTok izleyicilerini arındırın.",
+    "placeholder": "Bağlantıyı Girin (bit.ly, t.co veya izleyicili herhangi bir URL)",
+    "decrypting": "Çözülüyor...",
+    "decrypt": "Çöz & Temizle",
+    "success": "Bağlantı Güvenle Temizlendi",
+    "original": "Orijinal Hedef",
+    "decrypted": "Temiz Bağlantı",
+    "failed": "Çözümleme Başarısız",
+    "tab": {
+      "single": "Tekil Bağlantı",
+      "batch": "Toplu Temizleme (Batch)"
+    },
+    "input": {
+      "pasteTooltip": "Panodan yapıştır"
+    },
+    "processing": "Yönlendirmeler çözülüyor & izleyiciler arındırılıyor...",
+    "result": {
+      "subtitle": "Gerçek hedef tespit edildi ve tüm gözetim parametreleri budandı.",
+      "trackersRemoved": "{{count}} İzleyici Kaldırıldı",
+      "resetTooltip": "Yeni bağlantı",
+      "taxonomyTitle": "Kaldırılan Takipçiler & Taksonomi:",
+      "punycodeDetected": "Punycode tespit edildi (Olası sahte alan adı / homograf saldırısı)",
+      "rawIpDetected": "Doğrudan ham IP adresi yönlendirmesi",
+      "riskyTld": "Riskli / spam amaçlı tercih edilen TLD uzantısı",
+      "nonStandardPort": "Standart dışı port (: {{port}})",
+      "urlParseFailed": "URL yapısı çözümlenemedi",
+      "auditClean": "Güvenlik Taraması: Temiz alan adı yapısı, sahte punycode ve şüpheli port tespit edilmedi.",
+      "auditWarning": "Güvenlik Uyarısı: {{reasons}}",
+      "badgeSafe": "GÜVENLİ",
+      "badgeWarning": "DİKKAT",
+      "copy": "Güvenli Linki Kopyala",
+      "copied": "Kopyalandı!",
+      "openExternal": "Güvenle Aç",
+      "retry": "Tekrar Dene"
+    },
+    "batch": {
+      "title": "Toplu Bağlantı Girişi (Her satıra bir URL)",
+      "validCount": "{{count}} Geçerli URL",
+      "description": "Tüm URL'ler sırayla taranacak, izleyicileri arındırılacak ve temiz halleri listelenecektir.",
+      "processing": "İşleniyor...",
+      "cleanAll": "Tümünü Temizle",
+      "resultsTitle": "Temizlenen Bağlantılar ({{count}})",
+      "copyAll": "Tümünü Kopyala",
+      "copiedAll": "Tümü Kopyalandı!",
+      "trackersRemovedBadge": "{{count}} İzleyici Silindi",
+      "errorBadge": "Hata",
+      "copyTooltip": "Kopyala",
+      "openTooltip": "Tarayıcıda Aç"
+    },
+    "toast": {
+      "cleanSuccessTitle": "Bağlantı Temizlendi",
+      "cleanSuccessDesc": "{{count}} takipçi parametresi başarıyla kaldırıldı!",
+      "cleanErrorTitle": "Hata",
+      "cleanErrorFallback": "Bağlantı çözülemedi.",
+      "copiedTitle": "Kopyalandı",
+      "copiedDesc": "Güvenli bağlantı panoya kopyalandı.",
+      "batchSuccessTitle": "Toplu Temizleme Tamamlandı",
+      "batchSuccessDesc": "{{links}} bağlantıdan toplam {{trackers}} takipçi temizlendi.",
+      "batchErrorTitle": "Toplu İşlem Hatası",
+      "batchErrorFallback": "Toplu işlem başarısız oldu.",
+      "copyAllSuccessTitle": "Tümü Kopyalandı",
+      "copyAllSuccessDesc": "{{count}} temiz bağlantı panoya aktarıldı."
+    }
   }
 }

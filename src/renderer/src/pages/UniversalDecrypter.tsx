@@ -21,6 +21,40 @@ import { nexusAPI, DecryptResult, RemovedTrackerInfo } from '../lib/ipc'
 import { useT } from '../lib/i18n'
 import { useToast } from '../lib/ToastContext'
 
+/**
+ * Normalizes user input URLs by prefixing https:// if scheme is missing.
+ */
+export const normalizeUrl = (raw: string): string => {
+  const trimmed = raw.trim()
+  if (!trimmed) return ''
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed
+  }
+  return `https://${trimmed}`
+}
+
+/**
+ * Validates whether a URL string is valid, with or without explicit protocol.
+ */
+export const isValidUrlFormat = (raw: string): boolean => {
+  const trimmed = raw.trim()
+  if (!trimmed) return false
+  if (/^https?:\/\//i.test(trimmed)) {
+    try {
+      new URL(trimmed)
+      return true
+    } catch {
+      return false
+    }
+  }
+  try {
+    const parsed = new URL(`https://${trimmed}`)
+    return parsed.hostname.includes('.') && parsed.hostname.length >= 3
+  } catch {
+    return false
+  }
+}
+
 export default function UniversalDecrypter() {
   const { t } = useT()
   const { success: showToastSuccess, error: showToastError } = useToast()
@@ -42,7 +76,7 @@ export default function UniversalDecrypter() {
   const [batchCopiedIndex, setBatchCopiedIndex] = useState<number | null>(null)
   const [allBatchCopied, setAllBatchCopied] = useState(false)
 
-  const isValidUrl = url.trim().length > 0 && url.startsWith('http')
+  const isValidUrl = isValidUrlFormat(url)
 
   // ─── Single Mode Handlers ───────────────────────────────────────────────────
   const handleProcess = async () => {
@@ -51,20 +85,31 @@ export default function UniversalDecrypter() {
     setResult(null)
     setIsProcessing(true)
 
+    const targetUrl = normalizeUrl(url)
+
     try {
-      const response = await nexusAPI.decrypter.clean(url.trim())
+      const response = await nexusAPI.decrypter.clean(targetUrl)
       setResult(response)
       if (response.success) {
         showToastSuccess(
-          'Bağlantı Temizlendi',
-          `${response.trackersRemoved || 0} takipçi parametresi başarıyla kaldırıldı!`
+          t('decrypter.toast.cleanSuccessTitle') || 'Bağlantı Temizlendi',
+          (t('decrypter.toast.cleanSuccessDesc') || '{{count}} takipçi parametresi başarıyla kaldırıldı!').replace(
+            '{{count}}',
+            String(response.trackersRemoved || 0)
+          )
         )
       } else {
-        showToastError('Hata', response.error || 'Bağlantı çözülemedi.')
+        showToastError(
+          t('decrypter.toast.cleanErrorTitle') || 'Hata',
+          response.error || t('decrypter.toast.cleanErrorFallback') || 'Bağlantı çözülemedi.'
+        )
       }
     } catch (err: any) {
       setResult({ success: false, error: err.message || 'An unexpected error occurred.' })
-      showToastError('Hata', err.message || 'Beklenmeyen hata.')
+      showToastError(
+        t('decrypter.toast.cleanErrorTitle') || 'Hata',
+        err.message || t('decrypter.toast.cleanErrorFallback') || 'Beklenmeyen hata.'
+      )
     } finally {
       setIsProcessing(false)
     }
@@ -74,7 +119,10 @@ export default function UniversalDecrypter() {
     if (!result?.cleanUrl) return
     await navigator.clipboard.writeText(result.cleanUrl)
     setCopied(true)
-    showToastSuccess('Kopyalandı', 'Güvenli bağlantı panoya kopyalandı.')
+    showToastSuccess(
+      t('decrypter.toast.copiedTitle') || 'Kopyalandı',
+      t('decrypter.toast.copiedDesc') || 'Güvenli bağlantı panoya kopyalandı.'
+    )
     setTimeout(() => setCopied(false), 2000)
   }
 
@@ -96,15 +144,20 @@ export default function UniversalDecrypter() {
   }
 
   const handleOpenExternal = () => {
-    if (result?.cleanUrl) window.nexusAPI.openExternal(result.cleanUrl)
+    if (result?.cleanUrl) {
+      window.nexusAPI?.openExternal?.(result.cleanUrl)
+    }
   }
 
   // ─── Batch Mode Handlers ────────────────────────────────────────────────────
+  const batchValidUrls = batchInput
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0 && isValidUrlFormat(l))
+    .map(normalizeUrl)
+
   const handleBatchProcess = async () => {
-    const urls = batchInput
-      .split('\n')
-      .map((l) => l.trim())
-      .filter((l) => l.startsWith('http'))
+    const urls = batchValidUrls
 
     if (urls.length === 0 || isBatchProcessing) return
 
@@ -116,11 +169,16 @@ export default function UniversalDecrypter() {
       setBatchResults(results)
       const totalTrackers = results.reduce((acc, r) => acc + (r.trackersRemoved || 0), 0)
       showToastSuccess(
-        'Toplu Temizleme Tamamlandı',
-        `${results.length} bağlantıdan toplam ${totalTrackers} takipçi temizlendi.`
+        t('decrypter.toast.batchSuccessTitle') || 'Toplu Temizleme Tamamlandı',
+        (t('decrypter.toast.batchSuccessDesc') || '{{links}} bağlantıdan toplam {{trackers}} takipçi temizlendi.')
+          .replace('{{links}}', String(results.length))
+          .replace('{{trackers}}', String(totalTrackers))
       )
     } catch (err: any) {
-      showToastError('Toplu İşlem Hatası', err.message || 'Toplu işlem başarısız oldu.')
+      showToastError(
+        t('decrypter.toast.batchErrorTitle') || 'Toplu İşlem Hatası',
+        err.message || t('decrypter.toast.batchErrorFallback') || 'Toplu işlem başarısız oldu.'
+      )
     } finally {
       setIsBatchProcessing(false)
     }
@@ -139,7 +197,13 @@ export default function UniversalDecrypter() {
       .join('\n')
     await navigator.clipboard.writeText(text)
     setAllBatchCopied(true)
-    showToastSuccess('Tümü Kopyalandı', `${batchResults.length} temiz bağlantı panoya aktarıldı.`)
+    showToastSuccess(
+      t('decrypter.toast.copyAllSuccessTitle') || 'Tümü Kopyalandı',
+      (t('decrypter.toast.copyAllSuccessDesc') || '{{count}} temiz bağlantı panoya aktarıldı.').replace(
+        '{{count}}',
+        String(batchResults.length)
+      )
+    )
     setTimeout(() => setAllBatchCopied(false), 2000)
   }
 
@@ -163,7 +227,7 @@ export default function UniversalDecrypter() {
     <BaseToolTemplate
       title={t('nav.tools.decrypter') || 'Universal Link Decrypter'}
       description={
-        t('dashboard.tools.decrypter.desc') ||
+        t('decrypter.description') ||
         'Kısaltılmış linklerin gerçek hedefini bulun, gizlilik istilacısı Google/Meta/TikTok izleyicilerini arındırın.'
       }
       icon={ShieldCheck}
@@ -180,7 +244,7 @@ export default function UniversalDecrypter() {
             }`}
           >
             <Link2 className="w-3.5 h-3.5" />
-            <span>Tekil Bağlantı</span>
+            <span>{t('decrypter.tab.single') || 'Tekil Bağlantı'}</span>
           </button>
 
           <button
@@ -192,7 +256,7 @@ export default function UniversalDecrypter() {
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>Toplu Temizleme (Batch)</span>
+            <span>{t('decrypter.tab.batch') || 'Toplu Temizleme (Batch)'}</span>
           </button>
         </div>
 
@@ -233,7 +297,7 @@ export default function UniversalDecrypter() {
                   <button
                     onClick={handlePaste}
                     className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg text-nexus-muted hover:text-nexus-accent hover:bg-nexus-accent/10 transition-all"
-                    title="Panodan yapıştır"
+                    title={t('decrypter.input.pasteTooltip') || 'Panodan yapıştır'}
                   >
                     <ClipboardPaste className="w-4 h-4" />
                   </button>
@@ -282,7 +346,9 @@ export default function UniversalDecrypter() {
                     <Loader2 className="w-6 h-6 animate-spin relative z-10" />
                     <div className="absolute inset-0 bg-nexus-success/20 blur-md rounded-full animate-pulse" />
                   </div>
-                  <span className="text-sm font-medium">Yönlendirmeler çözülüyor & izleyiciler arındırılıyor...</span>
+                  <span className="text-sm font-medium">
+                    {t('decrypter.processing') || 'Yönlendirmeler çözülüyor & izleyiciler arındırılıyor...'}
+                  </span>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -311,7 +377,8 @@ export default function UniversalDecrypter() {
                               {t('decrypter.success') || 'Bağlantı Güvenle Temizlendi'}
                             </h3>
                             <p className="text-xs text-nexus-muted">
-                              Gerçek hedef tespit edildi ve tüm gözetim parametreleri budandı.
+                              {t('decrypter.result.subtitle') ||
+                                'Gerçek hedef tespit edildi ve tüm gözetim parametreleri budandı.'}
                             </p>
                           </div>
                         </div>
@@ -319,12 +386,17 @@ export default function UniversalDecrypter() {
                         <div className="flex items-center gap-2">
                           <div className="px-3 py-1.5 rounded-lg bg-nexus-accent/10 border border-nexus-accent/20 flex items-center gap-2 text-xs font-semibold text-nexus-accent">
                             <ShieldAlert className="w-3.5 h-3.5" />
-                            <span>{result.trackersRemoved || 0} İzleyici Kaldırıldı</span>
+                            <span>
+                              {(t('decrypter.result.trackersRemoved') || '{{count}} İzleyici Kaldırıldı').replace(
+                                '{{count}}',
+                                String(result.trackersRemoved || 0)
+                              )}
+                            </span>
                           </div>
                           <button
                             onClick={handleReset}
                             className="p-2 rounded-lg text-nexus-muted hover:text-white hover:bg-nexus-card transition-all"
-                            title="Yeni bağlantı"
+                            title={t('decrypter.result.resetTooltip') || 'Yeni bağlantı'}
                           >
                             <RotateCcw className="w-4 h-4" />
                           </button>
@@ -336,7 +408,7 @@ export default function UniversalDecrypter() {
                         <div className="mb-6 p-4 rounded-xl bg-nexus-bg/60 border border-white/5 space-y-2">
                           <div className="flex items-center gap-2 text-xs font-semibold text-nexus-muted mb-2">
                             <Tag className="w-3.5 h-3.5 text-nexus-cyan" />
-                            <span>Kaldırılan Takipçiler & Taksonomi:</span>
+                            <span>{t('decrypter.result.taxonomyTitle') || 'Kaldırılan Takipçiler & Taksonomi:'}</span>
                           </div>
                           <div className="flex flex-wrap gap-2">
                             {result.removedList.map((tr, i) => (
@@ -360,39 +432,73 @@ export default function UniversalDecrypter() {
                         try {
                           const parsed = new URL(result.cleanUrl)
                           if (parsed.hostname.startsWith('xn--')) {
-                            reasons.push('Punycode tespit edildi (Olası sahte alan adı / homograf saldırısı)')
+                            reasons.push(
+                              t('decrypter.result.punycodeDetected') ||
+                                'Punycode tespit edildi (Olası sahte alan adı / homograf saldırısı)'
+                            )
                           }
                           if (/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(parsed.hostname)) {
-                            reasons.push('Doğrudan ham IP adresi yönlendirmesi')
+                            reasons.push(t('decrypter.result.rawIpDetected') || 'Doğrudan ham IP adresi yönlendirmesi')
                           }
-                          const badTlds = ['.xyz', '.top', '.buzz', '.work', '.click', '.loan', '.fit', '.gq', '.cf', '.tk', '.ml']
+                          const badTlds = [
+                            '.xyz',
+                            '.top',
+                            '.buzz',
+                            '.work',
+                            '.click',
+                            '.loan',
+                            '.fit',
+                            '.gq',
+                            '.cf',
+                            '.tk',
+                            '.ml',
+                          ]
                           if (badTlds.some((tld) => parsed.hostname.endsWith(tld))) {
-                            reasons.push('Riskli / spam amaçlı tercih edilen TLD uzantısı')
+                            reasons.push(
+                              t('decrypter.result.riskyTld') || 'Riskli / spam amaçlı tercih edilen TLD uzantısı'
+                            )
                           }
                           if (parsed.port && !['80', '443', '8080'].includes(parsed.port)) {
-                            reasons.push(`Standart dışı port (: ${parsed.port})`)
+                            reasons.push(
+                              (t('decrypter.result.nonStandardPort') || 'Standart dışı port (: {{port}})').replace(
+                                '{{port}}',
+                                parsed.port
+                              )
+                            )
                           }
                         } catch {
-                          reasons.push('URL yapısı çözümlenemedi')
+                          reasons.push(t('decrypter.result.urlParseFailed') || 'URL yapısı çözümlenemedi')
                         }
 
                         const isClean = reasons.length === 0
                         return (
-                          <div className={`mb-6 p-3.5 rounded-xl border flex items-center justify-between text-xs ${
-                            isClean
-                              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
-                              : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
-                          }`}>
+                          <div
+                            className={`mb-6 p-3.5 rounded-xl border flex items-center justify-between text-xs ${
+                              isClean
+                                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
+                                : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+                            }`}
+                          >
                             <div className="flex items-center gap-2">
-                              {isClean ? <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" /> : <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />}
+                              {isClean ? (
+                                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                              ) : (
+                                <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
+                              )}
                               <span>
                                 {isClean
-                                  ? 'Güvenlik Taraması: Temiz alan adı yapısı, sahte punycode ve şüpheli port tespit edilmedi.'
-                                  : `Güvenlik Uyarısı: ${reasons.join(', ')}`}
+                                  ? t('decrypter.result.auditClean') ||
+                                    'Güvenlik Taraması: Temiz alan adı yapısı, sahte punycode ve şüpheli port tespit edilmedi.'
+                                  : (t('decrypter.result.auditWarning') || 'Güvenlik Uyarısı: {{reasons}}').replace(
+                                      '{{reasons}}',
+                                      reasons.join(', ')
+                                    )}
                               </span>
                             </div>
                             <span className="font-mono text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-black/30 shrink-0 ml-2">
-                              {isClean ? 'GÜVENLİ' : 'DİKKAT'}
+                              {isClean
+                                ? t('decrypter.result.badgeSafe') || 'GÜVENLİ'
+                                : t('decrypter.result.badgeWarning') || 'DİKKAT'}
                             </span>
                           </div>
                         )
@@ -409,7 +515,7 @@ export default function UniversalDecrypter() {
                               {t('decrypter.original') || 'Orijinal Hedef'}
                             </p>
                             <p className="text-xs text-nexus-muted font-mono break-all line-through opacity-70">
-                              {result.finalUrl}
+                              {result.originalUrl || result.finalUrl}
                             </p>
                           </div>
                         </div>
@@ -427,7 +533,7 @@ export default function UniversalDecrypter() {
                               {t('decrypter.decrypted') || 'Temiz Bağlantı'}
                             </p>
                             <p className="text-sm text-white font-mono break-all font-semibold">
-                              {result.cleanUrl}
+                              {result.cleanUrl || result.finalUrl}
                             </p>
                           </div>
                         </div>
@@ -452,12 +558,12 @@ export default function UniversalDecrypter() {
                           {copied ? (
                             <>
                               <Check className="w-4 h-4" />
-                              <span>Kopyalandı!</span>
+                              <span>{t('decrypter.result.copied') || 'Kopyalandı!'}</span>
                             </>
                           ) : (
                             <>
                               <Copy className="w-4 h-4" />
-                              <span>Güvenli Linki Kopyala</span>
+                              <span>{t('decrypter.result.copy') || 'Güvenli Linki Kopyala'}</span>
                             </>
                           )}
                         </motion.button>
@@ -471,7 +577,7 @@ export default function UniversalDecrypter() {
                             transition-all duration-300"
                         >
                           <ExternalLink className="w-4 h-4" />
-                          <span>Güvenle Aç</span>
+                          <span>{t('decrypter.result.openExternal') || 'Güvenle Aç'}</span>
                         </motion.button>
                       </div>
                     </>
@@ -496,7 +602,7 @@ export default function UniversalDecrypter() {
                         className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-nexus-error/10 text-nexus-error border border-nexus-error/20 hover:bg-nexus-error/20 transition-all"
                       >
                         <RotateCcw className="w-4 h-4" />
-                        <span>Tekrar Dene</span>
+                        <span>{t('decrypter.result.retry') || 'Tekrar Dene'}</span>
                       </motion.button>
                     </>
                   )}
@@ -515,17 +621,22 @@ export default function UniversalDecrypter() {
               <div className="flex items-center justify-between">
                 <label className="text-sm font-semibold text-nexus-text flex items-center gap-2">
                   <Layers className="w-4 h-4 text-nexus-accent" />
-                  <span>Toplu Bağlantı Girişi (Her satıra bir URL)</span>
+                  <span>
+                    {t('decrypter.batch.title') || 'Toplu Bağlantı Girişi (Her satıra bir URL)'}
+                  </span>
                 </label>
                 <span className="hud-badge text-[10px] text-nexus-cyan font-mono">
-                  {batchInput.split('\n').filter((l) => l.trim().startsWith('http')).length} Geçerli URL
+                  {(t('decrypter.batch.validCount') || '{{count}} Geçerli URL').replace(
+                    '{{count}}',
+                    String(batchValidUrls.length)
+                  )}
                 </span>
               </div>
 
               <textarea
                 value={batchInput}
                 onChange={(e) => setBatchInput(e.target.value)}
-                placeholder="https://example.com/item1?utm_source=twitter&#10;https://bit.ly/sample-link&#10;https://shop.com/deal?fbclid=abcdef123"
+                placeholder="https://example.com/item1?utm_source=twitter&#10;bit.ly/sample-link&#10;shop.com/deal?fbclid=abcdef123"
                 rows={5}
                 disabled={isBatchProcessing}
                 className="w-full px-4 py-3 rounded-xl bg-nexus-bg/80 border border-nexus-border/50 text-sm text-white placeholder:text-nexus-muted/40 font-mono outline-none focus:border-nexus-accent/50 focus:shadow-[0_0_20px_rgba(139,92,246,0.1)] transition-all resize-y"
@@ -533,28 +644,26 @@ export default function UniversalDecrypter() {
 
               <div className="flex items-center justify-between pt-2">
                 <p className="text-xs text-nexus-muted">
-                  Tüm URL'ler sırayla taranacak, izleyicileri arındırılacak ve temiz halleri listelenecektir.
+                  {t('decrypter.batch.description') ||
+                    "Tüm URL'ler sırayla taranacak, izleyicileri arındırılacak ve temiz halleri listelenecektir."}
                 </p>
 
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleBatchProcess}
-                  disabled={
-                    isBatchProcessing ||
-                    batchInput.split('\n').filter((l) => l.trim().startsWith('http')).length === 0
-                  }
+                  disabled={isBatchProcessing || batchValidUrls.length === 0}
                   className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-nexus-accent to-purple-600 text-white font-semibold text-xs transition-all shadow-lg shadow-nexus-accent/20 hover:shadow-nexus-accent/35 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {isBatchProcessing ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>İşleniyor...</span>
+                      <span>{t('decrypter.batch.processing') || 'İşleniyor...'}</span>
                     </>
                   ) : (
                     <>
                       <Sparkles className="w-4 h-4" />
-                      <span>Tümünü Temizle</span>
+                      <span>{t('decrypter.batch.cleanAll') || 'Tümünü Temizle'}</span>
                     </>
                   )}
                 </motion.button>
@@ -568,7 +677,10 @@ export default function UniversalDecrypter() {
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5 text-nexus-success" />
                     <h4 className="text-sm font-bold text-white">
-                      Temizlenen Bağlantılar ({batchResults.length})
+                      {(t('decrypter.batch.resultsTitle') || 'Temizlenen Bağlantılar ({{count}})').replace(
+                        '{{count}}',
+                        String(batchResults.length)
+                      )}
                     </h4>
                   </div>
 
@@ -581,7 +693,11 @@ export default function UniversalDecrypter() {
                     ) : (
                       <Copy className="w-3.5 h-3.5 text-nexus-accent" />
                     )}
-                    <span>{allBatchCopied ? 'Tümü Kopyalandı!' : 'Tümünü Kopyala'}</span>
+                    <span>
+                      {allBatchCopied
+                        ? t('decrypter.batch.copiedAll') || 'Tümü Kopyalandı!'
+                        : t('decrypter.batch.copyAll') || 'Tümünü Kopyala'}
+                    </span>
                   </button>
                 </div>
 
@@ -596,10 +712,14 @@ export default function UniversalDecrypter() {
                           <span className="text-[10px] text-nexus-muted font-mono font-bold">#{idx + 1}</span>
                           {item.success ? (
                             <span className="hud-badge text-[10px] text-nexus-success">
-                              {item.trackersRemoved || 0} İzleyici Silindi
+                              {(
+                                t('decrypter.batch.trackersRemovedBadge') || '{{count}} İzleyici Silindi'
+                              ).replace('{{count}}', String(item.trackersRemoved || 0))}
                             </span>
                           ) : (
-                            <span className="hud-badge text-[10px] text-rose-400">Hata</span>
+                            <span className="hud-badge text-[10px] text-rose-400">
+                              {t('decrypter.batch.errorBadge') || 'Hata'}
+                            </span>
                           )}
                         </div>
                         <p className="font-mono text-xs text-white truncate">
@@ -612,7 +732,7 @@ export default function UniversalDecrypter() {
                           <button
                             onClick={() => handleCopyBatchItem(item.cleanUrl!, idx)}
                             className="p-2 rounded-lg bg-nexus-card hover:bg-nexus-accent/20 text-nexus-muted hover:text-white transition-colors border border-white/5"
-                            title="Kopyala"
+                            title={t('decrypter.batch.copyTooltip') || 'Kopyala'}
                           >
                             {batchCopiedIndex === idx ? (
                               <Check className="w-3.5 h-3.5 text-emerald-400" />
@@ -623,9 +743,9 @@ export default function UniversalDecrypter() {
                         )}
                         {item.cleanUrl && (
                           <button
-                            onClick={() => window.nexusAPI.openExternal(item.cleanUrl!)}
+                            onClick={() => window.nexusAPI?.openExternal?.(item.cleanUrl!)}
                             className="p-2 rounded-lg bg-nexus-card hover:bg-nexus-cyan/20 text-nexus-muted hover:text-white transition-colors border border-white/5"
-                            title="Tarayıcıda Aç"
+                            title={t('decrypter.batch.openTooltip') || 'Tarayıcıda Aç'}
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </button>

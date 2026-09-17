@@ -926,5 +926,71 @@
     "preview": "Data-URL Media Preview",
     "copy": "Copy Result",
     "copied": "Copied!"
+  },
+  "decrypter": {
+    "title": "Universal Link Decrypter & Tracker Stripper",
+    "description": "Find the true destination of shortened links and purge privacy-invasive Google/Meta/TikTok trackers.",
+    "placeholder": "Enter Link (bit.ly, t.co, or any URL with tracking parameters)",
+    "decrypting": "Decrypting...",
+    "decrypt": "Decrypt & Clean",
+    "success": "Link Safely Decrypted",
+    "original": "Original Target",
+    "decrypted": "Clean Link",
+    "failed": "Decryption Failed",
+    "tab": {
+      "single": "Single Link",
+      "batch": "Batch Cleaner"
+    },
+    "input": {
+      "pasteTooltip": "Paste from clipboard"
+    },
+    "processing": "Resolving redirects & purging trackers...",
+    "result": {
+      "subtitle": "True destination verified and tracking surveillance parameters stripped.",
+      "trackersRemoved": "{{count}} Trackers Removed",
+      "resetTooltip": "New link",
+      "taxonomyTitle": "Removed Trackers & Taxonomy:",
+      "punycodeDetected": "Punycode detected (Potential spoofed domain / homograph attack)",
+      "rawIpDetected": "Direct raw IP address redirect",
+      "riskyTld": "Risky / suspicious top-level domain extension",
+      "nonStandardPort": "Non-standard port (: {{port}})",
+      "urlParseFailed": "URL structure could not be parsed",
+      "auditClean": "Security Scan: Clean domain structure, no punycode spoofing or suspicious ports detected.",
+      "auditWarning": "Security Warning: {{reasons}}",
+      "badgeSafe": "SAFE",
+      "badgeWarning": "WARNING",
+      "copy": "Copy Safe Link",
+      "copied": "Copied!",
+      "openExternal": "Open Safely",
+      "retry": "Try Again"
+    },
+    "batch": {
+      "title": "Batch Link Input (One URL per line)",
+      "validCount": "{{count}} Valid URLs",
+      "description": "All URLs will be sequentially scanned, stripped of trackers, and clean targets listed.",
+      "processing": "Processing...",
+      "cleanAll": "Clean All",
+      "resultsTitle": "Cleaned Links ({{count}})",
+      "copyAll": "Copy All",
+      "copiedAll": "All Copied!",
+      "trackersRemovedBadge": "{{count}} Trackers Removed",
+      "errorBadge": "Error",
+      "copyTooltip": "Copy",
+      "openTooltip": "Open in Browser"
+    },
+    "toast": {
+      "cleanSuccessTitle": "Link Cleaned",
+      "cleanSuccessDesc": "{{count}} tracking parameters successfully removed!",
+      "cleanErrorTitle": "Error",
+      "cleanErrorFallback": "Could not decrypt link.",
+      "copiedTitle": "Copied",
+      "copiedDesc": "Safe link copied to clipboard.",
+      "batchSuccessTitle": "Batch Clean Complete",
+      "batchSuccessDesc": "Cleaned {{trackers}} trackers across {{links}} links.",
+      "batchErrorTitle": "Batch Process Error",
+      "batchErrorFallback": "Batch processing failed.",
+      "copyAllSuccessTitle": "All Copied",
+      "copyAllSuccessDesc": "{{count}} clean links copied to clipboard."
+    }
   }
 }
