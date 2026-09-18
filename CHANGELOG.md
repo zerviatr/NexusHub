@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.5.4] - 2026-09-18
+## [2.5.5] - 2026-09-18
 
 ### Fixed
 - **Universal Link Decrypter (Bypasser)**:
@@ -20,6 +20,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Implemented full two-step POST handshake (`/get/tk` token retrieval followed by `/links/go2` destination resolution) with automatic session cookie jar persistence.
   - Added intermediate landing page unwrapping (e.g. `bildirim.link/ph/...`) to extract real final target links (such as `disk.yandex.com.tr`).
   - Excluded legacy pre-Tauri Electron test artifacts from Vitest test runner, keeping test suites 100% green.
+
+### Changed
+- **Release Synchronization**:
+  - Bumped version to `2.5.5` across all manifest and lockfile targets: `package.json`, `package-lock.json`, `src-tauri/Cargo.toml`, `src-tauri/Cargo.lock`, `src-tauri/tauri.conf.json`, `website/package.json`, `website/package-lock.json`, `.github/workflows/release.yml`, and `website/src/lib/downloadHelper.ts`.
+  - Synchronized download helper endpoints for Windows NSIS Setup (`ZenDev-Setup-2.5.5.exe`) and Portable binaries (`ZenDev-Portable-2.5.5.exe`).
+  - Updated all marketing web application components, FAQ entries, hero benchmarks, and demo states to v2.5.5.
+  - Aligned repository regression and challenge test suites (`tests/nsisSilentUpdate.test.ts`, `tests/websiteM1.challenge.test.ts`) to assert `2.5.5`.
+
+## [2.5.4] - 2026-09-18
+
+### Changed
+- Intermediary build tag for CI pipeline adjustments.
 
 ### Changed
 - **Release Synchronization**:

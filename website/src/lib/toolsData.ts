@@ -264,7 +264,7 @@ export const ZENDEV_TOOLS: ToolItem[] = [
     techSpecs: ['Vektörel SVG Çıktı', 'Özel Logo Gömme', 'Hata Düzeltme Seviyesi (H)', 'Görselden QR Okuma']
   },
 
-  // ── YAZILIM GELİŞTİRİCİ: YENİ ELEVASYON STÜDYOLARI (v2.5.4) ──
+  // ── YAZILIM GELİŞTİRİCİ: YENİ ELEVASYON STÜDYOLARI (v2.5.5) ──
   {
     id: 'jwt-studio',
     name: 'JwtStudio',
@@ -328,7 +328,7 @@ export const ZENDEV_TOOLS: ToolItem[] = [
 ];
 
 /**
- * Total active native developer workstations in ZenDev v2.5.4 suite.
+ * Total active native developer workstations in ZenDev v2.5.5 suite.
  * Synchronized across website Navbar, Hero, Catalog, CommandPalette, and Pricing.
  */
 export const TOTAL_TOOLS_COUNT = 27;
@@ -510,8 +510,8 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'technical',
     questionTr: 'Tauri v2 ve Rust mimarisinin Electron\'dan farkı nedir?',
     questionEn: 'How does Tauri v2 + Rust differ from traditional Electron apps?',
-    answerTr: 'Klasik Electron uygulamaları arka planda tam bir Chromium ve Node.js motoru çalıştırarak 400-600 MB RAM tüketir. ZenDev v2.5.4 ise Windows yerel WebView2 ve Rust işletim sistemi köprüsü kullanarak yalnızca < 26 MB RAM harcar ve 0.35 saniyede açılır.',
-    answerEn: 'Traditional Electron apps bundle a full Chromium browser and consume 400-600 MB RAM. ZenDev v2.5.4 leverages Windows native WebView2 and a Rust backend, consuming only < 26 MB RAM with 0.35s boot latency.'
+    answerTr: 'Klasik Electron uygulamaları arka planda tam bir Chromium ve Node.js motoru çalıştırarak 400-600 MB RAM tüketir. ZenDev v2.5.5 ise Windows yerel WebView2 ve Rust işletim sistemi köprüsü kullanarak yalnızca < 26 MB RAM harcar ve 0.35 saniyede açılır.',
+    answerEn: 'Traditional Electron apps bundle a full Chromium browser and consume 400-600 MB RAM. ZenDev v2.5.5 leverages Windows native WebView2 and a Rust backend, consuming only < 26 MB RAM with 0.35s boot latency.'
   },
   {
     id: 'faq-3',

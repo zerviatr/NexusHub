@@ -7,8 +7,8 @@ export const translations = {
       calculator: 'Tasarruf Hesabı',
       pricing: 'Fiyatlandırma',
       portal: 'Lisans Portalı',
-      downloadBtn: 'Hemen İndir v2.5.4',
-      whatsNew: 'v2.5.4 Yenilikler'
+      downloadBtn: 'Hemen İndir v2.5.5',
+      whatsNew: 'v2.5.5 Yenilikler'
     },
     hero: {
       tag: '⚡ API & YAZILIM EKİPLERİ İÇİN MASAÜSTÜ GELİŞTİRİCİ SAAS',
@@ -59,7 +59,7 @@ export const translations = {
     radar: {
       tag: 'MİMARİ KARŞILAŞTIRMA',
       title: 'Tauri v2 + Rust: Neden Klasik Electron\'u Terk Ettik?',
-      subtitle: 'ZenDev v2.5.4 ile tüm mimariyi baştan aşağı Rust ile yeniden inşa ettik. İşte somut donanım rakamları:',
+      subtitle: 'ZenDev v2.5.5 ile tüm mimariyi baştan aşağı Rust ile yeniden inşa ettik. İşte somut donanım rakamları:',
       metrics: {
         ram: {
           title: 'Bellek (RAM) Tüketimi',
@@ -140,8 +140,8 @@ export const translations = {
       calculator: 'ROI Calculator',
       pricing: 'Pricing',
       portal: 'License Portal',
-      downloadBtn: 'Download v2.5.4',
-      whatsNew: 'v2.5.4 What\'s New'
+      downloadBtn: 'Download v2.5.5',
+      whatsNew: 'v2.5.5 What\'s New'
     },
     hero: {
       tag: '⚡ DESKTOP DEVELOPER SAAS FOR API & ENGINEERING TEAMS',
@@ -192,7 +192,7 @@ export const translations = {
     radar: {
       tag: 'ARCHITECTURE BENCHMARK',
       title: 'Tauri v2 + Rust: Why We Ditched Traditional Electron',
-      subtitle: 'With ZenDev v2.5.4, we rebuilt our core foundation with Rust. Here are the real hardware benchmarks:',
+      subtitle: 'With ZenDev v2.5.5, we rebuilt our core foundation with Rust. Here are the real hardware benchmarks:',
       metrics: {
         ram: {
           title: 'Memory (RAM) Footprint',

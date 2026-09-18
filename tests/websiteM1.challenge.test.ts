@@ -588,15 +588,15 @@ describe('Empirical Challenge: Milestone M1 Website Modernization', () => {
   // TASK 4: Direct Release Download Integration & Fallback
   // =========================================================================
   describe('4. Direct Release Download Integration & Fallback', () => {
-    it('declares exact release URLs matching v2.5.4 binary specification', async () => {
+    it('declares exact release URLs matching v2.5.5 binary specification', async () => {
       const { ZENDEV_RELEASE_CONFIG } = await import('../website/src/lib/downloadHelper');
 
-      expect(ZENDEV_RELEASE_CONFIG.version).toBe('2.5.4');
+      expect(ZENDEV_RELEASE_CONFIG.version).toBe('2.5.5');
       expect(ZENDEV_RELEASE_CONFIG.setupExe).toBe(
-        'https://github.com/zerviatr/NexusHub/releases/download/v2.5.4/ZenDev-Setup-2.5.4.exe'
+        'https://github.com/zerviatr/NexusHub/releases/download/v2.5.5/ZenDev-Setup-2.5.5.exe'
       );
       expect(ZENDEV_RELEASE_CONFIG.portableExe).toBe(
-        'https://github.com/zerviatr/NexusHub/releases/download/v2.5.4/ZenDev-Portable-2.5.4.exe'
+        'https://github.com/zerviatr/NexusHub/releases/download/v2.5.5/ZenDev-Portable-2.5.5.exe'
       );
       expect(ZENDEV_RELEASE_CONFIG.fallbackLatestRelease).toBe(
         'https://github.com/zerviatr/NexusHub/releases/latest'
